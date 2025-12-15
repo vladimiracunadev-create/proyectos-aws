@@ -10,6 +10,8 @@ Objetivo: dejar evidencia clara (código + despliegues + links) de proyectos cor
 ### ✅ AWS Amplify - Mi sitio 1
 - Carpeta: `aws-amplify-mi-sitio-1/`
 - Demo: https://main.d3r1wuymolxagh.amplifyapp.com/
+- Demo2: https://dev.d20m8tc0banvg.amplifyapp.com/ (en otra ubicacion de la web)
+- En Branches (Ramas, se visualizan los cambios, he implementaciones)
 
 ---
 
