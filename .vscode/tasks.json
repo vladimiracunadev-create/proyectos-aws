@@ -1,0 +1,30 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Sync dev -> main (PS1)",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}\\sync-dev-main.ps1"
+      ],
+      "problemMatcher": [],
+      "group": "build"
+    },
+    {
+      "label": "Sync dev -> main (SH)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "${workspaceFolder}/sync-dev-main.sh"
+      ],
+      "problemMatcher": [],
+      "group": "build"
+    }
+  ]
+}
+
