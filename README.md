@@ -1,13 +1,29 @@
 # Proyectos AWS (Monorepo)
 
-Este repositorio agrupa varios proyectos desplegados/relacionados con AWS.
+Repositorio único que agrupa varios proyectos relacionados con AWS.  
+Objetivo: dejar evidencia clara (código + despliegues + links) de proyectos corriendo en AWS.
 
-## Proyectos
+---
 
-### 1) Amplify - Mi sitio 1
+## Demo destacada
+
+### ✅ AWS Amplify - Mi sitio 1
 - Carpeta: `aws-amplify-mi-sitio-1/`
 - Demo: https://main.d3r1wuymolxagh.amplifyapp.com/
 
-## Próximos
-- Lambda API (pendiente)
-- Infra (Terraform/CloudFormation) (pendiente)
+---
+
+## Estructura del repositorio
+
+```text
+proyectos-aws/
+  README.md
+  aws-amplify-mi-sitio-1/
+    README.md
+    index.html
+    *.pdf
+    amplify.yml               (recomendado)
+  aws-lambda-api-1/           (pendiente)
+  aws-ec2-docker-lab/         (pendiente)
+  infra-terraform/            (pendiente)
+  infra-cloudformation/       (pendiente)
