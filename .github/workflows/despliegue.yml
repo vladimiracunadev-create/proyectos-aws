@@ -1,4 +1,17 @@
-steps:
+name: Despliegue a S3 - Proyecto Scrum
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'proyectos-aws/aws-s3-scrum-mi-sitio-1/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout del código
         uses: actions/checkout@v3
 
@@ -9,10 +22,9 @@ steps:
           echo "Los archivos que veo son:"
           ls -R
 
-      - name: Sincronizar con S3
+      - name: Sincronizar subcarpeta con AWS S3
         run: |
-          # Usamos un comodín (*) para que busque la carpeta correcta
-          aws s3 sync ./proyecto*-aws/aws-s3-scrum-mi-sitio-1 s3://mi-pagina-scrum-123 --delete
+          aws s3 sync ./proyectos-aws/aws-s3-scrum-mi-sitio-1 s3://mi-pagina-scrum-123 --delete
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
