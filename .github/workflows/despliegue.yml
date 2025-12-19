@@ -7,6 +7,7 @@ on:
     paths:
       # El robot solo se despierta si cambias algo DENTRO de esta carpeta
       - 'proyecto-aws/aws-s3-scrum-mi-sitio-1/**'
+      workflow_dispatch: # <--- ESTO activa el botón de "Run workflow" manual
 
 jobs:
   deploy:
