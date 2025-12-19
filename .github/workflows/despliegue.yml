@@ -1,0 +1,25 @@
+name: Despliegue a S3 - Proyecto Scrum
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      # El robot solo se despierta si cambias algo DENTRO de esta carpeta
+      - 'proyecto-aws/aws-s3-scrum-mi-sitio-1/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+
+      - name: Sincronizar subcarpeta con AWS S3
+        run: |
+          # Aquí le decimos: "Toma solo lo que hay en esta ruta y llévalo a S3"
+          aws s3 sync ./proyecto-aws/aws-s3-scrum-mi-sitio-1 s3://NOMBRE-DE-TU-BUCKET-S3 --delete
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'us-east-2' 
