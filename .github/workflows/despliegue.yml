@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'proyecto-aws/aws-s3-scrum-mi-sitio-1/**'
+      - 'proyectos-aws/aws-s3-scrum-mi-sitio-1/**'
   workflow_dispatch:
 
 jobs:
