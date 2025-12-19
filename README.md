@@ -33,3 +33,15 @@ Este repositorio es un **Monorepo** que agrupa arquitecturas y despliegues reale
 ├── aws-lambda-api-1/           # (En desarrollo) Serverless API
 ├── aws-ec2-docker-lab/         # (Pendiente) Contenedores
 └── infra-terraform/            # (Pendiente) IaC
+
+## ⚙️ Pipeline de Automatización (DevOps)
+
+Este repositorio utiliza **CI/CD (Integración y Despliegue Continuo)** para eliminar la carga manual de subir archivos a la nube.
+
+### Flujo de Trabajo:
+1. **Detección de Cambios:** El flujo se activa automáticamente cada vez que se hace un `git push` a la rama `main`, pero solo si hay cambios dentro de la carpeta del proyecto.
+2. **Entorno Seguro:** Se levanta un contenedor temporal con **Ubuntu Latest** en los servidores de GitHub.
+3. **Autenticación:** El proceso utiliza **GitHub Secrets** para manejar las llaves de acceso de AWS (`Access Key ID` y `Secret Access Key`) de forma cifrada y segura.
+4. **Sincronización Inteligente:** Se utiliza el comando `aws s3 sync` con el parámetro `--delete`. Esto garantiza que el Bucket de S3 sea un espejo exacto del repositorio (si borras un archivo en Git, se borra en S3).
+
+**Beneficio:** Reducción de errores humanos y despliegue inmediato en menos de 1 minuto.
