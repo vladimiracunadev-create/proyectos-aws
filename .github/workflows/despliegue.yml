@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'proyectos-aws/aws-s3-scrum-mi-sitio-1/**'
+      - 'aws-s3-scrum-mi-sitio-1/**'
   workflow_dispatch:
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
 
       - name: Sincronizar subcarpeta con AWS S3
         run: |
-          aws s3 sync ./proyectos-aws/aws-s3-scrum-mi-sitio-1 s3://mi-pagina-scrum-123 --delete
+          aws s3 sync ./aws-s3-scrum-mi-sitio-1 s3://mi-pagina-scrum-123 --delete
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
