@@ -5,9 +5,8 @@ on:
     branches:
       - main
     paths:
-      # El robot solo se despierta si cambias algo DENTRO de esta carpeta
       - 'proyecto-aws/aws-s3-scrum-mi-sitio-1/**'
-      workflow_dispatch: # <--- ESTO activa el botón de "Run workflow" manual
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -18,10 +17,8 @@ jobs:
 
       - name: Sincronizar subcarpeta con AWS S3
         run: |
-          # Aquí le decimos: "Toma solo lo que hay en esta ruta y llévalo a S3"
-          # Cambia 'mi-sitio-scrum-2025' por el nombre REAL de tu bucket
           aws s3 sync ./proyecto-aws/aws-s3-scrum-mi-sitio-1 s3://mi-pagina-scrum-123 --delete
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'us-east-2' 
+          AWS_REGION: 'us-east-2'
