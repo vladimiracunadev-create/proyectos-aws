@@ -6,8 +6,6 @@
   // Reveal on scroll (con fallback)
   const els = Array.from(document.querySelectorAll(".reveal"));
 
-  if (!els.length) return;
-
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver(
       (entries) => {
@@ -20,7 +18,32 @@
 
     els.forEach((el) => io.observe(el));
   } else {
-    // Fallback: mostrar todo (navegadores viejos)
     els.forEach((el) => el.classList.add("show"));
+  }
+
+  // === Modo rápido (compacto) ===
+  const modeBtn = document.getElementById("modeBtn");
+  const saved = localStorage.getItem("viewMode"); // "compact" | "full"
+
+  const setModeUI = (isCompact) => {
+    if (!modeBtn) return;
+    modeBtn.setAttribute("aria-pressed", isCompact ? "true" : "false");
+    modeBtn.textContent = isCompact ? "✅ Modo rápido" : "⚡ Modo rápido";
+    modeBtn.title = isCompact ? "Mostrar todo el contenido" : "Oculta detalles largos";
+  };
+
+  if (saved === "compact") {
+    document.body.classList.add("compact");
+    setModeUI(true);
+  } else {
+    setModeUI(false);
+  }
+
+  if (modeBtn) {
+    modeBtn.addEventListener("click", () => {
+      const isCompact = document.body.classList.toggle("compact");
+      localStorage.setItem("viewMode", isCompact ? "compact" : "full");
+      setModeUI(isCompact);
+    });
   }
 })();
