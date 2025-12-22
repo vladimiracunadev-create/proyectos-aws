@@ -41,7 +41,6 @@
       if (open) closeMenu(); else openMenu();
     });
   }
-
   if (overlay) overlay.addEventListener("click", closeMenu);
 
   document.addEventListener("keydown", (e) => {
@@ -68,7 +67,7 @@
     toastTimer = setTimeout(() => toast.classList.remove("show"), 1400);
   };
 
-  // ===== Animación show/hide para bloques Optional/Deep =====
+  // ===== Animación show/hide para bloques Optional =====
   const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const animateHide = (el) => {
@@ -105,20 +104,22 @@
   const animateShow = (el) => {
     if (!el) return;
 
-    // Si ya está visible, no animar
     const computed = getComputedStyle(el).display;
-    const isHidden = el.dataset._hidden === "1" || computed === "none";
+    const isHidden = el.dataset._hidden === "1" || computed === "none" || el.hasAttribute("hidden");
     if (!isHidden) return;
 
     const display = el.dataset._display || "block";
 
     if (prefersReduced) {
       el.style.display = display;
+      el.removeAttribute("hidden");
       el.dataset._hidden = "0";
       return;
     }
 
+    el.removeAttribute("hidden");
     el.style.display = display;
+
     const end = el.scrollHeight || 0;
 
     el.style.overflow = "hidden";
@@ -140,13 +141,46 @@
     };
   };
 
+  // ===== Acordeón (funciona con JS) =====
+  const accordions = Array.from(document.querySelectorAll(".accordion[data-accordion]"));
+
+  const setAccordionOpen = (acc, open, announce = false) => {
+    const btn = acc.querySelector(".acc-summary");
+    const panel = acc.querySelector(".acc-panel");
+    if (!btn || !panel) return;
+
+    acc.classList.toggle("open", !!open);
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+
+    if (open) animateShow(panel);
+    else animateHide(panel);
+
+    if (announce) {
+      showToast(open ? "Sección expandida" : "Sección contraída");
+    }
+  };
+
+  accordions.forEach(acc => {
+    const btn = acc.querySelector(".acc-summary");
+    const panel = acc.querySelector(".acc-panel");
+    if (!btn || !panel) return;
+
+    // Estado inicial: cerrado
+    panel.setAttribute("hidden", "");
+    btn.setAttribute("aria-expanded", "false");
+    acc.classList.remove("open");
+
+    btn.addEventListener("click", () => {
+      const isOpen = acc.classList.contains("open");
+      setAccordionOpen(acc, !isOpen, true);
+    });
+  });
+
   // ===== 3 VISTAS =====
   const viewChip = document.getElementById("viewChip");
   const viewSwitch = document.getElementById("viewSwitch");
   const viewBtns = viewSwitch ? Array.from(viewSwitch.querySelectorAll("[data-view]")) : [];
   const optionalEls = Array.from(document.querySelectorAll(".optional"));
-  const deepEls = Array.from(document.querySelectorAll(".deep"));
-  const accordions = Array.from(document.querySelectorAll("details.accordion"));
 
   const LABEL = {
     quick: "👔 Vista: Reclutador",
@@ -166,26 +200,19 @@
   const setView = (view, announce = true) => {
     const v = (view === "quick" || view === "deep") ? view : "normal";
 
-    // Estado en body (por si luego quieres estilos específicos)
-    document.body.classList.toggle("view-quick", v === "quick");
-    document.body.classList.toggle("view-deep", v === "deep");
-
-    // Optional
+    // Optional: en quick se ocultan, en normal/deep se muestran
     if (v === "quick") optionalEls.forEach(animateHide);
     else optionalEls.forEach(animateShow);
 
-    // Deep-only
-    if (v === "deep") deepEls.forEach(animateShow);
-    else deepEls.forEach(animateHide);
-
-    // Acordeones: en Profundo se abren, en otros se cierran
-    if (v === "deep") accordions.forEach(d => d.open = true);
-    else accordions.forEach(d => d.open = false);
+    // Acordeones: en deep los abrimos automático; en normal los dejamos cerrados; en quick da igual (están ocultos)
+    accordions.forEach(acc => {
+      if (v === "deep") setAccordionOpen(acc, true, false);
+      else setAccordionOpen(acc, false, false);
+    });
 
     // UI
     setActiveBtn(v);
     setChip(v);
-
     localStorage.setItem("portfolioView", v);
 
     if (announce) {
@@ -195,12 +222,10 @@
     }
   };
 
-  // Eventos botones
   viewBtns.forEach(btn => {
     btn.addEventListener("click", () => setView(btn.dataset.view));
   });
 
-  // Restaurar preferencia
   const saved = localStorage.getItem("portfolioView") || "normal";
   setView(saved, false);
 })();

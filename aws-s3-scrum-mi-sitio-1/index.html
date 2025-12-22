@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Vladimir Acuña · Arquitecto de Software & Desarrollador Senior</title>
-  <meta name="description" content="Portafolio de Vladimir Acuña: modernización de sistemas legacy, productividad, automatización, IA local y DevOps." />
+  <meta name="description" content="Portafolio de Vladimir Acuña: modernización legacy, productividad, automatización, DevOps e IA local." />
 
   <link rel="stylesheet" href="styles.css" />
   <script src="app.js" defer></script>
@@ -34,6 +34,7 @@
             <a href="#roles">Roles</a>
             <a href="#servicios">Servicios</a>
             <a href="#descargas">Descargas</a>
+            <a href="#referencias">Referencias</a>
             <a href="#contacto">Contacto</a>
           </div>
 
@@ -59,7 +60,7 @@
   <!-- Overlay menú móvil -->
   <div class="overlay" id="overlay" hidden></div>
 
-  <!-- Toast (mensaje al cambiar vista) -->
+  <!-- Toast (mensaje al cambiar vista / abrir acordeón) -->
   <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
   <main>
@@ -84,6 +85,14 @@
               <a class="pill pill-link" href="#roles">🗄️ Migration Lead</a>
             </div>
 
+            <!-- Roles extra (se ocultan en vista Reclutador) -->
+            <div class="pillrow optional">
+              <a class="pill pill-link" href="#roles">🎓 Relator / Instructor TI</a>
+              <a class="pill pill-link" href="#roles">🧾 Asesorías de Sistemas (Pymes)</a>
+              <a class="pill pill-link" href="#roles">📣 MarTech / Automatización Marketing</a>
+              <a class="pill pill-link" href="#roles">🧭 Analista de Negocio (TI)</a>
+            </div>
+
             <div class="pillrow">
               <div class="pill">⚙️ PHP 5.4–8.x</div>
               <div class="pill">🗄️ SQL Server / MySQL</div>
@@ -96,6 +105,7 @@
               <a class="btn primary" href="#contacto">📨 Conversemos</a>
               <a class="btn" href="#proyectos">📁 Ver proyectos</a>
               <a class="btn" href="#roles">🧩 Ver roles</a>
+              <a class="btn" href="#labs">🧪 Ver demos</a>
 
               <a class="btn" href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">🐙 GitHub</a>
               <a class="btn" href="https://www.linkedin.com/in/vladimir-acu%C3%B1a-valdebenito-11924a29/" target="_blank" rel="noopener">in LinkedIn</a>
@@ -119,8 +129,8 @@
                 <span>Herramientas web para logs, configuración y análisis rápido.</span>
               </div>
               <div class="item">
-                <b>IA aplicada</b>
-                <span>Asistentes locales y flujos con tools controladas (MCP) + trazabilidad.</span>
+                <b>Negocio + TI</b>
+                <span>También soy técnico en administración de empresas: procesos, eficiencia, marketing y medición.</span>
               </div>
             </div>
           </aside>
@@ -140,25 +150,30 @@
           <article class="card">
             <h3>Batería Online (Fundación CEIS)</h3>
             <p class="muted">
-              Suite psicométrica web a gran escala: migración a PHP 8.2, optimización de SQL Server,
-              PWAs por perfil, reportes complejos PDF/Excel.
+              Suite psicométrica web a gran escala: evolución/soporte y modernización progresiva, optimización SQL Server,
+              reportes PDF/Excel y continuidad operacional.
             </p>
             <div class="taglist">
-              <span class="tag">PHP 8.2</span><span class="tag">SQL Server</span><span class="tag">PWA</span><span class="tag">PDF/Excel</span>
+              <span class="tag">PHP</span><span class="tag">SQL Server</span><span class="tag">Reporting</span><span class="tag">Operación</span>
             </div>
+
             <div class="links">
-              <a class="btn small" href="mailto:vladimir.acuna.dev@gmail.com?subject=Solicitud%20overview%20Bater%C3%ADa%20Online">📩 Pedir overview</a>
+              <a class="btn small primary" href="#referencias">📞 Ver referencia laboral</a>
+              <a class="btn small" href="#contacto">📨 Contactarme</a>
             </div>
-            <div class="note">*Proyecto institucional (no público). Demo/overview bajo solicitud.</div>
+
+            <div class="note">
+              *Por confidencialidad, no publico repos/código del producto institucional. Detalles y validación de experiencia vía referencia laboral.
+            </div>
           </article>
 
           <article class="card">
             <h3>Microsistemas · Caja de herramientas</h3>
             <p class="muted">
-              Colección de herramientas autocontenidas para soporte, diagnóstico y modernización de sistemas legacy (PHP 5.4 → 8.x + HTML/JS).
+              Herramientas autocontenidas para soporte, diagnóstico y modernización de sistemas legacy (PHP 5.4 → 8.x + HTML/JS).
             </p>
 
-            <!-- Optional: se oculta en modo Reclutador -->
+            <!-- Optional: se oculta en vista Reclutador -->
             <ul class="clean muted optional" style="margin-top:10px">
               <li>• Conversor de acentos/encoding</li>
               <li>• mini-phpMyAdmin acotado (SQL seguro)</li>
@@ -168,18 +183,19 @@
             </ul>
 
             <div class="taglist" style="margin-top:10px">
-              <span class="tag">PHP 5.4–8.x</span><span class="tag">Legacy Support</span><span class="tag">Productividad</span>
+              <span class="tag">Legacy Support</span><span class="tag">Productividad</span><span class="tag">Dev Tools</span>
             </div>
             <div class="links">
               <a class="btn small primary" href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">🐙 GitHub</a>
-              <a class="btn small" href="#roles">🧩 Ver roles</a>
+              <a class="btn small" href="#labs">🧪 Ver demos</a>
             </div>
           </article>
 
           <article class="card">
             <h3>mcp-ollama-local (IA local + Tools)</h3>
             <p class="muted">
-              Web local (FastAPI) + Ollama con tools vía MCP (system_info/list_files/grep_text) y opcional historial en SQLite. Interacción segura y trazable.
+              Web local (FastAPI) + Ollama con tools vía MCP (system_info/list_files/grep_text) y opcional historial en SQLite.
+              Interacción segura y trazable.
             </p>
             <div class="taglist">
               <span class="tag">FastAPI</span><span class="tag">Ollama</span><span class="tag">MCP Tools</span><span class="tag">SQLite</span>
@@ -189,98 +205,102 @@
             </div>
           </article>
 
-          <!-- Optional: se oculta en modo Reclutador -->
+          <!-- Optional: se oculta en vista Reclutador -->
           <article class="card optional">
-            <h3>Social Bot Scheduler (Python + n8n + PHP)</h3>
+            <h3>Automatización (Python + n8n + PHP)</h3>
             <p class="muted">
-              Flujo de automatización modular: scheduler en Python, routing por canal en n8n y API PHP registrando eventos (extensible a DB/colas/redes).
+              Flujos modulares: scheduler en Python, routing en n8n y API PHP registrando eventos (extensible a DB/colas/notificaciones).
             </p>
             <div class="taglist">
-              <span class="tag">Python</span><span class="tag">n8n</span><span class="tag">API PHP</span>
+              <span class="tag">Python</span><span class="tag">n8n</span><span class="tag">API</span>
             </div>
             <div class="links">
               <a class="btn small primary" href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">📦 Repo (GitHub)</a>
             </div>
           </article>
 
-          <!-- Optional: se oculta en modo Reclutador -->
+          <!-- Optional: se oculta en vista Reclutador -->
           <article class="card optional">
             <h3>Telemetría y Offline-Sync</h3>
             <p class="muted">
-              IndexedDB + Service Worker: latencia/TTFB, sincronización diferida, reintentos con backoff y resiliencia offline-first.
+              IndexedDB + Service Worker: medición (TTFB/latencia), sincronización diferida, reintentos con backoff y resiliencia offline-first.
             </p>
             <div class="taglist">
               <span class="tag">IndexedDB</span><span class="tag">Service Worker</span><span class="tag">Observabilidad</span>
             </div>
-            <div class="links">
-              <a class="btn small" href="mailto:vladimir.acuna.dev@gmail.com?subject=Solicitud%20arquitectura%20Offline-Sync%20y%20Telemetr%C3%ADa">🧾 Ver arquitectura</a>
-            </div>
           </article>
 
-          <!-- Optional: se oculta en modo Reclutador -->
+          <!-- Optional: se oculta en vista Reclutador -->
           <article class="card optional">
-            <h3>Modernización de reportes</h3>
+            <h3>Reportes & Data Quality</h3>
             <p class="muted">
-              Excel multi-sheet (PhpSpreadsheet) y PDFs con gráficos/percentiles. Enfoque en trazabilidad y QA de datos.
+              Excel multi-sheet, PDFs y validación de métricas: trazabilidad, QA de datos y consistencia entre fuentes.
             </p>
             <div class="taglist">
-              <span class="tag">PhpSpreadsheet</span><span class="tag">PDF</span><span class="tag">ETL</span>
-            </div>
-            <div class="links">
-              <a class="btn small" href="mailto:vladimir.acuna.dev@gmail.com?subject=Solicitud%20muestras%20reportes%20PDF%20y%20Excel">📄 Pedir muestras</a>
+              <span class="tag">Excel</span><span class="tag">PDF</span><span class="tag">Data Quality</span>
             </div>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- LABS (Optional: se oculta en modo Reclutador) -->
+    <!-- LABS (Optional: se oculta en vista Reclutador) -->
     <section id="labs" class="reveal optional">
       <div class="container">
-        <h2 class="section-title">Labs & Demos en vivo</h2>
+        <h2 class="section-title">Labs & Demos (repos reales)</h2>
         <p class="muted" style="margin-top:-6px">
-          Demos reproducibles (CI/CD, cloud y contenedores). Ideales para mostrar implementación real y buenas prácticas.
+          Repos y demos para respaldar lo que digo con implementación concreta (CI/CD, cloud, contenedores, tooling).
         </p>
 
         <div class="grid cols-3">
           <article class="card">
             <h3>AWS S3 + GitHub Actions</h3>
             <p class="muted">
-              Sitio estático con deploy automático al hacer <code>push</code> a <strong>main</strong> (sync con <code>--delete</code>).
+              Deploy automático al hacer <code>push</code> a <strong>main</strong> (sync con <code>--delete</code>).
             </p>
             <div class="taglist">
               <span class="tag">S3</span><span class="tag">GitHub Actions</span><span class="tag">CI/CD</span>
             </div>
             <div class="links">
-              <a class="btn small primary" href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">🐙 Repo (GitHub)</a>
+              <a class="btn small primary" href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">🐙 Ver en GitHub</a>
             </div>
           </article>
 
           <article class="card">
             <h3>AWS Amplify · Deploy por ramas</h3>
             <p class="muted">
-              Continuous Deployment con <strong>main/dev</strong>, build automático y SSL. Flujo ideal con revisión por rama.
+              Continuous Deployment con <strong>main/dev</strong>, build automático y SSL.
             </p>
             <div class="taglist">
-              <span class="tag">Amplify</span><span class="tag">main/dev</span><span class="tag">CD</span>
+              <span class="tag">Amplify</span><span class="tag">Branches</span><span class="tag">CD</span>
             </div>
             <div class="links">
-              <a class="btn small primary" href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">🐙 Repo (GitHub)</a>
+              <a class="btn small primary" href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">🐙 Ver en GitHub</a>
             </div>
           </article>
 
           <article class="card">
             <h3>Docker Labs 🧪🐳</h3>
             <p class="muted">
-              Laboratorios Docker/Compose: stacks independientes, objetivos de aprendizaje, documentación y buenas prácticas de repo.
+              Stacks independientes con objetivos claros, documentación y reproducibilidad.
             </p>
             <div class="taglist">
               <span class="tag">Docker</span><span class="tag">Compose</span><span class="tag">Stacks</span>
             </div>
             <div class="links">
-              <a class="btn small primary" href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">🐙 Repo (GitHub)</a>
+              <a class="btn small primary" href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">🐙 Ver en GitHub</a>
             </div>
           </article>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <h3>Acceso rápido a mis repos</h3>
+          <p class="muted">Centralizo demos y avances aquí:</p>
+          <div class="links">
+            <a class="btn small primary" href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">🐙 GitHub</a>
+            <a class="btn small" href="https://www.youtube.com/@VladimirAcu%C3%B1aDev" target="_blank" rel="noopener">▶️ YouTube</a>
+            <a class="btn small" href="https://www.linkedin.com/in/vladimir-acu%C3%B1a-valdebenito-11924a29/" target="_blank" rel="noopener">in LinkedIn</a>
+          </div>
         </div>
       </div>
     </section>
@@ -295,15 +315,15 @@
             <ul class="timeline">
               <li class="tl-item">
                 <b>2025–Actualidad</b>
-                <span>Período de transición: laboratorios, automatización (Python+n8n+PHP), microsistemas de productividad y prototipos con IA local.</span>
+                <span>Transición: laboratorios, automatización (Python+n8n+PHP), microsistemas de productividad y prototipos con IA local.</span>
               </li>
               <li class="tl-item">
                 <b>Fundación CEIS Maristas · 14 años</b>
                 <span>Arquitectura, desarrollo y operación de plataformas educativas/psicométricas. Optimización y migraciones.</span>
               </li>
               <li class="tl-item">
-                <b>Experiencia previa</b>
-                <span>Desarrollo web, administración de servidores, integraciones y soporte.</span>
+                <b>Perfil híbrido</b>
+                <span>Además de TI: formación técnica en administración de empresas (procesos, eficiencia, marketing y medición).</span>
               </li>
             </ul>
           </div>
@@ -311,11 +331,11 @@
           <div class="card">
             <h3>Logros destacables</h3>
             <ul class="clean muted">
-              <li>• Migraciones de servidores y modernización de stacks PHP.</li>
-              <li>• Optimización de SQL y performance en escenarios de alta concurrencia.</li>
-              <li>• Implementación de telemetría, diagnósticos y herramientas internas.</li>
-              <li>• Automatización de procesos con CI/CD y pipelines reproducibles.</li>
-              <li>• Integración de IA generativa/local como apoyo para refactor y documentación.</li>
+              <li>• Modernización progresiva y mantención de plataformas web complejas.</li>
+              <li>• Optimización SQL/performance en escenarios de concurrencia y reportes pesados.</li>
+              <li>• Telemetría, diagnósticos, herramientas internas y continuidad operacional.</li>
+              <li>• Automatización de despliegues y prácticas de repo (pipelines, Docker labs, etc.).</li>
+              <li>• Integración de IA (local / controlada) para productividad y documentación.</li>
             </ul>
           </div>
         </div>
@@ -327,10 +347,10 @@
       <div class="container">
         <h2 class="section-title">Roles en los que también encajo (y puedo postular)</h2>
         <p class="muted" style="margin-top:-6px">
-          Usa el selector de vista: <b>Reclutador</b> (rápido), <b>Normal</b> (equilibrado) o <b>Profundo</b> (todo abierto).
+          Usa el selector de vista: <b>Reclutador</b> (rápido), <b>Normal</b> (equilibrado) o <b>Profundo</b> (todo).
         </p>
 
-        <h3 class="section-subtitle">Top roles (alta compatibilidad con mi perfil)</h3>
+        <h3 class="section-subtitle">Top roles (alta compatibilidad)</h3>
 
         <div class="grid cols-3">
           <article class="card role-card">
@@ -345,7 +365,7 @@
 
           <article class="card role-card">
             <h3>Platform Engineer / IDP</h3>
-            <p class="muted">Plataforma interna para devs: plantillas Docker, pipelines, entornos reproducibles, estándares.</p>
+            <p class="muted">Plataforma interna: plantillas Docker, pipelines, entornos reproducibles, estándares.</p>
             <div class="taglist">
               <span class="tag">Platform Engineer</span>
               <span class="tag">IDP</span>
@@ -369,23 +389,23 @@
             <div class="taglist">
               <span class="tag">Migration Lead</span>
               <span class="tag">Data Migration Lead</span>
-              <span class="tag">Technical Delivery Lead</span>
+              <span class="tag">Technical Delivery</span>
             </div>
           </article>
 
           <article class="card role-card optional">
             <h3>Consultor Performance & Cost Optimization</h3>
-            <p class="muted">FinOps técnico: right-sizing, caching, DB tuning, budget alerts, arquitectura costo-efectiva.</p>
+            <p class="muted">FinOps técnico: right-sizing, caching, DB tuning, alertas de presupuesto.</p>
             <div class="taglist">
-              <span class="tag">FinOps (técnico)</span>
+              <span class="tag">FinOps</span>
               <span class="tag">AWS Cost</span>
               <span class="tag">Caching/DB Tuning</span>
             </div>
           </article>
 
           <article class="card role-card optional">
-            <h3>Especialista en Automatización (n8n / workflows)</h3>
-            <p class="muted">Automatizar operaciones: onboarding, reportes, alertas, integraciones con APIs, bots.</p>
+            <h3>Especialista Automatización (n8n / workflows)</h3>
+            <p class="muted">Onboarding, reportes, alertas, integraciones con APIs, bots y flujos internos.</p>
             <div class="taglist">
               <span class="tag">n8n</span>
               <span class="tag">Workflows</span>
@@ -394,107 +414,137 @@
           </article>
         </div>
 
-        <!-- Acordeón: en Profundo se abre automático -->
-        <details class="accordion optional" id="rolesMore">
-          <summary>Ver más roles (producto, pre-sales, continuidad, auditoría, datos)</summary>
+        <!-- ===== Acordeón REAL (funciona con JS + animación) ===== -->
+        <div class="accordion optional" id="rolesAccordion" data-accordion="roles">
+          <button class="acc-summary" type="button" id="accRolesBtn" aria-expanded="false" aria-controls="accRolesPanel">
+            Ver más roles (relatoría, asesorías, marketing tech, producto, continuidad, auditoría, datos)
+          </button>
 
-          <h3 class="section-subtitle" style="margin-top:14px">Producto / Pre-Sales / Evangelización técnica</h3>
+          <div class="acc-panel" id="accRolesPanel" hidden>
+            <h3 class="section-subtitle" style="margin-top:14px">Relatoría / Formación</h3>
+            <div class="grid cols-3">
+              <article class="card role-card">
+                <h3>Relator / Instructor TI</h3>
+                <p class="muted">Capacitaciones prácticas en modernización, buenas prácticas, DevOps, tooling y productividad.</p>
+                <div class="taglist">
+                  <span class="tag">Workshops</span>
+                  <span class="tag">Mentoría</span>
+                  <span class="tag">Capacitación</span>
+                </div>
+              </article>
 
-          <div class="grid cols-3">
-            <article class="card role-card">
-              <h3>Product Engineer (producto + ingeniería)</h3>
-              <p class="muted">Perfil híbrido: traduces necesidad del negocio (ideal edtech/psicometría) a software con enfoque en impacto.</p>
-              <div class="taglist">
-                <span class="tag">EdTech</span>
-                <span class="tag">Product + Engineering</span>
-                <span class="tag">Discovery</span>
-              </div>
-            </article>
+              <article class="card role-card">
+                <h3>Mentor Técnico (legacy → moderno)</h3>
+                <p class="muted">Guía de equipos en migración, refactor seguro, estándares y despliegues reproducibles.</p>
+                <div class="taglist">
+                  <span class="tag">Tech Mentoring</span>
+                  <span class="tag">Refactor</span>
+                  <span class="tag">CI/CD</span>
+                </div>
+              </article>
+            </div>
 
-            <article class="card role-card">
-              <h3>Solutions Engineer / Pre-Sales técnico (B2B)</h3>
-              <p class="muted">Demos, PoC, requisitos, arquitectura, cierre con TI/negocio. Ventaja: puedes construir demo real.</p>
-              <div class="taglist">
-                <span class="tag">PoC</span>
-                <span class="tag">Demos</span>
-                <span class="tag">Arquitectura</span>
-              </div>
-            </article>
+            <h3 class="section-subtitle" style="margin-top:18px">Asesorías de Sistemas (Pymes / Instituciones)</h3>
+            <div class="grid cols-3">
+              <article class="card role-card">
+                <h3>Asesor de Sistemas / Auditoría práctica</h3>
+                <p class="muted">Diagnóstico de deuda técnica, riesgos, performance, costos, plan de acción por etapas.</p>
+                <div class="taglist">
+                  <span class="tag">Assessment</span>
+                  <span class="tag">Roadmap</span>
+                  <span class="tag">Riesgos</span>
+                </div>
+              </article>
 
-            <article class="card role-card">
-              <h3>Developer Advocate / Technical Writer senior</h3>
-              <p class="muted">Guías, demos, repos, samples, tutoriales, workshops para herramientas dev, cloud, IA, plataformas.</p>
-              <div class="taglist">
-                <span class="tag">Docs</span>
-                <span class="tag">Samples</span>
-                <span class="tag">Workshops</span>
-              </div>
-            </article>
-          </div>
+              <article class="card role-card">
+                <h3>Gestión TI / Continuidad Operacional</h3>
+                <p class="muted">Backups, RTO/RPO, DRP, hardening básico, monitoreo y procedimientos.</p>
+                <div class="taglist">
+                  <span class="tag">RTO/RPO</span>
+                  <span class="tag">DRP</span>
+                  <span class="tag">Monitoreo</span>
+                </div>
+              </article>
 
-          <h3 class="section-subtitle" style="margin-top:18px">Datos aplicado</h3>
+              <article class="card role-card">
+                <h3>Implementador Integraciones (SSO / CRM / LMS)</h3>
+                <p class="muted">Conexión de plataformas, exportaciones, reporting y procesos de operación.</p>
+                <div class="taglist">
+                  <span class="tag">SSO</span>
+                  <span class="tag">Integraciones</span>
+                  <span class="tag">Reporting</span>
+                </div>
+              </article>
+            </div>
 
-          <div class="grid cols-3">
-            <article class="card role-card">
-              <h3>Analista / Arquitecto de Datos aplicado</h3>
-              <p class="muted">Modelado de datos, pipelines simples, reporting confiable, métricas educativas, calidad de datos.</p>
-              <div class="taglist">
-                <span class="tag">Data Modeling</span>
-                <span class="tag">Reporting</span>
-                <span class="tag">Data Quality</span>
-              </div>
-            </article>
-          </div>
+            <h3 class="section-subtitle" style="margin-top:18px">Producto / Pre-Sales / Negocio</h3>
+            <div class="grid cols-3">
+              <article class="card role-card">
+                <h3>Product Engineer (producto + ingeniería)</h3>
+                <p class="muted">Traduzco necesidades del negocio a soluciones con impacto (ideal edtech/reporting).</p>
+                <div class="taglist">
+                  <span class="tag">Product</span>
+                  <span class="tag">Discovery</span>
+                  <span class="tag">Impacto</span>
+                </div>
+              </article>
 
-          <h3 class="section-subtitle" style="margin-top:18px">Riesgo / Implementación / Continuidad</h3>
+              <article class="card role-card">
+                <h3>Solutions Engineer / Pre-Sales técnico</h3>
+                <p class="muted">Demos y PoC reales; requisitos, arquitectura y comunicación con TI/negocio.</p>
+                <div class="taglist">
+                  <span class="tag">PoC</span>
+                  <span class="tag">Demos</span>
+                  <span class="tag">Arquitectura</span>
+                </div>
+              </article>
 
-          <div class="grid cols-3">
-            <article class="card role-card">
-              <h3>Due-Diligence técnico / Auditoría de software</h3>
-              <p class="muted">Revisar codebase, riesgos, deuda técnica, seguridad básica, costos, plan de migración.</p>
-              <div class="taglist">
-                <span class="tag">Audit</span>
-                <span class="tag">Deuda Técnica</span>
-                <span class="tag">Plan de Migración</span>
-              </div>
-            </article>
+              <article class="card role-card">
+                <h3>Analista de Negocio (TI)</h3>
+                <p class="muted">Procesos, KPIs, reporting, eficiencia; puente entre áreas y tecnología.</p>
+                <div class="taglist">
+                  <span class="tag">Procesos</span>
+                  <span class="tag">KPIs</span>
+                  <span class="tag">Mejora continua</span>
+                </div>
+              </article>
+            </div>
 
-            <article class="card role-card">
-              <h3>Implementador / Consultor de plataformas</h3>
-              <p class="muted">Integrar sistemas: SSO, exportaciones, reporting, procesos, conectores.</p>
-              <div class="taglist">
-                <span class="tag">SSO</span>
-                <span class="tag">Integraciones</span>
-                <span class="tag">Reporting</span>
-              </div>
-            </article>
+            <h3 class="section-subtitle" style="margin-top:18px">Marketing Tech / Automatización (por formación + experiencia técnica)</h3>
+            <div class="grid cols-3">
+              <article class="card role-card">
+                <h3>MarTech / Automatización Marketing</h3>
+                <p class="muted">Integraciones, tracking, campañas, reporting y automatización (enfoque técnico).</p>
+                <div class="taglist">
+                  <span class="tag">Automations</span>
+                  <span class="tag">Tracking</span>
+                  <span class="tag">Reporting</span>
+                </div>
+              </article>
 
-            <article class="card role-card">
-              <h3>Gestor de Continuidad Operacional / Riesgo TI</h3>
-              <p class="muted">Backups, RTO/RPO, DRP, hardening básico, monitoreo y procedimientos.</p>
-              <div class="taglist">
-                <span class="tag">RTO/RPO</span>
-                <span class="tag">DRP</span>
-                <span class="tag">Monitoreo</span>
-              </div>
-            </article>
-          </div>
-        </details>
+              <article class="card role-card">
+                <h3>Consultor de Productividad & Operación Digital</h3>
+                <p class="muted">Estandarización, plantillas, checklists, tooling y automatizaciones para equipos.</p>
+                <div class="taglist">
+                  <span class="tag">Productividad</span>
+                  <span class="tag">Tooling</span>
+                  <span class="tag">Operación</span>
+                </div>
+              </article>
 
-        <div class="card role-cta optional" style="margin-top:18px">
-          <h3>¿Te armo un “one-pager” por rol (para postular más rápido)?</h3>
-          <p class="muted">
-            Puedo generar una versión corta orientada a: <b>Modernización Legacy</b>, <b>Platform/IDP</b>, <b>SRE Apps</b> o <b>Migraciones</b>,
-            con bullets de impacto + links a repos/demos.
-          </p>
-          <div class="cta">
-            <a class="btn primary"
-               href="mailto:vladimir.acuna.dev@gmail.com?subject=Solicitud%20one-pager%20por%20rol%20(Vladimir)&body=Hola%20Vladimir%2C%0A%0AQuisiera%20un%20one-pager%20orientado%20al%20rol%3A%20%5BModernizaci%C3%B3n%20Legacy%20%2F%20Platform%20Engineer%20%2F%20SRE%20Apps%20%2F%20Migraciones%20%2F%20FinOps%20t%C3%A9cnico%5D.%0A%0AEmpresa%2FRol%20objetivo%3A%20%5B...%5D%0AStack%2FContexto%3A%20%5B...%5D%0A%0AGracias.">
-              🧾 Solicitar one-pager por rol
-            </a>
-            <a class="btn" href="#proyectos">📌 Ver proyectos destacados</a>
+              <article class="card role-card">
+                <h3>Technical Writer / Documentación técnica</h3>
+                <p class="muted">Guías, repos, tutoriales, procedimientos y documentación operativa clara.</p>
+                <div class="taglist">
+                  <span class="tag">Docs</span>
+                  <span class="tag">Runbooks</span>
+                  <span class="tag">Tutoriales</span>
+                </div>
+              </article>
+            </div>
           </div>
         </div>
+        <!-- ===== FIN Acordeón ===== -->
       </div>
     </section>
 
@@ -520,10 +570,10 @@
           </article>
 
           <article class="card">
-            <h3>Automatización</h3>
-            <p class="muted">Flujos con Python, n8n y APIs: scheduler, routing, logs, integraciones.</p>
+            <h3>Asesoría TI (diagnóstico + plan)</h3>
+            <p class="muted">Evaluación rápida: riesgos, performance, costos, deuda técnica y plan por etapas.</p>
             <div class="taglist">
-              <span class="tag">Python</span><span class="tag">n8n</span><span class="tag">APIs</span>
+              <span class="tag">Assessment</span><span class="tag">Roadmap</span><span class="tag">Quick wins</span>
             </div>
           </article>
         </div>
@@ -534,30 +584,48 @@
     <section id="descargas" class="reveal">
       <div class="container">
         <h2 class="section-title">Descargas</h2>
-        <div class="two">
-          <div class="card">
-            <h3>PDFs listos para compartir</h3>
-            <p class="muted">
-              Versiones en PDF listas para compartir con reclutadores y empresas,
-              con el detalle de proyectos, logros y experiencia.
-            </p>
-            <div class="cta">
-              <a class="btn primary" href="portafolio-vladimir-acuna.pdf" target="_blank" rel="noopener">📂 Descargar Portafolio (PDF)</a>
-              <a class="btn" href="cv-vladimir-acuna-reducido.pdf" target="_blank" rel="noopener">📑 CV reducido (PDF)</a>
-              <a class="btn" href="cv-vladimir-acuna-completo.pdf" target="_blank" rel="noopener">📄 CV completo (PDF)</a>
+        <div class="card">
+          <h3>PDFs listos para compartir</h3>
+          <p class="muted">
+            Versiones en PDF listas para compartir con reclutadores y empresas.
+          </p>
+          <div class="cta">
+            <a class="btn primary" href="portafolio-vladimir-acuna.pdf" target="_blank" rel="noopener">📂 Descargar Portafolio (PDF)</a>
+            <a class="btn" href="cv-vladimir-acuna-reducido.pdf" target="_blank" rel="noopener">📑 CV reducido (PDF)</a>
+            <a class="btn" href="cv-vladimir-acuna-completo.pdf" target="_blank" rel="noopener">📄 CV completo (PDF)</a>
+          </div>
+          <div class="note">Si cambias la carpeta, ajusta estos <code>href</code> (por ejemplo: <code>assets/cv-vladimir-acuna-completo.pdf</code>).</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REFERENCIAS -->
+    <section id="referencias" class="reveal">
+      <div class="container">
+        <h2 class="section-title">Referencias laborales</h2>
+        <div class="card">
+          <p class="muted" style="margin-top:0">
+            Para roles/proyectos institucionales (ej. Batería Online), la validación de experiencia y detalles se realiza vía referencia laboral.
+          </p>
+
+          <div class="refbox">
+            <div class="refitem">
+              <b>Jean Claude Dupry</b>
+              <span class="muted">Último jefe directo</span>
             </div>
-            <div class="note">Si cambias la carpeta, ajusta estos <code>href</code> (por ejemplo: <code>assets/cv-vladimir-acuna-completo.pdf</code>).</div>
+            <div class="refitem">
+              <b>Celular</b>
+              <span><a class="ref-link" href="tel:+56994156984">+56 9 9415 6984</a></span>
+            </div>
           </div>
 
-          <div class="card optional">
-            <h3>¿Quieres un “one-pager” por rol?</h3>
-            <p class="muted">
-              Puedo entregar una versión ultra-corta orientada a Arquitectura, Full-Stack o Modernización Legacy,
-              con el resumen de impacto y links a repos.
-            </p>
-            <div class="cta">
-              <a class="btn" href="mailto:vladimir.acuna.dev@gmail.com?subject=Solicitud%20one-pager%20por%20rol%20(Vladimir)">🧾 Solicitar one-pager</a>
-            </div>
+          <div class="cta" style="margin-top:14px">
+            <a class="btn primary" href="#contacto">📨 Contactarme primero</a>
+            <a class="btn" href="mailto:vladimir.acuna.dev@gmail.com?subject=Referencia%20laboral%20-%20Vladimir%20Acu%C3%B1a">✉️ Email</a>
+          </div>
+
+          <div class="note">
+            *Sugerencia práctica: normalmente conviene que me contacten a mí primero, y luego coordino la referencia según contexto de la postulación.
           </div>
         </div>
       </div>
@@ -569,7 +637,8 @@
         <h2 class="section-title">Contacto</h2>
         <div class="card">
           <p class="muted">
-            ¿Buscas modernizar un sistema legacy, mejorar performance o automatizar procesos? Escríbeme.
+            ¿Buscas modernizar un sistema legacy, mejorar performance, reducir costos, automatizar procesos o capacitar un equipo?
+            Escríbeme.
           </p>
           <div class="cta">
             <a class="btn primary" href="mailto:vladimir.acuna.dev@gmail.com?subject=Contacto%20portfolio%20Vladimir">✉️ vladimir.acuna.dev@gmail.com</a>
