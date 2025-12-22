@@ -18,31 +18,49 @@
           <span style="font-size:18px">🧠</span>
           <span>Vladimir Acuña</span>
           <span class="badge">Arquitecto de Software · Senior</span>
+          <span class="viewchip" id="viewChip" title="Modo de lectura actual">Vista: Normal</span>
         </div>
 
-        <nav aria-label="principal">
-          <a href="#proyectos">Proyectos</a>
-          <a href="#labs">Labs & Demos</a>
-          <a href="#experiencia">Experiencia</a>
-          <a href="#roles">Roles</a>
-          <a href="#servicios">Servicios</a>
-          <a href="#descargas">Descargas</a>
-          <a href="#contacto">Contacto</a>
+        <!-- Botón menú móvil -->
+        <button class="iconbtn" id="menuBtn" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="navMenu">
+          ☰
+        </button>
 
-          <!-- MODO RÁPIDO -->
-          <button class="btn small modebtn" id="modeBtn" type="button" aria-pressed="false" title="Oculta detalles largos">
-            ⚡ Modo rápido
-          </button>
+        <nav id="navMenu" class="nav-menu" aria-label="principal">
+          <div class="nav-row nav-row-links">
+            <a href="#proyectos">Proyectos</a>
+            <a href="#labs">Labs & Demos</a>
+            <a href="#experiencia">Experiencia</a>
+            <a href="#roles">Roles</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#descargas">Descargas</a>
+            <a href="#contacto">Contacto</a>
+          </div>
 
-          <a href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://www.linkedin.com/in/vladimir-acu%C3%B1a-valdebenito-11924a29/" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://www.youtube.com/@VladimirAcu%C3%B1aDev" target="_blank" rel="noopener">YouTube</a>
-          <a href="https://x.com/VladiAcunaDev" target="_blank" rel="noopener">X</a>
-          <a href="https://www.tiktok.com/@vladimiracunadev" target="_blank" rel="noopener">TikTok</a>
+          <div class="nav-row nav-row-actions">
+            <!-- Selector de vistas (3 modos) -->
+            <div class="view-switch" id="viewSwitch" role="group" aria-label="Modo de lectura">
+              <button class="vs-btn" type="button" data-view="quick">👔 Reclutador</button>
+              <button class="vs-btn" type="button" data-view="normal">👀 Normal</button>
+              <button class="vs-btn" type="button" data-view="deep">🧠 Profundo</button>
+            </div>
+
+            <a href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://www.linkedin.com/in/vladimir-acu%C3%B1a-valdebenito-11924a29/" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://www.youtube.com/@VladimirAcu%C3%B1aDev" target="_blank" rel="noopener">YouTube</a>
+            <a href="https://x.com/VladiAcunaDev" target="_blank" rel="noopener">X</a>
+            <a href="https://www.tiktok.com/@vladimiracunadev" target="_blank" rel="noopener">TikTok</a>
+          </div>
         </nav>
       </div>
     </div>
   </header>
+
+  <!-- Overlay menú móvil -->
+  <div class="overlay" id="overlay" hidden></div>
+
+  <!-- Toast (mensaje al cambiar vista) -->
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
   <main>
     <!-- HERO -->
@@ -58,7 +76,7 @@
               DevOps, automatización (Python+n8n) e IA local.
             </p>
 
-            <!-- También postulo como (en pills para lectura rápida) -->
+            <!-- También postulo como (pills clickeables) -->
             <div class="pillrow roles-pills">
               <a class="pill pill-link" href="#roles">🧩 Modernization Architect</a>
               <a class="pill pill-link" href="#roles">🏗️ Platform Engineer (IDP)</a>
@@ -77,14 +95,10 @@
             <div class="cta">
               <a class="btn primary" href="#contacto">📨 Conversemos</a>
               <a class="btn" href="#proyectos">📁 Ver proyectos</a>
-              <a class="btn" href="#labs">🧪 Labs & Demos</a>
+              <a class="btn" href="#roles">🧩 Ver roles</a>
 
               <a class="btn" href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">🐙 GitHub</a>
               <a class="btn" href="https://www.linkedin.com/in/vladimir-acu%C3%B1a-valdebenito-11924a29/" target="_blank" rel="noopener">in LinkedIn</a>
-              <a class="btn" href="https://www.youtube.com/@VladimirAcu%C3%B1aDev" target="_blank" rel="noopener">▶️ YouTube</a>
-              <a class="btn" href="https://x.com/VladiAcunaDev" target="_blank" rel="noopener">𝕏 X</a>
-              <a class="btn" href="https://www.tiktok.com/@vladimiracunadev" target="_blank" rel="noopener">🎵 TikTok</a>
-
               <a class="btn" href="mailto:vladimir.acuna.dev@gmail.com?subject=Contacto%20portfolio%20Vladimir">✉️ Email</a>
             </div>
           </div>
@@ -144,8 +158,8 @@
               Colección de herramientas autocontenidas para soporte, diagnóstico y modernización de sistemas legacy (PHP 5.4 → 8.x + HTML/JS).
             </p>
 
-            <!-- Esto se oculta en Modo Rápido, pero sigue existiendo -->
-            <ul class="clean muted detail" style="margin-top:10px">
+            <!-- Optional: se oculta en modo Reclutador -->
+            <ul class="clean muted optional" style="margin-top:10px">
               <li>• Conversor de acentos/encoding</li>
               <li>• mini-phpMyAdmin acotado (SQL seguro)</li>
               <li>• Visor de logs/configuración (solo lectura)</li>
@@ -158,20 +172,7 @@
             </div>
             <div class="links">
               <a class="btn small primary" href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">🐙 GitHub</a>
-              <a class="btn small" href="#labs">🧪 Ver Labs</a>
-            </div>
-          </article>
-
-          <article class="card">
-            <h3>Social Bot Scheduler (Python + n8n + PHP)</h3>
-            <p class="muted">
-              Flujo de automatización modular: scheduler en Python, routing por canal en n8n y API PHP registrando eventos (extensible a DB/colas/redes).
-            </p>
-            <div class="taglist">
-              <span class="tag">Python</span><span class="tag">n8n</span><span class="tag">API PHP</span>
-            </div>
-            <div class="links">
-              <a class="btn small primary" href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">📦 Repo (GitHub)</a>
+              <a class="btn small" href="#roles">🧩 Ver roles</a>
             </div>
           </article>
 
@@ -188,7 +189,22 @@
             </div>
           </article>
 
-          <article class="card">
+          <!-- Optional: se oculta en modo Reclutador -->
+          <article class="card optional">
+            <h3>Social Bot Scheduler (Python + n8n + PHP)</h3>
+            <p class="muted">
+              Flujo de automatización modular: scheduler en Python, routing por canal en n8n y API PHP registrando eventos (extensible a DB/colas/redes).
+            </p>
+            <div class="taglist">
+              <span class="tag">Python</span><span class="tag">n8n</span><span class="tag">API PHP</span>
+            </div>
+            <div class="links">
+              <a class="btn small primary" href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">📦 Repo (GitHub)</a>
+            </div>
+          </article>
+
+          <!-- Optional: se oculta en modo Reclutador -->
+          <article class="card optional">
             <h3>Telemetría y Offline-Sync</h3>
             <p class="muted">
               IndexedDB + Service Worker: latencia/TTFB, sincronización diferida, reintentos con backoff y resiliencia offline-first.
@@ -201,7 +217,8 @@
             </div>
           </article>
 
-          <article class="card">
+          <!-- Optional: se oculta en modo Reclutador -->
+          <article class="card optional">
             <h3>Modernización de reportes</h3>
             <p class="muted">
               Excel multi-sheet (PhpSpreadsheet) y PDFs con gráficos/percentiles. Enfoque en trazabilidad y QA de datos.
@@ -217,8 +234,8 @@
       </div>
     </section>
 
-    <!-- LABS -->
-    <section id="labs" class="reveal">
+    <!-- LABS (Optional: se oculta en modo Reclutador) -->
+    <section id="labs" class="reveal optional">
       <div class="container">
         <h2 class="section-title">Labs & Demos en vivo</h2>
         <p class="muted" style="margin-top:-6px">
@@ -265,18 +282,6 @@
             </div>
           </article>
         </div>
-
-        <div class="card detail" style="margin-top:18px">
-          <h3>Enlaces rápidos</h3>
-          <p class="muted">Centralizo el código y los laboratorios en GitHub y comparto avances en redes.</p>
-          <div class="links">
-            <a class="btn small primary" href="https://github.com/vladimiracunadev-create" target="_blank" rel="noopener">🐙 GitHub</a>
-            <a class="btn small" href="https://www.linkedin.com/in/vladimir-acu%C3%B1a-valdebenito-11924a29/" target="_blank" rel="noopener">in LinkedIn</a>
-            <a class="btn small" href="https://www.youtube.com/@VladimirAcu%C3%B1aDev" target="_blank" rel="noopener">▶️ YouTube</a>
-            <a class="btn small" href="https://x.com/VladiAcunaDev" target="_blank" rel="noopener">𝕏 X</a>
-            <a class="btn small" href="https://www.tiktok.com/@vladimiracunadev" target="_blank" rel="noopener">🎵 TikTok</a>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -322,8 +327,7 @@
       <div class="container">
         <h2 class="section-title">Roles en los que también encajo (y puedo postular)</h2>
         <p class="muted" style="margin-top:-6px">
-          Para aumentar match con ATS/reclutadores, incluyo títulos típicos donde mi experiencia calza.
-          (En Modo rápido se muestra lo esencial; el detalle queda colapsado.)
+          Usa el selector de vista: <b>Reclutador</b> (rápido), <b>Normal</b> (equilibrado) o <b>Profundo</b> (todo abierto).
         </p>
 
         <h3 class="section-subtitle">Top roles (alta compatibilidad con mi perfil)</h3>
@@ -369,7 +373,7 @@
             </div>
           </article>
 
-          <article class="card role-card">
+          <article class="card role-card optional">
             <h3>Consultor Performance & Cost Optimization</h3>
             <p class="muted">FinOps técnico: right-sizing, caching, DB tuning, budget alerts, arquitectura costo-efectiva.</p>
             <div class="taglist">
@@ -379,7 +383,7 @@
             </div>
           </article>
 
-          <article class="card role-card">
+          <article class="card role-card optional">
             <h3>Especialista en Automatización (n8n / workflows)</h3>
             <p class="muted">Automatizar operaciones: onboarding, reportes, alertas, integraciones con APIs, bots.</p>
             <div class="taglist">
@@ -390,8 +394,8 @@
           </article>
         </div>
 
-        <!-- Roles secundarios: quedan colapsados para evitar sobrecarga visual -->
-        <details class="accordion detail">
+        <!-- Acordeón: en Profundo se abre automático -->
+        <details class="accordion optional" id="rolesMore">
           <summary>Ver más roles (producto, pre-sales, continuidad, auditoría, datos)</summary>
 
           <h3 class="section-subtitle" style="margin-top:14px">Producto / Pre-Sales / Evangelización técnica</h3>
@@ -428,7 +432,7 @@
             </article>
           </div>
 
-          <h3 class="section-subtitle" style="margin-top:18px">Datos aplicado (sin “data scientist”)</h3>
+          <h3 class="section-subtitle" style="margin-top:18px">Datos aplicado</h3>
 
           <div class="grid cols-3">
             <article class="card role-card">
@@ -456,7 +460,7 @@
             </article>
 
             <article class="card role-card">
-              <h3>Implementador / Consultor de plataformas (LMS/CRM/analítica)</h3>
+              <h3>Implementador / Consultor de plataformas</h3>
               <p class="muted">Integrar sistemas: SSO, exportaciones, reporting, procesos, conectores.</p>
               <div class="taglist">
                 <span class="tag">SSO</span>
@@ -477,7 +481,7 @@
           </div>
         </details>
 
-        <div class="card role-cta" style="margin-top:18px">
+        <div class="card role-cta optional" style="margin-top:18px">
           <h3>¿Te armo un “one-pager” por rol (para postular más rápido)?</h3>
           <p class="muted">
             Puedo generar una versión corta orientada a: <b>Modernización Legacy</b>, <b>Platform/IDP</b>, <b>SRE Apps</b> o <b>Migraciones</b>,
@@ -545,7 +549,7 @@
             <div class="note">Si cambias la carpeta, ajusta estos <code>href</code> (por ejemplo: <code>assets/cv-vladimir-acuna-completo.pdf</code>).</div>
           </div>
 
-          <div class="card detail">
+          <div class="card optional">
             <h3>¿Quieres un “one-pager” por rol?</h3>
             <p class="muted">
               Puedo entregar una versión ultra-corta orientada a Arquitectura, Full-Stack o Modernización Legacy,
@@ -588,19 +592,5 @@
       </div>
     </div>
   </footer>
-
-  <!--
-    Links oficiales:
-    GitHub:  https://github.com/vladimiracunadev-create
-    LinkedIn:https://www.linkedin.com/in/vladimir-acu%C3%B1a-valdebenito-11924a29/
-    YouTube: https://www.youtube.com/@VladimirAcu%C3%B1aDev
-    X:       https://x.com/VladiAcunaDev
-    TikTok:  https://www.tiktok.com/@vladimiracunadev
-
-    PDFs (mantener junto al HTML o ajustar ruta):
-    - portafolio-vladimir-acuna.pdf
-    - cv-vladimir-acuna-reducido.pdf
-    - cv-vladimir-acuna-completo.pdf
-  -->
 </body>
 </html>

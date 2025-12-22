@@ -51,6 +51,7 @@ a{color:inherit}
   font-weight: 700;
   letter-spacing:.2px;
   white-space:nowrap;
+  flex-wrap: wrap;
 }
 
 .badge{
@@ -63,21 +64,119 @@ a{color:inherit}
   background: rgba(255,255,255,.04);
 }
 
-nav{
-  display:flex; gap:14px; flex-wrap:wrap; justify-content:flex-end;
-  font-size: 13px;
-  color: var(--muted);
-  align-items: center;
+.viewchip{
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 4px 8px;
+  border: 1px solid rgba(136,243,208,.35);
+  border-radius: 999px;
+  background: rgba(136,243,208,.10);
+  color: var(--text);
+  opacity: .95;
 }
 
-nav a{
+/* Menú */
+.iconbtn{
+  display:none;
+  border:1px solid var(--border);
+  background: rgba(255,255,255,.04);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 8px 10px;
+  cursor:pointer;
+}
+
+.nav-menu{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  align-items:center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.nav-row{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:flex-end;
+}
+
+.nav-row a{
   text-decoration:none;
   padding: 6px 8px;
   border-radius: 10px;
 }
 
-nav a:hover{background: rgba(255,255,255,.06); color: var(--text)}
+.nav-row a:hover{
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+}
 
+/* Selector 3 vistas */
+.view-switch{
+  display:flex;
+  gap:4px;
+  padding:4px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,.14);
+}
+
+.vs-btn{
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor:pointer;
+  transition: transform .08s ease, background .12s ease, border-color .12s ease;
+}
+
+.vs-btn:hover{ transform: translateY(-1px); color: var(--text); }
+
+.vs-btn.active{
+  border-color: rgba(122,162,255,.45);
+  background: rgba(122,162,255,.16);
+  color: var(--text);
+}
+
+/* Overlay (menú móvil) */
+.overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.50);
+  backdrop-filter: blur(2px);
+  z-index: 40;
+}
+
+/* Toast */
+.toast{
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  background: rgba(11,16,32,.92);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 10px 14px;
+  box-shadow: var(--shadow);
+  color: var(--text);
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+  z-index: 70;
+}
+.toast.show{
+  opacity: 1;
+  transform: translateX(-50%) translateY(-6px);
+}
+
+/* HERO */
 .hero{padding: 58px 0 24px}
 
 .hero-grid{
@@ -123,6 +222,10 @@ nav a:hover{background: rgba(255,255,255,.06); color: var(--text)}
   color: var(--muted);
   display:flex; gap:8px; align-items:center;
 }
+
+.roles-pills { margin-top: 10px; }
+.pill-link { text-decoration: none; cursor: pointer; }
+.pill-link:hover { border-color: rgba(255,255,255,.22); color: var(--text); }
 
 .cta{display:flex; flex-wrap:wrap; gap:10px; margin-top: 14px}
 
@@ -173,15 +276,11 @@ nav a:hover{background: rgba(255,255,255,.06); color: var(--text)}
 
 .muted{color: var(--muted)}
 
-.grid{
-  display:grid;
-  gap: 14px;
-}
-
-.grid.cols-3{grid-template-columns: repeat(3, 1fr)}
+.grid{ display:grid; gap: 14px; }
+.grid.cols-3{ grid-template-columns: repeat(3, 1fr) }
 
 @media (max-width: 980px){
-  .grid.cols-3{grid-template-columns: 1fr}
+  .grid.cols-3{ grid-template-columns: 1fr }
 }
 
 .card h3{margin:0 0 8px}
@@ -247,10 +346,11 @@ code{font-family: var(--mono); font-size: 12px}
 .clean{padding-left: 0; margin: 10px 0 0}
 .clean li{list-style:none; margin: 6px 0}
 
+/* Reveal */
 .reveal{opacity: 0; transform: translateY(16px); transition: .55s ease}
 .reveal.show{opacity:1; transform: translateY(0)}
 
-/* === Roles (estilos visuales) === */
+/* Roles */
 .section-subtitle{
   margin: 8px 0 12px;
   font-size: 14px;
@@ -280,21 +380,7 @@ code{font-family: var(--mono); font-size: 12px}
     var(--panel);
 }
 
-/* === Pills clickeables para roles en el HERO === */
-.roles-pills { margin-top: 10px; }
-.pill-link { text-decoration: none; cursor: pointer; }
-.pill-link:hover { border-color: rgba(255,255,255,.22); color: var(--text); }
-
-/* === Modo rápido (compacto): ocultar detalle largo sin eliminar contenido === */
-body.compact .detail {
-  display: none !important;
-}
-
-.modebtn{
-  border-color: rgba(136,243,208,.35);
-}
-
-/* === Acordeón con <details> para contenido secundario === */
+/* Acordeón */
 details.accordion{
   margin-top: 14px;
   border: 1px solid var(--border);
@@ -327,4 +413,52 @@ details.accordion[open] summary::after{
 
 details.accordion > *:not(summary){
   padding: 0 14px 14px;
+}
+
+/* ======== RESPONSIVE MENÚ ======== */
+@media (max-width: 980px){
+  .iconbtn{ display:inline-flex; }
+
+  .nav-menu{
+    position: fixed;
+    top: 64px;
+    left: 16px;
+    right: 16px;
+    z-index: 60;
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+    background: rgba(11,16,32,.92);
+    border: 1px solid var(--border);
+    border-radius: var(--radius2);
+    box-shadow: var(--shadow);
+    color: var(--text);
+    max-height: calc(100vh - 90px);
+    overflow:auto;
+  }
+
+  .nav-menu.open{ display:flex; }
+
+  .nav-row{
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .nav-row a{
+    width: 100%;
+    padding: 10px 10px;
+  }
+
+  .view-switch{
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .vs-btn{
+    flex: 1;
+    text-align:center;
+  }
 }
