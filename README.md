@@ -4,6 +4,10 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Changelog](https://img.shields.io/badge/changelog-Unreleased-yellow.svg)](CHANGELOG.md)
 
+**Temas:** `aws` `gitlab` `static-site` `amplify` `s3` `cloudfront`
+
+**¿Quieres contribuir?** Lee `CONTRIBUTING.md` y `CODE_OF_CONDUCT.md`.
+
 Descripción
 -----------
 Plantilla para desplegar una web estática desde GitLab hacia AWS. Incluye dos enfoques bien documentados para distintos niveles de control y automatización:
