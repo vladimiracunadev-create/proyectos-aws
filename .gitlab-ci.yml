@@ -23,7 +23,9 @@ lint:
 
 deploy_prod:
   stage: deploy
-  image: public.ecr.aws/aws-cli/aws-cli:latest
+  image:
+    name: public.ecr.aws/aws-cli/aws-cli:latest
+    entrypoint: [""]
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
@@ -36,5 +38,6 @@ deploy_prod:
     - aws s3 sync caso-b-gitlab-s3/ "s3://$S3_BUCKET/" --delete --exclude "*.md"
   environment:
     name: production
+
 
 
