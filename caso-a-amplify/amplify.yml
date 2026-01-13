@@ -1,0 +1,17 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - echo "Static site: no build"
+    build:
+      commands:
+        - echo "Nothing to build"
+  artifacts:
+    # Importante: este amplify.yml debe estar en la RAÍZ del repo para que Amplify lo use.
+    # Por eso lo dejamos aquí como plantilla para copiarlo a la raíz cuando actives el Caso A.
+    baseDirectory: caso-a-amplify
+    files:
+      - '**/*'
+  cache:
+    paths: []

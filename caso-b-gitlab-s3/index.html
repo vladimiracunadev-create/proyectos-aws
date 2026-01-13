@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Web estática (GitLab → AWS)</title>
+  <link rel="stylesheet" href="./assets/style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="card">
+      <h1>Web estática</h1>
+      <p class="muted">Plantilla mínima para desplegar automáticamente desde <strong>GitLab</strong> hacia <strong>AWS</strong>.</p>
+    </header>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Contenido (idéntico)</h2>
+        <p>Esta web es la misma en <code>/caso-a-amplify</code> y <code>/caso-b-gitlab-s3</code>.</p>
+        <ul>
+          <li><strong>index.html</strong></li>
+          <li><strong>assets/style.css</strong></li>
+          <li><strong>assets/app.js</strong></li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h2>Estado</h2>
+        <div class="kv">
+          <div class="k">Fecha local</div><div class="v" id="now">—</div>
+          <div class="k">Ruta</div><div class="v" id="path">—</div>
+        </div>
+        <button id="btn" class="btn">Probar JS</button>
+        <p class="muted" id="msg"></p>
+      </article>
+    </section>
+
+    <footer class="muted foot">
+      <span>Hecho para CI/CD: Amplify (A) o GitLab CI → S3 (B).</span>
+    </footer>
+  </main>
+
+  <script src="./assets/app.js"></script>
+</body>
+</html>

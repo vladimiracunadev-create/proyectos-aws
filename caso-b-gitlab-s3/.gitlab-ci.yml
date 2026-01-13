@@ -1,0 +1,18 @@
+stages: [deploy]
+
+deploy_prod:
+  stage: deploy
+  # Imagen con AWS CLI para ejecutar comandos `aws` en el job
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  script:
+    # Sincroniza SOLO el contenido de esta carpeta al bucket
+    - aws s3 sync caso-b-gitlab-s3 "s3://$S3_BUCKET/" --delete
+    # Opcional: invalidar CloudFront para que los cambios se vean de inmediato
+    - |
+      if [ -n "$CLOUDFRONT_DISTRIBUTION_ID" ]; then
+        aws cloudfront create-invalidation --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" --paths "/*"
+      fi
+  environment:
+    name: production

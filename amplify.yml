@@ -1,0 +1,17 @@
+version: 1
+applications:
+  - appRoot: caso-a-amplify
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - echo "Static site: no build"
+        build:
+          commands:
+            - echo "Nothing to build"
+      artifacts:
+        baseDirectory: .
+        files:
+          - '**/*'
+      cache:
+        paths: []

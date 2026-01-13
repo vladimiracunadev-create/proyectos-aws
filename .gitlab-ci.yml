@@ -1,0 +1,17 @@
+stages: [deploy]
+
+deploy_prod:
+  stage: deploy
+  image: amazon/aws-cli:2
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - caso-b-gitlab-s3/**/*
+  script:
+    - aws s3 sync caso-b-gitlab-s3 "s3://$S3_BUCKET/" --delete
+    - |
+      if [ -n "$CLOUDFRONT_DISTRIBUTION_ID" ]; then
+        aws cloudfront create-invalidation --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" --paths "/*"
+      fi
+  environment:
+    name: production

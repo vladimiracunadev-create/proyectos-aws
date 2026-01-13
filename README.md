@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # proyectos-aws-gitlab
 
 
@@ -91,3 +92,20 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+=======
+# GitLab → AWS (web estática) — Plantilla con 2 casos
+
+Este repositorio trae **2 carpetas** con **el mismo contenido de web** (HTML/CSS/JS) pero distinto enfoque de despliegue:
+
+- `caso-a-amplify/` → AWS Amplify conectado a GitLab (más simple)
+- `caso-b-gitlab-s3/` → GitLab CI/CD despliega a S3 (más control)
+
+## Regla para NO afectar lo que ya tienes
+- Crea recursos **nuevos** (nueva Amplify App o nuevo bucket/distribución).
+- Usa credenciales/variables **solo en este proyecto**.
+- No reutilices buckets, distribuciones, ni usuarios IAM de otros entornos.
+
+## ¿Qué carpeta uso?
+- Si quieres “click, conectar y listo” → **Caso A**
+- Si quieres pipeline bajo tu control (S3/CloudFront/IAM) → **Caso B**
+>>>>>>> b0d354c (Subida inicial)
