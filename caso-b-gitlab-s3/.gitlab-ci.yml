@@ -1,18 +1,43 @@
-stages: [deploy]
+stages:
+  - test
+  - deploy
+
+lint:
+  stage: test
+  image: node:18
+  rules:
+    - changes:
+        - .gitlab-ci.yml
+        - caso-a-amplify/**/*
+        - caso-b-gitlab-s3/**/*
+  before_script:
+    - npm install -g htmlhint csslint || true
+  script:
+    - echo "Running HTML checks..."
+    - find caso-a-amplify caso-b-gitlab-s3 -name "*.html" -print0 | xargs -0 -r htmlhint || true
+    - echo "Running CSS checks..."
+    - find caso-a-amplify caso-b-gitlab-s3 -name "*.css" -print0 | xargs -0 -r csslint || true
+    - echo "Running JS syntax checks..."
+    - find caso-a-amplify caso-b-gitlab-s3 -name "*.js" -print0 | xargs -0 -r -n1 sh -c 'node --check "$0"' || true
+  allow_failure: false
 
 deploy_prod:
   stage: deploy
-  # Imagen con AWS CLI para ejecutar comandos `aws` en el job
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  image: amazon/aws-cli:2
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - .gitlab-ci.yml
+        - caso-b-gitlab-s3/**/*
   script:
-    # Sincroniza SOLO el contenido de esta carpeta al bucket
-    - aws s3 sync caso-b-gitlab-s3 "s3://$S3_BUCKET/" --delete
-    # Opcional: invalidar CloudFront para que los cambios se vean de inmediato
-    - |
-      if [ -n "$CLOUDFRONT_DISTRIBUTION_ID" ]; then
-        aws cloudfront create-invalidation --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" --paths "/*"
-      fi
+    # Debug seguro (no imprime secretos)
+    - echo "BUCKET=$S3_BUCKET REGION=$AWS_DEFAULT_REGION"
+    - aws --version
+    - aws sts get-caller-identity
+    - ls -la caso-b-gitlab-s3 || true
+    - aws s3 ls "s3://$S3_BUCKET/" || true
+
+    # Deploy (ojo la / final)
+    - aws s3 sync caso-b-gitlab-s3/ "s3://$S3_BUCKET/" --delete --exclude "*.md"
   environment:
     name: production
