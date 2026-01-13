@@ -1,49 +1,50 @@
 # 🚀 Cloud Portfolio: Proyectos AWS (Monorepo)
 
-Monorepo con **arquitecturas y despliegues reales en AWS**, enfocado en demostrar prácticas modernas de **CI/CD**, manejo de **entornos por rama**, y documentación de **infraestructura cloud**.
+**Monorepo de portafolio con despliegues reales en AWS** para demostrar prácticas modernas de **CI/CD**, separación de **entornos por rama**, y documentación clara de infraestructura.
 
-> Objetivo: mostrar implementación **real y trazable** (Local → GitHub → AWS), con enfoque de portafolio profesional.
+**TL;DR (30s):**
+- ✅ CI/CD real: cambios en Git → despliegue automático (S3 + GitHub Actions / Amplify por ramas)
+- ✅ Trabajo profesional con `dev → PR → main` y trazabilidad completa
+- ✅ Enfoque de portafolio: documentación + demos + estructura lista para crecer
 
 ---
 
-## 🌐 Demos en Vivo (abren en otra pestaña)
+## 🌐 Demos en Vivo
 
-### 1️⃣ AWS S3 + GitHub Actions (Despliegue Automatizado)
-*Sitio estático desplegado automáticamente al detectar cambios en `main` dentro de la carpeta del proyecto.*
+### 1) AWS S3 + GitHub Actions (Deploy Automatizado)
 - **Estado:** ✅ Operativo  
-- **Tecnologías:** S3, IAM, GitHub Actions (YAML)  
+- **Stack:** S3, IAM, GitHub Actions (YAML)  
 - **Carpeta:** `aws-s3-scrum-mi-sitio-1/`  
-- 🔗 <a href="https://mi-pagina-scrum-123.s3.us-east-2.amazonaws.com/index.html" target="_blank" rel="noopener noreferrer">Ver Demo en S3</a>
+- **Demo:** https://mi-pagina-scrum-123.s3.us-east-2.amazonaws.com/index.html
 
-### 2️⃣ AWS Amplify - Continuous Deployment
-*Hosting con despliegue por rama (`main` / `dev`) y SSL automático.*
+### 2) AWS Amplify – Continuous Deployment por Rama
 - **Estado:** ✅ Operativo  
-- **Tecnologías:** AWS Amplify Console  
+- **Stack:** AWS Amplify Console, SSL automático  
 - **Carpeta:** `aws-amplify-mi-sitio-1/`  
-- 🔗 <a href="https://main.d3r1wuymolxagh.amplifyapp.com/" target="_blank" rel="noopener noreferrer">Demo Rama Main</a>  
-- 🔗 <a href="https://dev.d20m8tc0banvg.amplifyapp.com/" target="_blank" rel="noopener noreferrer">Demo Rama Dev</a>  
+- **Demo Main:** https://main.d3r1wuymolxagh.amplifyapp.com/  
+- **Demo Dev:**  https://dev.d20m8tc0banvg.amplifyapp.com/
 
 ---
 
-## ✅ Cambios Profesionales en 3 Niveles (Local → GitHub → AWS)
+## 🧭 Flujo Profesional (Local → GitHub → AWS)
 
-Este repo permite actualizar de manera **profesional y trazable**:
-
-1. **Local (VS Code):** editas y validas cambios.
+1. **Local (VS Code):** editas, pruebas y validas cambios.
 2. **GitHub:** trabajas en `dev`, haces commits y creas **Pull Request** a `main`.
 3. **AWS:**
    - **Amplify** despliega automáticamente por rama (`dev` / `main`).
-   - **S3 + GitHub Actions** mantiene el bucket sincronizado (según workflow configurado).
+   - **S3 + GitHub Actions** sincroniza el bucket desde `main` según workflow.
 
 ---
 
-## 🛠️ Estructura del Proyecto
+## 🏗️ Arquitectura (alto nivel)
 
-```text
-.
-├── .github/workflows/          # Automatización (GitHub Actions)
-├── aws-s3-scrum-mi-sitio-1/    # Sitio 1: S3 + CI/CD
-├── aws-amplify-mi-sitio-1/     # Sitio 2: Amplify CI/CD
-├── aws-lambda-api-1/           # (En desarrollo) Serverless API
-├── aws-ec2-docker-lab/         # (Pendiente) Contenedores
-└── infra-terraform/            # (Pendiente) IaC
+```mermaid
+flowchart LR
+  A[Dev local] --> B[GitHub repo]
+  B -->|PR dev → main| C[Branch main]
+  C --> D[GitHub Actions]
+  D --> E[(S3 Bucket)]
+  B --> F[Amplify Console]
+  F --> G[Deploy main]
+  F --> H[Deploy dev]
+
