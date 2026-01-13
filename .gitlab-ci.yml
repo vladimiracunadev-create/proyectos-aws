@@ -23,24 +23,18 @@ lint:
 
 deploy_prod:
   stage: deploy
-  image: alpine:3.20
-  before_script:
-    - apk add --no-cache python3 py3-pip
-    - pip3 install --no-cache-dir awscli
+  image: public.ecr.aws/aws-cli/aws-cli:latest
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
         - .gitlab-ci.yml
         - caso-b-gitlab-s3/**/*
   script:
-    - set -eux
-    - test -n "$S3_BUCKET"
-    - test -n "$AWS_DEFAULT_REGION"
-    - test -d caso-b-gitlab-s3
     - aws --version
     - aws sts get-caller-identity
-    - aws s3 ls "s3://$S3_BUCKET/"
-    - aws s3 sync "caso-b-gitlab-s3/" "s3://$S3_BUCKET/" --delete --exclude "*.md"
+    - echo "BUCKET=$S3_BUCKET REGION=$AWS_DEFAULT_REGION"
+    - aws s3 sync caso-b-gitlab-s3/ "s3://$S3_BUCKET/" --delete --exclude "*.md"
   environment:
     name: production
+
 
