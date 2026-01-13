@@ -30,14 +30,11 @@ deploy_prod:
         - .gitlab-ci.yml
         - caso-b-gitlab-s3/**/*
   script:
-    # Debug seguro (no imprime secretos)
     - echo "BUCKET=$S3_BUCKET REGION=$AWS_DEFAULT_REGION"
     - aws --version
     - aws sts get-caller-identity
     - ls -la caso-b-gitlab-s3 || true
     - aws s3 ls "s3://$S3_BUCKET/" || true
-
-    # Deploy (ojo la / final)
     - aws s3 sync caso-b-gitlab-s3/ "s3://$S3_BUCKET/" --delete --exclude "*.md"
   environment:
     name: production
