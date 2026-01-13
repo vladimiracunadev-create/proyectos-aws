@@ -30,3 +30,20 @@ Referencias
 - `amplify.yml` (este folder)
 - Documentación oficial: https://docs.aws.amazon.com/amplify
 
+Despliegue en Amplify ✅
+-----------------------
+La app del **Caso A** está desplegada en: https://main.d1uybq9oui7h8c.amplifyapp.com/ (deployed 2026-01-13).
+
+Verificación rápida
+-------------------
+- Abrir la URL y comprobar que la página carga correctamente.
+- Revisar que los assets (CSS, JS, PDFs) se sirvan sin errores.
+- Probar en móvil/desktop y navegar por enlaces.
+- Para problemas, revisar logs de Amplify Console y el build log.
+
+Siguientes pasos recomendados
+-----------------------------
+- Configurar un dominio personalizado y certificado en Amplify si aplica.
+- Revisar ajustes de cache y headers (Cache-Control) en S3/CloudFront o Amplify.
+- Añadir monitorización/alertas (CloudWatch) y pruebas E2E si deseas.
+

@@ -1,5 +1,6 @@
 # GitLab → AWS (web estática) — Plantilla profesional
 
+[![Deployed](https://img.shields.io/badge/deployed-Amplify-brightgreen.svg)](https://main.d1uybq9oui7h8c.amplifyapp.com/)
 [![Pipeline](https://gitlab.com/vladimir.acuna.dev-group/proyectos-aws-gitlab/badges/main/pipeline.svg)](https://gitlab.com/vladimir.acuna.dev-group/proyectos-aws-gitlab/-/pipelines)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Changelog](https://img.shields.io/badge/changelog-Unreleased-yellow.svg)](CHANGELOG.md)
@@ -29,6 +30,7 @@ Estado del proyecto
 -------------------
 - Estatus: Activo (se aceptan contribuciones)
 - CI: Pipeline en GitLab (ver badge arriba)
+- Demo (Caso A): https://main.d1uybq9oui7h8c.amplifyapp.com/ (deployed 2026-01-13)
 
 Casos de uso
 ------------
