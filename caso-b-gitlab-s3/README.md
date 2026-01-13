@@ -17,3 +17,23 @@ Para ACTIVAR:
    - S3_BUCKET
    - (opcional) CLOUDFRONT_DISTRIBUTION_ID
 3) Haz commit + push a `main`.
+
+Testing local y validaciones
+---------------------------
+- Antes de activar el pipeline, prueba la sincronización localmente con AWS CLI:
+
+```bash
+# Revisa qué ocurriría sin subir nada
+aws s3 sync caso-b-gitlab-s3/ s3://$S3_BUCKET/ --dryrun
+
+# Si todo está bien, ejecuta:
+aws s3 sync caso-b-gitlab-s3/ s3://$S3_BUCKET/ --delete
+```
+
+- Añade validaciones en tu pipeline (ej. comprobaciones de HTML/CSS/JS, linter) para evitar despliegues con errores.
+
+Seguridad y permisos (IAM)
+--------------------------
+- Usa una política IAM con **permisos mínimos**: acceso a `s3:PutObject`, `s3:DeleteObject`, `s3:ListBucket` sobre el bucket objetivo, y `cloudfront:CreateInvalidation` si usas CloudFront.
+- Para un ejemplo de política lista para usar y guía, revisa `AWS_IAM_POLICY.md` en la raíz del repo.
+

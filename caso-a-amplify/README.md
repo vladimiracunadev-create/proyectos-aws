@@ -13,3 +13,20 @@
    - Haz commit y push.
 
 Amplify usa el `amplify.yml` del repositorio para el buildspec cuando está presente.
+
+Testing local
+-------------
+- Puedes ejecutar un servidor estático para ver la web localmente: `npx http-server caso-a-amplify -p 8080`.
+- Para revisar que el build funciona, reproduce los pasos de `amplify.yml` localmente (por ejemplo, instalar dependencias y ejecutar comandos de build).
+
+Notas y buenas prácticas
+------------------------
+- No incluyas credenciales en el repositorio. Usa las opciones de variables y secret manager en Amplify cuando sea necesario.
+- Mantén `amplify.yml` simple; si necesitas transformaciones (minificación, versiones) define pasos explícitos en el build.
+- Revisa la configuración de dominio y certificado en Amplify si vas a usar un dominio personalizado.
+
+Referencias
+-----------
+- `amplify.yml` (este folder)
+- Documentación oficial: https://docs.aws.amazon.com/amplify
+

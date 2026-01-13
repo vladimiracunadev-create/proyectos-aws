@@ -59,6 +59,7 @@ CI / Despliegue
 - Este repositorio ya incluye un pipeline en `.gitlab-ci.yml` con el job `deploy_prod` que sincroniza `caso-b-gitlab-s3` con un bucket S3 y, opcionalmente, invalida una distribución CloudFront.
 - Variables protegidas que debes configurar en GitLab CI/CD: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `S3_BUCKET`. `CLOUDFRONT_DISTRIBUTION_ID` es opcional para invalidaciones.
 - El job corre cuando hay cambios en `caso-b-gitlab-s3` en la rama `main`. Revisa y adapta `.gitlab-ci.yml` para tus necesidades (por ejemplo, añadir validaciones o etapas de staging antes de producción).
+- Para un ejemplo de **política IAM** con permisos mínimos para desplegar a S3 y (opcional) invalidar CloudFront, consulta `AWS_IAM_POLICY.md` en la raíz del repositorio.
 
 Contribuir
 ----------
