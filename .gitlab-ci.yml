@@ -23,7 +23,7 @@ lint:
 
 deploy_prod:
   stage: deploy
-  image: public.ecr.aws/aws-cli/aws-cli:2
+  image: public.ecr.aws/aws-cli/aws-cli:2.15.0
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:
