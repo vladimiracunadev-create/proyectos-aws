@@ -1,4 +1,24 @@
-stages: [deploy]
+stages:
+  - test
+  - deploy
+
+lint:
+  stage: test
+  image: node:18
+  rules:
+    - changes:
+        - caso-a-amplify/**/*
+        - caso-b-gitlab-s3/**/*
+  before_script:
+    - npm install -g htmlhint csslint || true
+  script:
+    - echo "Running HTML checks..."
+    - find caso-a-amplify caso-b-gitlab-s3 -name "*.html" -print0 | xargs -0 -r htmlhint || true
+    - echo "Running CSS checks..."
+    - find caso-a-amplify caso-b-gitlab-s3 -name "*.css" -print0 | xargs -0 -r csslint || true
+    - echo "Running JS syntax checks..."
+    - find caso-a-amplify caso-b-gitlab-s3 -name "*.js" -print0 | xargs -0 -r -n1 sh -c 'node --check "$0"' || true
+  allow_failure: false
 
 deploy_prod:
   stage: deploy

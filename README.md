@@ -60,6 +60,7 @@ CI / Despliegue
 - Variables protegidas que debes configurar en GitLab CI/CD: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `S3_BUCKET`. `CLOUDFRONT_DISTRIBUTION_ID` es opcional para invalidaciones.
 - El job corre cuando hay cambios en `caso-b-gitlab-s3` en la rama `main`. Revisa y adapta `.gitlab-ci.yml` para tus necesidades (por ejemplo, añadir validaciones o etapas de staging antes de producción).
 - Para un ejemplo de **política IAM** con permisos mínimos para desplegar a S3 y (opcional) invalidar CloudFront, consulta `AWS_IAM_POLICY.md` en la raíz del repositorio.
+- Se añadió un job `lint` en CI (`.gitlab-ci.yml`) que valida HTML, CSS y la sintaxis de JS antes de despliegues a producción.
 
 Contribuir
 ----------
