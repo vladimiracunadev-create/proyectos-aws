@@ -50,6 +50,12 @@ Desarrollo y pruebas
 - Estructura mínima: HTML/CSS/JS estático en cada carpeta `caso-*`.
 - Para pruebas locales: abre `index.html` en el navegador o usa un servidor estático (por ejemplo `npx http-server`).
 
+CI / Despliegue
+---------------
+- Este repositorio ya incluye un pipeline en `.gitlab-ci.yml` con el job `deploy_prod` que sincroniza `caso-b-gitlab-s3` con un bucket S3 y, opcionalmente, invalida una distribución CloudFront.
+- Variables protegidas que debes configurar en GitLab CI/CD: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `S3_BUCKET`. `CLOUDFRONT_DISTRIBUTION_ID` es opcional para invalidaciones.
+- El job corre cuando hay cambios en `caso-b-gitlab-s3` en la rama `main`. Revisa y adapta `.gitlab-ci.yml` para tus necesidades (por ejemplo, añadir validaciones o etapas de staging antes de producción).
+
 Contribuir
 ----------
 Gracias por considerar contribuir. Lee `CONTRIBUTING.md` para pautas de ramas, commits y PRs. También hay plantillas de issues y MR para agilizar la colaboración.
