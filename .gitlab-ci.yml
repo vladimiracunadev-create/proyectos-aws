@@ -1,40 +1,58 @@
+image: node:18
+
 stages:
   - test
   - deploy
+  - plan-infrastructure
 
+cache:
+  paths:
+    - node_modules/
+
+# --- Global Checks ---
 lint:
   stage: test
-  image: node:18
+  script:
+    - npm ci
+    - npm run lint
   rules:
     - changes:
-        - .gitlab-ci.yml
-        - caso-a-amplify/**/*
-        - caso-b-gitlab-s3/**/*
-  before_script:
-    - npm install -g htmlhint csslint || true
-  script:
-    - echo "Running HTML checks..."
-    - find caso-a-amplify caso-b-gitlab-s3 -name "*.html" -print0 | xargs -0 -r htmlhint || true
-    - echo "Running CSS checks..."
-    - find caso-a-amplify caso-b-gitlab-s3 -name "*.css" -print0 | xargs -0 -r csslint || true
-    - echo "Running JS syntax checks..."
-    - find caso-a-amplify caso-b-gitlab-s3 -name "*.js" -print0 | xargs -0 -r -n1 sh -c 'node --check "$0"' || true
-  allow_failure: false
+        - "**/*.{js,css,html,md}"
+        - package.json
+        - .eslintrc.js
+        - .prettierrc
 
-deploy_prod:
+# --- Caso B: Legacy S3 Sync ---
+deploy_case_b:
   stage: deploy
   image:
     name: public.ecr.aws/aws-cli/aws-cli:latest
     entrypoint: [""]
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - caso-b-gitlab-s3/**/*
   script:
-    - aws --version
-    - aws sts get-caller-identity
-    - echo "BUCKET=$S3_BUCKET REGION=$AWS_DEFAULT_REGION"
-    - aws s3 sync caso-b-gitlab-s3/ "s3://$S3_BUCKET/" --delete --exclude "*.md"
+    - echo "Deploying Case B to S3..."
+    - aws s3 sync caso-b-gitlab-s3/ "s3://$S3_BUCKET_CASO_B/" --delete --exclude "*.md"
   environment:
-    name: production
+    name: production/case-b
+
+# --- Caso C: Terraform (Placeholder) ---
+# plan_case_c:
+#   stage: plan-infrastructure
+#   image:
+#     name: hashicorp/terraform:light
+#     entrypoint: [""]
+#   rules:
+#     - if: '$CI_COMMIT_BRANCH == "main"'
+#       changes:
+#         - caso-c-terraform-s3/**/*
+#   script:
+#     - cd caso-c-terraform-s3
+#     - terraform init
+#     - terraform plan
+
 
 
 

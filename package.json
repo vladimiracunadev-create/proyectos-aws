@@ -1,0 +1,21 @@
+{
+  "name": "proyectos-aws-gitlab-monorepo",
+  "version": "1.0.0",
+  "description": "Monorepo educativo para despliegues AWS desde GitLab CI",
+  "private": true,
+  "scripts": {
+    "prepare": "husky install",
+    "lint": "eslint . --ext .js,.html",
+    "format": "prettier --write \"**/*.{js,json,md,html,css,yml}\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.0.0",
+    "@commitlint/config-conventional": "^17.0.0",
+    "eslint": "^8.0.0",
+    "htmlhint": "^1.0.0",
+    "husky": "^8.0.0",
+    "prettier": "^3.0.0",
+    "stylelint": "^15.0.0"
+  }
+}
