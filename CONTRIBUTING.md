@@ -1,26 +1,51 @@
-# Contributing
+# Guía de Contribución
 
-Gracias por querer contribuir. Por favor, sigue estas pautas básicas para facilitar las revisiones y mantener la calidad del proyecto.
+¡Gracias por tu interés en contribuir a este proyecto! 🚀
 
-## Reportar bugs
-- Abre un **issue** describiendo el comportamiento esperado y el observado, pasos para reproducir y entorno relevante.
+Este documento es un conjunto de pautas para contribuir al proyecto. Estas son solo pautas, no reglas estrictas. Usa tu mejor juicio y siéntete libre de proponer cambios a este documento en un Pull Request.
 
-## Proponer cambios (Pull Requests)
-- Crea una rama desde `main` con un nombre claro (`feature/`, `fix/`, `chore/`).
-- Usa commits pequeños y con mensajes descriptivos (se recomienda Conventional Commits).
-- Asegúrate de que los tests pasen y que agregues pruebas cuando sea apropiado.
-- Incluye una descripción clara en el PR de qué cambia y por qué.
+## 🛠️ Cómo empezar
 
-## Estilo de código
-- Sigue las reglas de lint/configuración del proyecto si existen.
-- Mantén el código legible y documenta funciones públicas.
+1.  **Haz un Fork** del repositorio en GitHub/GitLab.
+2.  **Clona** el proyecto a tu máquina local.
+3.  Crea una **nueva rama** para tu contribución:
+    ```bash
+    git checkout -b feat/mi-nueva-feature
+    ```
 
-## Revisión
-- Responde a comentarios de revisores y actualiza el PR según sea necesario.
+## 🐛 Reportando Bugs
 
-## Preguntas
-- Si no estás seguro, abre un issue para discutir la propuesta antes de implementar.
+Si encuentras un bug, por favor crea un [Issue](https://github.com/vladimir.acuna.dev-group/proyectos-aws-gitlab/issues) utilizando la plantilla de Bug Report. Asegúrate de incluir:
 
----
+*   Pasos para reproducir.
+*   Comportamiento esperado vs observado.
+*   Screenshots si es relevante.
 
-Gracias por contribuir — tu ayuda mejora el proyecto 🚀
+## 💡 Sugiriendo Mejoras
+
+Para sugerir una nueva funcionalidad, abre un Issue utilizando la plantilla de Feature Request. Explica claramente por qué sería útil esta funcionalidad.
+
+## 💻 Desarrollo
+
+### Estilo de Código
+*   Usamos **Prettier** para el formato. Asegúrate de correr `npm run format` antes de hacer commit.
+*   Usamos **ESLint** para el linting. Corre `npm run lint` para verificar errores.
+
+### Commits
+Seguimos la convención de **Conventional Commits**.
+*   `feat`: Nueva funcionalidad
+*   `fix`: Arreglo de bugs
+*   `docs`: Cambios en documentación
+*   `style`: Cambios de formato (espacios, puntos y comas, etc.)
+*   `refactor`: Refactorización de código
+*   `test`: Añadir o corregir tests
+
+Ejemplo: `feat(api): añadir endpoint de usuarios`
+
+##  Pull/Merge Requests
+
+1.  Asegúrate de que tu código está actualizado con la rama `main`.
+2.  Completa la plantilla del PR con toda la información necesaria.
+3.  Espera a la revisión y realiza los cambios solicitados si los hay.
+
+¡Gracias por ayudar a hacer este proyecto mejor! ✨

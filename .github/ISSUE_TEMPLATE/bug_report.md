@@ -1,3 +1,11 @@
+---
+name: Reporte de Bug
+about: Crea un reporte para ayudarnos a mejorar
+title: "[BUG] "
+labels: bug
+assignees: ''
+---
+
 ## 🐛 Descripción del Bug
 Una descripción clara y concisa de cuál es el problema.
 

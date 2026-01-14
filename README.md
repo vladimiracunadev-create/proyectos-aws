@@ -4,9 +4,12 @@
 [![Pipeline](https://gitlab.com/vladimir.acuna.dev-group/proyectos-aws-gitlab/badges/main/pipeline.svg)](https://gitlab.com/vladimir.acuna.dev-group/proyectos-aws-gitlab/-/pipelines)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://prettier.io)
+[![Antigravity](https://img.shields.io/badge/built_with-Antigravity-8A2BE2.svg)]()
 
 **Repositorio Maestro de Aprendizaje AWS**
 Este proyecto es una guía evolutiva paso a paso para dominar el despliegue de aplicaciones en AWS, desde sitios estáticos simples hasta arquitecturas avanzadas con contenedores y seguridad.
+
+> **Nota:** Este proyecto se trabaja íntegramente con **Antigravity**.
 
 ---
 
