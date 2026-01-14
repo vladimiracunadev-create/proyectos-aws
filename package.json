@@ -5,7 +5,9 @@
   "private": true,
   "scripts": {
     "prepare": "husky install",
-    "lint": "eslint . --ext .js,.html",
+    "lint": "npm run lint:js && npm run lint:html",
+    "lint:js": "eslint . --ext .js",
+    "lint:html": "htmlhint \"**/*.html\"",
     "format": "prettier --write \"**/*.{js,json,md,html,css,yml}\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
