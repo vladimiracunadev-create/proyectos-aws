@@ -13,6 +13,12 @@ Este proyecto es una guía evolutiva paso a paso para dominar el despliegue de a
 
 ---
 
+## 🎓 ¿Eres nuevo?
+**[👉 Empieza leyendo el MANUAL DE APRENDIZAJE para Novatos](./MANUAL_DE_APRENDIZAJE.md)**
+Entiende qué significa cada archivo y tecnología de este proyecto con explicaciones sencillas.
+
+---
+
 ## 🗺️ Roadmap de Aprendizaje
 
 Cada carpeta en este repositorio representa un "Caso de Estudio" que añade complejidad y profesionalismo sobre el anterior.
