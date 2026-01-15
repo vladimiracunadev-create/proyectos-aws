@@ -32,9 +32,10 @@ Cada carpeta en este repositorio representa un "Caso de Estudio" que añade comp
     - *Objetivo*: Entender qué pasa "por debajo". Pipelines manuales, buckets, sync.
 
 ### Nivel 2: Profesionalización (IaC & Serverless)
-- **[📂 caso-c-terraform-s3](./caso-c-terraform-s3/)** (Nivel 2) `NUEVO`
+- **[📂 caso-c-terraform-s3](./caso-c-terraform-s3/)** (Nivel 2) `DEPLOYED`
     - *Stack*: **Terraform** + S3 + CloudFront.
     - *Objetivo*: Infraestructura como Código (IaC). Cero configuración manual.
+    - *Live Demo*: [👉 Ver Sitio en Vivo](https://d3otfpeykrm536.cloudfront.net/)
 - **[📂 caso-d-serverless-basic](./caso-d-serverless-basic/)** (Nivel 3) `PROYECTADO`
     - *Stack*: Lambda + API Gateway.
     - *Objetivo*: Añadir lógica dinámica backend sin servidores (Serverless).

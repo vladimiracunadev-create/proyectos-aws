@@ -24,3 +24,13 @@ build/
 
 # Misc
 *.log
+
+# Terraform
+**/.terraform/*
+**/*.tfstate
+**/*.tfstate.*
+**/crash.log
+**/crash.*.log
+
+# Opcional: si usas plan file
+**/*.tfplan

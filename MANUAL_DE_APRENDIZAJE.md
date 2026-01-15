@@ -67,7 +67,9 @@ Cada carpeta es un nivel de dificultad progresiva:
 
 *   **`caso-a-amplify` (Nivel Bebé)**: Usas una herramienta que hace todo mágico (Amplify). Es fácil, pero tienes poco control.
 *   **`caso-b-gitlab-s3` (Nivel Manual)**: Aquí aprendes a subir archivos "a mano" (con scripts) a un almacenamiento simple (S3). Entiendes las bases.
-*   **`caso-c-terraform-s3` (Nivel Profesional)**: Usas "Infraestructura como Código". En lugar de dar clicks en la web de AWS, escribes código que crea la infraestructura. Es el estándar de la industria.
+*   **`caso-c-terraform-s3` (Nivel Profesional)**: Usas "Infraestructura como Código". Es el estándar de la industria.
+    *   **Estado**: ✅ Desplegado en [https://d3otfpeykrm536.cloudfront.net/](https://d3otfpeykrm536.cloudfront.net/)
+    *   **¿Qué aprendemos?**: A escribir código (HCL) que crea recursos reales en AWS (S3, CloudFront) de forma automática.
 *   **`caso-g-containers-ecs` (Nivel Experto)**: Despliegas aplicaciones complejas usando Docker y orquestadores. Esto es lo que usan las grandes empresas.
 
 ---

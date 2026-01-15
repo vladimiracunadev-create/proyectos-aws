@@ -20,7 +20,12 @@ caso-c-terraform-s3/
 └── public/        # Código web (html/css/js)
 ```
 
-## Instrucciones (Próximamente)
-1. Instalar Terraform.
-2. Configurar credenciales AWS.
-3. Ejecutar `terraform init` y `terraform apply`.
+## Instrucciones
+1. Instalar Terraform (o usar `.gitlab-ci.yml` para despliegue automático).
+2. Configurar credenciales AWS (si despliegas localmente).
+3. Ver el resultado en la URL de salida.
+
+## 🚀 Resultado
+**Sitio Desplegado:** [https://d3otfpeykrm536.cloudfront.net/](https://d3otfpeykrm536.cloudfront.net/)
+
+Este sitio es servido globalmente mediante CloudFront, leyendo los archivos desde un bucket privado S3 (OAC).
