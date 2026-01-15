@@ -61,16 +61,61 @@ Aunque despleguemos infraestructura, usamos herramientas creadas en JavaScript p
 
 ---
 
-## 🗺️ Los Niveles (Carpetas `caso-*`)
+## 🔬 Deep Dive: Análisis de los Casos
 
-Cada carpeta es un nivel de dificultad progresiva:
+Aquí explicamos el porqué, el cómo y la importancia de cada enfoque.
 
-*   **`caso-a-amplify` (Nivel Bebé)**: Usas una herramienta que hace todo mágico (Amplify). Es fácil, pero tienes poco control.
-*   **`caso-b-gitlab-s3` (Nivel Manual)**: Aquí aprendes a subir archivos "a mano" (con scripts) a un almacenamiento simple (S3). Entiendes las bases.
-*   **`caso-c-terraform-s3` (Nivel Profesional)**: Usas "Infraestructura como Código". Es el estándar de la industria.
-    *   **Estado**: ✅ Desplegado en [https://d3otfpeykrm536.cloudfront.net/](https://d3otfpeykrm536.cloudfront.net/)
-    *   **¿Qué aprendemos?**: A escribir código (HCL) que crea recursos reales en AWS (S3, CloudFront) de forma automática.
-*   **`caso-g-containers-ecs` (Nivel Experto)**: Despliegas aplicaciones complejas usando Docker y orquestadores. Esto es lo que usan las grandes empresas.
+### 🐣 Caso A: AWS Amplify (El Camino Rápido)
+**Ubicación:** `./caso-a-amplify/`
+
+**¿Qué es?**
+AWS Amplify es como un "mayordomo" que hace todo por ti. Tú solo le das tu código y él configura el servidor, el dominio, el HTTPS y las actualizaciones automáticas.
+
+**Archivos Clave:**
+*   `amplify.yml`: Es el único archivo de configuración que necesitas aquí. Le dice a Amplify cómo "construir" tu sitio (por ejemplo, si necesitas instalar dependencias antes de copiar los archivos HTML).
+
+**Alcance e Importancia:**
+*   **Ideal para:** Prototipos rápidos, hackathons, sitios personales simples.
+*   **Limitación:** Si quieres hacer algo muy específico fuera de lo "estándar", pelar con Amplify puede ser difícil. Es "magia negra": funciona genial, pero difícil saber qué pasa por dentro.
+*   **Lección:** Aprendes la velocidad de entrega.
+
+### 🛠️ Caso B: GitLab CI + S3 (El Camino Artesanal)
+**Ubicación:** `./caso-b-gitlab-s3/`
+
+**¿Qué es?**
+Aquí le quitamos la magia. Creamos un bucket S3 (una carpeta en la nube) manualmente y configuramos un pipeline de GitLab para que copie nuestros archivos allí.
+
+**Archivos Clave:**
+*   `.gitlab-ci.yml`: Aquí escribimos los comandos explícitos.
+    *   `deploy: script: aws s3 sync . s3://mi-bucket`: Literalmente le decimos "copia estos archivos a ese bucket".
+    *   **Variables**: Usamos variables de entorno ( $AWS_ACCESS_KEY_ID ) para no guardar contraseñas en el código.
+
+**Alcance e Importancia:**
+*   **Ideal para:** Entender los fundamentos de CI/CD.
+*   **Importancia:** Aprendes que "la nube" no es magia, son comandos de Linux ejecutándose en servidores de otra persona. Aprendes sobre permisos (IAM) y automatización básica.
+
+### 🏗️ Caso C: Terraform (El Camino Profesional - IaC)
+**Ubicación:** `./caso-c-terraform-s3/`
+
+**¿Qué es?**
+**Infraestructura como Código (IaC)**. En lugar de crear el bucket con clicks en la consola (que es propenso a errores humanos), escribimos un archivo de texto que *describe* la infraestructura deseada. Terraform lee ese archivo y hace que la realidad coincida con él.
+
+**Archivos Clave:**
+*   `main.tf`: El plano arquitectónico. Dice "Quiero un bucket, quiero una distribución de CloudFront, quiero una política de acceso".
+*   `variables.tf`: Los parámetros ajustables (nombre del proyecto, región).
+*   `terraform.tfstate`: ¡CRÍTICO! Es la "memoria" de Terraform. Guarda el estado actual de tu infraestructura para saber qué cambiar la próxima vez. *Nota: En equipos reales, esto se guarda en la nube, no en tu PC.*
+
+**Alcance e Importancia:**
+*   **Ideal para:** Empresas, equipos grandes, proyectos de producción.
+*   **Importancia:**
+    *   **Reproducibilidad**: Puedes crear 10 copias exactas del entorno en segundos.
+    *   **Auditoría**: Puedes ver en el historial de Git quién cambió la infraestructura y por qué.
+    *   **Seguridad**: Evita errores manuales como dejar un bucket público por accidente.
+    *   **Estado Actual**: ✅ Desplegado en [https://d3otfpeykrm536.cloudfront.net/](https://d3otfpeykrm536.cloudfront.net/)
+
+### 🚀 Próximos Pasos (Proyectados)
+
+*   **Caso G (Contenedores)**: Para cuando un simple HTML no basta y necesitas correr una API completa (Node.js/Python) en la nube de forma aislada y escalable.
 
 ---
 
