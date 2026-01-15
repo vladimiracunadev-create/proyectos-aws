@@ -8,17 +8,15 @@ locals {
   bucket_name  = "${var.project_name}-${random_id.suffix.hex}"
   s3_origin_id = "s3-${local.bucket_name}"
 
-  # Carpeta local con tu sitio (el ZIP descomprimido aquí)
   website_dir   = "${path.module}/website"
   website_files = fileset(local.website_dir, "**/*")
 
-  # Detecta extensión para content-type y cache-control
-  file_ext = {
+  ext = {
     for f in local.website_files :
     f => lower(element(split(".", f), length(split(".", f)) - 1))
   }
 
-  mime_types = {
+  mime = {
     html = "text/html; charset=utf-8"
     css  = "text/css; charset=utf-8"
     js   = "application/javascript; charset=utf-8"
@@ -32,21 +30,15 @@ locals {
     json = "application/json; charset=utf-8"
   }
 
-  # Cache: html corto (para ver cambios rápido), assets más largo
-  cache_control = {
-    for f, ext in local.file_ext :
-    f => ext == "html" ? "max-age=60" :
-         (ext == "css" || ext == "js") ? "max-age=3600" :
-         "max-age=31536000"
-  }
-
-  # “Huella” del deploy: si cambia cualquier archivo → cambia este hash
+  # Huella del deploy: si cambia cualquier archivo en website/, esto cambia.
   deployment_id = sha1(join(",", [
     for f in local.website_files : filemd5("${local.website_dir}/${f}")
   ]))
 }
 
-# 1) S3 bucket privado (bodega)
+# ----------------------------
+# S3 (bodega privada)
+# ----------------------------
 resource "aws_s3_bucket" "site" {
   bucket        = local.bucket_name
   force_destroy = var.force_destroy_bucket
@@ -84,16 +76,16 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "site" {
   }
 }
 
-# 2) OAC (credencial para que CloudFront lea S3 privado)
+# ----------------------------
+# CloudFront (repartidor) + OAC
+# ----------------------------
 resource "aws_cloudfront_origin_access_control" "oac" {
   name                              = "${var.project_name}-oac"
-  description                       = "OAC for private S3 origin"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
 }
 
-# 3) CloudFront (repartidor global)
 resource "aws_cloudfront_distribution" "cdn" {
   enabled             = true
   default_root_object = "index.html"
@@ -130,7 +122,7 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 }
 
-# 4) Bucket policy: SOLO esta distribución CloudFront puede leer objetos
+# Policy: SOLO CloudFront puede leer el bucket
 resource "aws_s3_bucket_policy" "site" {
   bucket = aws_s3_bucket.site.id
 
@@ -154,26 +146,46 @@ resource "aws_s3_bucket_policy" "site" {
   })
 }
 
-# 5) Subida automática del sitio (sin aws s3 sync)
+# ----------------------------
+# SUBIDA AUTOMÁTICA a S3 (esto es lo que “no veías” antes)
+# ----------------------------
 resource "aws_s3_object" "website" {
   for_each = { for f in local.website_files : f => f }
 
   bucket = aws_s3_bucket.site.id
   key    = each.key
   source = "${local.website_dir}/${each.value}"
+  etag   = filemd5("${local.website_dir}/${each.value}")
 
-  etag         = filemd5("${local.website_dir}/${each.value}")
-  content_type = lookup(local.mime_types, local.file_ext[each.key], "application/octet-stream")
-  cache_control = local.cache_control[each.key]
+  content_type = lookup(local.mime, local.ext[each.key], "application/octet-stream")
 
   depends_on = [aws_s3_bucket_ownership_controls.site]
 }
 
-# 6) Invalidate automático: si cambias archivos, CloudFront refresca
-resource "aws_cloudfront_invalidation" "all" {
-  distribution_id  = aws_cloudfront_distribution.cdn.id
-  paths            = ["/*"]
-  caller_reference = local.deployment_id
+# ----------------------------
+# INVALIDACIÓN (SIN resource): se hace con ACTION
+# ----------------------------
+action "aws_cloudfront_create_invalidation" "all" {
+  config {
+    distribution_id = aws_cloudfront_distribution.cdn.id
+    paths           = ["/*"]
+  }
+}
+
+# “Marcador” que cambia cuando cambia cualquier archivo en website/
+# y DISPARA 1 invalidación (after_create/after_update).
+resource "aws_s3_object" "deploy_marker" {
+  bucket       = aws_s3_bucket.site.id
+  key          = "_deploy.txt"
+  content      = local.deployment_id
+  content_type = "text/plain; charset=utf-8"
 
   depends_on = [aws_s3_object.website]
+
+  lifecycle {
+    action_trigger {
+      events  = [after_create, after_update]
+      actions = [action.aws_cloudfront_create_invalidation.all]
+    }
+  }
 }
