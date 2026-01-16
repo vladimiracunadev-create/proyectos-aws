@@ -24,11 +24,11 @@ Entiende qué significa cada archivo y tecnología de este proyecto con explicac
 Cada carpeta en este repositorio representa un "Caso de Estudio" que añade complejidad y profesionalismo sobre el anterior.
 
 ### Nivel 1: Conceptos Básicos
-- **[📂 caso-a-amplify](./caso-a-amplify/)** (Nivel 0)
+- **[📂 caso-a-amplify](./caso-a-amplify/)** (Nivel 0) `DEPLOYED`
     - *Stack*: AWS Amplify (ClickOps).
     - *Objetivo*: Despliegue en 5 minutos, conexión automática con GitLab.
     - *Live Demo*: [👉 Ver Sitio en Vivo](https://main.d1uybq9oui7h8c.amplifyapp.com/)
-- **[📂 caso-b-gitlab-s3](./caso-b-gitlab-s3/)** (Nivel 1)
+- **[📂 caso-b-gitlab-s3](./caso-b-gitlab-s3/)** (Nivel 1) `DEPLOYED`
     - *Stack*: S3 + GitLab CI.
     - *Objetivo*: Entender qué pasa "por debajo". Pipelines manuales, buckets, sync.
     - *Live Demo*: [👉 Ver Sitio en Vivo](http://vladimir-caso-b-site-2026.s3-website.us-east-2.amazonaws.com/)
@@ -46,8 +46,8 @@ Cada carpeta en este repositorio representa un "Caso de Estudio" que añade comp
 
 ### Nivel 3: Arquitectura Empresarial
 - **[📂 caso-e-dynamodb-persistence](./caso-e-dynamodb-persistence/)** (Nivel 4) `PROYECTADO`
-    - *Stack*: DynamoDB + Lambda.
-    - *Objetivo*: Persistencia de datos NoSQL. Aplicaciones reales con estado.
+    - *Stack*: DynamoDB + Lambda (CRUD Completo).
+    - *Objetivo*: Modelo de Datos Avanzado. Operaciones complejas, índices y diseño de tabla única.
 - **[📂 caso-f-security-cognito](./caso-f-security-cognito/)** (Nivel 5) `PROYECTADO`
     - *Stack*: Cognito + WAF.
     - *Objetivo*: Autenticación de usuarios y seguridad perimetral.
