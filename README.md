@@ -41,7 +41,8 @@ Cada carpeta en este repositorio representa un "Caso de Estudio" que añade comp
 - **[📂 caso-d-serverless-basic](./caso-d-serverless-basic/)** (Nivel 3) `DEPLOYED`
     - *Stack*: Lambda + API Gateway + DynamoDB.
     - *Objetivo*: Añadir lógica dinámica backend sin servidores (Serverless).
-    - *Live Demo*: [👉 Ver Portafolio Interactivo](https://staging.d3oq987bpa7ls7.amplifyapp.com/)
+    - *Live Demo (Frontend)*: [👉 Portafolio](https://staging.d3oq987bpa7ls7.amplifyapp.com/)
+    - *Live Demo (Backend)*: [👉 API Endpoint](https://tc78a6xibg.execute-api.us-east-2.amazonaws.com)
 
 ### Nivel 3: Arquitectura Empresarial
 - **[📂 caso-e-dynamodb-persistence](./caso-e-dynamodb-persistence/)** (Nivel 4) `PROYECTADO`

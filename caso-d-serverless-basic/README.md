@@ -5,7 +5,8 @@ Este proyecto es un **demo real y pequeño** para aprender y demostrar un stack 
 - **Frontend estático**: HTML/CSS/JS (publicado en **AWS Amplify Hosting**).
 - **Backend serverless**: **API Gateway (HTTP API)** → **AWS Lambda** → **DynamoDB**.
 
-> **Live Demo**: [👉 Ver Portafolio Interactivo](https://staging.d3oq987bpa7ls7.amplifyapp.com/)
+> **Live Demo (Frontend)**: [👉 Ver Portafolio](https://staging.d3oq987bpa7ls7.amplifyapp.com/)
+> **Live Demo (Backend)**: [👉 API Endpoint](https://tc78a6xibg.execute-api.us-east-2.amazonaws.com)
 
 La página principal incluye un **Formulario (Demo)** que, al enviar, **guarda el registro en DynamoDB**.
 

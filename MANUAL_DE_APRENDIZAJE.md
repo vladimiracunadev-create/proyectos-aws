@@ -132,7 +132,9 @@ La computación **Serverless** (sin servidores) significa que ya no administras 
 **Alcance e Importancia:**
 *   **Ideal para:** APIs, procesos en segundo plano, webs con tráfico variable.
 *   **Importancia:** Escala a cero (si nadie entra, pagas $0) y escala a infinito (si entran un millón, AWS levanta un millón de copias de tu función automáticamente). es el futuro del desarrollo cloud nativo.
-*   **Estado Actual**: ✅ Desplegado en [https://staging.d3oq987bpa7ls7.amplifyapp.com/](https://staging.d3oq987bpa7ls7.amplifyapp.com/)
+*   **Estado Actual**:
+    *   ✅ Frontend: [https://staging.d3oq987bpa7ls7.amplifyapp.com/](https://staging.d3oq987bpa7ls7.amplifyapp.com/)
+    *   ✅ Backend API: [https://tc78a6xibg.execute-api.us-east-2.amazonaws.com](https://tc78a6xibg.execute-api.us-east-2.amazonaws.com)
 
 ### 🚀 Próximos Pasos (Proyectados)
 
