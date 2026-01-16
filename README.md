@@ -27,9 +27,11 @@ Cada carpeta en este repositorio representa un "Caso de Estudio" que añade comp
 - **[📂 caso-a-amplify](./caso-a-amplify/)** (Nivel 0)
     - *Stack*: AWS Amplify (ClickOps).
     - *Objetivo*: Despliegue en 5 minutos, conexión automática con GitLab.
+    - *Live Demo*: [👉 Ver Sitio en Vivo](https://main.d1uybq9oui7h8c.amplifyapp.com/)
 - **[📂 caso-b-gitlab-s3](./caso-b-gitlab-s3/)** (Nivel 1)
     - *Stack*: S3 + GitLab CI.
     - *Objetivo*: Entender qué pasa "por debajo". Pipelines manuales, buckets, sync.
+    - *Live Demo*: [👉 Ver Sitio en Vivo](http://vladimir-caso-b-site-2026.s3-website.us-east-2.amazonaws.com/)
 
 ### Nivel 2: Profesionalización (IaC & Serverless)
 - **[📂 caso-c-terraform-s3](./caso-c-terraform-s3/)** (Nivel 2) `DEPLOYED`

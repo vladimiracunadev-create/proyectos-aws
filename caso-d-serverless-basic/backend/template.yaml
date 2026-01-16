@@ -1,0 +1,69 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: caso-d-serverless-basic - API Gateway (HTTP API) + Lambda + DynamoDB (form demo)
+
+Globals:
+  Function:
+    Timeout: 10
+    MemorySize: 128
+
+Resources:
+  Api:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - "*"
+        AllowMethods:
+          - POST
+          - OPTIONS
+        AllowHeaders:
+          - content-type
+
+  LeadsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: portfolio_leads
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+
+  CreateLeadFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: app.handler
+      Runtime: python3.12
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref LeadsTable
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref LeadsTable
+      Events:
+        CreateLead:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /lead
+            Method: POST
+
+Outputs:
+  ApiBaseUrl:
+    Description: Base URL del HTTP API (stage $default). Ej: https://xxxx.execute-api.sa-east-1.amazonaws.com
+    Value: !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com"
+
+  LeadsTableName:
+    Description: Nombre de la tabla DynamoDB
+    Value: !Ref LeadsTable

@@ -1,0 +1,9 @@
+# Frontend
+.DS_Store
+
+# Backend (SAM)
+backend/.aws-sam/
+backend/samconfig.toml
+
+# General
+*.log
