@@ -38,9 +38,10 @@ Cada carpeta en este repositorio representa un "Caso de Estudio" que añade comp
     - *Stack*: **Terraform** + S3 + CloudFront.
     - *Objetivo*: Infraestructura como Código (IaC). Cero configuración manual.
     - *Live Demo*: [👉 Ver Sitio en Vivo](https://d3otfpeykrm536.cloudfront.net/)
-- **[📂 caso-d-serverless-basic](./caso-d-serverless-basic/)** (Nivel 3) `PROYECTADO`
-    - *Stack*: Lambda + API Gateway.
+- **[📂 caso-d-serverless-basic](./caso-d-serverless-basic/)** (Nivel 3) `DEPLOYED`
+    - *Stack*: Lambda + API Gateway + DynamoDB.
     - *Objetivo*: Añadir lógica dinámica backend sin servidores (Serverless).
+    - *Live Demo*: [👉 Ver Portafolio Interactivo](https://staging.d3oq987bpa7ls7.amplifyapp.com/)
 
 ### Nivel 3: Arquitectura Empresarial
 - **[📂 caso-e-dynamodb-persistence](./caso-e-dynamodb-persistence/)** (Nivel 4) `PROYECTADO`

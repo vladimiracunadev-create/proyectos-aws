@@ -217,8 +217,8 @@
 
     if (announce) {
       showToast(v === "quick" ? "👔 Vista Reclutador activada" :
-                v === "deep" ? "🧠 Vista Profundo activada" :
-                               "👀 Vista Normal activada");
+        v === "deep" ? "🧠 Vista Profundo activada" :
+          "👀 Vista Normal activada");
     }
   };
 
@@ -240,7 +240,7 @@
   // 1) Despliega el backend (carpeta /backend) con SAM
   // 2) Copia el output ApiBaseUrl (ej: https://xxxx.execute-api.sa-east-1.amazonaws.com)
   // 3) Pégalo aquí:
-  const API_BASE = "Pega_aqui_tu_ApiBaseUrl";
+  const API_BASE = "https://tc78a6xibg.execute-api.us-east-2.amazonaws.com";
 
   const setStatus = (msg) => {
     if (!statusEl) return;

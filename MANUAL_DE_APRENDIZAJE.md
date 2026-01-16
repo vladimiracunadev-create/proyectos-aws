@@ -113,6 +113,27 @@ Aquí le quitamos la magia. Creamos un bucket S3 (una carpeta en la nube) manual
     *   **Seguridad**: Evita errores manuales como dejar un bucket público por accidente.
     *   **Estado Actual**: ✅ Desplegado en [https://d3otfpeykrm536.cloudfront.net/](https://d3otfpeykrm536.cloudfront.net/)
 
+### ⚡ Caso D: Serverless Basic (Sin Servidores)
+**Ubicación:** `./caso-d-serverless-basic/`
+
+**¿Qué es?**
+La computación **Serverless** (sin servidores) significa que ya no administras servidores (como en EC2) ni siquiera contenedores. Solo subes tu **código** (una función) y AWS se encarga de ejecutarlo solo cuando alguien lo llama.
+
+**El Stack:**
+*   **API Gateway**: Es el "recepcionista". Recibe las peticiones HTTP del mundo exterior (el formulario de tu web) y se las pasa a la función correcta.
+*   **AWS Lambda**: Es el "cerebro". Una función pequeña (en Python o Node.js) que se despierta, ejecuta tu lógica (guardar datos, enviar email) y se vuelve a dormir. ¡Solo pagas por los milisegundos que funciona!
+*   **DynamoDB**: Es la "memoria". Una base de datos NoSQL ultra-rapida que guarda tus datos (los leads del formulario) sin que tengas que instalar ningún motor de base de datos.
+*   **AWS Amplify**: Aloja el frontend (la página web bonita) que conecta con todo esto.
+
+**Archivos Clave:**
+*   `template.yaml`: Es como el `main.tf` de Terraform pero específico para Serverless (usando AWS SAM). Define: "Quiero una función Lambda, una base de datos y una API que las conecte".
+*   `app.js` (Frontend): Aquí es donde ocurre la magia de la conexión. El Javascript del navegador llama a la URL de tu API Gateway para enviar los datos.
+
+**Alcance e Importancia:**
+*   **Ideal para:** APIs, procesos en segundo plano, webs con tráfico variable.
+*   **Importancia:** Escala a cero (si nadie entra, pagas $0) y escala a infinito (si entran un millón, AWS levanta un millón de copias de tu función automáticamente). es el futuro del desarrollo cloud nativo.
+*   **Estado Actual**: ✅ Desplegado en [https://staging.d3oq987bpa7ls7.amplifyapp.com/](https://staging.d3oq987bpa7ls7.amplifyapp.com/)
+
 ### 🚀 Próximos Pasos (Proyectados)
 
 *   **Caso G (Contenedores)**: Para cuando un simple HTML no basta y necesitas correr una API completa (Node.js/Python) en la nube de forma aislada y escalable.
