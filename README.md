@@ -55,6 +55,17 @@ Cada carpeta en este repositorio representa un "Caso de Estudio" que añade comp
     - *Stack*: Docker + ECS Fargate.
     - *Objetivo*: Microservicios en contenedores para cargas de trabajo complejas.
 
+### Nivel 4: Maestría y Modernización
+- **[📂 caso-h-event-driven](./caso-h-event-driven/)** (Nivel 7) `PROYECTADO`
+    - *Stack*: EventBridge + SQS + SNS.
+    - *Objetivo*: Arquitecturas asíncronas para desacoplar sistemas y escalar.
+- **[📂 caso-i-observability](./caso-i-observability/)** (Nivel 8) `PROYECTADO`
+    - *Stack*: CloudWatch + X-Ray.
+    - *Objetivo*: Monitoreo proactivo, alarmas y trazabilidad distribuida.
+- **[📂 caso-j-genai-bedrock](./caso-j-genai-bedrock/)** (Nivel 9) `PROYECTADO`
+    - *Stack*: Amazon Bedrock (GenAI) + Lambda.
+    - *Objetivo*: Integrar Inteligencia Artificial (LLMs) seguros en la infraestructura.
+
 ---
 
 ## 🛠️ Desarrollo
