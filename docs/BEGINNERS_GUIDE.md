@@ -131,6 +131,7 @@ Aquí le quitamos la magia. Creamos un bucket S3 (una carpeta en la nube) manual
     *   **Auditoría**: Puedes ver en el historial de Git quién cambió la infraestructura y por qué.
     *   **Seguridad**: Evita errores manuales como dejar un bucket público por accidente.
     *   **Estado Actual**: ✅ Desplegado en [https://d3otfpeykrm536.cloudfront.net/](https://d3otfpeykrm536.cloudfront.net/)
+    *   **Seguridad**: Consulta [IAM_SECURITY.md](./IAM_SECURITY.md).
 
 ### ⚡ Caso D: Serverless Basic (Sin Servidores)
 **Ubicación:** `./caso-d-serverless-basic/`

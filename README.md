@@ -1,117 +1,59 @@
-# GitLab → AWS (Monorepo Educativo) ☁️
+# GitLab → AWS Monorepo (DevOps Training Suite) ☁️ 🚀
 
-[![Deployed](https://img.shields.io/badge/deployed-AWS-orange.svg)]()
-[![Pipeline](https://gitlab.com/vladimir.acuna.dev-group/proyectos-aws-gitlab/badges/main/pipeline.svg)](https://gitlab.com/vladimir.acuna.dev-group/proyectos-aws-gitlab/-/pipelines)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://prettier.io)
-[![Antigravity](https://img.shields.io/badge/built_with-Antigravity-8A2BE2.svg)]()
+[![Infrastructure-AWS](https://img.shields.io/badge/infrastructure-AWS-orange?style=for-the-badge&logo=amazon-aws)]()
+[![Pipeline-GitLab](https://img.shields.io/badge/pipeline-GitLab_CI-6C4DE6?style=for-the-badge&logo=gitlab)](https://gitlab.com/vladimir.acuna.dev-group/proyectos-aws-gitlab/-/pipelines)
+[![IaC-Terraform](https://img.shields.io/badge/IaC-Terraform-844FBA?style=for-the-badge&logo=terraform)]()
+[![Container-Docker](https://img.shields.io/badge/Container-Docker-2496ED?style=for-the-badge&logo=docker)]()
+[![Orchestrator-K8s](https://img.shields.io/badge/Orchestrator-K8s-326CE5?style=for-the-badge&logo=kubernetes)]()
 
-**Repositorio Maestro de Aprendizaje AWS**
-Este proyecto es una guía evolutiva paso a paso para dominar el despliegue de aplicaciones en AWS, desde sitios estáticos simples hasta arquitecturas avanzadas con contenedores y seguridad.
-
-> **Nota:** Este proyecto se trabaja íntegramente con **Antigravity**.
+Este monorepo es una suite educativa avanzada diseñada para modernizar y automatizar el flujo de despliegue en la nube. Desde el alojamiento estático hasta la orquestación industrial de contenedores.
 
 ---
 
-## 🎓 ¿Eres nuevo?
-**[👉 Empieza leyendo el MANUAL DE APRENDIZAJE para Novatos](./MANUAL_DE_APRENDIZAJE.md)**
-Entiende qué significa cada archivo y tecnología de este proyecto con explicaciones sencillas.
+## ⚡ Inicio Inmediato (Quick Start)
 
----
+Este proyecto incluye un **Makefile** para simplificar tus tareas. No necesitas memorizar comandos largos.
 
-## ⚡ Automatización con Makefile
-
-Para simplificar las tareas recurrentes, el proyecto incluye un `Makefile`. No necesitas recordar comandos largos de AWS o Terraform.
-
-| Comando | Descripción |
-| :--- | :--- |
-| `make install` | Instala las dependencias necesarias. |
-| `make lint` | Revisa la calidad del código. |
-| `make deploy-b` | Despliega el Caso B a S3. |
-| `make tf-plan` | Prepara el despliegue del Caso C. |
-| `make tf-apply` | Despliega el Caso C a AWS. |
-| `make docker-build` | Construye el contenedor del Caso G. |
-| `make k8s-lint` | Valida los planos del Caso K. |
-| `make help` | Ver todos los comandos disponibles. |
-
-> Consulta [SPECIFICATIONS.md](file:///c:/proyectos-aws-gitlab/SPECIFICATIONS.md) para ver los requerimientos técnicos y de acceso.
-
----
-
-## 🗺️ Roadmap de Aprendizaje
-
-Cada carpeta en este repositorio representa un "Caso de Estudio" que añade complejidad y profesionalismo sobre el anterior.
-
-### Nivel 1: Conceptos Básicos
-- **[📂 caso-a-amplify](./caso-a-amplify/)** (Nivel 0) `DEPLOYED`
-    - *Stack*: AWS Amplify (ClickOps).
-    - *Objetivo*: Despliegue en 5 minutos, conexión automática con GitLab.
-    - *Live Demo*: [👉 Ver Sitio en Vivo](https://main.d1uybq9oui7h8c.amplifyapp.com/)
-- **[📂 caso-b-gitlab-s3](./caso-b-gitlab-s3/)** (Nivel 1) `DEPLOYED`
-    - *Stack*: S3 + GitLab CI.
-    - *Objetivo*: Entender qué pasa "por debajo". Pipelines manuales, buckets, sync.
-    - *Live Demo*: [👉 Ver Sitio en Vivo](http://vladimir-caso-b-site-2026.s3-website.us-east-2.amazonaws.com/)
-
-### Nivel 2: Profesionalización (IaC & Serverless)
-- **[📂 caso-c-terraform-s3](./caso-c-terraform-s3/)** (Nivel 2) `DEPLOYED`
-    - *Stack*: **Terraform** + S3 + CloudFront.
-    - *Objetivo*: Infraestructura como Código (IaC). Cero configuración manual.
-    - *Live Demo*: [👉 Ver Sitio en Vivo](https://d3otfpeykrm536.cloudfront.net/)
-- **[📂 caso-d-serverless-basic](./caso-d-serverless-basic/)** (Nivel 3) `DEPLOYED`
-    - *Stack*: Lambda + API Gateway + DynamoDB.
-    - *Objetivo*: Añadir lógica dinámica backend sin servidores (Serverless).
-    - *Live Demo (Frontend)*: [👉 Portafolio](https://staging.d3oq987bpa7ls7.amplifyapp.com/)
-    - *Live Demo (Backend)*: [👉 API Endpoint](https://tc78a6xibg.execute-api.us-east-2.amazonaws.com)
-
-### Nivel 3: Contenedores y Orquestación
-- **[📂 caso-g-containers-ecs](./caso-g-containers-ecs/)** (Nivel 4) `NUEVO`
-    - *Stack*: **Docker** + Node.js (API).
-    - *Objetivo*: Empaquetado industrial de aplicaciones para portabilidad total.
-- **[📂 caso-k-kubernetes-eks](./caso-k-kubernetes-eks/)** (Nivel 5) `NUEVO`
-    - *Stack*: **Kubernetes** (Manifiestos YAML).
-    - *Objetivo*: Orquestación de flotas de contenedores y alta disponibilidad.
-
-### Nivel 4: Arquitectura Empresarial y Modernización
-- **[📂 caso-e-dynamodb-persistence](./caso-e-dynamodb-persistence/)** (Nivel 6) `PROYECTADO`
-
-### Nivel 4: Maestría y Modernización
-- **[📂 caso-h-event-driven](./caso-h-event-driven/)** (Nivel 7) `PROYECTADO`
-    - *Stack*: EventBridge + SQS + SNS.
-    - *Objetivo*: Arquitecturas asíncronas para desacoplar sistemas y escalar.
-- **[📂 caso-i-observability](./caso-i-observability/)** (Nivel 8) `PROYECTADO`
-    - *Stack*: CloudWatch + X-Ray.
-    - *Objetivo*: Monitoreo proactivo, alarmas y trazabilidad distribuida.
-- **[📂 caso-j-genai-bedrock](./caso-j-genai-bedrock/)** (Nivel 9) `PROYECTADO`
-    - *Stack*: Amazon Bedrock (GenAI) + Lambda.
-    - *Objetivo*: Integrar Inteligencia Artificial (LLMs) seguros en la infraestructura.
-
----
-
-## 🛠️ Desarrollo
-
-Este es un monorepo gestionado con herramientas estándar de Node.js.
-
-### Requisitos
-- Node.js 18+
-- Terraform (para Caso C en adelante)
-- AWS CLI configurado
-
-### Comandos Globales
 ```bash
-npm install     # Instalar herramientas de calidad (Linter, Prettier)
-npm run lint    # Revisar código en todos los casos
-npm run format  # Formatear código automáticamente
+# 1. Instalar todo lo necesario
+make install
+
+# 2. Verificar calidad y seguridad
+make lint
+make tf-security
+
+# 3. Ver todos los comandos disponibles
+make help
 ```
 
-### Reglas de Contribución
-Usamos **Conventional Commits**. Tus mensajes de commit deben seguir el formato:
-- `feat(caso-c): added main.tf`
-- `fix(root): updated readme`
-- `docs(caso-a): improved instructions`
+---
+
+## 📖 Documentación Avanzada
+Hemos organizado la base de conocimientos para que sea fácil de navegar:
+
+- 🏗️ **[Arquitectura](./docs/ARCHITECTURE.md)**: Visión técnica, diagramas Mermaid y stack.
+- 🚀 **[Guía de Instalación](./docs/INSTALL.md)**: Docker (DevContainers) vs Manual.
+- 🛠️ **[Especificaciones Técnicas](./docs/TECHNICAL_SPECS.md)**: Requerimientos de hardware y software.
+- 🛡️ **[Seguridad IAM](./docs/IAM_SECURITY.md)**: Políticas de acceso y privilegios mínimos.
+- 📘 **[Guía para Principiantes](./docs/BEGINNERS_GUIDE.md)**: Glosario y conceptos básicos.
 
 ---
 
-## 📜 Licencia
-Este proyecto está bajo la Licencia MIT. Úsalo libremente para aprender y enseñar.
+## 🗺️ Roadmap de Aprendizaje (Casos de Estudio)
 
+| Caso | Nivel | Stack | Objetivo |
+| :--- | :--- | :--- | :--- |
+| **[Caso A](./caso-a-amplify/)** | 🐣 | Amplify | ClickOps y Velocidad. |
+| **[Caso B](./caso-b-gitlab-s3/)** | 🛠️ | S3 + GitLab | Sincronización manual vs autom. |
+| **[Caso C](./caso-c-terraform-s3/)** | 🏗️ | Terraform | Infraestructura como Código (IaC). |
+| **[Caso D](./caso-d-serverless-basic/)** | ⚡ | SAM / Lambda | Lógica Serverless dinámica. |
+| **[Caso G](./caso-g-containers-ecs/)** | 🐳 | Docker | Empaquetado de microservicios. |
+| **[Caso K](./caso-k-kubernetes-eks/)** | ☸️ | Kubernetes | Orquestación y Alta Disponibilidad. |
 
+---
+
+## 🤝 Comunidad y Contribuciones
+¡Este proyecto está abierto a mejora continua! Revisa nuestras **[Normas de Conducta](./docs/CODE_OF_CONDUCT.md)** y la **[Guía de Contribución](./docs/CONTRIBUTING.md)**.
+
+---
+> **Construido con ❤️ por Vladimir Acuña — Optimizado para Ingeniería Cloud Senior.**
