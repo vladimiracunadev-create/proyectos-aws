@@ -6,7 +6,7 @@
 [![Container-Docker](https://img.shields.io/badge/Container-Docker-2496ED?style=for-the-badge&logo=docker)]()
 [![Orchestrator-K8s](https://img.shields.io/badge/Orchestrator-K8s-326CE5?style=for-the-badge&logo=kubernetes)]()
 
-Este monorepo es una suite educativa avanzada diseñada para modernizar y automatizar el flujo de despliegue en la nube. Desde el alojamiento estático hasta la orquestación industrial de contenedores, exploramos cómo construir infraestructuras seguras, escalables y auditables.
+Este monorepo es una suite educativa avanzada diseñada para modernizar y automatizar el flujo de despliegue en la nube. Desde el alojamiento estático hasta la orquestación industrial de contenedores en AWS, exploramos cómo construir infraestructuras seguras, escalables y profesionales.
 
 ---
 
@@ -41,41 +41,65 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 
 ## 🗺️ Roadmap de Aprendizaje (Casos de Estudio)
 
-Cada carpeta en este repositorio representa un hito en la evolución de un Ingeniero Cloud. A continuación, el detalle de cada módulo:
+Cada carpeta representa un salto técnico en tu carrera Cloud. Aquí el detalle de cada módulo:
 
-### 🟢 Nivel 1: Cimientos y Automatización Básica
+### 🟢 Nivel 1: Automatización y Hosting Estático
 
-#### [📂 Caso A: AWS Amplify](./caso-a-amplify/) `Nivel 0`
-*   **Stack**: AWS Amplify + GitLab Mirroring.
-*   **Enfoque**: **Integración Continua nativa.** Ideal para prototipos rápidos. Aprende cómo AWS gestiona automáticamente el escalado, SSL y CDN sin configurar servidores.
-*   👉 **[Ver Demo en Vivo](https://main.d1uybq9oui7h8c.amplifyapp.com/)**
+#### [📂 Caso A: AWS Amplify](./caso-a-amplify/) `Nivel 0` `COMPLETADO`
+*   **Stack**: AWS Amplify + GitLab Auto-Mirroring.
+*   **Enfoque**: **Integración Continua nativa.** Ideal para prototipos rápidos. Aprende cómo AWS gestiona el escalado, SSL y CDN de forma transparente.
+*   👉 [Ver Demo en Vivo](https://main.d1uybq9oui7h8c.amplifyapp.com/)
 
-#### [📂 Caso B: S3 + GitLab CI](./caso-b-gitlab-s3/) `Nivel 1`
-*   **Stack**: GitLab Runners AWS CLI + S3 Website Hosting.
-*   **Enfoque**: **Pipelines artesanales.** Entiende cómo funcionan los procesos por debajo. Aprendes sobre buckets públicos vs privados, sincronización de archivos (`aws s3 sync`) y gestión de secretos en GitLab.
-*   👉 **[Ver Demo en Vivo](http://vladimir-caso-b-site-2026.s3-website.us-east-2.amazonaws.com/)**
+#### [📂 Caso B: S3 + GitLab CI](./caso-b-gitlab-s3/) `Nivel 1` `COMPLETADO`
+*   **Stack**: GitLab Runners + AWS CLI + S3 Website Hosting.
+*   **Enfoque**: **Pipelines Artesanales.** Entiende qué pasa "bajo el capó". Aprendes sobre políticas de bucket, sincronización manual y gestión de secretos.
+*   👉 [Ver Demo en Vivo](http://vladimir-caso-b-site-2026.s3-website.us-east-2.amazonaws.com/)
 
-### 🔵 Nivel 2: Profesionalización e Infraestructura como Código (IaC)
+### 🔵 Nivel 2: Profesionalización y Arquitectura Decisiva
 
-#### [📂 Caso C: Terraform + CloudFront](./caso-c-terraform-s3/) `Nivel 2`
-*   **Stack**: Terraform + S3 (OAC) + CloudFront + Remote Backend.
-*   **Enfoque**: **Infraestructura como Código Profesional.** Elimina el ClickOps. Aprende a compartir el estado de la infraestructura entre el PC y la nube, y a proteger tus recursos con **Origin Access Control**.
-*   👉 **[Ver Demo en Vivo](https://d3otfpeykrm536.cloudfront.net/)**
+#### [📂 Caso C: Terraform + CloudFront](./caso-c-terraform-s3/) `Nivel 2` `COMPLETADO`
+*   **Stack**: Terraform + S3 (OAC) + CloudFront + Remote State.
+*   **Enfoque**: **Infraestructura como Código (IaC).** Elimina el error humano. Aprende a centralizar el estado de la infraestructura en la nube y proteger recursos con **Origin Access Control**.
+*   👉 [Ver Demo en Vivo](https://d3otfpeykrm536.cloudfront.net/)
 
-#### [📂 Caso D: Serverless Basic (SAM)](./caso-d-serverless-basic/) `Nivel 3`
-*   **Stack**: API Gateway + AWS Lambda (Python/JS) + DynamoDB.
-*   **Enfoque**: **Lógica Backend y Persistencia.** Añade vida a tus aplicaciones. Aprende a usar el modelo de aplicaciones serverless para manejar datos sin servidores encendidos 24/7.
-*   👉 **[Demo Portafolio](https://staging.d3oq987bpa7ls7.amplifyapp.com/)** / **[Endpoint de API](https://tc78a6xibg.execute-api.us-east-2.amazonaws.com)**
+#### [📂 Caso D: Serverless Basic (SAM)](./caso-d-serverless-basic/) `Nivel 3` `COMPLETADO`
+*   **Stack**: API Gateway + AWS Lambda + DynamoDB.
+*   **Enfoque**: **Lógica Backend y Persistencia.** Añade vida a tus apps. Escalamiento a cero costos cuando no hay uso y potencia reactiva bajo demanda.
+*   👉 [Demo Portafolio](https://staging.d3oq987bpa7ls7.amplifyapp.com/) / [API Endpoint](https://tc78a6xibg.execute-api.us-east-2.amazonaws.com)
 
-### 🟠 Nivel 3: Contenedores y Escalamiento Industrial
+### 🟠 Nivel 3: Gestión de Apps y Datos (En Ruta)
 
-#### [📂 Caso G: Dockerización (Microservicios)](./caso-g-containers-ecs/) `Nivel 4`
-*   **Stack**: Docker + Node.js Express API.
-*   **Enfoque**: **Portabilidad Total.** Aprende a empaquetar tus aplicaciones con todas sus dependencias. El estándar para despliegues modernos que deben funcionar igual en cualquier máquina o nube.
+#### [📂 Caso E: Persistence Pro](./caso-e-dynamodb-persistence/) `Nivel 4` `PROYECTADO`
+*   **Stack**: DynamoDB (Single Table Design) + SQS.
+*   **Enfoque**: **Modelado de Datos Senior.** Domina los índices (GSI/LSI) y la persistencia asíncrona para aplicaciones de alto rendimiento.
 
-#### [📂 Caso K: Kubernetes (EKS/Local)](./caso-k-kubernetes-eks/) `Nivel 5`
-*   **Stack**: K8s Manifests + Services + Deployments.
-*   **Enfoque**: **Orquestación de Flotas.** Si Docker es el contenedor, Kubernetes es el Capitán. Aprende a gestionar alta disponibilidad, auto-recuperación y balanceo de carga masivo.
+#### [📂 Caso F: Security First](./caso-f-security-cognito/) `Nivel 5` `PROYECTADO`
+*   **Stack**: AWS Cognito + WAF + IAM Roles.
+*   **Enfoque**: **Seguridad Perimetral.** Implementa autenticación de usuarios y protección contra ataques web (DDoS/SQLi).
+
+### 🔴 Nivel 4: Contenedores y Orquestación de Grado Industrial
+
+#### [📂 Caso G: Dockerización de Microservicios](./caso-g-containers-ecs/) `Nivel 6` `NUEVO`
+*   **Stack**: Docker + ECS Fargate + ECR.
+*   **Enfoque**: **Portabilidad e Isolation.** Empaquetado industrial de apps para que corran igual en local y en la nube. Gestión de registros de imágenes.
+
+#### [📂 Caso K: Kubernetes en AWS (EKS)](./caso-k-kubernetes-eks/) `Nivel 7` `NUEVO`
+*   **Stack**: AWS EKS + Manifests YAML + Helm.
+*   **Enfoque**: **Orquestación a Gran Escala.** Kubernetes directo en la infraestructura de AWS. Aprende a gestionar flotas de contenedores, auto-sanación y balanceo de carga masivo en clusters reales.
+
+### 🟣 Nivel 5: Maestría y Modernización
+
+#### [📂 Caso H: Event Driven](./caso-h-event-driven/) `Nivel 8` `PROYECTADO`
+*   **Stack**: EventBridge + Step Functions.
+*   **Enfoque**: **Arquitecturas Reactivas.** Desacoplamiento total de servicios mediante eventos.
+
+#### [📂 Caso I: Observability](./caso-i-observability/) `Nivel 9` `PROYECTADO`
+*   **Stack**: CloudWatch + X-Ray + Grafana.
+*   **Enfoque**: **Monitoreo Proactivo.** Trazabilidad distribuida para encontrar fallos antes que el usuario.
+
+#### [📂 Caso J: GenAI Bedrock](./caso-j-genai-bedrock/) `Nivel 10` `PROYECTADO`
+*   **Stack**: Amazon Bedrock + LangChain + Lambda.
+*   **Enfoque**: **Inteligencia Artificial Local/Nativa.** Integración de LLMs en tu propia infraestructura de forma segura.
 
 ---
 
