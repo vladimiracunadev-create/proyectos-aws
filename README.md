@@ -41,18 +41,18 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 
 ## 🗺️ Roadmap de Aprendizaje (Casos de Estudio)
 
-| Caso | Nivel | Stack | Objetivo |
+| Caso | Nivel | Stack | Objetivo y Demo |
 | :--- | :--- | :--- | :--- |
-| **[Caso A](./caso-a-amplify/)** | 🐣 | Amplify | ClickOps y Velocidad. |
-| **[Caso B](./caso-b-gitlab-s3/)** | 🛠️ | S3 + GitLab | Sincronización manual vs autom. |
-| **[Caso C](./caso-c-terraform-s3/)** | 🏗️ | Terraform | Infraestructura como Código (IaC). |
-| **[Caso D](./caso-d-serverless-basic/)** | ⚡ | SAM / Lambda | Lógica Serverless dinámica. |
-| **[Caso G](./caso-g-containers-ecs/)** | 🐳 | Docker | Empaquetado de microservicios. |
-| **[Caso K](./caso-k-kubernetes-eks/)** | ☸️ | Kubernetes | Orquestación y Alta Disponibilidad. |
+| **[Caso A](./caso-a-amplify/)** | 🐣 | Amplify | **ClickOps y Velocidad.** Despliegue en 5 min. <br> 👉 [Ver Demo](https://main.d1uybq9oui7h8c.amplifyapp.com/) |
+| **[Caso B](./caso-b-gitlab-s3/)** | 🛠️ | S3 + GitLab | **Automatización básica.** Entender pipelines y buckets. <br> 👉 [Ver Demo](http://vladimir-caso-b-site-2026.s3-website.us-east-2.amazonaws.com/) |
+| **[Caso C](./caso-c-terraform-s3/)** | 🏗️ | Terraform | **Infraestructura como Código (IaC).** Profesionalización. <br> 👉 [Ver Demo](https://d3otfpeykrm536.cloudfront.net/) |
+| **[Caso D](./caso-d-serverless-basic/)** | ⚡ | SAM / Lambda | **Lógica Serverless dinámica.** Backend sin servidores. <br> 👉 [Portafolio](https://staging.d3oq987bpa7ls7.amplifyapp.com/) / [API](https://tc78a6xibg.execute-api.us-east-2.amazonaws.com) |
+| **[Caso G](./caso-g-containers-ecs/)** | 🐳 | Docker | **Empaquetado industrial.** Microservicios escalables. <br> *(Infra proyectada)* |
+| **[Caso K](./caso-k-kubernetes-eks/)** | ☸️ | Kubernetes | **Orquestación y Alta Disponibilidad.** Flotas de apps. <br> *(Infra proyectada)* |
 
 ---
 
-## 🤝 Comunidad y Contribuciones
+## 🤝 Comunidad y Contribución
 ¡Este proyecto está abierto a mejora continua! Revisa nuestras **[Normas de Conducta](./docs/CODE_OF_CONDUCT.md)** y la **[Guía de Contribución](./docs/CONTRIBUTING.md)**.
 
 ---
