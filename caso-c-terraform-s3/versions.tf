@@ -4,7 +4,7 @@ terraform {
   backend "s3" {
     bucket = "vladimir-terraform-state-2026"
     key    = "caso-c/terraform.tfstate"
-    region = "sa-east-1"
+    region = "us-east-2"
   }
 
   required_providers {
