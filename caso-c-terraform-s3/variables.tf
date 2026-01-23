@@ -1,7 +1,7 @@
 variable "aws_region" {
   type        = string
   description = "Región donde se crea el bucket S3 (CloudFront es global)."
-  default     = "us-east-2"
+  default     = "sa-east-1"
 }
 
 variable "project_name" {
