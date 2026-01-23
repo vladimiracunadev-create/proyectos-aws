@@ -1,39 +1,39 @@
-# Caso B — GitLab CI/CD → S3 (CloudFront opcional)
+# 🛠️ Caso B: S3 + GitLab CI (Automatización Básica)
 
-## Qué hace
-- Cuando haces push a `main`, GitLab CI sincroniza `caso-b-gitlab-s3/` hacia tu bucket S3.
-- (Opcional) Invalida CloudFront si usas CDN.
+[![Nivel-1](https://img.shields.io/badge/Nivel-1_Aprendizaje-blue?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Deployed-success?style=for-the-badge)]()
 
-## Activación (a propósito NO está activo por defecto)
-GitLab solo ejecuta pipelines si existe un archivo `.gitlab-ci.yml` en la **raíz** del repo.
-Por seguridad (para no tocar otros entornos), esta plantilla está aquí dentro.
+Este caso de estudio demuestra cómo automatizar la sincronización de archivos estáticos desde un repositorio a un bucket de **AWS S3** sin intervención manual, utilizando el poder de los **GitLab Runners**.
 
-Para ACTIVAR:
-1) Copia `caso-b-gitlab-s3/.gitlab-ci.yml` a la raíz del repo como `./.gitlab-ci.yml`
-2) En GitLab → Settings → CI/CD → Variables crea:
-   - AWS_ACCESS_KEY_ID
-   - AWS_SECRET_ACCESS_KEY
-   - AWS_DEFAULT_REGION
-   - S3_BUCKET
-   - (opcional) CLOUDFRONT_DISTRIBUTION_ID
-3) Haz commit + push a `main`.
+---
 
-Testing local y validaciones
----------------------------
-- Antes de activar el pipeline, prueba la sincronización localmente con AWS CLI:
+## 🎯 Objetivo
+Aprender los fundamentos de **CI/CD** y la gestión de permisos en AWS. Este es el primer paso desde la configuración manual (Caso A) hacia la automatización profesional.
+
+## 🏗️ Arquitectura
+1.  **GitLab CI**: Detecta cambios en la carpeta `/caso-b-gitlab-s3`.
+2.  **Job de Despliegue**: Inicia un contenedor con `aws-cli`.
+3.  **S3 Sync**: Copia los archivos al bucket configurado, eliminando los que ya no existan.
+
+## 🚀 Despliegue Local (Pruebas)
+Si deseas replicar el despliegue desde tu máquina:
 
 ```bash
-# Revisa qué ocurriría sin subir nada
-aws s3 sync caso-b-gitlab-s3/ s3://$S3_BUCKET/ --dryrun
-
-# Si todo está bien, ejecuta:
-aws s3 sync caso-b-gitlab-s3/ s3://$S3_BUCKET/ --delete
+# Sincronización rápida usando el Makefile central
+make deploy-b
 ```
 
-- Añade validaciones en tu pipeline (ej. comprobaciones de HTML/CSS/JS, linter) para evitar despliegues con errores.
+*Nota: Requiere el bucket `vladimir-caso-b-site-2026` ya creado.*
 
-Seguridad y permisos (IAM)
---------------------------
-- Usa una política IAM con **permisos mínimos**: acceso a `s3:PutObject`, `s3:DeleteObject`, `s3:ListBucket` sobre el bucket objetivo, y `cloudfront:CreateInvalidation` si usas CloudFront.
-- Para un ejemplo de política lista para usar y guía, revisa `AWS_IAM_POLICY.md` en la raíz del repo.
+## 💎 Características Principales
+- **Automatización**: Cero clicks en la consola de AWS para actualizar contenido.
+- **Eficiencia**: Solo sube los archivos que han cambiado realmente.
+- **Seguridad**: Uso de variables de entorno para proteger las llaves de acceso.
 
+---
+
+## 🔗 Enlaces Relacionados
+- ⬅️ **[Regresar al Roadmap Principal](../README.md)**
+- 📘 **[Guía para Principiantes](../docs/BEGINNERS_GUIDE.md)**
+- 🛡️ **[Seguridad IAM](../docs/IAM_SECURITY.md)**
+- 🧪 **[Demos en Vivo](http://vladimir-caso-b-site-2026.s3-website.us-east-2.amazonaws.com/)**

@@ -1,31 +1,39 @@
-# Caso C: Infraestructura como Código (Terraform) 🏗️
+# 🏗️ Caso C: Terraform + CloudFront (Infraestructura como Código)
 
-> **Nivel 2**: Profesionalización
+[![Nivel-2](https://img.shields.io/badge/Nivel-2_Profesionalizaci%C3%B3n-blueviolet?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Deployed-success?style=for-the-badge)]()
 
-## Objetivo
-Dejar atrás la gestión manual ("ClickOps") y definir toda la infraestructura de AWS mediante código. Esto permite reproducibilidad, versionado y auditoría.
+Este caso de estudio representa el estándar industrial de despliegue. Aquí, la infraestructura de AWS no se crea haciendo clic, sino que se define en archivos de texto utilizando **Terraform**.
 
-## Stack Tecnológico
-- **Terraform** (o OpenTofu)
-- **AWS S3** (Almacenamiento Web)
-- **AWS CloudFront** (CDN y HTTPS)
-- **AWS ACM** (Certificados SSL)
+---
 
-## Estructura
+## 🎯 Objetivo
+Eliminar el error humano mediante la **Infraestructura como Código (IaC)**. Garantizar que el entorno sea 100% reproducible y auditable, utilizando protección de estado remoto y redes de distribución global (CDN).
+
+## 🧩 Componentes del Stack
+- **Terraform**: Orquestador de la infraestructura.
+- **AWS S3**: Alojamiento privado de los archivos de la web.
+- **AWS CloudFront**: Red CDN con HTTPS y cache global.
+- **Remote Backend**: Almacenamiento seguro del estado en la región de Ohio (`us-east-2`).
+
+## 🛠️ Comandos de Gestión
+Utiliza el Makefile central para operar este caso sin complicaciones:
+
+```bash
+make tf-init      # Conecta con el almacén de estado en la nube
+make tf-plan      # Revisa qué cambios se harán en AWS
+make tf-apply     # Realiza el despliegue real
+make tf-security  # Audita vulnerabilidades con tfsec
 ```
-caso-c-terraform-s3/
-├── main.tf        # Definición principal de recursos
-├── variables.tf   # Variables configurables (nombre bucket, región)
-├── outputs.tf     # Outputs (URL de CloudFront)
-└── public/        # Código web (html/css/js)
-```
 
-## Instrucciones
-1. Instalar Terraform (o usar `.gitlab-ci.yml` para despliegue automático).
-2. Configurar credenciales AWS (si despliegas localmente).
-3. Ver el resultado en la URL de salida.
+## 🔐 Seguridad Avanzada
+Este caso utiliza **Origin Access Control (OAC)**, lo que significa que el bucket de S3 es totalmente **privado**. Nadie puede entrar a S3 directamente; todo el tráfico debe pasar obligatoriamente por CloudFront.
 
-## 🚀 Resultado
-**Sitio Desplegado:** [https://d3otfpeykrm536.cloudfront.net/](https://d3otfpeykrm536.cloudfront.net/)
+---
 
-Este sitio es servido globalmente mediante CloudFront, leyendo los archivos desde un bucket privado S3 (OAC).
+## 🔗 Enlaces Relacionados
+- ⬅️ **[Regresar al Roadmap Principal](../README.md)**
+- 🏗️ **[Arquitectura Detallada](../docs/ARCHITECTURE.md)**
+- 🛡️ **[Seguridad IAM](../docs/IAM_SECURITY.md)**
+- 🚀 **[Guía de Instalación](../docs/INSTALL.md)**
+- 🧪 **[Demos en Vivo](https://d3otfpeykrm536.cloudfront.net/)**
