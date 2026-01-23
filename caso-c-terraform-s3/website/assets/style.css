@@ -1,0 +1,47 @@
+/* Minimal, readable, no frameworks */
+:root { color-scheme: light dark; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  line-height: 1.45;
+}
+.wrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+.card {
+  border: 1px solid rgba(127,127,127,.35);
+  border-radius: 14px;
+  padding: 16px;
+  background: rgba(127,127,127,.07);
+}
+.muted { opacity: .8; }
+.kv {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 8px 12px;
+  margin: 10px 0 14px;
+}
+.k { opacity: .8; }
+.v { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+.btn {
+  border: 1px solid rgba(127,127,127,.45);
+  background: transparent;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.btn:hover { background: rgba(127,127,127,.12); }
+.foot { margin-top: 18px; }
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: .95em;
+}
