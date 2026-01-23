@@ -54,8 +54,6 @@ plan_case_c:
       changes:
         - caso-c-terraform-s3/**/*
   script:
-    - export AWS_ACCESS_KEY_ID=$TF_AWS_ACCESS_KEY_ID
-    - export AWS_SECRET_ACCESS_KEY=$TF_AWS_SECRET_ACCESS_KEY
     - cd caso-c-terraform-s3
     - terraform init
     - terraform plan -out=tfplan
@@ -76,8 +74,6 @@ deploy_case_c:
   needs:
     - plan_case_c
   script:
-    - export AWS_ACCESS_KEY_ID=$TF_AWS_ACCESS_KEY_ID
-    - export AWS_SECRET_ACCESS_KEY=$TF_AWS_SECRET_ACCESS_KEY
     - cd caso-c-terraform-s3
     - terraform init
     - terraform apply -auto-approve tfplan
