@@ -9,7 +9,7 @@ S3_BUCKET ?= vladimir-caso-b-site-2026
 REGION ?= us-east-2
 TF_DIR = caso-c-terraform-s3
 
-.PHONY: help install lint format deploy-b tf-init tf-plan tf-apply clean
+.PHONY: help install lint format deploy-b tf-init tf-plan tf-apply tf-security clean
 
 help: ## Muestra este mensaje de ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -19,6 +19,10 @@ install: ## Instala las dependencias de Node.js (necesario para linting)
 
 lint: ## Ejecuta el análisis de calidad de código (JS y HTML)
 	npm run lint
+
+tf-security: ## Audita la seguridad de la infraestructura con tfsec
+	@echo "Escaneando seguridad en $(TF_DIR)..."
+	tfsec $(TF_DIR)
 
 format: ## Formatea el código automáticamente usando Prettier
 	npm run format

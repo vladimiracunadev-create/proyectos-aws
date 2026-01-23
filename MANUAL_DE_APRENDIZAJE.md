@@ -65,6 +65,17 @@ Aunque despleguemos infraestructura, usamos herramientas creadas en JavaScript p
 *   **¿Por qué lo usamos?**: En lugar de escribir `aws s3 sync ... --delete --region us-east-2`, solo escribes `make deploy-b`. Ahorra tiempo y evita que cometas errores tipográficos.
 *   **Comandos Mágicos**: Escribe `make help` en tu terminal para ver todo lo que este control remoto puede hacer por ti.
 
+#### `.devcontainer/` 🐳 (Nivel Senior)
+**Analogía**: La **Oficina de Cristal**.
+*   Imagínate una oficina que se construye sola en un segundo y tiene todas las herramientas de dibujo, internet y luz listas para usar.
+*   **¿Para qué sirve?**: Si tienes Docker, puedes abrir este proyecto y **no necesitas instalar nada en tu PC**. Todo (Terraform, Node, AWS CLI) ya viene instalado dentro de esta "oficina de cristal" (contenedor).
+*   **Ventaja**: Elimina el clásico problema de: *"¡Pero en mi máquina sí funcionaba!"*.
+
+#### `tfsec` 🛡️ (Nivel Senior)
+**Analogía**: El **Inspector de Seguridad**.
+*   Es una herramienta que mira tus planos de arquitectura (el código de Terraform) y te avisa si algo es peligroso.
+*   **¿Qué hace?**: Nos avisa si un bucket de S3 es público por error o si las llaves están mal configuradas. Es como tener un guardaespaldas digital revisando lo que construimos.
+
 ---
 
 ## 🔬 Deep Dive: Análisis de los Casos

@@ -1,9 +1,23 @@
 image: node:18
 
 stages:
+  - security
   - plan-infrastructure
   - test
   - deploy
+
+# --- Security Checks (IaC) ---
+scan_infrastructure:
+  stage: security
+  image:
+    name: aquasec/tfsec:v1.28.1
+    entrypoint: [""]
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - caso-c-terraform-s3/**/*
+  script:
+    - tfsec caso-c-terraform-s3
 
 cache:
   paths:
