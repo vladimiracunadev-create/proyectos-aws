@@ -9,10 +9,18 @@ S3_BUCKET ?= vladimir-caso-b-site-2026
 REGION ?= us-east-2
 TF_DIR = caso-c-terraform-s3
 
-.PHONY: help install lint format deploy-b tf-init tf-plan tf-apply tf-security clean
+.PHONY: help install lint format deploy-b tf-init tf-plan tf-apply tf-security docker-build k8s-lint clean
 
 help: ## Muestra este mensaje de ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
+
+docker-build: ## Construye la imagen Docker de la API (Caso G)
+	@echo "Construyendo imagen Docker..."
+	cd caso-g-containers-ecs && docker build -t vladimir-api:latest .
+
+k8s-lint: ## Valida los manifiestos de Kubernetes (Caso K)
+	@echo "Validando manifiestos K8s..."
+	kubectl apply --dry-run=client -f caso-k-kubernetes-eks/deployment.yaml
 
 install: ## Instala las dependencias de Node.js (necesario para linting)
 	npm install

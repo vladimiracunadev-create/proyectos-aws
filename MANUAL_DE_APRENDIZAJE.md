@@ -144,6 +144,16 @@ La computación **Serverless** (sin servidores) significa que ya no administras 
 *   **DynamoDB**: Es la "memoria". Una base de datos NoSQL ultra-rapida que guarda tus datos (los leads del formulario) sin que tengas que instalar ningún motor de base de datos.
 *   **AWS Amplify**: Aloja el frontend (la página web bonita) que conecta con todo esto.
 
+### 🐳 Caso G: Dockerización de Servicios (Contenedores)
+**Ubicación:** `./caso-g-containers-ecs/`
+**¿Qué es?**
+Empaquetar una aplicación (en este caso una API en Node.js) con todo lo que necesita para correr. Evitamos el "en mi máquina funciona" y preparamos el código para ser escalable.
+
+### ☸️ Caso K: Kubernetes (Orquestación Industrial)
+**Ubicación:** `./caso-k-kubernetes-eks/`
+**¿Qué es?**
+Si Docker es el contenedor, Kubernetes es el **Capitán del Barco**. Se encarga de gobernar una flota de contenedores, asegurando que siempre estén vivos y repartiendo el tráfico entre ellos.
+
 **Archivos Clave:**
 *   `template.yaml`: Es como el `main.tf` de Terraform pero específico para Serverless (usando AWS SAM). Define: "Quiero una función Lambda, una base de datos y una API que las conecte".
 *   `app.js` (Frontend): Aquí es donde ocurre la magia de la conexión. El Javascript del navegador llama a la URL de tu API Gateway para enviar los datos.

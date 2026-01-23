@@ -28,8 +28,9 @@ Para ejecutar este proyecto, debes tener instalado:
 2.  **Node.js (LTS)**: Versión 18.x o superior.
 3.  **AWS CLI**: Configurado con credenciales válidas.
 4.  **Terraform**: Versión 1.14.0 o superior.
-5.  **Docker Desktop** (Opcional pero Recomendado): Para usar el entorno preconfigurado (DevContainers).
-6.  **Make**:
+5.  **Docker Desktop**: Necesario para construir imágenes (Caso G) y el entorno de desarrollo.
+6.  **Kubectl**: Para gestionar el orquestador (Caso K).
+7.  **Make**:
     *   **Linux/macOS**: Suele venir preinstalado.
     *   **Windows**: Instalar vía [Chocolatey](https://community.chocolatey.org/packages/make) (`choco install make`) o usar mediante Git Bash/WSL.
 

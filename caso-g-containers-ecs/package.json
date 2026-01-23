@@ -1,0 +1,12 @@
+{
+    "name": "vladimir-api-docker",
+    "version": "1.0.0",
+    "description": "API de ejemplo para el Caso G (Docker)",
+    "main": "server.js",
+    "dependencies": {
+        "express": "^4.18.2"
+    },
+    "scripts": {
+        "start": "node server.js"
+    }
+}

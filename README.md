@@ -30,6 +30,8 @@ Para simplificar las tareas recurrentes, el proyecto incluye un `Makefile`. No n
 | `make deploy-b` | Despliega el Caso B a S3. |
 | `make tf-plan` | Prepara el despliegue del Caso C. |
 | `make tf-apply` | Despliega el Caso C a AWS. |
+| `make docker-build` | Construye el contenedor del Caso G. |
+| `make k8s-lint` | Valida los planos del Caso K. |
 | `make help` | Ver todos los comandos disponibles. |
 
 > Consulta [SPECIFICATIONS.md](file:///c:/proyectos-aws-gitlab/SPECIFICATIONS.md) para ver los requerimientos técnicos y de acceso.
@@ -61,16 +63,16 @@ Cada carpeta en este repositorio representa un "Caso de Estudio" que añade comp
     - *Live Demo (Frontend)*: [👉 Portafolio](https://staging.d3oq987bpa7ls7.amplifyapp.com/)
     - *Live Demo (Backend)*: [👉 API Endpoint](https://tc78a6xibg.execute-api.us-east-2.amazonaws.com)
 
-### Nivel 3: Arquitectura Empresarial
-- **[📂 caso-e-dynamodb-persistence](./caso-e-dynamodb-persistence/)** (Nivel 4) `PROYECTADO`
-    - *Stack*: DynamoDB + Lambda (CRUD Completo).
-    - *Objetivo*: Modelo de Datos Avanzado. Operaciones complejas, índices y diseño de tabla única.
-- **[📂 caso-f-security-cognito](./caso-f-security-cognito/)** (Nivel 5) `PROYECTADO`
-    - *Stack*: Cognito + WAF.
-    - *Objetivo*: Autenticación de usuarios y seguridad perimetral.
-- **[📂 caso-g-containers-ecs](./caso-g-containers-ecs/)** (Nivel 6) `PROYECTADO`
-    - *Stack*: Docker + ECS Fargate.
-    - *Objetivo*: Microservicios en contenedores para cargas de trabajo complejas.
+### Nivel 3: Contenedores y Orquestación
+- **[📂 caso-g-containers-ecs](./caso-g-containers-ecs/)** (Nivel 4) `NUEVO`
+    - *Stack*: **Docker** + Node.js (API).
+    - *Objetivo*: Empaquetado industrial de aplicaciones para portabilidad total.
+- **[📂 caso-k-kubernetes-eks](./caso-k-kubernetes-eks/)** (Nivel 5) `NUEVO`
+    - *Stack*: **Kubernetes** (Manifiestos YAML).
+    - *Objetivo*: Orquestación de flotas de contenedores y alta disponibilidad.
+
+### Nivel 4: Arquitectura Empresarial y Modernización
+- **[📂 caso-e-dynamodb-persistence](./caso-e-dynamodb-persistence/)** (Nivel 6) `PROYECTADO`
 
 ### Nivel 4: Maestría y Modernización
 - **[📂 caso-h-event-driven](./caso-h-event-driven/)** (Nivel 7) `PROYECTADO`
