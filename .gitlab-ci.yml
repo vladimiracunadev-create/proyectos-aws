@@ -34,24 +34,52 @@ deploy_case_b:
         - caso-b-gitlab-s3/**/*
   script:
     - echo "Deploying Case B to S3..."
+    - |
+      if [ -z "$S3_BUCKET_CASO_B" ]; then
+        echo "ERROR: La variable S3_BUCKET_CASO_B no está definida en GitLab CI/CD Variables."
+        exit 1
+      fi
     - aws s3 sync caso-b-gitlab-s3/ "s3://$S3_BUCKET_CASO_B/" --delete --exclude "*.md"
   environment:
     name: production/case-b
 
-# --- Caso C: Terraform (Placeholder) ---
-# plan_case_c:
-#   stage: plan-infrastructure
-#   image:
-#     name: hashicorp/terraform:light
-#     entrypoint: [""]
-#   rules:
-#     - if: '$CI_COMMIT_BRANCH == "main"'
-#       changes:
-#         - caso-c-terraform-s3/**/*
-#   script:
-#     - cd caso-c-terraform-s3
-#     - terraform init
-#     - terraform plan
+# --- Caso C: Terraform (Infraestructura y App) ---
+plan_case_c:
+  stage: plan-infrastructure
+  image:
+    name: hashicorp/terraform:1.14.3
+    entrypoint: [""]
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - caso-c-terraform-s3/**/*
+  script:
+    - cd caso-c-terraform-s3
+    - terraform init
+    - terraform plan -out=tfplan
+  artifacts:
+    paths:
+      - caso-c-terraform-s3/tfplan
+    expire_in: 1 hour
+
+deploy_case_c:
+  stage: deploy
+  image:
+    name: hashicorp/terraform:1.14.3
+    entrypoint: [""]
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - caso-c-terraform-s3/**/*
+  needs:
+    - plan_case_c
+  script:
+    - cd caso-c-terraform-s3
+    - terraform init
+    - terraform apply -auto-approve tfplan
+  environment:
+    name: production/case-c
+
 
 
 
