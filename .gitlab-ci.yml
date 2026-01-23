@@ -1,9 +1,9 @@
 image: node:18
 
 stages:
+  - plan-infrastructure
   - test
   - deploy
-  - plan-infrastructure
 
 cache:
   paths:
