@@ -19,6 +19,23 @@ Entiende qué significa cada archivo y tecnología de este proyecto con explicac
 
 ---
 
+## ⚡ Automatización con Makefile
+
+Para simplificar las tareas recurrentes, el proyecto incluye un `Makefile`. No necesitas recordar comandos largos de AWS o Terraform.
+
+| Comando | Descripción |
+| :--- | :--- |
+| `make install` | Instala las dependencias necesarias. |
+| `make lint` | Revisa la calidad del código. |
+| `make deploy-b` | Despliega el Caso B a S3. |
+| `make tf-plan` | Prepara el despliegue del Caso C. |
+| `make tf-apply` | Despliega el Caso C a AWS. |
+| `make help` | Ver todos los comandos disponibles. |
+
+> Consulta [SPECIFICATIONS.md](file:///c:/proyectos-aws-gitlab/SPECIFICATIONS.md) para ver los requerimientos técnicos y de acceso.
+
+---
+
 ## 🗺️ Roadmap de Aprendizaje
 
 Cada carpeta en este repositorio representa un "Caso de Estudio" que añade complejidad y profesionalismo sobre el anterior.

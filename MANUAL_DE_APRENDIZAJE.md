@@ -59,6 +59,12 @@ Aunque despleguemos infraestructura, usamos herramientas creadas en JavaScript p
 *   Le dice a Git qué archivos NO debe guardar.
 *   Por ejemplo: `node_modules` (que pesa muchísimo y se puede regenerar) o archivos con contraseñas secretas.
 
+#### `Makefile` ⚡
+**Analogía**: El **Control Remoto Universal**.
+*   Es un archivo que agrupa comandos largos y difíciles bajo un nombre corto.
+*   **¿Por qué lo usamos?**: En lugar de escribir `aws s3 sync ... --delete --region us-east-2`, solo escribes `make deploy-b`. Ahorra tiempo y evita que cometas errores tipográficos.
+*   **Comandos Mágicos**: Escribe `make help` en tu terminal para ver todo lo que este control remoto puede hacer por ti.
+
 ---
 
 ## 🔬 Deep Dive: Análisis de los Casos
