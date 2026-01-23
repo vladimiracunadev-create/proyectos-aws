@@ -103,7 +103,9 @@ Aquí le quitamos la magia. Creamos un bucket S3 (una carpeta en la nube) manual
 **Archivos Clave:**
 *   `main.tf`: El plano arquitectónico. Dice "Quiero un bucket, quiero una distribución de CloudFront, quiero una política de acceso".
 *   `variables.tf`: Los parámetros ajustables (nombre del proyecto, región).
-*   `terraform.tfstate`: ¡CRÍTICO! Es la "memoria" de Terraform. Guarda el estado actual de tu infraestructura para saber qué cambiar la próxima vez. *Nota: En equipos reales, esto se guarda en la nube, no en tu PC.*
+*   `terraform.tfstate`: ¡CRÍTICO! Es la "memoria" de Terraform. Guarda el estado actual de tu infraestructura para saber qué cambiar la próxima vez. En este proyecto hemos implementado un **Remote Backend** en S3 para compartir este mapa entre tu PC y GitLab CI, evitando recursos duplicados.
+*   `outputs.tf`: Define la información que Terraform te "devuelve" al terminar (como la URL de tu sitio).
+*   `versions.tf`: Donde configuramos el Backend Remoto y los proveedores de AWS.
 
 **Alcance e Importancia:**
 *   **Ideal para:** Empresas, equipos grandes, proyectos de producción.
@@ -136,9 +138,16 @@ La computación **Serverless** (sin servidores) significa que ya no administras 
     *   ✅ Frontend: [https://staging.d3oq987bpa7ls7.amplifyapp.com/](https://staging.d3oq987bpa7ls7.amplifyapp.com/)
     *   ✅ Backend API: [https://tc78a6xibg.execute-api.us-east-2.amazonaws.com](https://tc78a6xibg.execute-api.us-east-2.amazonaws.com)
 
-### 🚀 Próximos Pasos (Proyectados)
+## 🧠 Lecciones Aprendidas (Casos B y C)
 
-*   **Caso G (Contenedores)**: Para cuando un simple HTML no basta y necesitas correr una API completa (Node.js/Python) en la nube de forma aislada y escalable.
+### 1. El Enigma del Estado (Remote Backend)
+Aprendimos que si el archivo `tfstate` vive solo en tu PC, GitLab "está ciego". Al configurar un **Remote Backend** en un bucket de S3 (ej: `vladimir-terraform-state-2026`), ambos miran el mismo mapa. **Regla de oro:** Nunca dejes que Terraform trabaje solo en local si usas CI/CD.
+
+### 2. El Poder de las Credenciales (IAM)
+Descubrimos que no todas las llaves de AWS tienen el mismo poder. El usuario `gitlab-ci-caso-b-s3` solo podía tocar S3, mientras que `terraform-user` tenía el poder para CloudFront. Unificar bajo una **Llave Maestra** simplifica la vida y evita los molestos errores "Access Denied".
+
+### 3. Integridad de Activos (MIME Types y Rutas)
+Vimos que el CSS es caprichoso. Moverlo a `assets/styles.css` y referenciarlo correctamente en el HTML no solo ordena el proyecto, sino que evita choques de nombres y asegura que CloudFront cachee correctamente los estilos.
 
 ---
 
