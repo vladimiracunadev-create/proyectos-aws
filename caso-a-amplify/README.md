@@ -1,49 +1,36 @@
-# Caso A — AWS Amplify + GitLab (hosting automático)
+# 🐣 Caso A: AWS Amplify (Despliegue ClickOps)
 
-## Qué hace
-- Conecta el repo de GitLab con **AWS Amplify Hosting**.
-- Cada `git push` a tu rama (ej. `main`) despliega automáticamente tu web estática.
+[![Nivel-0](https://img.shields.io/badge/Nivel-0_Concepto-green?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Deployed-success?style=for-the-badge)]()
 
-## Pasos (sin afectar otros entornos)
-1) En AWS, crea una **nueva Amplify App** (no reutilices una existente).
-2) Conecta tu repo GitLab y selecciona la rama (ej. `main`).
-3) Marca **My app is a monorepo** y pon el path: `caso-a-amplify`.
-4) (Recomendado) Para que quede "infra como código" en el repo:
-   - Copia `caso-a-amplify/amplify.yml` a la **raíz** del repositorio (quedará como `./amplify.yml`).
-   - Haz commit y push.
+Este caso es el punto de partida del monorepo. Demuestra el método más rápido y sencillo para desplegar una aplicación moderna conectada directamente a un repositorio de Git.
 
-Amplify usa el `amplify.yml` del repositorio para el buildspec cuando está presente.
+---
 
-Testing local
--------------
-- Puedes ejecutar un servidor estático para ver la web localmente: `npx http-server caso-a-amplify -p 8080`.
-- Para revisar que el build funciona, reproduce los pasos de `amplify.yml` localmente (por ejemplo, instalar dependencias y ejecutar comandos de build).
+## 🎯 Objetivo
+Entender la facilidad de la **Integración Continua (CI)** nativa de AWS. El foco aquí es la velocidad de entrega y la configuración automática de certificados SSL y dominios.
 
-Notas y buenas prácticas
-------------------------
-- No incluyas credenciales en el repositorio. Usa las opciones de variables y secret manager en Amplify cuando sea necesario.
-- Mantén `amplify.yml` simple; si necesitas transformaciones (minificación, versiones) define pasos explícitos en el build.
-- Revisa la configuración de dominio y certificado en Amplify si vas a usar un dominio personalizado.
+## 🏗️ Arquitectura
+1.  **GitLab Connection**: AWS Amplify escucha cambios en la rama `main`.
+2.  **Amplify Engine**: Detecta el archivo `amplify.yml`.
+3.  **Hosting Global**: Despliega el contenido en una infraestructura gestionada por Amazon que escala sola.
 
-Referencias
------------
-- `amplify.yml` (este folder)
-- Documentación oficial: https://docs.aws.amazon.com/amplify
+## 🚀 Despliegue Local (Simulación)
+Puedes visualizar el sitio antes de subirlo:
 
-Despliegue en Amplify ✅
------------------------
-La app del **Caso A** está desplegada en: https://main.d1uybq9oui7h8c.amplifyapp.com/ (deployed 2026-01-13).
+```bash
+# Servir estáticos localmente
+npx http-server . -p 8080
+```
 
-Verificación rápida
--------------------
-- Abrir la URL y comprobar que la página carga correctamente.
-- Revisar que los assets (CSS, JS, PDFs) se sirvan sin errores.
-- Probar en móvil/desktop y navegar por enlaces.
-- Para problemas, revisar logs de Amplify Console y el build log.
+## 💎 Características Principales
+- **ClickOps**: Configuración inicial sencilla desde la consola de AWS.
+- **Zero Config**: Amplify maneja el CDN (CloudFront) y S3 por ti de forma invisible.
+- **Pull Request Previews**: Capacidad de ver cambios en ramas temporales antes de unirlos a `main`.
 
-Siguientes pasos recomendados
------------------------------
-- Configurar un dominio personalizado y certificado en Amplify si aplica.
-- Revisar ajustes de cache y headers (Cache-Control) en S3/CloudFront o Amplify.
-- Añadir monitorización/alertas (CloudWatch) y pruebas E2E si deseas.
+---
 
+## 🔗 Enlaces Relacionados
+- ⬅️ **[Regresar al Roadmap Principal](../README.md)**
+- 🚀 **[Guía de Instalación](../docs/INSTALL.md)**
+- 🧪 **[Demo en Vivo](https://main.d1uybq9oui7h8c.amplifyapp.com/)**

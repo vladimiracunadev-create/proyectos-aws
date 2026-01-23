@@ -1,112 +1,39 @@
-# caso-d-serverless-basic (Nivel 3) — Portafolio estático + Formulario Serverless
+# ⚡ Caso D: Serverless Basic (Lógica Distribuidora)
 
-Este proyecto es un **demo real y pequeño** para aprender y demostrar un stack típico en AWS:
+[![Nivel-3](https://img.shields.io/badge/Nivel-3_Arquitectura-orange?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Deployed-success?style=for-the-badge)]()
 
-- **Frontend estático**: HTML/CSS/JS (publicado en **AWS Amplify Hosting**).
-- **Backend serverless**: **API Gateway (HTTP API)** → **AWS Lambda** → **DynamoDB**.
-
-> **Live Demo (Frontend)**: [👉 Ver Portafolio](https://staging.d3oq987bpa7ls7.amplifyapp.com/)
-> **Live Demo (Backend)**: [👉 API Endpoint](https://tc78a6xibg.execute-api.us-east-2.amazonaws.com)
-
-La página principal incluye un **Formulario (Demo)** que, al enviar, **guarda el registro en DynamoDB**.
+Este caso introduce la capacidad de ejecutar código backend sin gestionar servidores, utilizando un stack 100% Serverless para manejar formularios y persistencia de datos.
 
 ---
 
-## Estructura
+## 🎯 Objetivo
+Dominar la integración entre el frontend estático y los servicios de cómputo reactivos de AWS. Aprender a usar **AWS SAM (Serverless Application Model)** para desplegar funciones y bases de datos NoSQL de forma automatizada.
 
-```
-caso-d-serverless-basic/
-  frontend/                 # tu portafolio (HTML/CSS/JS + PDFs)
-    index.html
-    styles.css
-    app.js
-    *.pdf
-  backend/                  # SAM: API + Lambda + DynamoDB
-    template.yaml
-    src/
-      app.py
-  amplify.yml               # (opcional) para publicar solo /frontend en Amplify
-  .gitignore
-```
+## 🏗️ Arquitectura (Stack)
+- **API Gateway**: El recepcionista que expone los endpoints HTTP.
+- **AWS Lambda**: El cerebro ejecutando Python/NodeJS solo cuando es necesario.
+- **DynamoDB**: Almacén de datos ultra-rápido de baja latencia.
+- **Amplify Hosting**: Alojamiento del frontend que consume esta API.
 
----
-
-## 1) Deploy del Backend (API + Lambda + DynamoDB)
-
-### Requisitos
-- AWS CLI configurada (`aws configure`)
-- AWS SAM CLI instalada (`sam --version`)
-
-### Comandos
+## 🛠️ Comandos de Gestión (Backend)
+Si tienes instalado el AWS SAM CLI:
 
 ```bash
 cd backend
-sam build
-sam deploy --guided
+sam build        # Prepara las funciones para la nube
+sam deploy       # Despliega API + Lambda + DynamoDB
 ```
 
-Al terminar, SAM/CloudFormation mostrará outputs. Copia el **ApiBaseUrl**, ejemplo:
-
-```
-ApiBaseUrl = https://xxxx.execute-api.sa-east-1.amazonaws.com
-```
+## 💎 Características Principales
+- **Escalabilidad Infinita**: AWS levanta tantas copias como necesites.
+- **Costo Cero en Reposo**: Si nadie usa el formulario, pagas $0.
+- **Auto-Limpieza**: La tabla de DynamoDB está configurada con TTL para borrar registros antiguos.
 
 ---
 
-## 2) Conectar el Frontend al Backend (pegar URL del API)
-
-Abre:
-
-- `frontend/app.js`
-
-Busca esta línea y pega tu URL real:
-
-```js
-const API_BASE = "Pega_aqui_tu_ApiBaseUrl";
-```
-
-Guarda los cambios.
-
----
-
-## 3) Deploy del Frontend (Amplify)
-
-Opción simple:
-- En **AWS Amplify Hosting** publica la carpeta **`frontend/`**.
-
-Este repo incluye un `amplify.yml` (opcional) que indica a Amplify que el artefacto está en `frontend/`.
-
----
-
-## 4) Probar la demo
-
-1. Abre tu sitio.
-2. Menú superior → **Formulario (Demo)**.
-3. Envía el formulario.
-4. Revisa en AWS:
-   - **DynamoDB → Tables → `portfolio_leads`**
-
----
-
-## Notas importantes (para aprender bien)
-
-- El frontend es **estático** (no “corre en servidor”): corre en el navegador.
-- La parte “serverless” es el backend: **Lambda** sí ejecuta código en AWS, pero **sin administrar servidores**.
-- Para mantener el demo ordenado, la tabla usa **TTL** para auto-borrar registros en 30 días.
-
-### Seguridad (modo demo)
-- CORS está en `*` para que funcione fácil.
-- En producción, limita `AllowOrigins` al dominio real del sitio.
-
----
-
-## Endpoints
-
-- `POST /lead`
-
-Body JSON esperado:
-
-```json
-{ "name": "...", "email": "...", "message": "..." }
-```
-
+## 🔗 Enlaces Relacionados
+- ⬅️ **[Regresar al Roadmap Principal](../README.md)**
+- 🏗️ **[Arquitectura Detallada](../docs/ARCHITECTURE.md)**
+- 📘 **[Guía para Principiantes](../docs/BEGINNERS_GUIDE.md)**
+- 🧪 **[Demo Portafolio](https://staging.d3oq987bpa7ls7.amplifyapp.com/)** / **[API Test](https://tc78a6xibg.execute-api.us-east-2.amazonaws.com)**
