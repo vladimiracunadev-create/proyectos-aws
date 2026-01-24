@@ -1,17 +1,20 @@
-# Caso J: Inteligencia Artificial Generativa (GenAI) - Nivel 9
+# 🤖 Caso I: GenAI Bedrock (IA Nativa en AWS)
 
-> **Status**: `PROYECTADO` (Próximamente)
+[![Nivel-8](https://img.shields.io/badge/Nivel-8_Inteligencia-blueviolet?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Proyectado-lightgrey?style=for-the-badge)]()
 
-## 🎯 El Desafío
-El mercado actual exige integración con IA. No solo usar ChatGPT en la web, sino integrar modelos potentes (LLMs) **dentro** de tu infraestructura segura de AWS, conectada a tus datos.
+La frontera final: Integrar Inteligencia Artificial Generativa directamente en tu propia infraestructura de nube, manteniendo la privacidad y seguridad de tus datos.
 
-## 🛠️ Stack Tecnológico
-- **Amazon Bedrock**: API unificada para acceder a modelos fundacionales (Claude, Titan, Llama 2).
-- **LangChain (Python/JS)**: Framework para orquestar la IA.
-- **AWS Lambda**: Para invocar a Bedrock.
+---
 
-## 🚀 ¿Qué construiremos?
-Un **"Analista de Portafolio Inteligente"**:
-1. Un chat donde el reclutador puede preguntar: "¿Qué experiencia tiene Vladimir en AWS?".
-2. El sistema (Lambda) enviará el contexto de tu CV (Caso D) a **Claude 3 (via Bedrock)**.
-3. El modelo responderá basado en TU información real, alojada de forma privada.
+## 🎯 Objetivo
+Desplegar modelos LLM seguros. Aprenderás a invocar modelos de Anthropic o Amazon desde tus lambdas y a alimentar la IA con contexto de tus propias bases de datos (RAG).
+
+## 🧠 Herramientas
+- **Amazon Bedrock**: Acceso a modelos como Claude 3 y Llama 3.
+- **LangChain**: Orquestación de lógica inteligente.
+- **RAG (Retrieval Augmented Generation)**: Tu base de datos como cerebro de la IA.
+
+## 🔗 Enlaces Relacionados
+- ⬅️ **[Regresar al Roadmap Principal](../README.md)**
+- 📘 **[Glosario de Términos](../docs/BEGINNERS_GUIDE.md)**

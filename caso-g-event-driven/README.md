@@ -1,22 +1,20 @@
-# Caso H: Arquitecturas Orientadas a Eventos (EDA) - Nivel 7
+# 📨 Caso G: Event Driven (Arquitectura Asíncrona)
 
-> **Status**: `PROYECTADO` (Próximamente)
+[![Nivel-6](https://img.shields.io/badge/Nivel-6_Eventos-yellow?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Proyectado-lightgrey?style=for-the-badge)]()
 
-## 🎯 El Desafío
-Hasta ahora, tus sistemas (Caso D, E) han sido "síncronos" (A llama a B y espera). En sistemas grandes, esto crea cuellos de botella.
-El desafío aquí es **desacoplar** componentes. Que el sistema "reaccione" a cosas que pasan, sin esperas.
+Desacoplar componentes es el secreto de la escalabilidad. En este módulo, los servicios no se llaman entre sí directamente, sino que reaccionan a eventos que ocurren en tiempo real.
 
-## 🛠️ Stack Tecnológico
-- **Amazon EventBridge**: El cerebro que enruta eventos.
-- **Amazon SQS (Simple Queue Service)**: Cola de mensajes para amortiguar tráfico.
-- **Amazon SNS (Simple Notification Service)**: Para broadcasting (enviar a muchos a la vez).
+---
 
-## 🚀 ¿Qué construiremos?
-Un sistema de **"Procesamiento de Pedidos Asíncrono"**:
-1. Usuario crea pedido (API Gateway).
-2. Se confirma al usuario "Recibido" inmediatamente (0 espera).
-3. Por detrás, se dispara un evento `OrderPlaced`.
-4. Tres servicios distintos reaccionan a la vez:
-   - Servicio de Facturación (genera PDF).
-   - Servicio de Logística (avisa al almacén).
-   - Servicio de Notificación (envía email).
+## 🎯 Objetivo
+Eliminar cuellos de botella mediante el paso de mensajes. Aprenderás a usar colas y buses de eventos para que un fallo en un servicio no detenga a toda la aplicación.
+
+## 🧩 Stack Tecnológico
+- **Amazon EventBridge**: Orquestación de eventos.
+- **Amazon SQS**: Amortiguamiento de carga mediante colas.
+- **Amazon SNS**: Notificaciones masivas push/email.
+
+## 🔗 Enlaces Relacionados
+- ⬅️ **[Regresar al Roadmap Principal](../README.md)**
+- 🏗️ **[Diagrama de Flujo](../docs/ARCHITECTURE.md)**

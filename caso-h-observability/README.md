@@ -1,19 +1,20 @@
-# Caso I: Observabilidad y Operaciones - Nivel 8
+# 👁️ Caso H: Observability (Salud y Monitoreo)
 
-> **Status**: `PROYECTADO` (Próximamente)
+[![Nivel-7](https://img.shields.io/badge/Nivel-7_Operaciones-blue?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Proyectado-lightgrey?style=for-the-badge)]()
 
-## 🎯 El Desafío
-"No puedes mejorar lo que no puedes medir".
-Cuando tienes Lambdas, bases de datos y colas (Caso H), ¿cómo sabes dónde falló ese pedido? ¿Cómo sabes si la base de datos está lenta?
-El desafío es implementar **Ojos y Oídos** en tu nube.
+"No puedes mejorar lo que no puedes medir". Este caso convierte la infraestructura en una caja de cristal donde cada error y cada milisegundo de latencia queda registrado.
 
-## 🛠️ Stack Tecnológico
-- **Amazon CloudWatch**: Dashboards, Métricas custom y Alarmas.
-- **AWS X-Ray**: Trazabilidad distribuida (ver el viaje de una petición entre microservicios).
-- **CloudWatch Logs Insights**: Buscador potente para logs.
+---
 
-## 🚀 ¿Qué construiremos?
-Instrumentaremos el sistema del Caso D/H para lograr:
-1. **Mapa de Servicio**: Ver visualmente cómo se conectan las Lambdas.
-2. **Dashboard Ejecutivo**: Ver "Pedidos por minuto" y "Errores" en gráficas en tiempo real.
-3. **Alarma Crítica**: Recibir un email si más del 5% de las peticiones fallan en 1 minuto.
+## 🎯 Objetivo
+Implementar monitoreo proactivo. Aprenderás a crear tableros de control (**CloudWatch**) y a rastrear peticiones que viajan entre múltiples servicios (**X-Ray**).
+
+## 📊 ¿Qué mediremos?
+- **KPIs de Negocio**: Pedidos completados, usuarios activos.
+- **Salud Técnica**: Tasas de error 4xx/5xx, latencia de base de datos.
+- **Alertas**: Notificaciones inmediatas antes de que el usuario lo note.
+
+## 🔗 Enlaces Relacionados
+- ⬅️ **[Regresar al Roadmap Principal](../README.md)**
+- 🛠️ **[Specs Técnicas](../docs/TECHNICAL_SPECS.md)**

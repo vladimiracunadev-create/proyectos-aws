@@ -1,16 +1,20 @@
-# Caso F: Seguridad y Autenticación (Cognito) 🔐
+# 🔐 Caso F: Security First (Identidad y Perímetro)
 
-> **Nivel 5**: Seguridad Empresarial
+[![Nivel-5](https://img.shields.io/badge/Nivel-5_Seguridad-red?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Proyectado-lightgrey?style=for-the-badge)]()
 
-## Objetivo
-Proteger la aplicación mediante autenticación robusta y cortafuegos de aplicación web.
+La seguridad no es un parche, es la base. Este caso implementa capas de protección para asegurar que solo usuarios válidos accedan a la aplicación y que el tráfico malicioso sea bloqueado.
 
-## Stack Tecnológico
-- **Amazon Cognito** (User Pools & Identity Pools)
-- **AWS WAF** (Web Application Firewall)
+---
 
-## Escenario
-Restringir el acceso al "Libro de Visitas" (Caso E). Solo los usuarios registrados e identificados podrán publicar comentarios. Se implementará un flujo de Registro/Login estándar (OAuth2/JWT).
+## 🎯 Objetivo
+Implementar el modelo de responsabilidad compartida de AWS. Aprenderás a gestionar identidades de usuario (**Cognito**) y a proteger tus endpoints contra ataques comunes (**WAF**).
 
-## Próximamente
-Configuración de Cognito User Pool y Authorizers en API Gateway.
+## 🛠️ Componentes de Seguridad
+- **AWS Cognito**: Gestión de usuarios, MFA y tokens JWT.
+- **AWS WAF**: Protección contra SQL Injection y XSS.
+- **IAM Roles**: Privilegio mínimo para cada función.
+
+## 🔗 Enlaces Relacionados
+- ⬅️ **[Regresar al Roadmap Principal](../README.md)**
+- 🛡️ **[Políticas IAM Detalladas](../docs/IAM_SECURITY.md)**

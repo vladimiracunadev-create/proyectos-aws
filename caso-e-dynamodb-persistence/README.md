@@ -1,17 +1,20 @@
-# Caso E: Persistencia de Datos (DynamoDB) 💾
+# 💾 Caso E: Persistence Pro (Modelado NoSQL)
 
-> **Nivel 4**: Aplicación Real
+[![Nivel-4](https://img.shields.io/badge/Nivel-4_Datos-green?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Proyectado-lightgrey?style=for-the-badge)]()
 
-## Objetivo
-Implementar persistencia de datos NoSQL para que la aplicación tenga "memoria". Se construirá un sistema CRUD (Create, Read, Update, Delete) completo.
+Este caso profundiza en el almacenamiento de datos a gran escala utilizando **Amazon DynamoDB**, enfocándose en patrones de acceso eficientes y diseño de tabla única.
 
-## Stack Tecnológico
-- **Amazon DynamoDB** (Base de datos NoSQL Key-Value)
-- **AWS SDK** (Integración desde Lambda)
+---
 
-## Escenario
-**Libro de Visitas (Guestbook)**:
-Los usuarios pueden escribir comentarios que se guardan permanentemente en DynamoDB y se muestran a los demás visitantes.
+## 🎯 Objetivo
+Dominar la persistencia de datos NoSQL. Aprenderás a diseñar esquemas que escalan de forma infinita sin perder rendimiento, utilizando índices secundarios (GSI) y transacciones.
 
-## Próximamente
-Diseño de tablas (Single Table Design básico) y conexión con las Lambdas del Caso D.
+## 🏗️ Arquitectura
+1.  **Frontend**: Interfaz de registro de datos.
+2.  **AWS Lambda**: Lógica de validación y escritura.
+3.  **DynamoDB**: Almacén persistente con políticas de auto-escalado.
+
+## 🔗 Enlaces Relacionados
+- ⬅️ **[Regresar al Roadmap Principal](../README.md)**
+- 🏗️ **[Arquitectura Global](../docs/ARCHITECTURE.md)**
