@@ -16,39 +16,44 @@
 
 ## 🔬 Deep Dive: Análisis de los Casos
 
-A medida que avanzas por las carpetas, la complejidad y el profesionalismo aumentan:
+A medida que avanzas por las carpetas, la complejidad y el profesionalismo aumentan siguiendo este nuevo orden:
 
 ### 🐣 Caso A: AWS Amplify (Velocidad Total)
-**Objetivo**: Despliegue en 5 minutos. AWS hace toda la "magia" (hosting, SSL, CDN) de forma automática.
-*   **Ideal para**: Prototipos y Frontends rápidos.
+**Objetivo**: Despliegue en 5 minutos. AWS hace toda la "magia" (hosting, SSL, CDN) de forma automática. Ideal para frontends modernos.
 
 ### 🛠️ Caso B: GitLab CI + S3 (El Camino Artesanal)
-**Objetivo**: Entender los cimientos. Tú configuras el "camión" (Pipeline) para que lleve los archivos al bucket.
-*   **Aprendizaje**: Permisos IAM, Buckets y automatización manual.
+**Objetivo**: Entender los cimientos. Tú configuras el "camión" (Pipeline) para que lleve los archivos al bucket. Aprendes sobre permisos IAM y sincronización.
 
 ### 🏗️ Caso C: Terraform (Infraestructura como Código)
-**Objetivo**: Profesionalización profesional. Los servidores y redes se escriben en texto, no se clickean.
-*   **Aprendizaje**: Remote State, CloudFront OAC y seguridad de red.
+**Objetivo**: Profesionalización Senior. Los servidores y redes se escriben en texto. Aprendes a compartir el "mapa" de la nube (Remote State) y proteger datos con CloudFront.
 
 ### ⚡ Caso D: Serverless Basic (Lógica Reactiva)
-**Objetivo**: Añadir "cerebro" al portafolio. Formularios que guardan datos sin servidores encendidos 24/7.
-*   **Stack**: Gateway + Lambda + DynamoDB.
+**Objetivo**: Añadir "cerebro" al sistema. Formularios que guardan datos usando Lambda y DynamoDB sin necesidad de servidores encendidos 24/7.
 
-### 🐳 Caso G: Dockerización (Microservicios)
-**Objetivo**: Independencia total. Empaquetamos la app con todo su sistema operativo para que nunca falle por "problemas de entorno".
+### 🟠 Casos E-I: Gestión Senior de Aplicaciones
+- **E - Persistencia**: Modelado de datos profesional en DynamoDB.
+- **F - Seguridad**: Autenticación con Cognito y protección WAF.
+- **G - Eventos**: Arquitecturas asíncronas reactivas (EventBridge).
+- **H - Observabilidad**: Encontrar fallos antes que el usuario (CloudWatch).
+- **I - GenAI**: Integración de modelos de lenguaje (Bedrock).
+
+### 🐳 Caso J: Dockerización (Microservicios)
+**Objetivo**: Independencia total. Empaquetamos la app con sus dependencias para que el despliegue sea idéntico en cualquier entorno (ECS/Fargate).
 
 ### ☸️ Caso K: Kubernetes en AWS (Orquestación EKS)
-**Objetivo**: El nivel máximo. Kubernetes manejando flotas de contenedores directamente en la infraestructura de **AWS (EKS)**.
-*   **Enfoque**: Alta disponibilidad, auto-recuperación y escalado masivo industrial.
+**Objetivo**: El nivel máximo. Kubernetes gestionando flotas de contenedores directamente en la infraestructura de AWS (Clusters Reales).
+
+### 🟣 Caso L: FinOps (Optimización Financiera)
+**Objetivo**: Excelencia operativa. Aprender a controlar los costos de la nube para que el proyecto sea sostenible y eficiente.
 
 ---
 
 ## 🚀 ¿Cómo se conecta todo?
 
 1.  **Haces un cambio** en tu PC (o en tu DevContainer).
-2.  **Validación**: Corres `make lint` para que el "policía" revise el código.
+2.  **Validación local**: Corres `make lint` y `make tf-security`.
 3.  **Push**: Subes a GitLab.
-4.  **Pipeline**: El robot de GitLab despierta, audita la seguridad con `tfsec` y despliega en AWS.
+4.  **Pipeline**: El robot de GitLab despierta, audita la seguridad y despliega automáticamente en AWS.
 
 ---
-¿Listo para aprender? **¡Empieza explorando las carpetas y rompiendo cosas!** Es la mejor forma de dominar la nube. 🚀🦾
+¿Listo para aprender? **¡Empieza explorando las carpetas y rompiendo cosas!** Es la mejor forma de dominar el Cloud Computing. 🚀🦾

@@ -14,9 +14,9 @@ TF_DIR = caso-c-terraform-s3
 help: ## Muestra este mensaje de ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
-docker-build: ## Construye la imagen Docker de la API (Caso G)
+docker-build: ## Construye la imagen Docker de la API (Caso J)
 	@echo "Construyendo imagen Docker..."
-	cd caso-g-containers-ecs && docker build -t vladimir-api:latest .
+	cd caso-j-containers-ecs && docker build -t vladimir-api:latest .
 
 k8s-lint: ## Valida los manifiestos de Kubernetes (Caso K)
 	@echo "Validando manifiestos K8s..."

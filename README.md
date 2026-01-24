@@ -41,13 +41,13 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 
 ## 🗺️ Roadmap de Aprendizaje (Casos de Estudio)
 
-Cada carpeta representa un salto técnico en tu carrera Cloud. Aquí el detalle de cada módulo:
+Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el detalle de cada módulo:
 
 ### 🟢 Nivel 1: Automatización y Hosting Estático
 
 #### [📂 Caso A: AWS Amplify](./caso-a-amplify/) `Nivel 0` `COMPLETADO`
 *   **Stack**: AWS Amplify + GitLab Auto-Mirroring.
-*   **Enfoque**: **Integración Continua nativa.** Ideal para prototipos rápidos. Aprende cómo AWS gestiona el escalado, SSL y CDN de forma transparente.
+*   **Enfoque**: **Integración Continua nativa.** Ideal para prototipos rápidos. Aprende cómo AWS gestiona automáticamente el escalado, SSL y CDN de forma transparente.
 *   👉 [Ver Demo en Vivo](https://main.d1uybq9oui7h8c.amplifyapp.com/)
 
 #### [📂 Caso B: S3 + GitLab CI](./caso-b-gitlab-s3/) `Nivel 1` `COMPLETADO`
@@ -67,39 +67,43 @@ Cada carpeta representa un salto técnico en tu carrera Cloud. Aquí el detalle 
 *   **Enfoque**: **Lógica Backend y Persistencia.** Añade vida a tus apps. Escalamiento a cero costos cuando no hay uso y potencia reactiva bajo demanda.
 *   👉 [Demo Portafolio](https://staging.d3oq987bpa7ls7.amplifyapp.com/) / [API Endpoint](https://tc78a6xibg.execute-api.us-east-2.amazonaws.com)
 
-### 🟠 Nivel 3: Gestión de Apps y Datos (En Ruta)
+### 🟠 Nivel 3: Gestión de Aplicaciones y Datos (Senior)
 
 #### [📂 Caso E: Persistence Pro](./caso-e-dynamodb-persistence/) `Nivel 4` `PROYECTADO`
 *   **Stack**: DynamoDB (Single Table Design) + SQS.
-*   **Enfoque**: **Modelado de Datos Senior.** Domina los índices (GSI/LSI) y la persistencia asíncrona para aplicaciones de alto rendimiento.
+*   **Enfoque**: **Modelado de Datos Avanzado.** Domina los índices (GSI/LSI) y la persistencia asíncrona para aplicaciones de alto rendimiento.
 
 #### [📂 Caso F: Security First](./caso-f-security-cognito/) `Nivel 5` `PROYECTADO`
 *   **Stack**: AWS Cognito + WAF + IAM Roles.
 *   **Enfoque**: **Seguridad Perimetral.** Implementa autenticación de usuarios y protección contra ataques web (DDoS/SQLi).
 
-### 🔴 Nivel 4: Contenedores y Orquestación de Grado Industrial
+#### [� Caso G: Event Driven](./caso-g-event-driven/) `Nivel 6` `PROYECTADO`
+*   **Stack**: EventBridge + Step Functions.
+*   **Enfoque**: **Arquitecturas Reactivas.** Desacoplamiento total de servicios mediante el paso de mensajes y orquestación de flujos.
 
-#### [📂 Caso G: Dockerización de Microservicios](./caso-g-containers-ecs/) `Nivel 6` `NUEVO`
+#### [📂 Caso H: Observability](./caso-h-observability/) `Nivel 7` `PROYECTADO`
+*   **Stack**: CloudWatch + X-Ray + Grafana.
+*   **Enfoque**: **Monitoreo Proactivo.** Trazabilidad distribuida para encontrar fallos antes que el usuario y tableros de salud en tiempo real.
+
+#### [📂 Caso I: GenAI Bedrock](./caso-i-genai-bedrock/) `Nivel 8` `PROYECTADO`
+*   **Stack**: Amazon Bedrock + LangChain + Lambda.
+*   **Enfoque**: **Inteligencia Artificial Propia.** Integración de modelos LLM en tu infraestructura de forma privada y segura.
+
+### 🔴 Nivel 4: Contenedores y Escalamiento Grado Industrial
+
+#### [� Caso J: Dockerización de Microservicios](./caso-j-containers-ecs/) `Nivel 9` `NUEVO`
 *   **Stack**: Docker + ECS Fargate + ECR.
 *   **Enfoque**: **Portabilidad e Isolation.** Empaquetado industrial de apps para que corran igual en local y en la nube. Gestión de registros de imágenes.
 
-#### [📂 Caso K: Kubernetes en AWS (EKS)](./caso-k-kubernetes-eks/) `Nivel 7` `NUEVO`
+#### [📂 Caso K: Kubernetes en AWS (EKS)](./caso-k-kubernetes-eks/) `Nivel 10` `NUEVO`
 *   **Stack**: AWS EKS + Manifests YAML + Helm.
-*   **Enfoque**: **Orquestación a Gran Escala.** Kubernetes directo en la infraestructura de AWS. Aprende a gestionar flotas de contenedores, auto-sanación y balanceo de carga masivo en clusters reales.
+*   **Enfoque**: **Orquestación Real en AWS.** Kubernetes directo en la nube. Gestiona flotas de contenedores, auto-sanación y balanceo masivo.
 
-### 🟣 Nivel 5: Maestría y Modernización
+### 🟣 Nivel 5: Gobernanza y Optimizaciones Finales
 
-#### [📂 Caso H: Event Driven](./caso-h-event-driven/) `Nivel 8` `PROYECTADO`
-*   **Stack**: EventBridge + Step Functions.
-*   **Enfoque**: **Arquitecturas Reactivas.** Desacoplamiento total de servicios mediante eventos.
-
-#### [📂 Caso I: Observability](./caso-i-observability/) `Nivel 9` `PROYECTADO`
-*   **Stack**: CloudWatch + X-Ray + Grafana.
-*   **Enfoque**: **Monitoreo Proactivo.** Trazabilidad distribuida para encontrar fallos antes que el usuario.
-
-#### [📂 Caso J: GenAI Bedrock](./caso-j-genai-bedrock/) `Nivel 10` `PROYECTADO`
-*   **Stack**: Amazon Bedrock + LangChain + Lambda.
-*   **Enfoque**: **Inteligencia Artificial Local/Nativa.** Integración de LLMs en tu propia infraestructura de forma segura.
+#### [📂 Caso L: FinOps & Cost Optimization](./caso-l-finops-optimization/) `Nivel 11` `NUEVO`
+*   **Stack**: AWS Budgets + Cost Explorer + Compute Optimizer.
+*   **Enfoque**: **Eficiencia Financiera.** Aprende a reducir la factura de AWS sin sacrificar rendimiento. El nivel máximo de madurez operativa.
 
 ---
 
