@@ -36,6 +36,7 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 - 🛠️ **[Especificaciones Técnicas](./docs/TECHNICAL_SPECS.md)**: Requerimientos de hardware y software.
 - 🛡️ **[Seguridad IAM](./docs/IAM_SECURITY.md)**: Políticas de acceso y privilegios mínimos.
 - 📘 **[Guía para Principiantes](./docs/BEGINNERS_GUIDE.md)**: Glosario y conceptos básicos.
+- 🕒 **[Historial de Cambios](./docs/CHANGELOG.md)**: Registro detallado de versiones y mejoras.
 
 ---
 
