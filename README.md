@@ -110,7 +110,7 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 ---
 
 ## 🤝 Comunidad y Contribución
-¡Este proyecto está abierto a mejora continua! Revisa nuestras **[Normas de Conducta](./docs/CODE_OF_CONDUCT.md)** y la **[Guía de Contribución](./docs/CONTRIBUTING.md)**.
+¡Este proyecto está abierto a mejora continua! Revisa nuestras **[Normas de Conducta](./docs/CODE_OF_CONDUCT.md)** y la **[Guía de Contribución](./CONTRIBUTING.md)**.
 
 ---
 > **Construido con ❤️ por Vladimir Acuña — Optimizado para Ingeniería Cloud Senior.**
