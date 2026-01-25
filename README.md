@@ -38,6 +38,8 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 - 📘 **[Guía para Principiantes](./docs/BEGINNERS_GUIDE.md)**: Glosario y conceptos básicos.
 - 🕒 **[Historial de Cambios](./CHANGELOG.md)**: Registro detallado de versiones y mejoras.
 - 📑 **[Wiki del Proyecto](../../wikis/home)**: Base de conocimientos colaborativa en GitLab.
+- 📄 **[Licencia](./LICENSE)**: Términos de uso bajo licencia MIT.
+- 🤝 **[Guía de Contribución](./CONTRIBUTING.md)**: Cómo contribuir al proyecto.
 
 ---
 
