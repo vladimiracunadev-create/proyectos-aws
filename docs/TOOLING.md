@@ -407,7 +407,7 @@ tooling
 
 ```bash
 # Crear archivo con secret de prueba
-echo "AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" > test-secret.txt
+echo "AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7M-EJEMPLO-KEY-NO-REAL" > test-secret.txt
 
 # Intentar commit
 git add test-secret.txt

@@ -56,7 +56,7 @@ if (Test-Path ".pre-commit-config.yaml") {
     if (Get-Command pre-commit -ErrorAction SilentlyContinue) {
         Write-Status "OK" "pre-commit instalado"
     } else {
-        Write-Status "WARN" "pre-commit no instalado (instala con: pip install pre-commit)"
+        Write-Status "WARN" "pre-commit no instalado (instale con: pip install pre-commit)"
     }
 } else {
     Write-Status "FAIL" ".pre-commit-config.yaml no encontrado"
@@ -164,7 +164,7 @@ if (Test-Path "Makefile") {
     $makefileContent = Get-Content "Makefile" -Raw
     $requiredTargets = @("tooling-build", "tooling-validate", "security-scan", "k8s-demo")
     foreach ($target in $requiredTargets) {
-        if ($makefileContent -match "^$target:") {
+        if ($makefileContent -match "^${target}:") {
             Write-Status "OK" "Target '$target' definido"
         } else {
             Write-Status "FAIL" "Target '$target' no encontrado"
