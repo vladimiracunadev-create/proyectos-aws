@@ -9,7 +9,7 @@ Se ha implementado exitosamente una **capa de tooling profesional** con Docker, 
 ## 📊 Estadísticas
 
 | Métrica | Valor |
-|---------|-------|
+| :--- | :--- |
 | **Archivos creados** | 22 |
 | **Archivos modificados** | 3 |
 | **Líneas de código** | ~2,500 |
@@ -21,8 +21,7 @@ Se ha implementado exitosamente una **capa de tooling profesional** con Docker, 
 
 ## 📁 Estructura Creada
 
-```
-
+```text
 proyectos-aws/
 ├── tooling/
 │   ├── Dockerfile.tooling          # Imagen Docker con herramientas
@@ -110,7 +109,7 @@ make k8s-clean
 ### ✅ 27/27 Medidas de Seguridad
 
 | Categoría | Items | Estado |
-|-----------|-------|--------|
+| :--- | :--- | :--- |
 | Secrets Management | 5 | ✅ 100% |
 | Supply Chain | 4 | ✅ 100% |
 | Container Security | 5 | ✅ 100% |
@@ -132,7 +131,7 @@ make k8s-clean
 ## 📚 Documentación
 
 | Documento | Descripción |
-|-----------|-------------|
+| :--- | :--- |
 | [README.md](../README.md) | Actualizado con sección de tooling |
 | [SECURITY.md](../SECURITY.md) | Política de seguridad y OIDC |
 | [docs/TOOLING.md](TOOLING.md) | Guía completa (arquitectura, comandos, tests) |
@@ -181,8 +180,7 @@ chmod +x scripts/security-verify.sh
 
 ### Resultado Esperado
 
-```
-
+```text
 ✅ .gitignore contiene patrones de seguridad
 ✅ .pre-commit-config.yaml existe
 ✅ security-scan.yml configurado
@@ -271,7 +269,7 @@ make k8s-demo
 
 ## 🎉 Estado Final
 
-**✅ IMPLEMENTACIÓN COMPLETADA Y VERIFICADA**
+### ✅ IMPLEMENTACIÓN COMPLETADA Y VERIFICADA
 
 - ✅ Tooling completo (Docker, K8s, Makefile, Hub CLI)
 - ✅ Seguridad exhaustiva (27/27 medidas)

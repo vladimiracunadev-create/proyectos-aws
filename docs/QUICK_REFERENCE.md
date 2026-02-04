@@ -141,7 +141,7 @@ docker run --rm proyectos-aws/tooling:1.0.0 whoami
 ## 📚 Documentación
 
 | Documento | Descripción |
-|-----------|-------------|
+| :--- | :--- |
 | [README.md](../README.md) | Descripción general del proyecto |
 | [SECURITY.md](../SECURITY.md) | Política de seguridad y OIDC |
 | [docs/TOOLING.md](TOOLING.md) | Guía completa de tooling |

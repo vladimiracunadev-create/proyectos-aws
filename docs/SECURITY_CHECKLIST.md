@@ -12,7 +12,7 @@ Checklist completo de auditoría y hardening de seguridad implementado.
 ### ✅ Secrets y Credenciales
 
 | Amenaza | Estado | Mitigación Implementada |
-|---------|--------|-------------------------|
+| :--- | :--- | :--- |
 | Credenciales AWS en repo | ✅ Mitigado | `.gitignore` reforzado, pre-commit hooks |
 | API keys hardcodeadas | ✅ Mitigado | `detect-secrets` en pre-commit y CI |
 | Archivos .env commitados | ✅ Mitigado | `.gitignore` incluye `.env*` |
@@ -20,6 +20,7 @@ Checklist completo de auditoría y hardening de seguridad implementado.
 | Claves privadas (.pem, .key) | ✅ Mitigado | Extensiones bloqueadas en `.gitignore` |
 
 **Verificación:**
+
 ```bash
 # Ejecutar detect-secrets
 pre-commit run detect-secrets --all-files
@@ -33,13 +34,14 @@ cat .gitignore | grep -E "(\.env|\.tfstate|\.pem|\.key)"
 ### ✅ Supply Chain Security
 
 | Amenaza | Estado | Mitigación Implementada |
-|---------|--------|-------------------------|
+| :--- | :--- | :--- |
 | Dependencias vulnerables | ✅ Mitigado | GitHub Actions: dependency-review-action |
 | Imágenes Docker sin tags fijos | ✅ Mitigado | Dockerfile usa versiones específicas |
 | Imágenes base desactualizadas | ✅ Mitigado | Alpine 3.19 (actualizada) |
 | Paquetes sin verificación | ✅ Mitigado | Checksums en instalación (AWS CLI) |
 
 **Verificación:**
+
 ```bash
 # Verificar tags fijos en Dockerfile
 grep -E "FROM|ARG.*VERSION" tooling/Dockerfile.tooling
@@ -53,7 +55,7 @@ cat .github/workflows/security-scan.yml | grep dependency-review
 ### ✅ Container Security
 
 | Amenaza | Estado | Mitigación Implementada |
-|---------|--------|-------------------------|
+| :--- | :--- | :--- |
 | Contenedor corre como root | ✅ Mitigado | USER no-root (tooling:1000) |
 | Privilegios excesivos | ✅ Mitigado | SecurityContext con capabilities drop ALL |
 | Filesystem escribible | ✅ Mitigado | readOnlyRootFilesystem: true |
@@ -61,6 +63,7 @@ cat .github/workflows/security-scan.yml | grep dependency-review
 | Sin healthcheck | ✅ Mitigado | HEALTHCHECK en Dockerfile |
 
 **Verificación:**
+
 ```bash
 # Verificar usuario no-root
 docker run --rm proyectos-aws/tooling:1.0.0 whoami
@@ -75,7 +78,7 @@ kubectl get job -n tooling-demo tooling-validate -o yaml | grep -A 10 securityCo
 ### ✅ Kubernetes Security
 
 | Amenaza | Estado | Mitigación Implementada |
-|---------|--------|-------------------------|
+| :--- | :--- | :--- |
 | Pods sin SecurityContext | ✅ Mitigado | runAsNonRoot, runAsUser configurados |
 | Sin resource limits | ✅ Mitigado | requests/limits definidos |
 | Tráfico de red sin restricción | ✅ Mitigado | NetworkPolicy deny-all |
@@ -83,6 +86,7 @@ kubectl get job -n tooling-demo tooling-validate -o yaml | grep -A 10 securityCo
 | Seccomp profile no configurado | ✅ Mitigado | seccompProfile: RuntimeDefault |
 
 **Verificación:**
+
 ```bash
 # Verificar Job
 kubectl get job -n tooling-demo tooling-validate -o yaml
@@ -96,13 +100,14 @@ kubectl get networkpolicy -n tooling-demo -o yaml
 ### ✅ Code Injection & Input Validation
 
 | Amenaza | Estado | Mitigación Implementada |
-|---------|--------|-------------------------|
+| :--- | :--- | :--- |
 | Command injection en scripts | ✅ Mitigado | Scripts usan `set -euo pipefail`, validación de inputs |
 | Path traversal | ✅ Mitigado | Volúmenes montados como read-only |
 | SSRF (Server-Side Request Forgery) | ✅ Mitigado | NetworkPolicy bloquea egress |
 | RCE por inputs | ✅ Mitigado | No hay inputs de usuario sin validar |
 
 **Verificación:**
+
 ```bash
 # Verificar scripts con set -euo pipefail
 head -n 5 tooling/scripts/validate.sh hub.sh
@@ -120,6 +125,7 @@ grep -A 2 "volumeMounts" k8s/tooling-job/job.yaml
 ✅ **Implementado:** `c:\proyectos-aws\.gitignore`
 
 **Patrones agregados:**
+
 - `*.tfstate`, `*.tfstate.backup`, `.terraform/`
 - `*.pem`, `*.key`, `*.p12`, `*.pfx`
 - `.env*`, `!.env.example`
@@ -127,6 +133,7 @@ grep -A 2 "volumeMounts" k8s/tooling-job/job.yaml
 - `.aws/`, `aws-credentials`
 
 **Verificación:**
+
 ```bash
 # Contar patrones de seguridad
 grep -c -E "(tfstate|\.pem|\.key|\.env|secrets)" .gitignore
@@ -140,6 +147,7 @@ grep -c -E "(tfstate|\.pem|\.key|\.env|secrets)" .gitignore
 ✅ **Implementado:** `.pre-commit-config.yaml`
 
 **Hooks configurados:**
+
 - `detect-secrets` (Yelp)
 - `check-yaml`, `check-json`
 - `check-merge-conflict`
@@ -148,12 +156,14 @@ grep -c -E "(tfstate|\.pem|\.key|\.env|secrets)" .gitignore
 - `markdownlint`
 
 **Instalación:**
+
 ```bash
 pip install pre-commit
 pre-commit install
 ```
 
 **Verificación:**
+
 ```bash
 pre-commit run --all-files
 ```
@@ -165,6 +175,7 @@ pre-commit run --all-files
 ✅ **Implementado:** `.github/workflows/security-scan.yml`
 
 **Jobs configurados:**
+
 - **secret-scan:** TruffleHog
 - **dependency-scan:** dependency-review-action
 - **detect-secrets:** detect-secrets baseline
@@ -172,11 +183,13 @@ pre-commit run --all-files
 - **yaml-lint:** yamllint
 
 **Triggers:**
+
 - Push a `main`, `dev`
 - Pull Requests
 - Schedule semanal (lunes 9 AM UTC)
 
 **Verificación:**
+
 ```bash
 # Ver workflow
 cat .github/workflows/security-scan.yml
@@ -192,6 +205,7 @@ act -l
 ✅ **Implementado:** `tooling/Dockerfile.tooling`
 
 **Medidas:**
+
 - ✅ Usuario no-root: `USER tooling`
 - ✅ Tags fijos: `alpine:3.19`, `terraform:1.7.0`
 - ✅ Healthcheck: `HEALTHCHECK CMD terraform version && aws --version`
@@ -199,6 +213,7 @@ act -l
 - ✅ Multi-stage build (opcional para optimización futura)
 
 **Verificación:**
+
 ```bash
 # Escanear imagen con Trivy (opcional)
 docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
@@ -212,6 +227,7 @@ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
 ✅ **Implementado:** `k8s/tooling-job/job.yaml`
 
 **SecurityContext (Pod):**
+
 ```yaml
 securityContext:
   runAsNonRoot: true
@@ -223,6 +239,7 @@ securityContext:
 ```
 
 **SecurityContext (Container):**
+
 ```yaml
 securityContext:
   allowPrivilegeEscalation: false
@@ -234,6 +251,7 @@ securityContext:
 ```
 
 **ResourceLimits:**
+
 ```yaml
 resources:
   requests:
@@ -245,11 +263,14 @@ resources:
 ```
 
 **NetworkPolicy:**
+
 ✅ **Implementado:** `k8s/tooling-job/networkpolicy.yaml`
+
 - Deny all ingress
 - Deny all egress
 
 **Verificación:**
+
 ```bash
 make k8s-demo
 kubectl get job,networkpolicy -n tooling-demo
@@ -262,13 +283,14 @@ kubectl get job,networkpolicy -n tooling-demo
 ✅ **Implementado:**
 
 | Documento | Ubicación | Propósito |
-|-----------|-----------|-----------|
+| :--- | :--- | :--- |
 | SECURITY.md | `/SECURITY.md` | Política de seguridad, OIDC, pre-commit |
 | killed.md | `/docs/killed.md` | Prácticas prohibidas y alternativas |
 | TOOLING.md | `/docs/TOOLING.md` | Guía completa de tooling |
 | SECURITY_CHECKLIST.md | `/docs/SECURITY_CHECKLIST.md` | Este documento |
 
 **Verificación:**
+
 ```bash
 ls -lh SECURITY.md docs/killed.md docs/TOOLING.md docs/SECURITY_CHECKLIST.md
 ```
@@ -356,6 +378,7 @@ echo "=========================================="
 ```
 
 **Guardar y ejecutar:**
+
 ```bash
 chmod +x security-verify.sh
 ./security-verify.sh
@@ -366,7 +389,7 @@ chmod +x security-verify.sh
 ## 📊 Resumen de Implementación
 
 | Categoría | Items | Completados | Estado |
-|-----------|-------|-------------|--------|
+| :--- | :--- | :--- | :--- |
 | Secrets Management | 5 | 5 | ✅ 100% |
 | Supply Chain | 4 | 4 | ✅ 100% |
 | Container Security | 5 | 5 | ✅ 100% |
@@ -382,29 +405,33 @@ chmod +x security-verify.sh
 ### Opcional - Mejoras Futuras
 
 1. **SAST (Static Application Security Testing):**
-   ```yaml
-   # Agregar a .github/workflows/security-scan.yml
-   - name: Semgrep
-     uses: returntocorp/semgrep-action@v1
-   ```
 
-2. **Container Scanning:**
-   ```bash
-   # Integrar Trivy en CI
-   docker run aquasec/trivy image proyectos-aws/tooling:1.0.0
-   ```
+```yaml
+# Agregar a .github/workflows/security-scan.yml
+- name: Semgrep
+  uses: returntocorp/semgrep-action@v1
+```
 
-3. **SBOM (Software Bill of Materials):**
-   ```bash
-   # Generar SBOM con Syft
-   syft proyectos-aws/tooling:1.0.0 -o spdx-json > sbom.json
-   ```
+1. **Container Scanning:**
 
-4. **Policy as Code:**
-   ```bash
-   # OPA (Open Policy Agent) para Kubernetes
-   conftest test k8s/tooling-job/
-   ```
+```bash
+# Integrar Trivy en CI
+docker run aquasec/trivy image proyectos-aws/tooling:1.0.0
+```
+
+1. **SBOM (Software Bill of Materials):**
+
+```bash
+# Generar SBOM con Syft
+syft proyectos-aws/tooling:1.0.0 -o spdx-json > sbom.json
+```
+
+1. **Policy as Code:**
+
+```bash
+# OPA (Open Policy Agent) para Kubernetes
+conftest test k8s/tooling-job/
+```
 
 ---
 

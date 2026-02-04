@@ -14,7 +14,7 @@ Documentación completa del sistema de tooling con Docker, Kubernetes y validaci
 
 ---
 
-## 🏗️ Arquitectura
+## Arquitectura
 
 El sistema de tooling proporciona una capa de validación y automatización **completamente opcional** que no afecta el funcionamiento de los proyectos existentes.
 
@@ -48,13 +48,14 @@ flowchart TB
 
 ---
 
-## 🧩 Componentes
+## Componentes
 
 ### 1. Docker Tooling Image
 
 **Ubicación:** `tooling/Dockerfile.tooling`
 
 **Herramientas incluidas:**
+
 - AWS CLI v2 (2.15.10)
 - Terraform (1.7.0)
 - Checkov (3.1.50) - Security scanning
@@ -62,12 +63,14 @@ flowchart TB
 - markdownlint-cli (0.39.0)
 
 **Características de seguridad:**
+
 - ✅ Usuario no-root (`tooling:1000`)
 - ✅ Tags fijos (no `latest`)
 - ✅ Healthcheck incluido
 - ✅ Imagen base Alpine (mínima)
 
 **Build:**
+
 ```bash
 make tooling-build
 ```
@@ -81,7 +84,7 @@ make tooling-build
 **Validaciones ejecutadas:**
 
 | Validación | Herramienta | Descripción |
-|------------|-------------|-------------|
+| :--- | :--- | :--- |
 | Terraform Format | `terraform fmt -check` | Verifica formato de archivos .tf |
 | Terraform Validate | `terraform validate` | Valida sintaxis y configuración |
 | YAML Lint | `yamllint` | Valida sintaxis YAML |
@@ -89,6 +92,7 @@ make tooling-build
 | Security Scan | `checkov` | Escanea IaC por problemas de seguridad |
 
 **Códigos de salida:**
+
 - `0`: Todas las validaciones pasaron
 - `1`: Al menos una validación falló
 
@@ -115,6 +119,7 @@ make k8s-clean            # Limpia recursos K8s
 ### 4. Hub CLI
 
 **Scripts:**
+
 - `hub.sh` (Linux/Mac)
 - `hub.ps1` (Windows PowerShell)
 
@@ -139,6 +144,7 @@ make k8s-clean            # Limpia recursos K8s
 **Ubicación:** `k8s/tooling-job/`
 
 **Recursos:**
+
 - `namespace.yaml`: Namespace `tooling-demo`
 - `job.yaml`: Job que ejecuta validaciones
 - `networkpolicy.yaml`: NetworkPolicy restrictiva
@@ -163,7 +169,7 @@ resources:
 
 ---
 
-## 🚀 Comandos Disponibles
+## Comandos Disponibles
 
 ### Desarrollo Local
 
@@ -209,7 +215,7 @@ make k8s-delete-cluster
 
 ---
 
-## 🧪 Smoke Tests
+## Smoke Tests
 
 ### Test 1: Build de Imagen Docker
 
@@ -220,11 +226,13 @@ make tooling-build
 ```
 
 **Resultado esperado:**
-```
+
+```text
 ✅ Imagen construida: proyectos-aws/tooling:1.0.0
 ```
 
 **Verificación:**
+
 ```bash
 docker images | grep proyectos-aws/tooling
 ```
@@ -240,7 +248,8 @@ make tooling-validate
 ```
 
 **Resultado esperado:**
-```
+
+```text
 🔍 Iniciando validación de tooling
 ==========================================
 
@@ -271,7 +280,8 @@ make tooling-validate
 ```
 
 **Resultado esperado:**
-```
+
+```text
 📂 Proyectos AWS encontrados:
 
   ▸ aws-amplify-mi-sitio-1 (XX archivos)
@@ -295,6 +305,7 @@ make tooling-validate
 ```
 
 **Resultado esperado:**
+
 - Construye imagen si no existe
 - Ejecuta `make tooling-validate`
 - Muestra resultados de validación
@@ -315,7 +326,8 @@ pre-commit run --all-files
 ```
 
 **Resultado esperado:**
-```
+
+```text
 detect-secrets...........................................................Passed
 check-yaml...............................................................Passed
 check-json...............................................................Passed
@@ -331,6 +343,7 @@ trailing-whitespace......................................................Passed
 **Objetivo:** Desplegar y ejecutar job en Kubernetes
 
 **Prerequisitos:**
+
 ```bash
 # Instalar kind (si no está instalado)
 # Linux/Mac:
@@ -343,6 +356,7 @@ choco install kind
 ```
 
 **Ejecución:**
+
 ```bash
 # 1. Desplegar demo
 make k8s-demo
@@ -361,7 +375,8 @@ kubectl get networkpolicy -n tooling-demo
 ```
 
 **Resultado esperado:**
-```
+
+```text
 NAME               COMPLETIONS   DURATION   AGE
 tooling-validate   1/1           30s        1m
 ```
@@ -377,7 +392,8 @@ docker run --rm proyectos-aws/tooling:1.0.0 whoami
 ```
 
 **Resultado esperado:**
-```
+
+```text
 tooling
 ```
 
@@ -399,7 +415,8 @@ git commit -m "test secret detection"
 ```
 
 **Resultado esperado:**
-```
+
+```text
 detect-secrets...........................................................Failed
 - hook id: detect-secrets
 - exit code: 1
@@ -408,6 +425,7 @@ ERROR: Potential secrets detected!
 ```
 
 **Limpieza:**
+
 ```bash
 git reset HEAD test-secret.txt
 rm test-secret.txt
@@ -415,16 +433,18 @@ rm test-secret.txt
 
 ---
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Problema: Docker no está corriendo
 
 **Síntoma:**
-```
+
+```text
 ❌ Error: Docker no está corriendo
 ```
 
 **Solución:**
+
 ```bash
 # Linux
 sudo systemctl start docker
@@ -441,11 +461,13 @@ sudo systemctl start docker
 ### Problema: Imagen de tooling no encontrada
 
 **Síntoma:**
-```
+
+```text
 ⚠️  Imagen de tooling no encontrada
 ```
 
 **Solución:**
+
 ```bash
 make tooling-build
 ```
@@ -455,11 +477,13 @@ make tooling-build
 ### Problema: kind no instalado
 
 **Síntoma:**
-```
+
+```text
 ⚠️  kind no instalado
 ```
 
 **Solución:**
+
 ```bash
 # Linux/Mac
 curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
@@ -478,9 +502,11 @@ scoop install kind
 ### Problema: Pre-commit hooks no se ejecutan
 
 **Síntoma:**
+
 Los commits se realizan sin ejecutar validaciones
 
 **Solución:**
+
 ```bash
 # Instalar pre-commit
 pip install pre-commit
@@ -497,11 +523,13 @@ pre-commit run --all-files
 ### Problema: Terraform validate falla
 
 **Síntoma:**
-```
+
+```text
 ✗ Terraform validate: /workspace/some-dir
 ```
 
 **Solución:**
+
 ```bash
 # Inicializar Terraform en el directorio
 cd some-dir
@@ -516,11 +544,13 @@ make tooling-validate
 ### Problema: Permisos en hub.sh (Linux/Mac)
 
 **Síntoma:**
-```
+
+```text
 bash: ./hub.sh: Permission denied
 ```
 
 **Solución:**
+
 ```bash
 chmod +x hub.sh
 ./hub.sh help

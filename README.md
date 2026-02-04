@@ -3,6 +3,7 @@
 **Monorepo de portafolio con despliegues reales en AWS** para demostrar prácticas modernas de **CI/CD**, separación de **entornos por rama**, y documentación clara de infraestructura.
 
 **TL;DR (30s):**
+
 - ✅ CI/CD real: cambios en Git → despliegue automático (S3 + GitHub Actions / Amplify por ramas)
 - ✅ Trabajo profesional con `dev → PR → main` y trazabilidad completa
 - ✅ Enfoque de portafolio: documentación + demos + estructura lista para crecer
@@ -12,12 +13,14 @@
 ## 🌐 Demos en Vivo
 
 ### 1) AWS S3 + GitHub Actions (Deploy Automatizado)
+
 - **Estado:** ✅ Operativo  
 - **Stack:** S3, IAM, GitHub Actions (YAML)  
 - **Carpeta:** `aws-s3-scrum-mi-sitio-1/`  
 - **Demo:** https://mi-pagina-scrum-123.s3.us-east-2.amazonaws.com/index.html
 
 ### 2) AWS Amplify – Continuous Deployment por Rama
+
 - **Estado:** ✅ Operativo  
 - **Stack:** AWS Amplify Console, SSL automático  
 - **Carpeta:** `aws-amplify-mi-sitio-1/`  

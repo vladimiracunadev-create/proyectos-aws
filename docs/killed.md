@@ -17,6 +17,7 @@ Este documento especifica explícitamente las prácticas de seguridad que **NO e
 - Tokens de sesión en commits
 
 **RAZÓN:** Las credenciales comprometidas pueden resultar en:
+
 - Acceso no autorizado a recursos AWS
 - Costos inesperados por uso malicioso
 - Violaciones de datos
@@ -27,16 +28,19 @@ Este documento especifica explícitamente las prácticas de seguridad que **NO e
 ### ❌ 2. Archivos de Estado de Terraform (.tfstate)
 
 **NO PERMITIDO:**
+
 - `*.tfstate`
 - `*.tfstate.backup`
 - Cualquier archivo de estado de Terraform en Git
 
 **RAZÓN:**
+
 - Los archivos `.tfstate` contienen información sensible (IPs, IDs de recursos, outputs)
 - Pueden contener secretos en texto plano
 - Son archivos grandes que no deben versionarse
 
 **ALTERNATIVA:**
+
 - Usar backend remoto (S3 + DynamoDB para locking)
 - Configurar `.gitignore` apropiadamente (✅ ya configurado)
 
@@ -45,12 +49,14 @@ Este documento especifica explícitamente las prácticas de seguridad que **NO e
 ### ❌ 3. Secretos Hardcodeados
 
 **NO PERMITIDO:**
+
 - API keys en código
 - Passwords en archivos de configuración
 - Tokens de acceso en scripts
 - Certificados privados (`.pem`, `.key`, `.p12`)
 
 **RAZÓN:**
+
 - Exposición pública en GitHub
 - Difícil rotación de secretos
 - Violación de principios de seguridad
@@ -60,16 +66,19 @@ Este documento especifica explícitamente las prácticas de seguridad que **NO e
 ### ❌ 4. Ejecución como Root en Contenedores
 
 **NO PERMITIDO:**
+
 - Contenedores Docker que corren como `root`
 - Imágenes sin `USER` no-root especificado
 - Pods de Kubernetes sin `securityContext`
 
 **RAZÓN:**
+
 - Principio de mínimo privilegio
 - Reducción de superficie de ataque
 - Prevención de escalación de privilegios
 
 **ALTERNATIVA:**
+
 - ✅ Usar `USER` no-root en Dockerfile (ver `tooling/Dockerfile.tooling`)
 - ✅ Configurar `securityContext` en Kubernetes (ver `k8s/tooling-job/job.yaml`)
 
@@ -99,12 +108,14 @@ jobs:
 ```
 
 **Ventajas:**
+
 - ✅ Sin credenciales de larga duración
 - ✅ Tokens temporales automáticos
 - ✅ Auditoría completa en CloudTrail
 - ✅ Permisos granulares por repositorio/rama
 
 **Configuración en AWS:**
+
 1. Crear Identity Provider OIDC en IAM
 2. Crear rol IAM con trust policy para GitHub
 3. Asignar permisos mínimos necesarios
@@ -123,6 +134,7 @@ env:
 ```
 
 **Configuración:**
+
 1. Ir a Settings → Secrets and variables → Actions
 2. Agregar secrets necesarios
 3. Referenciar con `${{ secrets.SECRET_NAME }}`
@@ -140,6 +152,7 @@ aws secretsmanager get-secret-value --secret-id prod/db/password
 ```
 
 **Ventajas:**
+
 - ✅ Rotación automática de secretos
 - ✅ Encriptación en reposo (KMS)
 - ✅ Auditoría de accesos
@@ -162,6 +175,7 @@ export AWS_PROFILE=dev-profile
 ```
 
 **Asegurar con `.gitignore`:**
+
 ```gitignore
 .env
 .env.*
