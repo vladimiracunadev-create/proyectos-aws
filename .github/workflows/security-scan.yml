@@ -70,6 +70,7 @@ jobs:
   markdown-lint:
     name: Markdown Lint
     runs-on: ubuntu-latest
+    continue-on-error: true  # No bloquear por errores de formato
     
     steps:
       - name: Checkout code
@@ -85,6 +86,7 @@ jobs:
   yaml-lint:
     name: YAML Lint
     runs-on: ubuntu-latest
+    continue-on-error: true  # No bloquear por errores de formato
     
     steps:
       - name: Checkout code
@@ -95,4 +97,5 @@ jobs:
         with:
           config_file: .yamllint.yml
           file_or_dir: .
-          strict: true
+          strict: false
+

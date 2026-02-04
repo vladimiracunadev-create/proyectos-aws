@@ -7,6 +7,7 @@ Este proyecto está pensado como portafolio profesional con prácticas reales de
 ---
 
 ## 🧭 Flujo de trabajo (branching)
+
 - `main`: estable / producción
 - `dev`: integración / pruebas
 
@@ -15,6 +16,7 @@ Regla general: **no hacer push directo a `main`**. Usar Pull Request desde `dev`
 ---
 
 ## 🧑‍💻 Setup rápido
+
 ```bash
 git clone <URL_DEL_REPO>
 cd <CARPETA_DEL_REPO>
