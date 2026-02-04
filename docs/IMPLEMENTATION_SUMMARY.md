@@ -22,6 +22,7 @@ Se ha implementado exitosamente una **capa de tooling profesional** con Docker, 
 ## 📁 Estructura Creada
 
 ```
+
 proyectos-aws/
 ├── tooling/
 │   ├── Dockerfile.tooling          # Imagen Docker con herramientas
@@ -181,6 +182,7 @@ chmod +x scripts/security-verify.sh
 ### Resultado Esperado
 
 ```
+
 ✅ .gitignore contiene patrones de seguridad
 ✅ .pre-commit-config.yaml existe
 ✅ security-scan.yml configurado
@@ -232,16 +234,19 @@ make k8s-demo
 ## 🔑 Puntos Clave
 
 ### ✅ Decisión de Runtime
+
 - **Elegido:** bash/ps1 + Makefile
 - **Razón:** El repositorio NO usa Node.js ni Python
 - **Resultado:** Hub CLI funciona en Linux/Mac/Windows
 
 ### ✅ Sin Romper Funcionalidad
+
 - Los proyectos existentes (`aws-amplify-mi-sitio-1`, `aws-s3-scrum-mi-sitio-1`) NO fueron modificados
 - La capa de tooling es completamente **opcional**
 - Todo funciona sin el tooling (backward compatible)
 
 ### ✅ Sin Credenciales AWS
+
 - Todo el tooling funciona **sin AWS keys**
 - Validaciones son de formato/sintaxis únicamente
 - Documentación de OIDC para CI/CD
