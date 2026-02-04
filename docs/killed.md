@@ -9,6 +9,7 @@ Este documento especifica explícitamente las prácticas de seguridad que **NO e
 ### ❌ 1. Credenciales AWS en el Repositorio
 
 **NO PERMITIDO:**
+
 - Archivos `.aws/credentials`
 - Variables `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` hardcodeadas
 - Archivos `.env` con credenciales AWS

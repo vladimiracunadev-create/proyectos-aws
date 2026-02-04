@@ -252,6 +252,7 @@ make k8s-demo
 - Documentación de OIDC para CI/CD
 
 ### ✅ Seguridad Exhaustiva
+
 - 27/27 medidas implementadas (100%)
 - Pre-commit hooks previenen commits inseguros
 - GitHub Actions escanean automáticamente
