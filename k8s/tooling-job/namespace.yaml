@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tooling-demo
+  labels:
+    name: tooling-demo
+    purpose: validation-demo

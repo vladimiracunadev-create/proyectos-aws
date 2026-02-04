@@ -36,6 +36,43 @@
 
 ---
 
+## 🛠️ Tooling Layer (Opcional)
+
+Este repositorio incluye una **capa de tooling profesional** con Docker, Kubernetes y validaciones automatizadas. Es completamente opcional y no afecta los proyectos existentes.
+
+### Quick Start
+
+```bash
+# 1. Construir imagen de tooling
+make tooling-build
+
+# 2. Ejecutar validaciones
+make tooling-validate
+
+# 3. Listar proyectos
+./hub.sh list-projects      # Linux/Mac
+.\hub.ps1 list-projects     # Windows
+
+# 4. Demo en Kubernetes (requiere kind)
+make k8s-demo
+```
+
+### Características
+
+- ✅ **Docker:** Imagen con AWS CLI, Terraform, Checkov, linters
+- ✅ **Kubernetes:** Demo con Job, SecurityContext, NetworkPolicy
+- ✅ **Makefile:** Comandos estandarizados para tooling
+- ✅ **Hub CLI:** Scripts bash/PowerShell para gestión de proyectos
+- ✅ **Seguridad:** Pre-commit hooks, secret scanning, dependency scanning
+
+### Documentación
+
+- 📖 [Guía de Tooling](docs/TOOLING.md) - Documentación completa
+- 🔒 [Security Checklist](docs/SECURITY_CHECKLIST.md) - Auditoría de seguridad
+- ❌ [Killed Practices](docs/killed.md) - Prácticas prohibidas
+
+---
+
 ## 🏗️ Arquitectura (alto nivel)
 
 ```mermaid
@@ -47,4 +84,28 @@ flowchart LR
   B --> F[Amplify Console]
   F --> G[Deploy main]
   F --> H[Deploy dev]
+```
 
+---
+
+## 🔒 Seguridad
+
+Este repositorio implementa múltiples capas de seguridad:
+
+- 🔐 **Pre-commit hooks** con `detect-secrets`
+- 🔍 **GitHub Actions** para secret scanning y dependency scanning
+- 🐳 **Docker** con usuario no-root y tags fijos
+- ☸️ **Kubernetes** con SecurityContext y NetworkPolicy
+- 📋 **Documentación** de prácticas seguras (OIDC, IAM roles)
+
+Ver [SECURITY.md](SECURITY.md) para más detalles.
+
+---
+
+## 📚 Documentación Adicional
+
+- [SECURITY.md](SECURITY.md) - Política de seguridad
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Guía de contribución
+- [ROADMAP.md](ROADMAP.md) - Roadmap del proyecto
+- [docs/TOOLING.md](docs/TOOLING.md) - Guía de tooling
+- [docs/killed.md](docs/killed.md) - Prácticas prohibidas

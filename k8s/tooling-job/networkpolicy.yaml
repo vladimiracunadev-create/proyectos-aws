@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: tooling-validate-netpol
+  labels:
+    app: tooling-validate
+spec:
+  podSelector:
+    matchLabels:
+      app: tooling-validate
+  
+  policyTypes:
+  - Ingress
+  - Egress
+  
+  # Deny all ingress traffic (el job no necesita recibir conexiones)
+  ingress: []
+  
+  # Deny all egress traffic (el job no necesita conectarse a nada)
+  # En un escenario real, podrías permitir DNS o registry
+  egress: []

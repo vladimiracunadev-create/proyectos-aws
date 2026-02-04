@@ -39,6 +39,85 @@ Incluye:
 ---
 
 ## 🔒 Buenas prácticas del repo
-- No se deben commitear secretos (keys, tokens).
-- Se recomienda usar GitHub Secrets y permisos mínimos IAM.
-- Todo cambio a `main` debe ser vía Pull Request.
+
+### Gestión de Secretos
+- ❌ **NUNCA** commitear secretos (keys, tokens, credenciales AWS)
+- ✅ Usar GitHub Secrets para CI/CD
+- ✅ Usar AWS OIDC para autenticación sin credenciales de larga duración
+- ✅ Consultar [killed.md](docs/killed.md) para prácticas prohibidas y alternativas
+
+### Pre-commit Hooks
+Este repositorio usa `pre-commit` para prevenir commits inseguros:
+
+```bash
+# Instalar pre-commit hooks
+pip install pre-commit
+pre-commit install
+
+# Ejecutar manualmente
+pre-commit run --all-files
+```
+
+Los hooks incluyen:
+- `detect-secrets`: Previene commit de secretos
+- `check-yaml`: Valida sintaxis YAML
+- `terraform_fmt`: Formatea archivos Terraform
+- `detect-private-key`: Detecta claves privadas
+
+### Autenticación AWS con OIDC
+
+**Configuración recomendada para GitHub Actions:**
+
+1. **En AWS IAM:**
+   - Crear Identity Provider OIDC para GitHub
+   - Crear rol con trust policy:
+     ```json
+     {
+       "Version": "2012-10-17",
+       "Statement": [{
+         "Effect": "Allow",
+         "Principal": {
+           "Federated": "arn:aws:iam::ACCOUNT_ID:oidc-provider/token.actions.githubusercontent.com"
+         },
+         "Action": "sts:AssumeRoleWithWebIdentity",
+         "Condition": {
+           "StringEquals": {
+             "token.actions.githubusercontent.com:sub": "repo:OWNER/REPO:ref:refs/heads/main"
+           }
+         }
+       }]
+     }
+     ```
+
+2. **En GitHub Actions:**
+   ```yaml
+   permissions:
+     id-token: write
+     contents: read
+   
+   - uses: aws-actions/configure-aws-credentials@v4
+     with:
+       role-to-assume: arn:aws:iam::ACCOUNT_ID:role/GitHubActionsRole
+       aws-region: us-east-1
+   ```
+
+### Escaneo de Seguridad Automatizado
+
+El repositorio ejecuta automáticamente:
+- **Secret scanning** con TruffleHog (GitHub Actions)
+- **Dependency scanning** en Pull Requests
+- **YAML/Markdown linting** en cada push
+
+Ver: `.github/workflows/security-scan.yml`
+
+### Permisos IAM Mínimos
+- Aplicar principio de mínimo privilegio
+- Usar roles específicos por entorno (dev/prod)
+- Habilitar MFA para usuarios IAM
+- Rotar credenciales regularmente (si se usan)
+
+### Workflow de Cambios
+- Todo cambio a `main` debe ser vía Pull Request
+- PRs requieren revisión de código
+- CI/CD debe pasar antes de merge
+- Usar ramas protegidas en GitHub

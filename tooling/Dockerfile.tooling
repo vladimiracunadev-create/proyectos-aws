@@ -1,0 +1,67 @@
+# Tooling Image - Security-hardened validation tools
+# Purpose: Provides AWS CLI, Terraform, Checkov, and linters for validation
+# Security: Non-root user, fixed tags, minimal attack surface
+
+FROM alpine:3.19 AS base
+
+# Install base dependencies
+RUN apk add --no-cache \
+    bash \
+    curl \
+    git \
+    python3 \
+    py3-pip \
+    unzip \
+    ca-certificates
+
+# Install AWS CLI v2
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.15.10.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install && \
+    rm -rf awscliv2.zip aws
+
+# Install Terraform (fixed version for reproducibility)
+ARG TERRAFORM_VERSION=1.7.0
+RUN curl -LO "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" && \
+    unzip "terraform_${TERRAFORM_VERSION}_linux_amd64.zip" && \
+    mv terraform /usr/local/bin/ && \
+    rm "terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
+
+# Install validation tools via pip
+RUN pip3 install --no-cache-dir \
+    checkov==3.1.50 \
+    yamllint==1.33.0 \
+    markdownlint-cli==0.37.0 \
+    --break-system-packages
+
+# Install markdownlint-cli via npm (Alpine has nodejs available)
+RUN apk add --no-cache nodejs npm && \
+    npm install -g markdownlint-cli@0.39.0
+
+# Create non-root user for security
+RUN addgroup -g 1000 tooling && \
+    adduser -D -u 1000 -G tooling tooling
+
+# Set working directory
+WORKDIR /workspace
+
+# Copy validation scripts
+COPY scripts/ /opt/tooling/scripts/
+RUN chmod +x /opt/tooling/scripts/*.sh && \
+    chown -R tooling:tooling /opt/tooling
+
+# Switch to non-root user
+USER tooling
+
+# Add healthcheck
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD terraform version && aws --version || exit 1
+
+# Default command
+CMD ["/bin/bash"]
+
+# Labels for metadata
+LABEL maintainer="proyectos-aws" \
+      version="1.0.0" \
+      description="Security-hardened tooling image for AWS validation" \
+      org.opencontainers.image.source="https://github.com/YOUR_USERNAME/proyectos-aws"
