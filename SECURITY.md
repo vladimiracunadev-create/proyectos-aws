@@ -111,11 +111,15 @@ Los hooks incluyen:
 
 ### Escaneo de Seguridad Automatizado
 
-El repositorio ejecuta automáticamente:
+El repositorio ejecuta automáticamente en cada push a `main`:
 
-- **Secret scanning** con TruffleHog (GitHub Actions)
-- **Dependency scanning** en Pull Requests
-- **YAML/Markdown linting** en cada push
+- **Secret scanning** con TruffleHog (GitHub Actions).
+- **Detect Secrets** comparando con `.secrets.baseline` (UTF-8).
+- **Dependency scanning** en Pull Requests (vulnerabilidades moderadas+).
+- **Linter YAML/Markdown** para asegurar calidad de código.
+
+> [!NOTE]
+> Los escaneos de seguridad están configurados para reportar hallazgos sin bloquear el despliegue (`continue-on-error: true`), permitiendo visibilidad constante sin detener la agilidad de desarrollo.
 
 Ver: `.github/workflows/security-scan.yml`
 

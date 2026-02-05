@@ -6,7 +6,8 @@
 
 - ✅ CI/CD real: cambios en Git → despliegue automático (S3 + GitHub Actions / Amplify por ramas)
 - ✅ Trabajo profesional con `dev → PR → main` y trazabilidad completa
-- ✅ Enfoque de portafolio: documentación + demos + estructura lista para crecer
+- ✅ Enfoque de portafolio: documentación + demos + estructura profesional
+- 👨‍💼 **Para Reclutadores:** Ver [Guía para Reclutadores](docs/RECRUITER.md) para un resumen del valor de negocio.
 
 ---
 
@@ -107,8 +108,9 @@ Ver [SECURITY.md](SECURITY.md) para más detalles.
 
 ## 📚 Documentación Adicional
 
-- [SECURITY.md](SECURITY.md) - Política de seguridad
-- [CONTRIBUTING.md](CONTRIBUTING.md) - Guía de contribución
-- [ROADMAP.md](ROADMAP.md) - Roadmap del proyecto
-- [docs/TOOLING.md](docs/TOOLING.md) - Guía de tooling
-- [docs/killed.md](docs/killed.md) - Prácticas prohibidas
+- [👨‍💼 Guía para Reclutadores](docs/RECRUITER.md) - Valor de negocio y resumen técnico
+- [🔒 SECURITY.md](SECURITY.md) - Política de seguridad
+- [🤝 CONTRIBUTING.md](CONTRIBUTING.md) - Guía de contribución
+- [📅 ROADMAP.md](ROADMAP.md) - Roadmap del proyecto
+- [🛠️ docs/TOOLING.md](docs/TOOLING.md) - Guía de tooling
+- [❌ docs/killed.md](docs/killed.md) - Prácticas prohibidas
