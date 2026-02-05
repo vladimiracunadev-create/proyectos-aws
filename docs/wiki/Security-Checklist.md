@@ -1,25 +1,25 @@
-# ✅ Security Audit Checklist - proyectos-aws
+﻿# âœ… Security Audit Checklist - proyectos-aws
 
-Checklist completo de auditoría y hardening de seguridad implementado.
+Checklist completo de auditorÃ­a y hardening de seguridad implementado.
 
-**Fecha de auditoría:** 2026-02-04  
-**Versión:** 1.0.0
+**Fecha de auditorÃ­a:** 2026-02-04
+**VersiÃ³n:** 1.0.0
 
 ---
 
-## 🔍 Auditoría de Amenazas
+## ðŸ” AuditorÃ­a de Amenazas
 
-### ✅ Secrets y Credenciales
+### âœ… Secrets y Credenciales
 
-| Amenaza | Estado | Mitigación Implementada |
+| Amenaza | Estado | MitigaciÃ³n Implementada |
 | :--- | :--- | :--- |
-| Credenciales AWS en repo | ✅ Mitigado | `.gitignore` reforzado, pre-commit hooks |
-| API keys hardcodeadas | ✅ Mitigado | `detect-secrets` en pre-commit y CI |
-| Archivos .env commitados | ✅ Mitigado | `.gitignore` incluye `.env*` |
-| Terraform state con secrets | ✅ Mitigado | `*.tfstate` en `.gitignore` |
-| Claves privadas (.pem, .key) | ✅ Mitigado | Extensiones bloqueadas en `.gitignore` |
+| Credenciales AWS en repo | âœ… Mitigado | `.gitignore` reforzado, pre-commit hooks |
+| API keys hardcodeadas | âœ… Mitigado | `detect-secrets` en pre-commit y CI |
+| Archivos .env commitados | âœ… Mitigado | `.gitignore` incluye `.env*` |
+| Terraform state con secrets | âœ… Mitigado | `*.tfstate` en `.gitignore` |
+| Claves privadas (.pem, .key) | âœ… Mitigado | Extensiones bloqueadas en `.gitignore` |
 
-**Verificación:**
+**VerificaciÃ³n:**
 
 ```bash
 # Ejecutar detect-secrets
@@ -31,16 +31,16 @@ cat .gitignore | grep -E "(\.env|\.tfstate|\.pem|\.key)"
 
 ---
 
-### ✅ Supply Chain Security
+### âœ… Supply Chain Security
 
-| Amenaza | Estado | Mitigación Implementada |
+| Amenaza | Estado | MitigaciÃ³n Implementada |
 | :--- | :--- | :--- |
-| Dependencias vulnerables | ✅ Mitigado | GitHub Actions: dependency-review-action |
-| Imágenes Docker sin tags fijos | ✅ Mitigado | Dockerfile usa versiones específicas |
-| Imágenes base desactualizadas | ✅ Mitigado | Alpine 3.19 (actualizada) |
-| Paquetes sin verificación | ✅ Mitigado | Checksums en instalación (AWS CLI) |
+| Dependencias vulnerables | âœ… Mitigado | GitHub Actions: dependency-review-action |
+| ImÃ¡genes Docker sin tags fijos | âœ… Mitigado | Dockerfile usa versiones especÃ­ficas |
+| ImÃ¡genes base desactualizadas | âœ… Mitigado | Alpine 3.19 (actualizada) |
+| Paquetes sin verificaciÃ³n | âœ… Mitigado | Checksums en instalaciÃ³n (AWS CLI) |
 
-**Verificación:**
+**VerificaciÃ³n:**
 
 ```bash
 # Verificar tags fijos en Dockerfile
@@ -52,17 +52,17 @@ cat .github/workflows/security-scan.yml | grep dependency-review
 
 ---
 
-### ✅ Container Security
+### âœ… Container Security
 
-| Amenaza | Estado | Mitigación Implementada |
+| Amenaza | Estado | MitigaciÃ³n Implementada |
 | :--- | :--- | :--- |
-| Contenedor corre como root | ✅ Mitigado | USER no-root (tooling:1000) |
-| Privilegios excesivos | ✅ Mitigado | SecurityContext con capabilities drop ALL |
-| Filesystem escribible | ✅ Mitigado | readOnlyRootFilesystem: true |
-| Sin resource limits | ✅ Mitigado | CPU/Memory limits configurados |
-| Sin healthcheck | ✅ Mitigado | HEALTHCHECK en Dockerfile |
+| Contenedor corre como root | âœ… Mitigado | USER no-root (tooling:1000) |
+| Privilegios excesivos | âœ… Mitigado | SecurityContext con capabilities drop ALL |
+| Filesystem escribible | âœ… Mitigado | readOnlyRootFilesystem: true |
+| Sin resource limits | âœ… Mitigado | CPU/Memory limits configurados |
+| Sin healthcheck | âœ… Mitigado | HEALTHCHECK en Dockerfile |
 
-**Verificación:**
+**VerificaciÃ³n:**
 
 ```bash
 # Verificar usuario no-root
@@ -75,17 +75,17 @@ kubectl get job -n tooling-demo tooling-validate -o yaml | grep -A 10 securityCo
 
 ---
 
-### ✅ Kubernetes Security
+### âœ… Kubernetes Security
 
-| Amenaza | Estado | Mitigación Implementada |
+| Amenaza | Estado | MitigaciÃ³n Implementada |
 | :--- | :--- | :--- |
-| Pods sin SecurityContext | ✅ Mitigado | runAsNonRoot, runAsUser configurados |
-| Sin resource limits | ✅ Mitigado | requests/limits definidos |
-| Tráfico de red sin restricción | ✅ Mitigado | NetworkPolicy deny-all |
-| Privilege escalation | ✅ Mitigado | allowPrivilegeEscalation: false |
-| Seccomp profile no configurado | ✅ Mitigado | seccompProfile: RuntimeDefault |
+| Pods sin SecurityContext | âœ… Mitigado | runAsNonRoot, runAsUser configurados |
+| Sin resource limits | âœ… Mitigado | requests/limits definidos |
+| TrÃ¡fico de red sin restricciÃ³n | âœ… Mitigado | NetworkPolicy deny-all |
+| Privilege escalation | âœ… Mitigado | allowPrivilegeEscalation: false |
+| Seccomp profile no configurado | âœ… Mitigado | seccompProfile: RuntimeDefault |
 
-**Verificación:**
+**VerificaciÃ³n:**
 
 ```bash
 # Verificar Job
@@ -97,32 +97,32 @@ kubectl get networkpolicy -n tooling-demo -o yaml
 
 ---
 
-### ✅ Code Injection & Input Validation
+### âœ… Code Injection & Input Validation
 
-| Amenaza | Estado | Mitigación Implementada |
+| Amenaza | Estado | MitigaciÃ³n Implementada |
 | :--- | :--- | :--- |
-| Command injection en scripts | ✅ Mitigado | Scripts usan `set -euo pipefail`, validación de inputs |
-| Path traversal | ✅ Mitigado | Volúmenes montados como read-only |
-| SSRF (Server-Side Request Forgery) | ✅ Mitigado | NetworkPolicy bloquea egress |
-| RCE por inputs | ✅ Mitigado | No hay inputs de usuario sin validar |
+| Command injection en scripts | âœ… Mitigado | Scripts usan `set -euo pipefail`, validaciÃ³n de inputs |
+| Path traversal | âœ… Mitigado | VolÃºmenes montados como read-only |
+| SSRF (Server-Side Request Forgery) | âœ… Mitigado | NetworkPolicy bloquea egress |
+| RCE por inputs | âœ… Mitigado | No hay inputs de usuario sin validar |
 
-**Verificación:**
+**VerificaciÃ³n:**
 
 ```bash
 # Verificar scripts con set -euo pipefail
 head -n 5 tooling/scripts/validate.sh hub.sh
 
-# Verificar volúmenes read-only
+# Verificar volÃºmenes read-only
 grep -A 2 "volumeMounts" k8s/tooling-job/job.yaml
 ```
 
 ---
 
-## 🛡️ Hardening Implementado
+## ðŸ›¡ï¸ Hardening Implementado
 
 ### 1. .gitignore Reforzado
 
-✅ **Implementado:** `c:\proyectos-aws\.gitignore`
+âœ… **Implementado:** `c:\proyectos-aws\.gitignore`
 
 **Patrones agregados:**
 
@@ -132,7 +132,7 @@ grep -A 2 "volumeMounts" k8s/tooling-job/job.yaml
 - `secrets/`, `credentials/`
 - `.aws/`, `aws-credentials`
 
-**Verificación:**
+**VerificaciÃ³n:**
 
 ```bash
 # Contar patrones de seguridad
@@ -144,7 +144,7 @@ grep -c -E "(tfstate|\.pem|\.key|\.env|secrets)" .gitignore
 
 ### 2. Pre-commit Hooks
 
-✅ **Implementado:** `.pre-commit-config.yaml`
+âœ… **Implementado:** `.pre-commit-config.yaml`
 
 **Hooks configurados:**
 
@@ -155,14 +155,14 @@ grep -c -E "(tfstate|\.pem|\.key|\.env|secrets)" .gitignore
 - `terraform_fmt`, `terraform_validate`
 - `markdownlint`
 
-**Instalación:**
+**InstalaciÃ³n:**
 
 ```bash
 pip install pre-commit
 pre-commit install
 ```
 
-**Verificación:**
+**VerificaciÃ³n:**
 
 ```bash
 pre-commit run --all-files
@@ -172,7 +172,7 @@ pre-commit run --all-files
 
 ### 3. GitHub Actions - Security Scan
 
-✅ **Implementado:** `.github/workflows/security-scan.yml`
+âœ… **Implementado:** `.github/workflows/security-scan.yml`
 
 **Jobs configurados:**
 
@@ -188,7 +188,7 @@ pre-commit run --all-files
 - Pull Requests
 - Schedule semanal (lunes 9 AM UTC)
 
-**Verificación:**
+**VerificaciÃ³n:**
 
 ```bash
 # Ver workflow
@@ -202,17 +202,17 @@ act -l
 
 ### 4. Docker Security
 
-✅ **Implementado:** `tooling/Dockerfile.tooling`
+âœ… **Implementado:** `tooling/Dockerfile.tooling`
 
 **Medidas:**
 
-- ✅ Usuario no-root: `USER tooling`
-- ✅ Tags fijos: `alpine:3.19`, `terraform:1.7.0`
-- ✅ Healthcheck: `HEALTHCHECK CMD terraform version && aws --version`
-- ✅ Imagen mínima: Alpine Linux
-- ✅ Multi-stage build (opcional para optimización futura)
+- âœ… Usuario no-root: `USER tooling`
+- âœ… Tags fijos: `alpine:3.19`, `terraform:1.7.0`
+- âœ… Healthcheck: `HEALTHCHECK CMD terraform version && aws --version`
+- âœ… Imagen mÃ­nima: Alpine Linux
+- âœ… Multi-stage build (opcional para optimizaciÃ³n futura)
 
-**Verificación:**
+**VerificaciÃ³n:**
 
 ```bash
 # Escanear imagen con Trivy (opcional)
@@ -224,7 +224,7 @@ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
 
 ### 5. Kubernetes Security
 
-✅ **Implementado:** `k8s/tooling-job/job.yaml`
+âœ… **Implementado:** `k8s/tooling-job/job.yaml`
 
 **SecurityContext (Pod):**
 
@@ -264,12 +264,12 @@ resources:
 
 **NetworkPolicy:**
 
-✅ **Implementado:** `k8s/tooling-job/networkpolicy.yaml`
+âœ… **Implementado:** `k8s/tooling-job/networkpolicy.yaml`
 
 - Deny all ingress
 - Deny all egress
 
-**Verificación:**
+**VerificaciÃ³n:**
 
 ```bash
 make k8s-demo
@@ -280,16 +280,16 @@ kubectl get job,networkpolicy -n tooling-demo
 
 ### 6. Documentation
 
-✅ **Implementado:**
+âœ… **Implementado:**
 
-| Documento | Ubicación | Propósito |
+| Documento | UbicaciÃ³n | PropÃ³sito |
 | :--- | :--- | :--- |
-| SECURITY.md | `/SECURITY.md` | Política de seguridad, OIDC, pre-commit |
-| killed.md | `/docs/killed.md` | Prácticas prohibidas y alternativas |
-| TOOLING.md | `/docs/TOOLING.md` | Guía completa de tooling |
+| SECURITY.md | `/SECURITY.md` | PolÃ­tica de seguridad, OIDC, pre-commit |
+| killed.md | `/docs/killed.md` | PrÃ¡cticas prohibidas y alternativas |
+| TOOLING.md | `/docs/TOOLING.md` | GuÃ­a completa de tooling |
 | SECURITY_CHECKLIST.md | `/docs/SECURITY_CHECKLIST.md` | Este documento |
 
-**Verificación:**
+**VerificaciÃ³n:**
 
 ```bash
 ls -lh SECURITY.md docs/killed.md docs/TOOLING.md docs/SECURITY_CHECKLIST.md
@@ -297,83 +297,83 @@ ls -lh SECURITY.md docs/killed.md docs/TOOLING.md docs/SECURITY_CHECKLIST.md
 
 ---
 
-## 🧪 Comandos de Verificación
+## ðŸ§ª Comandos de VerificaciÃ³n
 
-### Verificación Completa (Ejecutar todos)
+### VerificaciÃ³n Completa (Ejecutar todos)
 
 ```bash
 #!/bin/bash
-# security-verify.sh - Script de verificación completa
+# security-verify.sh - Script de verificaciÃ³n completa
 
-echo "🔍 Iniciando verificación de seguridad..."
+echo "ðŸ” Iniciando verificaciÃ³n de seguridad..."
 echo ""
 
 # 1. Verificar .gitignore
-echo "1️⃣ Verificando .gitignore..."
+echo "1ï¸âƒ£ Verificando .gitignore..."
 if grep -q "\.tfstate" .gitignore && grep -q "\.env" .gitignore && grep -q "\.pem" .gitignore; then
-    echo "✅ .gitignore contiene patrones de seguridad"
+    echo "âœ… .gitignore contiene patrones de seguridad"
 else
-    echo "❌ .gitignore incompleto"
+    echo "âŒ .gitignore incompleto"
 fi
 echo ""
 
 # 2. Verificar pre-commit
-echo "2️⃣ Verificando pre-commit hooks..."
+echo "2ï¸âƒ£ Verificando pre-commit hooks..."
 if [ -f ".pre-commit-config.yaml" ]; then
-    echo "✅ .pre-commit-config.yaml existe"
-    pre-commit run --all-files || echo "⚠️  Pre-commit encontró issues"
+    echo "âœ… .pre-commit-config.yaml existe"
+    pre-commit run --all-files || echo "âš ï¸  Pre-commit encontrÃ³ issues"
 else
-    echo "❌ .pre-commit-config.yaml no encontrado"
+    echo "âŒ .pre-commit-config.yaml no encontrado"
 fi
 echo ""
 
 # 3. Verificar GitHub Actions
-echo "3️⃣ Verificando GitHub Actions..."
+echo "3ï¸âƒ£ Verificando GitHub Actions..."
 if [ -f ".github/workflows/security-scan.yml" ]; then
-    echo "✅ security-scan.yml configurado"
+    echo "âœ… security-scan.yml configurado"
 else
-    echo "❌ security-scan.yml no encontrado"
+    echo "âŒ security-scan.yml no encontrado"
 fi
 echo ""
 
 # 4. Verificar Docker security
-echo "4️⃣ Verificando seguridad de Docker..."
+echo "4ï¸âƒ£ Verificando seguridad de Docker..."
 if docker images | grep -q "proyectos-aws/tooling"; then
     USER=$(docker run --rm proyectos-aws/tooling:1.0.0 whoami)
     if [ "$USER" = "tooling" ]; then
-        echo "✅ Contenedor corre como usuario no-root: $USER"
+        echo "âœ… Contenedor corre como usuario no-root: $USER"
     else
-        echo "❌ Contenedor corre como: $USER (debería ser 'tooling')"
+        echo "âŒ Contenedor corre como: $USER (deberÃ­a ser 'tooling')"
     fi
 else
-    echo "⚠️  Imagen de tooling no construida. Ejecuta: make tooling-build"
+    echo "âš ï¸  Imagen de tooling no construida. Ejecuta: make tooling-build"
 fi
 echo ""
 
-# 5. Verificar documentación
-echo "5️⃣ Verificando documentación de seguridad..."
+# 5. Verificar documentaciÃ³n
+echo "5ï¸âƒ£ Verificando documentaciÃ³n de seguridad..."
 DOCS=("SECURITY.md" "docs/killed.md" "docs/TOOLING.md")
 for doc in "${DOCS[@]}"; do
     if [ -f "$doc" ]; then
-        echo "✅ $doc existe"
+        echo "âœ… $doc existe"
     else
-        echo "❌ $doc no encontrado"
+        echo "âŒ $doc no encontrado"
     fi
 done
 echo ""
 
 # 6. Buscar secretos potenciales
-echo "6️⃣ Buscando secretos potenciales..."
+echo "6ï¸âƒ£ Buscando secretos potenciales..."
 if command -v detect-secrets > /dev/null; then
     detect-secrets scan --baseline .secrets.baseline
-    echo "✅ Escaneo de secretos completado"
+    echo "âœ… Escaneo de secretos completado"
 else
-    echo "⚠️  detect-secrets no instalado. Instala con: pip install detect-secrets"
+    echo "âš ï¸  detect-secrets no instalado. Instala con: pip install detect-secrets"
 fi
 echo ""
 
 echo "=========================================="
-echo "✅ Verificación de seguridad completada"
+echo "âœ… VerificaciÃ³n de seguridad completada"
 echo "=========================================="
 ```
 
@@ -386,21 +386,21 @@ chmod +x security-verify.sh
 
 ---
 
-## 📊 Resumen de Implementación
+## ðŸ“Š Resumen de ImplementaciÃ³n
 
-| Categoría | Items | Completados | Estado |
+| CategorÃ­a | Items | Completados | Estado |
 | :--- | :--- | :--- | :--- |
-| Secrets Management | 5 | 5 | ✅ 100% |
-| Supply Chain | 4 | 4 | ✅ 100% |
-| Container Security | 5 | 5 | ✅ 100% |
-| Kubernetes Security | 5 | 5 | ✅ 100% |
-| Code Injection | 4 | 4 | ✅ 100% |
-| Documentation | 4 | 4 | ✅ 100% |
-| **TOTAL** | **27** | **27** | **✅ 100%** |
+| Secrets Management | 5 | 5 | âœ… 100% |
+| Supply Chain | 4 | 4 | âœ… 100% |
+| Container Security | 5 | 5 | âœ… 100% |
+| Kubernetes Security | 5 | 5 | âœ… 100% |
+| Code Injection | 4 | 4 | âœ… 100% |
+| Documentation | 4 | 4 | âœ… 100% |
+| **TOTAL** | **27** | **27** | **âœ… 100%** |
 
 ---
 
-## 🎯 Próximos Pasos Recomendados
+## ðŸŽ¯ PrÃ³ximos Pasos Recomendados
 
 ### Opcional - Mejoras Futuras
 
@@ -435,23 +435,23 @@ conftest test k8s/tooling-job/
 
 ---
 
-## ✅ Checklist Final para Contribuidores
+## âœ… Checklist Final para Contribuidores
 
 Antes de cada commit:
 
 - [ ] Pre-commit hooks instalados (`pre-commit install`)
-- [ ] No hay credenciales AWS en el código
+- [ ] No hay credenciales AWS en el cÃ³digo
 - [ ] No hay archivos `.tfstate` en el commit
 - [ ] No hay secretos hardcodeados
-- [ ] Los archivos `.env` están en `.gitignore`
+- [ ] Los archivos `.env` estÃ¡n en `.gitignore`
 - [ ] `detect-secrets` no reporta alertas
 - [ ] Contenedores Docker usan usuario no-root
 - [ ] Manifiestos K8s tienen `securityContext`
-- [ ] Documentación actualizada si es necesario
+- [ ] DocumentaciÃ³n actualizada si es necesario
 
 ---
 
-**Auditado por:** Antigravity AI  
-**Fecha:** 2026-02-04  
-**Versión:** 1.0.0  
-**Estado:** ✅ APROBADO
+**Auditado por:** Antigravity AI
+**Fecha:** 2026-02-04
+**VersiÃ³n:** 1.0.0
+**Estado:** âœ… APROBADO

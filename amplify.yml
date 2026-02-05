@@ -1,4 +1,4 @@
-version: 1
+﻿version: 1
 applications:
   - appRoot: aws-amplify-mi-sitio-1
     frontend:

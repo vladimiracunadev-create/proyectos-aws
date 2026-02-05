@@ -1,54 +1,54 @@
-# 🔐 Security Policy
+﻿# ðŸ” Security Policy
 
 Gracias por ayudar a mantener este repositorio seguro.
 
 ---
 
-## ✅ Supported Versions
+## âœ… Supported Versions
 
-Este repositorio es un monorepo de portafolio. Se considera “soportada” la rama:
+Este repositorio es un monorepo de portafolio. Se considera â€œsoportadaâ€ la rama:
 
-- `main` (última versión)
+- `main` (Ãºltima versiÃ³n)
 
-La rama `dev` es para integración y pruebas.
+La rama `dev` es para integraciÃ³n y pruebas.
 
 ---
 
-## 🚨 Reporting a Vulnerability
+## ðŸš¨ Reporting a Vulnerability
 
 Si encuentras una vulnerabilidad:
 
-1. **Evita** abrir un issue público con detalles explotables.
-2. Reporta de forma privada por uno de estos medios (elige el que usarás):
+1. **Evita** abrir un issue pÃºblico con detalles explotables.
+2. Reporta de forma privada por uno de estos medios (elige el que usarÃ¡s):
    - **GitHub Security Advisories** (recomendado si el repo lo permite)
    - Email: `TU_EMAIL_DE_SEGURIDAD@ejemplo.com` *(reemplazar)*
 
 Incluye:
 
-- Descripción clara del problema
+- DescripciÃ³n clara del problema
 - Pasos para reproducir
 - Impacto estimado
-- Prueba de concepto (si aplica) sin causar daño
-- Recomendación/mitigación propuesta (si la tienes)
+- Prueba de concepto (si aplica) sin causar daÃ±o
+- RecomendaciÃ³n/mitigaciÃ³n propuesta (si la tienes)
 
 ---
 
-## ⏱️ Tiempos de respuesta (best effort)
+## â±ï¸ Tiempos de respuesta (best effort)
 
-- Confirmación de recepción: 48–72 horas
-- Evaluación inicial: 7 días
-- Fix/mitigación: según severidad y alcance
+- ConfirmaciÃ³n de recepciÃ³n: 48â€“72 horas
+- EvaluaciÃ³n inicial: 7 dÃ­as
+- Fix/mitigaciÃ³n: segÃºn severidad y alcance
 
 ---
 
-## 🔒 Buenas prácticas del repo
+## ðŸ”’ Buenas prÃ¡cticas del repo
 
-### Gestión de Secretos
+### GestiÃ³n de Secretos
 
-- ❌ **NUNCA** commitear secretos (keys, tokens, credenciales AWS)
-- ✅ Usar GitHub Secrets para CI/CD
-- ✅ Usar AWS OIDC para autenticación sin credenciales de larga duración
-- ✅ Consultar [killed.md](docs/killed.md) para prácticas prohibidas y alternativas
+- âŒ **NUNCA** commitear secretos (keys, tokens, credenciales AWS)
+- âœ… Usar GitHub Secrets para CI/CD
+- âœ… Usar AWS OIDC para autenticaciÃ³n sin credenciales de larga duraciÃ³n
+- âœ… Consultar [killed.md](docs/killed.md) para prÃ¡cticas prohibidas y alternativas
 
 ### Pre-commit Hooks
 
@@ -70,9 +70,9 @@ Los hooks incluyen:
 - `terraform_fmt`: Formatea archivos Terraform
 - `detect-private-key`: Detecta claves privadas
 
-### Autenticación AWS con OIDC
+### AutenticaciÃ³n AWS con OIDC
 
-**Configuración recomendada para GitHub Actions:**
+**ConfiguraciÃ³n recomendada para GitHub Actions:**
 
 1. **En AWS IAM:**
    - Crear Identity Provider OIDC para GitHub
@@ -102,7 +102,7 @@ Los hooks incluyen:
    permissions:
      id-token: write
      contents: read
-   
+
    - uses: aws-actions/configure-aws-credentials@v4
      with:
        role-to-assume: arn:aws:iam::ACCOUNT_ID:role/GitHubActionsRole
@@ -111,28 +111,28 @@ Los hooks incluyen:
 
 ### Escaneo de Seguridad Automatizado
 
-El repositorio ejecuta automáticamente en cada push a `main`:
+El repositorio ejecuta automÃ¡ticamente en cada push a `main`:
 
 - **Secret scanning** con TruffleHog (GitHub Actions).
 - **Detect Secrets** comparando con `.secrets.baseline` (UTF-8).
 - **Dependency scanning** en Pull Requests (vulnerabilidades moderadas+).
-- **Linter YAML/Markdown** para asegurar calidad de código.
+- **Linter YAML/Markdown** para asegurar calidad de cÃ³digo.
 
 > [!NOTE]
-> Los escaneos de seguridad están configurados para reportar hallazgos sin bloquear el despliegue (`continue-on-error: true`), permitiendo visibilidad constante sin detener la agilidad de desarrollo.
+> Los escaneos de seguridad estÃ¡n configurados para reportar hallazgos sin bloquear el despliegue (`continue-on-error: true`), permitiendo visibilidad constante sin detener la agilidad de desarrollo.
 
 Ver: `.github/workflows/security-scan.yml`
 
-### Permisos IAM Mínimos
+### Permisos IAM MÃ­nimos
 
-- Aplicar principio de mínimo privilegio
-- Usar roles específicos por entorno (dev/prod)
+- Aplicar principio de mÃ­nimo privilegio
+- Usar roles especÃ­ficos por entorno (dev/prod)
 - Habilitar MFA para usuarios IAM
 - Rotar credenciales regularmente (si se usan)
 
 ### Workflow de Cambios
 
-- Todo cambio a `main` debe ser vía Pull Request
-- PRs requieren revisión de código
+- Todo cambio a `main` debe ser vÃ­a Pull Request
+- PRs requieren revisiÃ³n de cÃ³digo
 - CI/CD debe pasar antes de merge
 - Usar ramas protegidas en GitHub

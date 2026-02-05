@@ -1,4 +1,4 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
+﻿apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 namespace: tooling-demo
@@ -13,7 +13,7 @@ commonLabels:
   managed-by: kustomize
   environment: demo
 
-# Configuración común para todos los recursos
+# ConfiguraciÃ³n comÃºn para todos los recursos
 commonAnnotations:
-  description: "Demo de validación de tooling en Kubernetes"
+  description: "Demo de validaciÃ³n de tooling en Kubernetes"
   repository: "proyectos-aws"

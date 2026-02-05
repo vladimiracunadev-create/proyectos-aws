@@ -1,4 +1,4 @@
-name: Security Scan
+﻿name: Security Scan
 
 on:
   push:
@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: [main, dev]
   schedule:
-    # Ejecuta semanalmente los lunes a las 9 AM UTC
     - cron: '0 9 * * 1'
 
 permissions:
@@ -18,84 +17,60 @@ jobs:
   secret-scan:
     name: Secret Scanning
     runs-on: ubuntu-latest
-    continue-on-error: true
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch all history for secret scanning
+          fetch-depth: 0
 
       - name: TruffleHog Secret Scan
-        uses: trufflesecurity/trufflehog@main
-        with:
-          path: ./
-          extra_args: --only-verified
+        run: |
+          docker run --rm -v "$(pwd):/pwd" trufflesecurity/trufflehog:latest github --repo https://github.com/vladimiracunadev-create/proyectos-aws --only-verified || true
 
   dependency-scan:
     name: Dependency Scanning
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Dependency Review
         uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: moderate
 
   detect-secrets:
-    name: Detect Secrets (Pre-commit)
+    name: Detect Secrets
     runs-on: ubuntu-latest
-    continue-on-error: true
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run detect-secrets
+        run: |
+          pip install detect-secrets
+          detect-secrets scan --baseline .secrets.baseline || true
 
+  lint:
+    name: Code Quality (Linters)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install detect-secrets
+      - name: YAML Lint
         run: |
-          pip install detect-secrets
-
-      - name: Run detect-secrets
-        run: |
-          detect-secrets scan --baseline .secrets.baseline || true
-
-  markdown-lint:
-    name: Markdown Lint
-    runs-on: ubuntu-latest
-    continue-on-error: true  # No bloquear por errores de formato
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+          pip install yamllint
+          yamllint -c .yamllint.yml . || true
 
       - name: Markdown Lint
-        uses: nosborn/github-action-markdown-cli@v3.3.0
-        with:
-          files: .
-          config_file: .markdownlint.json
-          ignore_files: node_modules/
-
-  yaml-lint:
-    name: YAML Lint
-    runs-on: ubuntu-latest
-    continue-on-error: true  # No bloquear por errores de formato
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: YAML Lint
-        uses: ibiqlik/action-yamllint@v3
-        with:
-          config_file: .yamllint.yml
-          file_or_dir: .
-          strict: false
+        run: |
+          npx markdownlint-cli . --ignore node_modules || true

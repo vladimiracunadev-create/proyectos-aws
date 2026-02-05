@@ -1,22 +1,22 @@
-# ❌ KILLED: Prácticas NO Permitidas en este Repositorio
+﻿# âŒ KILLED: PrÃ¡cticas NO Permitidas en este Repositorio
 
-Este documento especifica explícitamente las prácticas de seguridad que **NO están permitidas** en este repositorio y proporciona alternativas seguras.
+Este documento especifica explÃ­citamente las prÃ¡cticas de seguridad que **NO estÃ¡n permitidas** en este repositorio y proporciona alternativas seguras.
 
 ---
 
-## 🚫 Prohibiciones Absolutas
+## ðŸš« Prohibiciones Absolutas
 
-### ❌ 1. Credenciales AWS en el Repositorio
+### âŒ 1. Credenciales AWS en el Repositorio
 
 **NO PERMITIDO:**
 
 - Archivos `.aws/credentials`
 - Variables `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` hardcodeadas
 - Archivos `.env` con credenciales AWS
-- Claves IAM en código fuente
-- Tokens de sesión en commits
+- Claves IAM en cÃ³digo fuente
+- Tokens de sesiÃ³n en commits
 
-**RAZÓN:** Las credenciales comprometidas pueden resultar en:
+**RAZÃ“N:** Las credenciales comprometidas pueden resultar en:
 
 - Acceso no autorizado a recursos AWS
 - Costos inesperados por uso malicioso
@@ -25,7 +25,7 @@ Este documento especifica explícitamente las prácticas de seguridad que **NO e
 
 ---
 
-### ❌ 2. Archivos de Estado de Terraform (.tfstate)
+### âŒ 2. Archivos de Estado de Terraform (.tfstate)
 
 **NO PERMITIDO:**
 
@@ -33,62 +33,62 @@ Este documento especifica explícitamente las prácticas de seguridad que **NO e
 - `*.tfstate.backup`
 - Cualquier archivo de estado de Terraform en Git
 
-**RAZÓN:**
+**RAZÃ“N:**
 
-- Los archivos `.tfstate` contienen información sensible (IPs, IDs de recursos, outputs)
+- Los archivos `.tfstate` contienen informaciÃ³n sensible (IPs, IDs de recursos, outputs)
 - Pueden contener secretos en texto plano
 - Son archivos grandes que no deben versionarse
 
 **ALTERNATIVA:**
 
 - Usar backend remoto (S3 + DynamoDB para locking)
-- Configurar `.gitignore` apropiadamente (✅ ya configurado)
+- Configurar `.gitignore` apropiadamente (âœ… ya configurado)
 
 ---
 
-### ❌ 3. Secretos Hardcodeados
+### âŒ 3. Secretos Hardcodeados
 
 **NO PERMITIDO:**
 
-- API keys en código
-- Passwords en archivos de configuración
+- API keys en cÃ³digo
+- Passwords en archivos de configuraciÃ³n
 - Tokens de acceso en scripts
 - Certificados privados (`.pem`, `.key`, `.p12`)
 
-**RAZÓN:**
+**RAZÃ“N:**
 
-- Exposición pública en GitHub
-- Difícil rotación de secretos
-- Violación de principios de seguridad
+- ExposiciÃ³n pÃºblica en GitHub
+- DifÃ­cil rotaciÃ³n de secretos
+- ViolaciÃ³n de principios de seguridad
 
 ---
 
-### ❌ 4. Ejecución como Root en Contenedores
+### âŒ 4. EjecuciÃ³n como Root en Contenedores
 
 **NO PERMITIDO:**
 
 - Contenedores Docker que corren como `root`
-- Imágenes sin `USER` no-root especificado
+- ImÃ¡genes sin `USER` no-root especificado
 - Pods de Kubernetes sin `securityContext`
 
-**RAZÓN:**
+**RAZÃ“N:**
 
-- Principio de mínimo privilegio
-- Reducción de superficie de ataque
-- Prevención de escalación de privilegios
+- Principio de mÃ­nimo privilegio
+- ReducciÃ³n de superficie de ataque
+- PrevenciÃ³n de escalaciÃ³n de privilegios
 
 **ALTERNATIVA:**
 
-- ✅ Usar `USER` no-root en Dockerfile (ver `tooling/Dockerfile.tooling`)
-- ✅ Configurar `securityContext` en Kubernetes (ver `k8s/tooling-job/job.yaml`)
+- âœ… Usar `USER` no-root en Dockerfile (ver `tooling/Dockerfile.tooling`)
+- âœ… Configurar `securityContext` en Kubernetes (ver `k8s/tooling-job/job.yaml`)
 
 ---
 
-## ✅ Prácticas Recomendadas (Alternativas Seguras)
+## âœ… PrÃ¡cticas Recomendadas (Alternativas Seguras)
 
-### 1. Autenticación con OIDC (OpenID Connect)
+### 1. AutenticaciÃ³n con OIDC (OpenID Connect)
 
-**Para GitHub Actions → AWS:**
+**Para GitHub Actions â†’ AWS:**
 
 ```yaml
 # .github/workflows/deploy.yml
@@ -109,22 +109,22 @@ jobs:
 
 **Ventajas:**
 
-- ✅ Sin credenciales de larga duración
-- ✅ Tokens temporales automáticos
-- ✅ Auditoría completa en CloudTrail
-- ✅ Permisos granulares por repositorio/rama
+- âœ… Sin credenciales de larga duraciÃ³n
+- âœ… Tokens temporales automÃ¡ticos
+- âœ… AuditorÃ­a completa en CloudTrail
+- âœ… Permisos granulares por repositorio/rama
 
-**Configuración en AWS:**
+**ConfiguraciÃ³n en AWS:**
 
 1. Crear Identity Provider OIDC en IAM
 2. Crear rol IAM con trust policy para GitHub
-3. Asignar permisos mínimos necesarios
+3. Asignar permisos mÃ­nimos necesarios
 
 ---
 
 ### 2. GitHub Secrets para Variables Sensibles
 
-**Para valores que no pueden ser públicos:**
+**Para valores que no pueden ser pÃºblicos:**
 
 ```yaml
 # .github/workflows/example.yml
@@ -133,9 +133,9 @@ env:
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
 ```
 
-**Configuración:**
+**ConfiguraciÃ³n:**
 
-1. Ir a Settings → Secrets and variables → Actions
+1. Ir a Settings â†’ Secrets and variables â†’ Actions
 2. Agregar secrets necesarios
 3. Referenciar con `${{ secrets.SECRET_NAME }}`
 
@@ -146,17 +146,17 @@ env:
 **Para secretos en runtime:**
 
 ```bash
-# Obtener secreto en tiempo de ejecución
+# Obtener secreto en tiempo de ejecuciÃ³n
 aws ssm get-parameter --name /app/database/password --with-decryption
 aws secretsmanager get-secret-value --secret-id prod/db/password
 ```
 
 **Ventajas:**
 
-- ✅ Rotación automática de secretos
-- ✅ Encriptación en reposo (KMS)
-- ✅ Auditoría de accesos
-- ✅ Versionado de secretos
+- âœ… RotaciÃ³n automÃ¡tica de secretos
+- âœ… EncriptaciÃ³n en reposo (KMS)
+- âœ… AuditorÃ­a de accesos
+- âœ… Versionado de secretos
 
 ---
 
@@ -184,22 +184,22 @@ export AWS_PROFILE=dev-profile
 
 ---
 
-## 🔒 Checklist de Seguridad para Contribuidores
+## ðŸ”’ Checklist de Seguridad para Contribuidores
 
 Antes de hacer commit, verifica:
 
-- [ ] No hay credenciales AWS en el código
+- [ ] No hay credenciales AWS en el cÃ³digo
 - [ ] No hay archivos `.tfstate` en el commit
 - [ ] No hay secretos hardcodeados
-- [ ] Los archivos `.env` están en `.gitignore`
-- [ ] Pre-commit hooks están instalados (`pre-commit install`)
+- [ ] Los archivos `.env` estÃ¡n en `.gitignore`
+- [ ] Pre-commit hooks estÃ¡n instalados (`pre-commit install`)
 - [ ] `detect-secrets` no reporta alertas
 - [ ] Contenedores Docker usan usuario no-root
 - [ ] Manifiestos K8s tienen `securityContext`
 
 ---
 
-## 📚 Referencias
+## ðŸ“š Referencias
 
 - [AWS Security Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html)
 - [GitHub OIDC with AWS](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services)
@@ -208,16 +208,16 @@ Antes de hacer commit, verifica:
 
 ---
 
-## 🚨 Reporte de Incidentes
+## ðŸš¨ Reporte de Incidentes
 
 Si encuentras credenciales expuestas en este repositorio:
 
 1. **NO** las uses ni las compartas
-2. Reporta inmediatamente a través de GitHub Security Advisories
+2. Reporta inmediatamente a travÃ©s de GitHub Security Advisories
 3. Contacta al maintainer del repositorio
-4. Las credenciales serán rotadas inmediatamente
+4. Las credenciales serÃ¡n rotadas inmediatamente
 
 ---
 
-**Última actualización:** 2026-02-04  
+**Ãšltima actualizaciÃ³n:** 2026-02-04
 **Mantenido por:** Equipo de Seguridad - proyectos-aws

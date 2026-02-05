@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1
+﻿apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: tooling-validate-netpol
@@ -17,5 +17,5 @@ spec:
   ingress: []
 
   # Deny all egress traffic (el job no necesita conectarse a nada)
-  # En un escenario real, podrías permitir DNS o registry
+  # En un escenario real, podrÃ­as permitir DNS o registry
   egress: []

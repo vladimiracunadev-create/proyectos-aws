@@ -1,4 +1,4 @@
-apiVersion: batch/v1
+﻿apiVersion: batch/v1
 kind: Job
 metadata:
   name: tooling-validate
@@ -8,7 +8,7 @@ metadata:
 spec:
   # Job configuration
   backoffLimit: 2
-  ttlSecondsAfterFinished: 3600  # Limpia el job después de 1 hora
+  ttlSecondsAfterFinished: 3600  # Limpia el job despuÃ©s de 1 hora
 
   template:
     metadata:
@@ -63,6 +63,6 @@ spec:
 
       volumes:
         - name: workspace
-          emptyDir: {}  # En demo usamos emptyDir, en prod sería un ConfigMap o PV
+          emptyDir: {}  # En demo usamos emptyDir, en prod serÃ­a un ConfigMap o PV
         - name: tmp
           emptyDir: {}

@@ -1,10 +1,10 @@
-# 🛠️ Guía de Tooling - proyectos-aws
+﻿# ðŸ› ï¸ GuÃ­a de Tooling - proyectos-aws
 
-Documentación completa del sistema de tooling con Docker, Kubernetes y validaciones automatizadas.
+DocumentaciÃ³n completa del sistema de tooling con Docker, Kubernetes y validaciones automatizadas.
 
 ---
 
-## 📋 Tabla de Contenidos
+## ðŸ“‹ Tabla de Contenidos
 
 - [Arquitectura](#arquitectura)
 - [Componentes](#componentes)
@@ -16,30 +16,30 @@ Documentación completa del sistema de tooling con Docker, Kubernetes y validaci
 
 ## Arquitectura
 
-El sistema de tooling proporciona una capa de validación y automatización **completamente opcional** que no afecta el funcionamiento de los proyectos existentes.
+El sistema de tooling proporciona una capa de validaciÃ³n y automatizaciÃ³n **completamente opcional** que no afecta el funcionamiento de los proyectos existentes.
 
 ```mermaid
 flowchart TB
     A[Developer] -->|Ejecuta| B[Hub CLI]
     A -->|Ejecuta| C[Makefile]
-    
+
     B --> D[hub.sh / hub.ps1]
     D --> E[Docker Tooling]
-    
+
     C --> E
     C --> F[Kubernetes Demo]
-    
+
     E --> G[validate.sh]
     G --> H[Terraform Validate]
     G --> I[YAML Lint]
     G --> J[Markdown Lint]
     G --> K[Checkov Security]
-    
+
     F --> L[K8s Job]
     L --> E
 ```
 
-### Principios de Diseño
+### Principios de DiseÃ±o
 
 1. **Opcional:** Los proyectos legacy funcionan sin tooling
 2. **Sin credenciales:** Todo funciona sin AWS keys
@@ -52,7 +52,7 @@ flowchart TB
 
 ### 1. Docker Tooling Image
 
-**Ubicación:** `tooling/Dockerfile.tooling`
+**UbicaciÃ³n:** `tooling/Dockerfile.tooling`
 
 **Herramientas incluidas:**
 
@@ -62,12 +62,12 @@ flowchart TB
 - yamllint (1.33.0)
 - markdownlint-cli (0.39.0)
 
-**Características de seguridad:**
+**CaracterÃ­sticas de seguridad:**
 
-- ✅ Usuario no-root (`tooling:1000`)
-- ✅ Tags fijos (no `latest`)
-- ✅ Healthcheck incluido
-- ✅ Imagen base Alpine (mínima)
+- âœ… Usuario no-root (`tooling:1000`)
+- âœ… Tags fijos (no `latest`)
+- âœ… Healthcheck incluido
+- âœ… Imagen base Alpine (mÃ­nima)
 
 **Build:**
 
@@ -79,28 +79,28 @@ make tooling-build
 
 ### 2. Validation Script
 
-**Ubicación:** `tooling/scripts/validate.sh`
+**UbicaciÃ³n:** `tooling/scripts/validate.sh`
 
 **Validaciones ejecutadas:**
 
-| Validación | Herramienta | Descripción |
+| ValidaciÃ³n | Herramienta | DescripciÃ³n |
 | :--- | :--- | :--- |
 | Terraform Format | `terraform fmt -check` | Verifica formato de archivos .tf |
-| Terraform Validate | `terraform validate` | Valida sintaxis y configuración |
+| Terraform Validate | `terraform validate` | Valida sintaxis y configuraciÃ³n |
 | YAML Lint | `yamllint` | Valida sintaxis YAML |
 | Markdown Lint | `markdownlint` | Valida formato Markdown |
 | Security Scan | `checkov` | Escanea IaC por problemas de seguridad |
 
-**Códigos de salida:**
+**CÃ³digos de salida:**
 
 - `0`: Todas las validaciones pasaron
-- `1`: Al menos una validación falló
+- `1`: Al menos una validaciÃ³n fallÃ³
 
 ---
 
 ### 3. Makefile
 
-**Ubicación:** `Makefile` (raíz del proyecto)
+**UbicaciÃ³n:** `Makefile` (raÃ­z del proyecto)
 
 **Comandos principales:**
 
@@ -114,8 +114,8 @@ make k8s-clean            # Limpia recursos K8s
 make k8s-delete-cluster    # Elimina cluster kind
 ```
 
-#### Uso Práctico:
-El `Makefile` actúa como la **interfaz unificada** del proyecto. No necesitas recordar comandos complejos de Docker o kubectl; `make` abstrae la complejidad, permitiendo que cualquier ingeniero sea productivo desde el minuto uno.
+#### Uso PrÃ¡ctico:
+El `Makefile` actÃºa como la **interfaz unificada** del proyecto. No necesitas recordar comandos complejos de Docker o kubectl; `make` abstrae la complejidad, permitiendo que cualquier ingeniero sea productivo desde el minuto uno.
 
 ---
 
@@ -137,23 +137,23 @@ El `Makefile` actúa como la **interfaz unificada** del proyecto. No necesitas r
 .\hub.ps1 help
 ```
 
-#### ¿Por qué un Hub CLI?
-A diferencia del `Makefile`, los scripts `hub.sh` y `hub.ps1` ofrecen una lógica más dinámica para la **gestión de múltiples proyectos** dentro del monorepo. Detectan automáticamente directorios, validan pre-requisitos y ofrecen una experiencia consistente tanto en entornos Windows como POSIX.
+#### Â¿Por quÃ© un Hub CLI?
+A diferencia del `Makefile`, los scripts `hub.sh` y `hub.ps1` ofrecen una lÃ³gica mÃ¡s dinÃ¡mica para la **gestiÃ³n de mÃºltiples proyectos** dentro del monorepo. Detectan automÃ¡ticamente directorios, validan pre-requisitos y ofrecen una experiencia consistente tanto en entornos Windows como POSIX.
 
 ---
 
 ### 5. Kubernetes Demo
 
-**Ubicación:** `k8s/tooling-job/`
+**UbicaciÃ³n:** `k8s/tooling-job/`
 
 **Recursos:**
 
 - `namespace.yaml`: Namespace `tooling-demo`
 - `job.yaml`: Job que ejecuta validaciones
 - `networkpolicy.yaml`: NetworkPolicy restrictiva
-- `kustomization.yaml`: Configuración Kustomize
+- `kustomization.yaml`: ConfiguraciÃ³n Kustomize
 
-**Características de seguridad:**
+**CaracterÃ­sticas de seguridad:**
 
 ```yaml
 securityContext:
@@ -200,7 +200,7 @@ make security-scan
 # 1. Crear cluster kind (si no existe)
 kind create cluster --name proyectos-aws
 
-# 2. Desplegar job de validación
+# 2. Desplegar job de validaciÃ³n
 make k8s-demo
 
 # 3. Ver logs del job
@@ -231,10 +231,10 @@ make tooling-build
 **Resultado esperado:**
 
 ```text
-✅ Imagen construida: proyectos-aws/tooling:1.0.0
+âœ… Imagen construida: proyectos-aws/tooling:1.0.0
 ```
 
-**Verificación:**
+**VerificaciÃ³n:**
 
 ```bash
 docker images | grep proyectos-aws/tooling
@@ -242,7 +242,7 @@ docker images | grep proyectos-aws/tooling
 
 ---
 
-### Test 2: Validación Local
+### Test 2: ValidaciÃ³n Local
 
 **Objetivo:** Ejecutar validaciones en el repositorio
 
@@ -253,19 +253,19 @@ make tooling-validate
 **Resultado esperado:**
 
 ```text
-🔍 Iniciando validación de tooling
+ðŸ” Iniciando validaciÃ³n de tooling
 ==========================================
 
-📋 Validando archivos Terraform...
-✓ Terraform format check
+ðŸ“‹ Validando archivos Terraform...
+âœ“ Terraform format check
 
-📋 Validando archivos YAML...
-✓ YAML lint check
+ðŸ“‹ Validando archivos YAML...
+âœ“ YAML lint check
 
-📋 Validando archivos Markdown...
-✓ Markdown lint check
+ðŸ“‹ Validando archivos Markdown...
+âœ“ Markdown lint check
 
-✅ Validación EXITOSA
+âœ… ValidaciÃ³n EXITOSA
 ```
 
 ---
@@ -285,19 +285,19 @@ make tooling-validate
 **Resultado esperado:**
 
 ```text
-📂 Proyectos AWS encontrados:
+ðŸ“‚ Proyectos AWS encontrados:
 
-  ▸ aws-amplify-mi-sitio-1 (XX archivos)
-  ▸ aws-s3-scrum-mi-sitio-1 (XX archivos)
+  â–¸ aws-amplify-mi-sitio-1 (XX archivos)
+  â–¸ aws-s3-scrum-mi-sitio-1 (XX archivos)
 
-✅ Total: 2 proyecto(s)
+âœ… Total: 2 proyecto(s)
 ```
 
 ---
 
 ### Test 4: Hub CLI - Validate
 
-**Objetivo:** Ejecutar validaciones vía Hub CLI
+**Objetivo:** Ejecutar validaciones vÃ­a Hub CLI
 
 ```bash
 # Linux/Mac
@@ -311,13 +311,13 @@ make tooling-validate
 
 - Construye imagen si no existe
 - Ejecuta `make tooling-validate`
-- Muestra resultados de validación
+- Muestra resultados de validaciÃ³n
 
 ---
 
 ### Test 5: Security Scan (Pre-commit)
 
-**Objetivo:** Verificar detección de secretos
+**Objetivo:** Verificar detecciÃ³n de secretos
 
 ```bash
 # Instalar pre-commit
@@ -348,7 +348,7 @@ trailing-whitespace......................................................Passed
 **Prerequisitos:**
 
 ```bash
-# Instalar kind (si no está instalado)
+# Instalar kind (si no estÃ¡ instalado)
 # Linux/Mac:
 curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
 chmod +x ./kind
@@ -358,7 +358,7 @@ sudo mv ./kind /usr/local/bin/kind
 choco install kind
 ```
 
-**Ejecución:**
+**EjecuciÃ³n:**
 
 ```bash
 # 1. Desplegar demo
@@ -438,15 +438,15 @@ rm test-secret.txt
 
 ## Troubleshooting
 
-### Problema: Docker no está corriendo
+### Problema: Docker no estÃ¡ corriendo
 
-**Síntoma:**
+**SÃ­ntoma:**
 
 ```text
-❌ Error: Docker no está corriendo
+âŒ Error: Docker no estÃ¡ corriendo
 ```
 
-**Solución:**
+**SoluciÃ³n:**
 
 ```bash
 # Linux
@@ -463,13 +463,13 @@ sudo systemctl start docker
 
 ### Problema: Imagen de tooling no encontrada
 
-**Síntoma:**
+**SÃ­ntoma:**
 
 ```text
-⚠️  Imagen de tooling no encontrada
+âš ï¸  Imagen de tooling no encontrada
 ```
 
-**Solución:**
+**SoluciÃ³n:**
 
 ```bash
 make tooling-build
@@ -479,13 +479,13 @@ make tooling-build
 
 ### Problema: kind no instalado
 
-**Síntoma:**
+**SÃ­ntoma:**
 
 ```text
-⚠️  kind no instalado
+âš ï¸  kind no instalado
 ```
 
-**Solución:**
+**SoluciÃ³n:**
 
 ```bash
 # Linux/Mac
@@ -504,11 +504,11 @@ scoop install kind
 
 ### Problema: Pre-commit hooks no se ejecutan
 
-**Síntoma:**
+**SÃ­ntoma:**
 
 Los commits se realizan sin ejecutar validaciones
 
-**Solución:**
+**SoluciÃ³n:**
 
 ```bash
 # Instalar pre-commit
@@ -517,7 +517,7 @@ pip install pre-commit
 # Instalar hooks en el repositorio
 pre-commit install
 
-# Verificar instalación
+# Verificar instalaciÃ³n
 pre-commit run --all-files
 ```
 
@@ -525,20 +525,20 @@ pre-commit run --all-files
 
 ### Problema: Terraform validate falla
 
-**Síntoma:**
+**SÃ­ntoma:**
 
 ```text
-✗ Terraform validate: /workspace/some-dir
+âœ— Terraform validate: /workspace/some-dir
 ```
 
-**Solución:**
+**SoluciÃ³n:**
 
 ```bash
 # Inicializar Terraform en el directorio
 cd some-dir
 terraform init -backend=false
 
-# Volver a ejecutar validación
+# Volver a ejecutar validaciÃ³n
 make tooling-validate
 ```
 
@@ -546,13 +546,13 @@ make tooling-validate
 
 ### Problema: Permisos en hub.sh (Linux/Mac)
 
-**Síntoma:**
+**SÃ­ntoma:**
 
 ```text
 bash: ./hub.sh: Permission denied
 ```
 
-**Solución:**
+**SoluciÃ³n:**
 
 ```bash
 chmod +x hub.sh
@@ -561,7 +561,7 @@ chmod +x hub.sh
 
 ---
 
-## 📚 Referencias
+## ðŸ“š Referencias
 
 - [Docker Best Practices](https://docs.docker.com/develop/dev-best-practices/)
 - [Kubernetes Security Context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
@@ -571,16 +571,16 @@ chmod +x hub.sh
 
 ---
 
-## 🤝 Contribuciones
+## ðŸ¤ Contribuciones
 
 Para contribuir al tooling:
 
-1. Asegurar que pre-commit hooks están instalados
+1. Asegurar que pre-commit hooks estÃ¡n instalados
 2. Ejecutar `make tooling-validate` antes de commit
 3. Verificar que los tests pasan
-4. Actualizar documentación si es necesario
+4. Actualizar documentaciÃ³n si es necesario
 
 ---
 
-**Última actualización:** 2026-02-04  
-**Versión:** 1.0.0
+**Ãšltima actualizaciÃ³n:** 2026-02-04
+**VersiÃ³n:** 1.0.0
