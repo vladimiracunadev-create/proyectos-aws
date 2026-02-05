@@ -9,7 +9,7 @@ spec:
   # Job configuration
   backoffLimit: 2
   ttlSecondsAfterFinished: 3600  # Limpia el job después de 1 hora
-  
+
   template:
     metadata:
       labels:
@@ -17,7 +17,7 @@ spec:
         job-name: tooling-validate
     spec:
       restartPolicy: Never
-      
+
       # Security: Run as non-root user
       securityContext:
         runAsNonRoot: true
@@ -26,43 +26,43 @@ spec:
         fsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
-      
+
       containers:
-      - name: validator
-        image: proyectos-aws/tooling:1.0.0
-        imagePullPolicy: IfNotPresent
-        
-        command: ["/opt/tooling/scripts/validate.sh"]
-        
-        # Security Context para el contenedor
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          runAsUser: 1000
-          capabilities:
-            drop:
-              - ALL
-        
-        # Resource limits para prevenir abuso
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-        
-        # Volume mounts (read-only para seguridad)
-        volumeMounts:
-        - name: workspace
-          mountPath: /workspace
-          readOnly: true
-        - name: tmp
-          mountPath: /tmp
-      
+        - name: validator
+          image: proyectos-aws/tooling:1.0.0
+          imagePullPolicy: IfNotPresent
+
+          command: ["/opt/tooling/scripts/validate.sh"]
+
+          # Security Context para el contenedor
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            capabilities:
+              drop:
+                - ALL
+
+          # Resource limits para prevenir abuso
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+
+          # Volume mounts (read-only para seguridad)
+          volumeMounts:
+            - name: workspace
+              mountPath: /workspace
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+
       volumes:
-      - name: workspace
-        emptyDir: {}  # En demo usamos emptyDir, en prod sería un ConfigMap o PV
-      - name: tmp
-        emptyDir: {}
+        - name: workspace
+          emptyDir: {}  # En demo usamos emptyDir, en prod sería un ConfigMap o PV
+        - name: tmp
+          emptyDir: {}
