@@ -34,7 +34,6 @@ jobs:
   dependency-scan:
     name: Dependency Scanning
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
     
     steps:
       - name: Checkout code
@@ -65,7 +64,6 @@ jobs:
       - name: Run detect-secrets
         run: |
           detect-secrets scan --baseline .secrets.baseline
-          detect-secrets audit .secrets.baseline
 
   markdown-lint:
     name: Markdown Lint
