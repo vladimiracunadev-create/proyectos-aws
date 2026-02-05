@@ -1,18 +1,19 @@
-﻿# Bienvenido a la Wiki de Proyectos AWS ðŸš€âœ¨
+﻿# Bienvenido a la Wiki de Proyectos AWS 🚀✨
 
-Esta Wiki contiene la documentaciÃ³n tÃ©cnica detallada y las guÃ­as de uso para el ecosistema de **Cloud Portfolio**.
+Esta Wiki contiene la documentación técnica detallada y las guías de uso para el ecosistema de **Cloud Portfolio**.
 
-## ðŸ§­ Secciones Principales
+## 🧭 Secciones Principales
 
-- [ðŸ‘¨â€ðŸ’¼ GuÃ­a para Reclutadores](Recruiter-Guide) - Resumen de valor de negocio y excelencia tÃ©cnica.
-- [ðŸ—ï¸ Arquitectura de CI/CD](CI-CD-Architecture) - Detalles de los workflows de automatizaciÃ³n.
-- [ðŸ› ï¸ GuÃ­a de Tooling](Tooling-Guide) - CÃ³mo usar Docker, Kubernetes y el Hub CLI.
-- [ðŸ”’ PolÃ­tica de Seguridad](Security-Policy) - Nuestras prÃ¡cticas de seguridad y reporte de vulnerabilidades.
-- [ðŸ“‹ Checklist de Seguridad](Security-Checklist) - AuditorÃ­a detallada de las capas de seguridad implementadas.
-- [âŒ PrÃ¡cticas Prohibidas](Killed-Practices) - Lo que NO hacemos y por quÃ©.
+- [👨‍💼 Guía para Reclutadores](Recruiter-Guide) - Resumen de valor de negocio y excelencia técnica.
+- [🔰 Manual para Novatos](Manual-Novatos) - Conceptos de Cloud y CI/CD explicados para todos.
+- [🏗️ Arquitectura de CI/CD](CI-CD-Architecture) - Detalles de los workflows de automatización.
+- [🛠️ Guía de Tooling](Tooling-Guide) - Cómo usar Docker, Kubernetes y el Hub CLI.
+- [🔒 Política de Seguridad](Security-Policy) - Nuestras prácticas de seguridad y reporte de vulnerabilidades.
+- [📋 Checklist de Seguridad](Security-Checklist) - Auditoría detallada de las capas de seguridad implementadas.
+- [❌ Prácticas Prohibidas](Killed-Practices) - Lo que NO hacemos y por qué.
 
-## ðŸš€ Flujo de Trabajo
-Todo cambio en la carpeta `docs/wiki/` del repositorio principal se sincroniza automÃ¡ticamente con esta Wiki.
+## 🚀 Flujo de Trabajo
+Todo cambio en la carpeta `docs/wiki/` del repositorio principal se sincroniza automáticamente con esta Wiki.
 
 ---
-*Mantenido por el equipo de ingenierÃ­a de Proyectos AWS.*
+*Mantenido por el equipo de ingeniería de Proyectos AWS.*

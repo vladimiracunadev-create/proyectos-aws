@@ -14,6 +14,15 @@
 
 ---
 
+## 🧭 ¿Por dónde empezar? (Elige tu camino)
+
+| Si eres... | Te recomendamos leer... | ¿Qué aprenderás? |
+| :--- | :--- | :--- |
+| **💼 Reclutador / Manager** | [**Guía Estratégica**](docs/wiki/Recruiter-Guide.md) | Valor de negocio, seguridad y madurez técnica. |
+| **🔰 Novato / Estudiante** | [**Manual para Novatos**](docs/wiki/Manual-Novatos.md) | Conceptos básicos de Cloud y CI/CD con analogías. |
+| **💻 Desarrollador / DevOps** | [**Guía de Tooling**](docs/wiki/Tooling-Guide.md) | Uso del Hub CLI, Docker, K8s y validaciones. |
+| **🔒 Experto en Seguridad** | [**Política de Seguridad**](SECURITY.md) | Detalles de SAST, Secret Scanning y OIDC. |
+
 ## 🌐 Demos en Vivo
 
 ### 1) AWS S3 + GitHub Actions (Deploy Automatizado)
