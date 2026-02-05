@@ -110,9 +110,12 @@ make tooling-build         # Construye imagen Docker
 make tooling-validate      # Ejecuta validaciones
 make tooling-shell         # Shell interactivo
 make security-scan         # Escaneo de secretos
-make k8s-demo             # Demo en Kubernetes
 make k8s-clean            # Limpia recursos K8s
+make k8s-delete-cluster    # Elimina cluster kind
 ```
+
+#### Uso Práctico:
+El `Makefile` actúa como la **interfaz unificada** del proyecto. No necesitas recordar comandos complejos de Docker o kubectl; `make` abstrae la complejidad, permitiendo que cualquier ingeniero sea productivo desde el minuto uno.
 
 ---
 
@@ -131,11 +134,11 @@ make k8s-clean            # Limpia recursos K8s
 ./hub.sh validate          # Ejecuta validaciones
 ./hub.sh help              # Muestra ayuda
 
-# Windows PowerShell
-.\hub.ps1 list-projects
-.\hub.ps1 validate
 .\hub.ps1 help
 ```
+
+#### ¿Por qué un Hub CLI?
+A diferencia del `Makefile`, los scripts `hub.sh` y `hub.ps1` ofrecen una lógica más dinámica para la **gestión de múltiples proyectos** dentro del monorepo. Detectan automáticamente directorios, validan pre-requisitos y ofrecen una experiencia consistente tanto en entornos Windows como POSIX.
 
 ---
 

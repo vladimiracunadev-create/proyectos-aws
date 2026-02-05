@@ -4,10 +4,11 @@ Esta Wiki contiene la documentación técnica detallada y las guías de uso para
 
 ## 🧭 Secciones Principales
 
-- [👨‍💼 Guía para Reclutadores](Recruiter-Guide.md) - Resumen de valor de negocio y excelencia técnica.
+- [👨‍💼 Guía para Reclutadores](Recruiter-Guide) - Resumen de valor de negocio y excelencia técnica.
+- [🏗️ Arquitectura de CI/CD](CI-CD-Architecture) - Detalles de los workflows de automatización.
 - [🛠️ Guía de Tooling](Tooling-Guide) - Cómo usar Docker, Kubernetes y el Hub CLI.
-- [🔒 Política de Seguridad](Security-Policy.md) - Nuestras prácticas de seguridad y reporte de vulnerabilidades.
-- [📋 Checklist de Seguridad](Security-Checklist.md) - Auditoría detallada de las capas de seguridad implementadas.
+- [🔒 Política de Seguridad](Security-Policy) - Nuestras prácticas de seguridad y reporte de vulnerabilidades.
+- [📋 Checklist de Seguridad](Security-Checklist) - Auditoría detallada de las capas de seguridad implementadas.
 - [❌ Prácticas Prohibidas](Killed-Practices.md) - Lo que NO hacemos y por qué.
 
 ## 🚀 Flujo de Trabajo

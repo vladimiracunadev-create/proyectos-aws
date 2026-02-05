@@ -2,11 +2,11 @@
 
 Este repositorio no es solo una colección de archivos; es un **ecosistema de ingeniería** diseñado para demostrar cómo manejo entornos de producción reales, seguridad y escalabilidad.
 
-## 🌟 Valor de Negocio
+## 🌟 Valor de Negocio y KPIs
 
-1. **Reducción de Riesgos:** Implementación de pipelines de seguridad (SAST, Secret Scanning) que previenen fugas de datos antes de que lleguen a producción.
-2. **Time-to-Market (TTM):** Flujo de trabajo `dev -> PR -> main` automatizado, permitiendo despliegues continuos y confiables en AWS S3 y Amplify.
-3. **Eficiencia de Costos:** Uso de servicios Serverless (S3, Amplify) y orquestación ligera con Kubernetes para optimizar recursos.
+1. **Reducción de Riesgos (Security First):** Implementación de pipelines de seguridad (SAST, Secret Scanning) que previenen fugas de datos. *Resultado: 0 secretos expuestos en main.*
+2. **Time-to-Market (Agilidad):** Flujo de trabajo automatizado que reduce el error humano en despliegues. *Resultado: Despliegues en < 3 minutos.*
+3. **Excelencia Operativa:** Documentación as Code y estandarización que facilita el onboarding.
 
 ## 🛠️ Destacados Técnicos
 

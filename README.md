@@ -1,13 +1,16 @@
 # 🚀 Cloud Portfolio: Proyectos AWS (Monorepo)
 
+![Security Scan](https://github.com/vladimiracunadev-create/proyectos-aws/actions/workflows/security-scan.yml/badge.svg)
+![Wiki Sync](https://github.com/vladimiracunadev-create/proyectos-aws/actions/workflows/wiki-sync.yml/badge.svg)
+
 **Monorepo de portafolio con despliegues reales en AWS** para demostrar prácticas modernas de **CI/CD**, separación de **entornos por rama**, y documentación clara de infraestructura.
 
-**TL;DR (30s):**
+## ✨ Características Principales
 
-- ✅ CI/CD real: cambios en Git → despliegue automático (S3 + GitHub Actions / Amplify por ramas)
-- ✅ Trabajo profesional con `dev → PR → main` y trazabilidad completa
-- ✅ Enfoque de portafolio: documentación + demos + estructura profesional
-- 👨‍💼 **Para Reclutadores:** Ver [Guía para Reclutadores](docs/RECRUITER.md) para un resumen del valor de negocio.
+- **✅ CI/CD de Alto Nivel:** Pipeline automatizado que integra S3, Amplify y GitHub Actions con estrategias de despliegue por rama.
+- **✅ Seguridad Multi-capa:** Escaneos SAST, auditoría de secretos (TruffleHog, detect-secrets) y control de dependencias.
+- **✅ Infraestructura Moderna:** Uso de Docker y Kubernetes para herramientas de validación, garantizando portabilidad absoluta.
+- **✅ Documentación Viva:** Wiki automatizada que se sincroniza con el código (`Documentation as Code`).
 
 ---
 
@@ -92,17 +95,19 @@ flowchart LR
 
 ---
 
-## 🔒 Seguridad
+## 🔒 Seguridad (Defense in Depth)
 
-Este repositorio implementa múltiples capas de seguridad:
+Este repositorio implementa un modelo de **Defensa en Profundidad**:
 
-- 🔐 **Pre-commit hooks** con `detect-secrets`
-- 🔍 **GitHub Actions** para secret scanning y dependency scanning
-- 🐳 **Docker** con usuario no-root y tags fijos
-- ☸️ **Kubernetes** con SecurityContext y NetworkPolicy
-- 📋 **Documentación** de prácticas seguras (OIDC, IAM roles)
+| Capa | Herramienta/Práctica | Propósito |
+| :--- | :--- | :--- |
+| **Local** | `pre-commit` | Validaciones rápidas antes de subir código. |
+| **Estática** | `detect-secrets` | Auditoría de secretos accidentalmente commiteados. |
+| **Dinámica** | `TruffleHog` | Verificación de secretos expuestos en el historial. |
+| **Infra** | `K8s NetPol` | Aislamiento de red para trabajos de validación. |
+| **Identidad** | `AWS OIDC` | Eliminación de Access Keys estáticas en CI. |
 
-Ver [SECURITY.md](SECURITY.md) para más detalles.
+Ver [SECURITY.md](SECURITY.md) para la política completa.
 
 ---
 
