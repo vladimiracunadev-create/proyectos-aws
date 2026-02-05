@@ -1,4 +1,4 @@
-# Bienvenido a la Wiki de Proyectos AWS 🚀
+# Bienvenido a la Wiki de Proyectos AWS 🚀✨
 
 Esta Wiki contiene la documentación técnica detallada y las guías de uso para el ecosistema de **Cloud Portfolio**.
 
