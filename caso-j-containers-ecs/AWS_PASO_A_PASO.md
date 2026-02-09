@@ -1,93 +1,81 @@
-# ☁️ Guía Paso a Paso: Despliegue en AWS (Caso J)
+# 🚀 Despliegue en AWS ECS Fargate (Paso a Paso)
 
-Esta guía te llevará de 0 a 100 para desplegar tu aplicación en un entorno profesional de contenedores usando **Amazon ECS (Fargate)** y **Terraform**.
+Este documento detalla el proceso validado para construir, publicar y desplegar la aplicación en AWS ECS usando Terraform y Docker.
 
----
+## 📋 Prerequisitos
 
-## 🛠️ 1. Prerrequisitos
+Antes de comenzar, asegúrate de tener configurado tu entorno:
 
-Asegúrate de tener en tu terminal:
-1.  **AWS CLI** configurado: `aws configure` (con tus credenciales).
-2.  **Terraform** instalado: `terraform version`.
-3.  **Docker** corriendo: `docker ps`.
+1.  **AWS CLI configurado**:
+    Ejecuta `aws configure` e introduce tus credenciales (Access Key, Secret Key, Región `us-east-2`).
+2.  **Permisos IAM**:
+    El usuario debe tener permisos suficientes (ej. `AdministratorAccess` o `PowerUserAccess` + IAMFullAccess) para gestionar VPCs, ECS, ECR y IAM Roles.
 
----
+## 🛠️ 1. Infraestructura como Código (Terraform)
 
-## 🚀 2. Flujo de Trabajo (Automatizado con Make)
+Desplegamos la infraestructura base (VPC, ALB, Cluster ECS, Repositorio ECR).
 
-Hemos creado comandos simples en el `Makefile` de la raíz para que no tengas que memorizar comandos largos.
-
-### Paso A: Crear la Infraestructura (El "Cascarón")
-Primero necesitamos crear el registro de imágenes (ECR), el clúster y el balanceador de carga.
-
-Ejecuta desde la raíz del repositorio:
-
-```bash
-# 1. Inicializar Terraform (descarga plugins)
-make case-j-init
-
-# 2. Crear los recursos en AWS
-make case-j-apply
-```
-*(Escribe `yes` cuando se te pida confirmar).*
-
-> **¿Qué acaba de pasar?**
-> Terraform creó:
-> *   Un repositorio **ECR** privado para tus imágenes.
-> *   Un **ALB (Load Balancer)** público para recibir internet.
-> *   Un **Cluster ECS Fargate** listo para correr contenedores.
-
----
-
-### Paso B: Construir y Subir tu Aplicación
-Ahora que la infraestructura existe, subimos tu código como una imagen Docker.
-
-```bash
-# 3. Autenticarse en ECR (usa tus credenciales de AWS locales)
-make docker-login
-
-# 4. Construir y Subir la imagen
-make docker-push
+```powershell
+cd terraform
+terraform init
+terraform apply -auto-approve
 ```
 
-> **¿Qué acaba de pasar?**
-> *   Se construyó `vladimir-api:latest`.
-> *   Se etiquetó con la URL de tu repositorio ECR.
-> *   Se subió a la nube de AWS.
+> **Nota:** Al finalizar, Terraform mostrará los `Outputs` importantes:
+>
+> *   `alb_dns_name`: URL pública de la aplicación.
+> *   `ecr_repository_url`: URL del repositorio de imágenes Docker.
+
+## 🐳 2. Construcción y Publicación de la Imagen Docker
+
+Una vez creada la infraestructura, debemos subir nuestra aplicación al registro (ECR).
+
+1.  **Autenticarse en ECR:**
+    ```powershell
+    aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin <TU_CUENTA_ID>.dkr.ecr.us-east-2.amazonaws.com
+    ```
+    *(Reemplaza `<TU_CUENTA_ID>` con tu ID de cuenta AWS, ej: `689978033715`)*
+
+2.  **Construir la imagen:**
+    Asegúrate de estar en la raíz de la carpeta `caso-j-containers-ecs`.
+    ```powershell
+    docker build -t vladimir-case-j-repo .
+    ```
+
+3.  **Etiquetar la imagen:**
+    ```powershell
+    docker tag vladimir-case-j-repo:latest <ECR_REPOSITORY_URL>:latest
+    ```
+
+4.  **Subir la imagen (Push):**
+    ```powershell
+    docker push <ECR_REPOSITORY_URL>:latest
+    ```
+
+## 🔄 3. Actualizar el Servicio ECS
+
+Si el servicio ya estaba corriendo (pero fallando por falta de imagen), forzamos una nueva actualización para que descargue la imagen recién subida:
+
+```powershell
+aws ecs update-service --cluster vladimir-case-j-cluster --service vladimir-case-j-service --force-new-deployment --region us-east-2
+```
+
+## ✅ 4. Verificación
+
+Espera unos minutos a que el servicio se estabilice (estado RUNNING). Luego accede a la URL del ALB:
+
+👉 **[http://vladimir-case-j-alb-683413891.us-east-2.elb.amazonaws.com](http://vladimir-case-j-alb-683413891.us-east-2.elb.amazonaws.com)**
 
 ---
 
-### Paso C: Actualizar el Servicio (Opcional la primera vez)
-Si es la primera vez, el servicio de ECS esperará a que la imagen exista. Si ya habías desplegado y solo subiste una nueva versión del código, a veces es necesario forzar un nuevo despliegue:
+## 🐛 Solución de Problemas Comunes
 
-```bash
-make case-j-apply
-```
-*(Esto refresca el estado y asegura que el servicio esté corriendo con la configuración deseada).*
-
----
-
-## 👀 3. Verificación y Uso
-
-Tu aplicación ya debería estar corriendo detrás del Balanceador de Carga.
-
-**Obtener la URL:**
-```bash
-cd caso-j-containers-ecs/terraform && terraform output alb_dns_name
-```
-
-Copia esa dirección (ej: `vladimir-case-j-alb-12345.us-east-2.elb.amazonaws.com`) y pégala en tu navegador. 
-¡Deberías ver el mensaje de "Hola Vladimir"!
-
----
-
-## 🧹 4. Limpieza (IMPORTANTE)
-
-Los recursos de este laboratorio (ALB y Fargate) **cuestan dinero** si los dejas encendidos. Cuando termines tu sesión de estudio:
-
-```bash
-make case-j-destroy
-```
-*(Confirma con `yes`).*
-
-Esto eliminará el Balanceador, el Clúster y el Repositorio, deteniendo cualquier costo.
+*   **Error `npm ci` en Docker build:**
+    *   Causa: Falta de `package-lock.json`.
+    *   Solución: Generarlo localmente con `npm install --package-lock-only` y subirlo al repo.
+*   **Error `UnauthorizedOperation` en Terraform:**
+    *   Causa: Usuario IAM sin permisos.
+    *   Solución: Adjuntar política `AdministratorAccess` al usuario en consola AWS.
+*   **Error `push access denied`:**
+    *   Causa: Token de autenticación de Docker expirado o inexistente.
+    *   Solución: Volver a ejecutar el comando `aws ecr get-login-password | docker login ...`.

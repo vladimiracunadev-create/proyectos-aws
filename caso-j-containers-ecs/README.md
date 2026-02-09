@@ -12,8 +12,13 @@ Portabilidad absoluta. Aprenderás a escribir Dockerfiles eficientes, gestionar 
 
 ## 🛠️ Stack Tecnológico
 - **Docker**: Motor de contenedores.
-- **Amazon ECR**: Almacén privado de imágenes.
-- **Amazon ECS**: Orquestador serverless (Fargate).
+- **Estado**: ✅ COMPLETADO
+- **Nivel**: Intermedio-Avanzado
+- **Tiempo estimado**: 45-60 minutos
+- **Tecnologías**: Docker, AWS ECS (Fargate), AWS ECR, Terraform
+
+## 🔗 Ver Demo en Vivo
+[Aplicación Desplegada en ECS](http://vladimir-case-j-alb-683413891.us-east-2.elb.amazonaws.com/)
 
 ## 🚀 Uso rápido
 ```bash
