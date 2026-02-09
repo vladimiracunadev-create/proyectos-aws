@@ -1,126 +1,93 @@
-# Guía de Despliegue: Docker + ECS Fargate + ECR (Stack Industrial)
+# ☁️ Guía Paso a Paso: Despliegue en AWS (Caso J)
 
-Esta guía detalla paso a paso cómo desplegar la aplicación contenedorizada en AWS utilizando CloudFormation.
-
-## Prerrequisitos
-
-1.  **AWS CLI** instalado y configurado (`aws configure`).
-2.  **Docker** instalado y corriendo.
-3.  Permisos en AWS para crear VPC, ECR, ECS e IAM Roles.
+Esta guía te llevará de 0 a 100 para desplegar tu aplicación en un entorno profesional de contenedores usando **Amazon ECS (Fargate)** y **Terraform**.
 
 ---
 
-## Estrategia de Despliegue
+## 🛠️ 1. Prerrequisitos
 
-Utilizaremos una estrategia de **"Infraestructura Primero"** para asegurar la consistencia:
-
-1.  Desplegar Infraestructura (Redes + Repo + Cluster) sin tareas activas.
-2.  Construir y subir la imagen Docker al repo creado.
-3.  Actualizar el Servicio para desplegar la aplicación.
-
----
-
-## 1. Despliegue de Infraestructura Base
-
-Ejecuta el siguiente comando para crear la infraestructura. Nótese `ServiceDesiredCount=0` para evitar que ECS intente arrancar tareas sin imagen.
-
-```bash
-aws cloudformation deploy \
-  --template-file ecs-fargate-stack.yml \
-  --stack-name caso-j-stack \
-  --capabilities CAPABILITY_NAMED_IAM \
-  --parameter-overrides AppName=caso-j-app Environment=dev ServiceDesiredCount=0
-```
-
-*Espera a que termine (aprox. 3-5 minutos).*
-
-Obtén la URI del repositorio ECR creado:
-
-```bash
-aws cloudformation describe-stacks \
-  --stack-name caso-j-stack \
-  --query "Stacks[0].Outputs[?OutputKey=='ECRRepoURI'].OutputValue" \
-  --output text
-```
-
-*Guarda esta URI, la usaremos como `<ECR_URI>`.*
+Asegúrate de tener en tu terminal:
+1.  **AWS CLI** configurado: `aws configure` (con tus credenciales).
+2.  **Terraform** instalado: `terraform version`.
+3.  **Docker** corriendo: `docker ps`.
 
 ---
 
-## 2. Construcción y Publicación de Imagen
+## 🚀 2. Flujo de Trabajo (Automatizado con Make)
 
-**Login en ECR:**
+Hemos creado comandos simples en el `Makefile` de la raíz para que no tengas que memorizar comandos largos.
 
-```bash
-aws ecr get-login-password --region <TU_REGION> | docker login --username AWS --password-stdin <ECR_URI>
-```
-*(Nota: usa solo el dominio, ej: `123456789012.dkr.ecr.us-east-1.amazonaws.com`)*
+### Paso A: Crear la Infraestructura (El "Cascarón")
+Primero necesitamos crear el registro de imágenes (ECR), el clúster y el balanceador de carga.
 
-**Docker Build & Push:**
+Ejecuta desde la raíz del repositorio:
 
 ```bash
-# Construir imagen (usa el Dockerfile multi-stage optimizado)
-docker build -t caso-j-app:latest .
+# 1. Inicializar Terraform (descarga plugins)
+make case-j-init
 
-# Etiquetar con la URI del repo remoto
-docker tag caso-j-app:latest <ECR_URI>:latest
-
-# Subir imagen
-docker push <ECR_URI>:latest
+# 2. Crear los recursos en AWS
+make case-j-apply
 ```
+*(Escribe `yes` cuando se te pida confirmar).*
+
+> **¿Qué acaba de pasar?**
+> Terraform creó:
+> *   Un repositorio **ECR** privado para tus imágenes.
+> *   Un **ALB (Load Balancer)** público para recibir internet.
+> *   Un **Cluster ECS Fargate** listo para correr contenedores.
 
 ---
 
-## 3. Activar el Servicio
-
-Ahora que la imagen está en el repositorio, actualizamos el stack para que ECS lance 1 tarea (podrías poner 2 o más para alta disponibilidad).
+### Paso B: Construir y Subir tu Aplicación
+Ahora que la infraestructura existe, subimos tu código como una imagen Docker.
 
 ```bash
-aws cloudformation deploy \
-  --template-file ecs-fargate-stack.yml \
-  --stack-name caso-j-stack \
-  --capabilities CAPABILITY_NAMED_IAM \
-  --parameter-overrides AppName=caso-j-app Environment=dev ServiceDesiredCount=1
+# 3. Autenticarse en ECR (usa tus credenciales de AWS locales)
+make docker-login
+
+# 4. Construir y Subir la imagen
+make docker-push
 ```
+
+> **¿Qué acaba de pasar?**
+> *   Se construyó `vladimir-api:latest`.
+> *   Se etiquetó con la URL de tu repositorio ECR.
+> *   Se subió a la nube de AWS.
 
 ---
 
-## 4. Verificación
-
-Obtén la URL pública del Load Balancer:
+### Paso C: Actualizar el Servicio (Opcional la primera vez)
+Si es la primera vez, el servicio de ECS esperará a que la imagen exista. Si ya habías desplegado y solo subiste una nueva versión del código, a veces es necesario forzar un nuevo despliegue:
 
 ```bash
-aws cloudformation describe-stacks \
-  --stack-name caso-j-stack \
-  --query "Stacks[0].Outputs[?OutputKey=='LoadBalancerDNS'].OutputValue" \
-  --output text
+make case-j-apply
 ```
-
-Abre esa URL en tu navegador. Deberías ver el mensaje de éxito de la API.
+*(Esto refresca el estado y asegura que el servicio esté corriendo con la configuración deseada).*
 
 ---
 
-## Paridad Local (Desarrollo)
+## 👀 3. Verificación y Uso
 
-Para probar exactamente lo mismo en tu máquina:
+Tu aplicación ya debería estar corriendo detrás del Balanceador de Carga.
 
+**Obtener la URL:**
 ```bash
-docker-compose up --build
+cd caso-j-containers-ecs/terraform && terraform output alb_dns_name
 ```
 
-Esto levantará el contenedor en `http://localhost:3000` simulando el entorno de producción (mismo Dockerfile, límites de recursos simulados).
+Copia esa dirección (ej: `vladimir-case-j-alb-12345.us-east-2.elb.amazonaws.com`) y pégala en tu navegador. 
+¡Deberías ver el mensaje de "Hola Vladimir"!
 
 ---
 
-## Limpieza
+## 🧹 4. Limpieza (IMPORTANTE)
 
-Para borrar todo y no generar costos:
+Los recursos de este laboratorio (ALB y Fargate) **cuestan dinero** si los dejas encendidos. Cuando termines tu sesión de estudio:
 
-1.  **Vaciar ECR** (CloudFormation no borra repos con imágenes):
-    ```bash
-    aws ecr batch-delete-image --repository-name caso-j-app-dev --image-ids imageTag=latest
-    ```
-2.  **Borrar Stack**:
-    ```bash
-    aws cloudformation delete-stack --stack-name caso-j-stack
-    ```
+```bash
+make case-j-destroy
+```
+*(Confirma con `yes`).*
+
+Esto eliminará el Balanceador, el Clúster y el Repositorio, deteniendo cualquier costo.
