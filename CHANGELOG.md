@@ -3,6 +3,13 @@
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato seguirá [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) y este proyecto utiliza [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-02-09
+### Added
+- **Caso J**: Finalización del módulo de Dockerización con ECS Fargate.
+    - Despliegue automatizado de infraestructura con Terraform.
+    - Pipeline manual documentado para Build, Tag & Push a ECR.
+    - Documentación exhaustiva `AWS_PASO_A_PASO.md` con bitácora de comandos.
+
 ## [1.1.0] - 2026-01-23
 ### Added
 - **Automatización**: Implementación de `Makefile` raíz para orquestar tareas comunes (install, lint, deploy, security).
