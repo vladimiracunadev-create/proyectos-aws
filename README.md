@@ -103,6 +103,7 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   **Stack**: Docker + ECS Fargate + ECR.
 *   **Enfoque**: **Portabilidad e Isolation.** Empaquetado industrial de apps para que corran igual en local y en la nube. Gestión de registros de imágenes.
 *   ☁️ [Guía Paso a Paso AWS](./caso-j-containers-ecs/AWS_PASO_A_PASO.md)
+*   👉 [Ver Demo en Vivo](#) *(Pendiente de Despliegue)*
 
 #### [📂 Caso K: Kubernetes en AWS (EKS)](./caso-k-kubernetes-eks/) `Nivel 10` `NUEVO`
 *   **Stack**: AWS EKS + YAML + GitLab Kubernetes Agent.
