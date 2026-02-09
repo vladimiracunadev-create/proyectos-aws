@@ -34,6 +34,7 @@ make deploy-b
 
 ## 🔗 Enlaces Relacionados
 - ⬅️ **[Regresar al Roadmap Principal](../README.md)**
-- 📘 **[Guía para Principiantes](../docs/BEGINNERS_GUIDE.md)**
+- 🚀 **[Guía de Instalación](../docs/INSTALL.md)**
+- ☁️ **[Guía Paso a Paso AWS](./AWS_PASO_A_PASO.md)**
 - 🛡️ **[Seguridad IAM](../docs/IAM_SECURITY.md)**
 - 🧪 **[Demos en Vivo](http://vladimir-caso-b-site-2026.s3-website.us-east-2.amazonaws.com/)**

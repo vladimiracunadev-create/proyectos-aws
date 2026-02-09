@@ -35,5 +35,6 @@ sam deploy       # Despliega API + Lambda + DynamoDB
 ## 🔗 Enlaces Relacionados
 - ⬅️ **[Regresar al Roadmap Principal](../README.md)**
 - 🏗️ **[Arquitectura Detallada](../docs/ARCHITECTURE.md)**
-- 📘 **[Guía para Principiantes](../docs/BEGINNERS_GUIDE.md)**
+- 🚀 **[Guía de Instalación](../docs/INSTALL.md)**
+- ☁️ **[Guía Paso a Paso AWS](./AWS_PASO_A_PASO.md)**
 - 🧪 **[Demo Portafolio](https://staging.d3oq987bpa7ls7.amplifyapp.com/)** / **[API Test](https://tc78a6xibg.execute-api.us-east-2.amazonaws.com)**
