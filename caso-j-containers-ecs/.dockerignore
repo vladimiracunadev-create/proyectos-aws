@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log
+Dockerfile
+.dockerignore
+.git
+.gitignore
+README.md
+docker-compose.yml
+ecs-fargate-stack.yml
+AWS_PASO_A_PASO.md
+.env
+.DS_Store
