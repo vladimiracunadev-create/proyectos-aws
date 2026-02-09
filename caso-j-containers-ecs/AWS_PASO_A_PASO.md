@@ -1,19 +1,44 @@
-# 🚀 Despliegue en AWS ECS Fargate (Paso a Paso)
+# 🚀 Despliegue en AWS ECS Fargate: Bitácora Completa de Comandos
 
-Este documento detalla el proceso validado para construir, publicar y desplegar la aplicación en AWS ECS usando Terraform y Docker.
+Este documento registra **exactamente** los comandos y pasos realizados en la consola para desplegar exitosamente el Caso J, incluyendo la resolución de errores comunes encontrados durante el proceso.
 
-## 📋 Prerequisitos
+## 1. Preparación del Entorno Local
 
-Antes de comenzar, asegúrate de tener configurado tu entorno:
+### 1.1 Configuración de Credenciales AWS
+Para permitir que Terraform y Docker interactúen con AWS, configuramos las credenciales del usuario IAM.
 
-1.  **AWS CLI configurado**:
-    Ejecuta `aws configure` e introduce tus credenciales (Access Key, Secret Key, Región `us-east-2`).
-2.  **Permisos IAM**:
-    El usuario debe tener permisos suficientes (ej. `AdministratorAccess` o `PowerUserAccess` + IAMFullAccess) para gestionar VPCs, ECS, ECR y IAM Roles.
+```powershell
+aws configure
+# AWS Access Key ID: [TU_ACCESS_KEY]
+# AWS Secret Access Key: [TU_SECRET_KEY]
+# Default region name: us-east-2
+# Default output format: json
+```
 
-## 🛠️ 1. Infraestructura como Código (Terraform)
+> **Nota:** Si encuentras errores de autorización (`UnauthorizedOperation`), asegúrate de que el usuario IAM tenga adjunta la política `AdministratorAccess` o permisos equivalentes en la consola de AWS.
 
-Desplegamos la infraestructura base (VPC, ALB, Cluster ECS, Repositorio ECR).
+### 1.2 Resolución de Dependencias (npm ci)
+Intentamos construir la imagen Docker, pero falló el comando `npm ci` debido a la falta de `package-lock.json`.
+
+**Error:**
+`npm error The npm ci command can only install with an existing package-lock.json`
+
+**Solución aplicada:**
+Generamos el archivo de bloqueo localmente y lo subimos al repositorio.
+
+```powershell
+# En la carpeta caso-j-containers-ecs
+npm install --package-lock-only
+# (Si falla por políticas de PowerShell, usar: cmd /c "npm install --package-lock-only")
+
+git add package-lock.json
+git commit -m "fix(deps): generate package-lock.json for npm ci"
+git push
+```
+
+## 2. Despliegue de Infraestructura (Terraform)
+
+Creamos la red (VPC), el balanceador de carga (ALB), el clúster ECS y el repositorio ECR.
 
 ```powershell
 cd terraform
@@ -21,61 +46,52 @@ terraform init
 terraform apply -auto-approve
 ```
 
-> **Nota:** Al finalizar, Terraform mostrará los `Outputs` importantes:
->
-> *   `alb_dns_name`: URL pública de la aplicación.
-> *   `ecr_repository_url`: URL del repositorio de imágenes Docker.
+**Salida crítica (Outputs):**
+Al finalizar, Terraform nos entregó dos valores clave:
+*   `alb_dns_name`: `vladimir-case-j-alb-683413891.us-east-2.elb.amazonaws.com` (URL pública)
+*   `ecr_repository_url`: `689978033715.dkr.ecr.us-east-2.amazonaws.com/vladimir-case-j-repo` (URL del registro)
 
-## 🐳 2. Construcción y Publicación de la Imagen Docker
+## 3. Construcción y Publicación de la Imagen Docker
 
-Una vez creada la infraestructura, debemos subir nuestra aplicación al registro (ECR).
+### 3.1 Autenticación en ECR
+Docker necesita permiso para subir imágenes a tu cuenta AWS.
 
-1.  **Autenticarse en ECR:**
-    ```powershell
-    aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin <TU_CUENTA_ID>.dkr.ecr.us-east-2.amazonaws.com
-    ```
-    *(Reemplaza `<TU_CUENTA_ID>` con tu ID de cuenta AWS, ej: `689978033715`)*
+```powershell
+# Obtiene el token de login y se lo pasa al cliente Docker
+aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 689978033715.dkr.ecr.us-east-2.amazonaws.com
+```
 
-2.  **Construir la imagen:**
-    Asegúrate de estar en la raíz de la carpeta `caso-j-containers-ecs`.
-    ```powershell
-    docker build -t vladimir-case-j-repo .
-    ```
+> **Error posible:** `push access denied` o `no basic auth credentials`.
+> **Solución:** Ejecutar el comando de login de arriba. El token expira cada 12 horas.
 
-3.  **Etiquetar la imagen:**
-    ```powershell
-    docker tag vladimir-case-j-repo:latest <ECR_REPOSITORY_URL>:latest
-    ```
+### 3.2 Build, Tag & Push
+Volvimos a la carpeta raíz del caso (donde está el `Dockerfile`) y ejecutamos:
 
-4.  **Subir la imagen (Push):**
-    ```powershell
-    docker push <ECR_REPOSITORY_URL>:latest
-    ```
+```powershell
+cd .. # Asegurarse de estar en caso-j-containers-ecs/
 
-## 🔄 3. Actualizar el Servicio ECS
+# 1. Construir la imagen localmente
+docker build -t vladimir-case-j-repo .
 
-Si el servicio ya estaba corriendo (pero fallando por falta de imagen), forzamos una nueva actualización para que descargue la imagen recién subida:
+# 2. Etiquetar la imagen con la URL del repositorio remoto
+docker tag vladimir-case-j-repo:latest 689978033715.dkr.ecr.us-east-2.amazonaws.com/vladimir-case-j-repo:latest
+
+# 3. Subir la imagen a AWS ECR
+docker push 689978033715.dkr.ecr.us-east-2.amazonaws.com/vladimir-case-j-repo:latest
+```
+
+## 4. Actualización del Servicio ECS
+
+Una vez que la imagen estuvo en ECR, forzamos al servicio ECS a actualizarse para descargar la nueva versión.
 
 ```powershell
 aws ecs update-service --cluster vladimir-case-j-cluster --service vladimir-case-j-service --force-new-deployment --region us-east-2
 ```
 
-## ✅ 4. Verificación
+## 5. Validación Final
 
-Espera unos minutos a que el servicio se estabilice (estado RUNNING). Luego accede a la URL del ALB:
+Esperamos unos minutos a que Fargate provisionara la tarea y accedimos a la URL del ALB:
 
-👉 **[http://vladimir-case-j-alb-683413891.us-east-2.elb.amazonaws.com](http://vladimir-case-j-alb-683413891.us-east-2.elb.amazonaws.com)**
+🔗 **[http://vladimir-case-j-alb-683413891.us-east-2.elb.amazonaws.com](http://vladimir-case-j-alb-683413891.us-east-2.elb.amazonaws.com)**
 
----
-
-## 🐛 Solución de Problemas Comunes
-
-*   **Error `npm ci` en Docker build:**
-    *   Causa: Falta de `package-lock.json`.
-    *   Solución: Generarlo localmente con `npm install --package-lock-only` y subirlo al repo.
-*   **Error `UnauthorizedOperation` en Terraform:**
-    *   Causa: Usuario IAM sin permisos.
-    *   Solución: Adjuntar política `AdministratorAccess` al usuario en consola AWS.
-*   **Error `push access denied`:**
-    *   Causa: Token de autenticación de Docker expirado o inexistente.
-    *   Solución: Volver a ejecutar el comando `aws ecr get-login-password | docker login ...`.
+La aplicación respondió correctamente, confirmando el despliegue exitoso.

@@ -99,7 +99,7 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 
 ### 🔴 Nivel 4: Contenedores y Escalamiento Grado Industrial
 
-#### [📂 Caso J: Dockerización de Microservicios](./caso-j-containers-ecs/) `Nivel 9` `NUEVO`
+#### [📂 Caso J: Dockerización de Microservicios](./caso-j-containers-ecs/) `Nivel 9` `COMPLETADO`
 *   **Stack**: Docker + ECS Fargate + ECR.
 *   **Enfoque**: **Portabilidad e Isolation.** Empaquetado industrial de apps para que corran igual en local y en la nube. Gestión de registros de imágenes.
 *   ☁️ [Guía Paso a Paso AWS](./caso-j-containers-ecs/AWS_PASO_A_PASO.md)

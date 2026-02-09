@@ -22,7 +22,20 @@ Portabilidad absoluta. Aprenderás a escribir Dockerfiles eficientes, gestionar 
 
 ## 🚀 Uso rápido
 ```bash
-make docker-build  # Construye la imagen localmente
+# 1. Login en ECR (Token expira en 12h)
+aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 689978033715.dkr.ecr.us-east-2.amazonaws.com
+
+# 2. Construir imagen
+docker build -t vladimir-case-j-repo .
+
+# 3. Etiquetar con URL del registro
+docker tag vladimir-case-j-repo:latest 689978033715.dkr.ecr.us-east-2.amazonaws.com/vladimir-case-j-repo:latest
+
+# 4. Subir imagen
+docker push 689978033715.dkr.ecr.us-east-2.amazonaws.com/vladimir-case-j-repo:latest
+
+# 5. Actualizar servicio (Forzar nuevo despliegue)
+aws ecs update-service --cluster vladimir-case-j-cluster --service vladimir-case-j-service --force-new-deployment --region us-east-2
 ```
 
 ## ☁️ Despliegue en AWS (Terraform)
