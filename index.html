@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
     <meta name="theme-color" content="#4f46e5">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
+
 <body>
     <aside id="sidebar">
         <div class="sidebar-header">
@@ -26,26 +28,40 @@
             </div>
 
             <div class="nav-group">
-                <div class="nav-group-title">Guías Técnicas</div>
+                <div class="nav-group-title">Documentación Avanzada</div>
+                <a href="#docs/INSTALL.md" class="nav-link">Guía de Instalación</a>
+                <a href="#docs/BEGINNERS_GUIDE.md" class="nav-link">Guía Principiantes</a>
                 <a href="#docs/ARCHITECTURE.md" class="nav-link">Arquitectura</a>
                 <a href="#docs/TECHNICAL_SPECS.md" class="nav-link">Especificaciones</a>
-                <a href="#docs/IAM_SECURITY.md" class="nav-link">Seguridad IAM</a>
-                <a href="#docs/SECURITY_CHECKLIST.md" class="nav-link">Checklist Seguridad</a>
                 <a href="#docs/TOOLING.md" class="nav-link">Herramientas</a>
+                <a href="#docs/IAM_SECURITY.md" class="nav-link">Seguridad IAM</a>
+                <a href="#docs/RECRUITER.md" class="nav-link">Para Reclutadores</a>
+                <a href="#wiki/home.md" class="nav-link">Wiki Home</a>
             </div>
 
             <div class="nav-group">
-                <div class="nav-group-title">Wiki & Recursos</div>
-                <a href="#wiki/home.md" class="nav-link">Wiki Home</a>
-                <a href="#docs/RECRUITER.md" class="nav-link">Para Reclutadores</a>
-                <a href="#docs/BEGINNERS_GUIDE.md" class="nav-link">Guía Principiantes</a>
-                <a href="#docs/INSTALL.md" class="nav-link">Instalación</a>
+                <div class="nav-group-title">Casos de Uso (Web)</div>
+                <a href="caso-a-amplify/index.html" class="nav-link">Caso A: Amplify Dashboard</a>
+                <a href="caso-b-gitlab-s3/index.html" class="nav-link">Caso B: GitLab CI/CD</a>
+                <a href="caso-j-containers-ecs/index.html" class="nav-link">Caso J: Containers ECS</a>
+            </div>
+
+            <div class="nav-group">
+                <div class="nav-group-title">Centro de Descargas</div>
+                <a href="caso-a-amplify/caso-a-amplify.zip" class="nav-link" download>
+                    <span>📁 Descargar Caso A (ZIP)</span>
+                </a>
+                <a href="https://github.com/vladimiracunadev-create/proyectos-aws/archive/refs/heads/main.zip"
+                    class="nav-link" target="_blank">
+                    <span>🚀 Repo Completo (.zip)</span>
+                </a>
             </div>
 
             <div class="nav-group pwa-only" id="install-container" style="display: none;">
-                <div class="nav-group-title">Aplicación</div>
-                <button id="btn-install" class="nav-link btn-install-pwa" style="width: 100%; text-align: left; border: none; cursor: pointer;">
-                    <span>✨ Instalar App</span>
+                <div class="nav-group-title">Instalación PWA</div>
+                <button id="btn-install" class="nav-link btn-install-pwa"
+                    style="width: 100%; text-align: left; border: none; cursor: pointer;">
+                    <span>✨ Instalar Aplicación</span>
                 </button>
             </div>
         </nav>
@@ -60,4 +76,5 @@
 
     <script src="assets/js/app.js"></script>
 </body>
+
 </html>

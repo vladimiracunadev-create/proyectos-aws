@@ -4,9 +4,11 @@ const CONFIG = {
     defaultFile: 'README.md'
 };
 
-navLinks: document.querySelectorAll('.nav-link'),
+const elements = {
+    content: document.getElementById('content'),
+    navLinks: document.querySelectorAll('.nav-link'),
     installBtn: document.getElementById('btn-install'),
-        installContainer: document.getElementById('install-container')
+    installContainer: document.getElementById('install-container')
 };
 
 let deferredPrompt;

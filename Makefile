@@ -9,10 +9,18 @@ S3_BUCKET ?= vladimir-caso-b-site-2026
 REGION ?= us-east-2
 TF_DIR = caso-c-terraform-s3
 
-.PHONY: help install lint format deploy-b tf-init tf-plan tf-apply tf-security docker-build k8s-lint clean case-k-init case-k-deploy case-k-destroy
+.PHONY: help install lint format serve upload deploy-b tf-init tf-plan tf-apply tf-security docker-build k8s-lint clean case-k-init case-k-deploy case-k-destroy
 
 help: ## Muestra este mensaje de ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
+
+serve: ## Levanta servidor local en puerto 8000 (requiere Python)
+	@echo "Iniciando servidor en http://localhost:8000..."
+	python -m http.server 8000
+
+upload: ## Sincroniza cambios con el repositorio Git usando Python
+	@echo "Subiendo cambios al repositorio..."
+	python -c "import os; os.system('git add .'); os.system('git commit -m \"Actualización de documentación y portal\"'); os.system('git push')"
 
 docker-build: ## Construye la imagen Docker de la API (Caso J)
 	@echo "Construyendo imagen Docker..."
