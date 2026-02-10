@@ -9,7 +9,7 @@ S3_BUCKET ?= vladimir-caso-b-site-2026
 REGION ?= us-east-2
 TF_DIR = caso-c-terraform-s3
 
-.PHONY: help install lint format deploy-b tf-init tf-plan tf-apply tf-security docker-build k8s-lint clean
+.PHONY: help install lint format deploy-b tf-init tf-plan tf-apply tf-security docker-build k8s-lint clean case-k-init case-k-deploy case-k-destroy
 
 help: ## Muestra este mensaje de ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -87,6 +87,27 @@ docker-push: docker-build ## Etiqueta y sube la imagen a ECR
 	docker tag vladimir-api:latest $(REPO_URL):latest
 	docker push $(REPO_URL):latest
 	@echo "Imagen subida exitosamente!"
+
+# ==========================================
+# CASO K: Kubernetes EKS
+# ==========================================
+TF_K_DIR = caso-k-kubernetes-eks/terraform
+
+case-k-init: ## Inicializa Terraform para el Caso K
+	@echo "Inicializando Terraform en $(TF_K_DIR)..."
+	cd $(TF_K_DIR) && terraform init -reconfigure
+
+case-k-deploy: case-k-init ## Despliega el clúster y la app (ADVERTENCIA: TIENE COSTO)
+	@echo "ADVERTENCIA: Iniciando despliegue de EKS. Costo: $0.10/hr."
+	cd $(TF_K_DIR) && terraform apply -auto-approve
+	aws eks update-kubeconfig --region $(REGION) --name vladimir-eks-cluster
+	kubectl apply -f caso-k-kubernetes-eks/deployment.yaml
+	@echo "Despliegue completado! Verifica la URL del balanceador en la consola AWS."
+
+case-k-destroy: ## 🚨 ELIMINA TODO EL CASO K (EVITA CARGOS EXTRAS)
+	@echo "ELIMINANDO Caso K de forma permanente..."
+	cd $(TF_K_DIR) && terraform destroy -auto-approve
+	@echo "Limpieza completada exitosamente!"
 
 clean: ## Limpia archivos temporales de Node y Terraform
 	@echo "Limpiando el proyecto..."

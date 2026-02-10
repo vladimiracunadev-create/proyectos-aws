@@ -3,7 +3,8 @@
 [![Nivel-10](https://img.shields.io/badge/Nivel-10_Enterprise-blueviolet?style=for-the-badge)]()
 [![Status](https://img.shields.io/badge/Status-Nuevo-blue?style=for-the-badge)]()
 
-Si Docker es el contenedor, Kubernetes es el Capitán que gobierna la flota. Este caso se enfoca en la orquestación real dentro de la infraestructura de **AWS (Elastic Kubernetes Service - EKS)**.
+> [!CAUTION]
+> **ADVERTENCIA DE COSTOS**: EKS no está incluido en el Free Tier de AWS. Este laboratorio tiene un costo aproximado de **$0.10 USD/hora**. Sigue la estrategia de limpieza inmediatamente después de verificar.
 
 ---
 
@@ -12,13 +13,21 @@ Maestría en orquestación. Aprenderás a gestionar clusters reales en la nube, 
 
 ## 🏗️ Stack del Cluster
 - **AWS EKS**: El plano de control avanzado.
-- **Kubectl**: Tu terminal de mando para el cluster.
+- **Kubectl**: Tu terminal de mando para el clúster.
 - **YAML Manifests**: La verdad absoluta del estado deseado.
-- **VPC Networking**: Seguridad y aislamiento a nivel de red AWS.
+- **Terraform**: Infraestructura como Código (VPC, Subnets, EKS).
 
-## 🛠️ Comandos
+## 💰 Gestión de Costos (Opción A)
+Para minimizar el gasto, hemos implementado una estrategia de **"Fast Deploy & Destroy"**:
+1. Desplegar (`make case-k-deploy`)
+2. Validar el funcionamiento.
+3. **Destruir inmediatamente** (`make case-k-destroy`).
+
+## 🛠️ Comandos de Supervivencia
 ```bash
-make k8s-lint      # Valida tus planos de orquestación
+make case-k-init      # Inicializa los planos de infraestructura
+make case-k-deploy    # Levanta el clúster y despliega la app
+make case-k-destroy   # 🚨 BORRA TODO PARA EVITAR CARGOS EXTRAS
 ```
 
 ## 🔗 Enlaces Relacionados
