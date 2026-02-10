@@ -10,6 +10,15 @@ Este monorepo es una suite educativa avanzada diseñada para modernizar y automa
 
 ---
 
+## 🌐 Portal de Documentación (PWA)
+¡Nuevo! Hemos lanzado un portal web interactivo para explorar este repositorio con un diseño moderno y premium (**Glassmorphism**).
+
+*   **Acceso Local**: Abre `index.html` usando un servidor local (ej: `npx serve .`).
+*   **Experiencia PWA**: Instálalo en tu móvil o escritorio para acceso rápido y soporte offline.
+*   **Contraste**: Navega por todas las guías, diagramas y especificaciones de forma dinámica.
+
+---
+
 ## ⚡ Inicio Inmediato (Quick Start)
 
 Este proyecto incluye un **Makefile** para simplificar tus tareas. No necesitas memorizar comandos largos.
