@@ -7,6 +7,17 @@ terraform {
       version = "~> 5.0"
     }
   }
+
+  # -------------------------------------------------------------------
+  # RECOMENDACIÓN DE SEGURIDAD (Backend Remoto)
+  # Descomentar este bloque para guardar el estado en S3 y permitir
+  # trabajo colaborativo real.
+  # -------------------------------------------------------------------
+  # backend "s3" {
+  #   bucket = "vladimir-terraform-state-2026"
+  #   key    = "caso-j/terraform.tfstate"
+  #   region = "us-east-2"
+  # }
 }
 
 provider "aws" {

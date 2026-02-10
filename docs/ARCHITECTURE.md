@@ -42,7 +42,7 @@ A diferencia de los archivos estáticos, el código de aplicaciones empaquetadas
 - **Infraestructura**: Terraform (IaC), AWS SAM, Kubernetes Manifests.
 - **Servicios Cloud**: S3, CloudFront, Lambda, API Gateway, EKS, ECS.
 - **Automatización**: Makefile, GitLab CI/CD, Docker (DevContainers).
-- **Calidad**: ESLint, Prettier, HTMLHint, tfsec.
+- **Calidad**: ESLint, Prettier, HTMLHint, tfsec, gitleaks.
 
 ## 🔐 Estrategia de Seguridad
 1.  **Auditoría Estática**: Escaneo automático de planos de infraestructura antes de cada cambio.

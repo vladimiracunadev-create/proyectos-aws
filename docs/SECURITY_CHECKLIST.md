@@ -35,7 +35,7 @@ cat .gitignore | grep -E "(\.env|\.tfstate|\.pem|\.key)"
 
 | Amenaza | Estado | Mitigación Implementada |
 | :--- | :--- | :--- |
-| Dependencias vulnerables | ✅ Mitigado | GitHub Actions: dependency-review-action |
+| Dependencias vulnerables | ✅ Mitigado | GitLab CI: `npm audit` (high severity) |
 | Imágenes Docker sin tags fijos | ✅ Mitigado | Dockerfile usa versiones específicas |
 | Imágenes base desactualizadas | ✅ Mitigado | Alpine 3.19 (actualizada) |
 | Paquetes sin verificación | ✅ Mitigado | Checksums en instalación (AWS CLI) |
@@ -44,10 +44,10 @@ cat .gitignore | grep -E "(\.env|\.tfstate|\.pem|\.key)"
 
 ```bash
 # Verificar tags fijos en Dockerfile
-grep -E "FROM|ARG.*VERSION" tooling/Dockerfile.tooling
+grep -E "FROM|ARG.*VERSION" caso-j-containers-ecs/Dockerfile
 
-# Verificar workflow de dependency scan
-cat .github/workflows/security-scan.yml | grep dependency-review
+# Verificar job de auditoría
+cat .gitlab-ci.yml | grep "npm audit"
 ```
 
 ---
@@ -56,7 +56,7 @@ cat .github/workflows/security-scan.yml | grep dependency-review
 
 | Amenaza | Estado | Mitigación Implementada |
 | :--- | :--- | :--- |
-| Contenedor corre como root | ✅ Mitigado | USER no-root (tooling:1000) |
+| Contenedor corre como root | ✅ Mitigado | USER no-root (tooling:1000 / node:1000) |
 | Privilegios excesivos | ✅ Mitigado | SecurityContext con capabilities drop ALL |
 | Filesystem escribible | ✅ Mitigado | readOnlyRootFilesystem: true |
 | Sin resource limits | ✅ Mitigado | CPU/Memory limits configurados |
@@ -67,135 +67,31 @@ cat .github/workflows/security-scan.yml | grep dependency-review
 ```bash
 # Verificar usuario no-root
 docker run --rm proyectos-aws/tooling:1.0.0 whoami
-# Debe retornar: tooling (NO root)
-
-# Verificar SecurityContext en K8s
-kubectl get job -n tooling-demo tooling-validate -o yaml | grep -A 10 securityContext
+# Debe retornar: node (NO root)
 ```
 
 ---
 
-### ✅ Kubernetes Security
+### 3. GitLab CI - Security Scan
 
-| Amenaza | Estado | Mitigación Implementada |
-| :--- | :--- | :--- |
-| Pods sin SecurityContext | ✅ Mitigado | runAsNonRoot, runAsUser configurados |
-| Sin resource limits | ✅ Mitigado | requests/limits definidos |
-| Tráfico de red sin restricción | ✅ Mitigado | NetworkPolicy deny-all |
-| Privilege escalation | ✅ Mitigado | allowPrivilegeEscalation: false |
-| Seccomp profile no configurado | ✅ Mitigado | seccompProfile: RuntimeDefault |
-
-**Verificación:**
-
-```bash
-# Verificar Job
-kubectl get job -n tooling-demo tooling-validate -o yaml
-
-# Verificar NetworkPolicy
-kubectl get networkpolicy -n tooling-demo -o yaml
-```
-
----
-
-### ✅ Code Injection & Input Validation
-
-| Amenaza | Estado | Mitigación Implementada |
-| :--- | :--- | :--- |
-| Command injection en scripts | ✅ Mitigado | Scripts usan `set -euo pipefail`, validación de inputs |
-| Path traversal | ✅ Mitigado | Volúmenes montados como read-only |
-| SSRF (Server-Side Request Forgery) | ✅ Mitigado | NetworkPolicy bloquea egress |
-| RCE por inputs | ✅ Mitigado | No hay inputs de usuario sin validar |
-
-**Verificación:**
-
-```bash
-# Verificar scripts con set -euo pipefail
-head -n 5 tooling/scripts/validate.sh hub.sh
-
-# Verificar volúmenes read-only
-grep -A 2 "volumeMounts" k8s/tooling-job/job.yaml
-```
-
----
-
-## 🛡️ Hardening Implementado
-
-### 1. .gitignore Reforzado
-
-✅ **Implementado:** `c:\proyectos-aws\.gitignore`
-
-**Patrones agregados:**
-
-- `*.tfstate`, `*.tfstate.backup`, `.terraform/`
-- `*.pem`, `*.key`, `*.p12`, `*.pfx`
-- `.env*`, `!.env.example`
-- `secrets/`, `credentials/`
-- `.aws/`, `aws-credentials`
-
-**Verificación:**
-
-```bash
-# Contar patrones de seguridad
-grep -c -E "(tfstate|\.pem|\.key|\.env|secrets)" .gitignore
-# Debe retornar: >10
-```
-
----
-
-### 2. Pre-commit Hooks
-
-✅ **Implementado:** `.pre-commit-config.yaml`
-
-**Hooks configurados:**
-
-- `detect-secrets` (Yelp)
-- `check-yaml`, `check-json`
-- `check-merge-conflict`
-- `detect-private-key`
-- `terraform_fmt`, `terraform_validate`
-- `markdownlint`
-
-**Instalación:**
-
-```bash
-pip install pre-commit
-pre-commit install
-```
-
-**Verificación:**
-
-```bash
-pre-commit run --all-files
-```
-
----
-
-### 3. GitHub Actions - Security Scan
-
-✅ **Implementado:** `.github/workflows/security-scan.yml`
+✅ **Implementado:** `.gitlab-ci.yml`
 
 **Jobs configurados:**
 
-- **secret-scan:** TruffleHog
-- **dependency-scan:** dependency-review-action
-- **detect-secrets:** detect-secrets baseline
-- **markdown-lint:** markdownlint
-- **yaml-lint:** yamllint
+- **secret_detection:** gitleaks (escaneo de historial y codebase)
+- **dependency_scan:** npm audit (vulnerabilidades conocidas)
+- **scan_infrastructure:** tfsec (análisis estático de IaC)
 
 **Triggers:**
 
-- Push a `main`, `dev`
-- Pull Requests
-- Schedule semanal (lunes 9 AM UTC)
+- Push a `main`
+- Merge Requests
 
 **Verificación:**
 
 ```bash
-# Ver workflow
-cat .github/workflows/security-scan.yml
-
-# Ejecutar localmente (con act)
-act -l
+# Ver configuración
+cat .gitlab-ci.yml
 ```
 
 ---
