@@ -74,6 +74,28 @@ El proyecto resuelve problemas críticos que enfrentan las empresas modernas al 
 
 ---
 
+## 💰 Estrategia de Costos y Persistencia
+
+Un Ingeniero Cloud Senior no solo construye; optimiza. Esta arquitectura implementa un modelo de **Responsabilidad Compartida y Eficiencia Financiera**:
+
+- **Persistencia Desacoplada**: Los contenedores (ECS) y funciones (Lambda) son efímeros. Los datos residen en servicios gestionados (`RDS` para SQL, `DynamoDB` para NoSQL), garantizando que la caída de un servicio no afecte la integridad de la información.
+- **Optimización de Costos (FinOps)**: 
+  - **Tráfico Bajo/Nulo**: Uso de *Amplify* y *Lambda* para mantener costos cercanos a **$0 USD**.
+  - **Tráfico Industrial**: Uso de *ECS Fargate* con políticas de *Auto Scaling* para pagar solo por la capacidad necesaria en cada momento, eliminando el desperdicio de servidores ociosos.
+
+---
+
+## 🎯 Alcance y Versatilidad (Scope)
+
+La arquitectura de este monorepo no es una solución única, sino un **Blueprint (plantilla)** capaz de resolver múltiples desafíos de negocio similares:
+
+1. **Migración de Legacy**: El entorno Docker permite "envolver" aplicaciones antiguas sin modificar su código para llevarlas a la nube.
+2. **Microservicios Escalables**: Preparado para orquestar decenas de servicios independientes que se comunican entre sí.
+3. **Procesamiento en Lote (Batch)**: Ideal para tareas pesadas (como generación de reportes o procesamiento de imágenes) que se ejecutan, cumplen su función y se apagan automáticamente.
+4. **Entornos de QA Dinámicos**: Capacidad de levantar una réplica exacta del entorno de producción para pruebas en segundos usando Terraform.
+
+---
+
 ## 🔍 Tour Guiado de Código
 
 Para ver la calidad técnica de este proyecto, te invito a explorar:
