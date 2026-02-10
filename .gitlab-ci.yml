@@ -99,3 +99,15 @@ deploy_case_c:
 
 
 
+
+pages:
+  stage: deploy
+  script:
+    - mkdir -p public
+    - cp index.html manifest.json sw.js public/
+    - cp -r assets docs wiki apps caso-* public/
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
