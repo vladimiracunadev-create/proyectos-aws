@@ -12,7 +12,7 @@ Este roadmap refleja el estado actual del proyecto y las próximas prioridades p
 - [x] **Caso B**: S3 + GitLab CI/CD con sincronización automatizada
 - [x] **Caso C**: Terraform + CloudFront con OAC (Origin Access Control)
 - [x] **Caso D**: Serverless API con Lambda, API Gateway y DynamoDB
-- [x] **Caso J**: Dockerización con ECS Fargate, ECR y Load Balancer
+- [x] **Caso J**: Docker Dashboard Premium con ECS Fargate, ECR y Load Balancer
 
 ### Infraestructura y Herramientas
 
@@ -39,7 +39,7 @@ Este roadmap refleja el estado actual del proyecto y las próximas prioridades p
 
 - [ ] **Wiki GitLab**: Expandir contenido técnico y troubleshooting
 - [ ] **Video Walkthrough**: Grabación de demos en vivo
-- [ ] **Diagramas de Arquitectura**: Completar para todos los casos
+- [x] **Diagramas de Arquitectura**: Completar para todos los casos (Flujos ECS/ECR incluidos)
 - [ ] **Guías de Migración**: Documentar cómo replicar en otras cuentas AWS
 
 ---
@@ -151,4 +151,4 @@ Al completar todos los casos, se habrán dominado:
 
 ---
 
-_Última actualización: 2026-02-09_
+_Última actualización: 2026-02-10_

@@ -3,6 +3,12 @@
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato seguirá [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) y este proyecto utiliza [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-02-10
+### Added
+- **Caso J (Premium Dashboard)**: Evolución de la interfaz técnica JSON a un Dashboard industrial con **Glassmorphism** y animaciones.
+- **Arquitectura**: Sección de "Claridad Conceptual" en la documentación para explicar la relación Docker (Local) vs AWS (ECR/ECS/Fargate).
+- **Diagramas**: Inclusión de diagramas Mermaid detallando la cadena de suministro de imágenes (Image Supply Chain).
+
 ## [1.2.0] - 2026-02-09
 ### Added
 - **Caso J**: Finalización del módulo de Dockerización con ECS Fargate.
@@ -47,4 +53,4 @@ El formato seguirá [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) y e
 - Documentación base de aprendizaje.
 
 ---
-_Ultima actualización: 2026-01-23_
+_Ultima actualización: 2026-02-10_
