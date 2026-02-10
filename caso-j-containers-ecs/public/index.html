@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS ECS Dashboard | Caso J</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <main class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="badge">AWS ECS Fargate</div>
+            <h1>Contenedores Industriales</h1>
+            <p class="subtitle">Despliegue escalable y portable en la nube</p>
+        </header>
+
+        <section class="status-grid">
+            <div class="glass-card status-card">
+                <div class="icon-container container-icon">📦</div>
+                <div class="card-content">
+                    <h3>Docker Status</h3>
+                    <p id="docker-status" class="status-active">Running</p>
+                    <span class="detail">Isolated Environment</span>
+                </div>
+            </div>
+
+            <div class="glass-card status-card">
+                <div class="icon-container cloud-icon">☁️</div>
+                <div class="card-content">
+                    <h3>Infrustructura</h3>
+                    <p id="infra-status">Fargate Serverless</p>
+                    <span class="detail">Region: us-east-2</span>
+                </div>
+            </div>
+
+            <div class="glass-card status-card">
+                <div class="icon-container lock-icon">🔐</div>
+                <div class="card-content">
+                    <h3>Seguridad</h3>
+                    <p>Rootless Execution</p>
+                    <span class="detail">IAM Managed Roles</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-detail">
+            <div class="glass-card main-content">
+                <h2>¿Por qué este diseño importa?</h2>
+                <p>Esta aplicación no es solo una web; es una muestra de <strong>Portabilidad e Isolation</strong>. El empaquetado industrial garantiza que corra igual en tu PC que en este cluster de AWS.</p>
+                
+                <div class="api-output">
+                    <div class="output-header">
+                        <span>Live API Output</span>
+                        <div class="dot-indicator"></div>
+                    </div>
+                    <pre id="json-display">Cargando datos del contenedor...</pre>
+                </div>
+            </div>
+        </section>
+
+        <footer class="dashboard-footer">
+            <p>Construido con ❤️ por Vladimir Acuña — 683413891.us-east-2.elb.amazonaws.com</p>
+        </footer>
+    </main>
+
+    <script>
+        async function fetchStatus() {
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                document.getElementById('json-display').textContent = JSON.stringify(data, null, 4);
+            } catch (error) {
+                document.getElementById('json-display').textContent = "Error conectando con la API del contenedor.";
+            }
+        }
+        fetchStatus();
+    </script>
+</body>
+</html>

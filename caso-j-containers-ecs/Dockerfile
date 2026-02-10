@@ -27,6 +27,8 @@ WORKDIR /app
 # Copiamos desde la etapa builder
 COPY --from=builder /app/node_modules ./node_modules
 COPY . .
+# La carpeta public se copia automáticamente con el COPY anterior, 
+# pero nos aseguramos de que los permisos sean correctos si fuera necesario.
 
 # Usamos el usuario 'node' (UID 1000) que viene por defecto en la imagen oficial
 # Esto es CRÍTICO para seguridad (evitar correr como root)

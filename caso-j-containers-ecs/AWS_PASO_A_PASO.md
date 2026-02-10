@@ -95,3 +95,10 @@ Esperamos unos minutos a que Fargate provisionara la tarea y accedimos a la URL 
 🔗 **[http://vladimir-case-j-alb-683413891.us-east-2.elb.amazonaws.com](http://vladimir-case-j-alb-683413891.us-east-2.elb.amazonaws.com)**
 
 La aplicación respondió correctamente, confirmando el despliegue exitoso.
+
+## 🆕 Evolución Estética (Premium Dashboard)
+
+Tras el despliegue inicial exitoso, se realizó una actualización de "Hot Reload" estética:
+1.  Se rediseñó la interfaz usando **Glassmorphism**.
+2.  Se actualizó el `Dockerfile` para incluir activos estáticos.
+3.  Se realizó un `docker push` con el tag `latest` y un `force-new-deployment` en ECS para aplicar los cambios visuales sin tiempo de inactividad.

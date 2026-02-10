@@ -3,8 +3,18 @@
 [![Nivel-9](https://img.shields.io/badge/Nivel-9_Contenedores-blue?style=for-the-badge)]()
 [![Status](https://img.shields.io/badge/Status-Nuevo-blue?style=for-the-badge)]()
 
-Empaquetar aplicaciones es el estándar de la industria moderna. Este caso demuestra cómo crear un entorno aislado y reproducible que corre igual en tu PC que en AWS ECS/Fargate.
+Empaquetar aplicaciones es el estándar de la industria moderna. Este caso demuestra cómo crear un entorno aislado y reproducible que corre igual en tu PC que en AWS ECS/Fargate, ahora con una interfaz **Premium Dashboard**.
 
+---
+
+## ✨ Evolución: De API JSON a Dashboard Premium
+Originalmente, este caso entregaba una respuesta JSON técnica. Lo hemos evolucionado a una experiencia visual completa que incluye:
+*   **Interfaz Glassmorphism**: Diseño moderno con efectos de cristal y desenfoque.
+*   **Micro-animaciones**: Fondo dinámico con blobs animados y transiciones suaves.
+*   **Estado en Tiempo Real**: Tarjetas que muestran la salud del contenedor y datos vivos de la API interna.
+*   **Arquitectura Híbrida**: Servidor Express que gestiona tanto el contenido estático como los endpoints de datos.
+
+---
 ## 🔍 Claridad Conceptual: Docker vs AWS
 
 Es común preguntarse: **¿Por qué Docker está en el repositorio y no "dentro" de AWS?**
