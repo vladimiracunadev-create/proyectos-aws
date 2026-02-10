@@ -25,6 +25,17 @@ async function loadMarkdown(path) {
         elements.content.innerHTML = html;
         window.scrollTo(0, 0);
         updateActiveLink(path);
+
+        // Intercept relative markdown links to use hash navigation
+        elements.content.querySelectorAll('a').forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && href.endsWith('.md') && !href.startsWith('http') && !href.startsWith('#')) {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.hash = href;
+                });
+            }
+        });
     } catch (error) {
         elements.content.innerHTML = `
             <div class="error">

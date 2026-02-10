@@ -41,31 +41,31 @@ make help
 Hemos organizado la base de conocimientos para que sea fácil de navegar:
 
 ### 🎯 Inicio Rápido
-- 🚀 **[Guía de Instalación](#docs/INSTALL.md)**: Docker (DevContainers) vs Manual.
-- 📘 **[Guía para Principiantes](#docs/BEGINNERS_GUIDE.md)**: Glosario y conceptos básicos.
-- ⚡ **[Referencia Rápida](#docs/QUICK_REFERENCE.md)**: Comandos esenciales y atajos.
+- 🚀 **[Guía de Instalación](docs/INSTALL.md)**: Docker (DevContainers) vs Manual.
+- 📘 **[Guía para Principiantes](docs/BEGINNERS_GUIDE.md)**: Glosario y conceptos básicos.
+- ⚡ **[Referencia Rápida](docs/QUICK_REFERENCE.md)**: Comandos esenciales y atajos.
 
 ### 🏗️ Arquitectura y Stack
-- 🏗️ **[Arquitectura](#docs/ARCHITECTURE.md)**: Visión técnica, diagramas Mermaid y stack.
-- 🛠️ **[Especificaciones Técnicas](#docs/TECHNICAL_SPECS.md)**: Requerimientos de hardware y software.
-- 🔧 **[Tooling](#docs/TOOLING.md)**: Docker, Kubernetes, Makefile y validaciones.
-- 📊 **[Resumen de Implementación](#docs/IMPLEMENTATION_SUMMARY.md)**: Overview del tooling y seguridad.
+- 🏗️ **[Arquitectura](docs/ARCHITECTURE.md)**: Visión técnica, diagramas Mermaid y stack.
+- 🛠️ **[Especificaciones Técnicas](docs/TECHNICAL_SPECS.md)**: Requerimientos de hardware y software.
+- 🔧 **[Tooling](docs/TOOLING.md)**: Docker, Kubernetes, Makefile y validaciones.
+- 📊 **[Resumen de Implementación](docs/IMPLEMENTATION_SUMMARY.md)**: Overview del tooling y seguridad.
 
 ### 🛡️ Seguridad
-- 🛡️ **[Seguridad IAM](#docs/IAM_SECURITY.md)**: Políticas de acceso y privilegios mínimos.
-- ✅ **[Security Checklist](#docs/SECURITY_CHECKLIST.md)**: Lista de verificación completa de seguridad.
-- 🔐 **[Secretos Comprometidos](#docs/killed.md)**: Registro de secretos rotados.
+- 🛡️ **[Seguridad IAM](docs/IAM_SECURITY.md)**: Políticas de acceso y privilegios mínimos.
+- ✅ **[Security Checklist](docs/SECURITY_CHECKLIST.md)**: Lista de verificación completa de seguridad.
+- 🔐 **[Secretos Comprometidos](docs/killed.md)**: Registro de secretos rotados.
 
 ### 👔 Para Reclutadores
-- 👨‍💼 **[Guía para Reclutadores](#docs/RECRUITER.md)**: Tour ejecutivo y valor de negocio.
+- 👨‍💼 **[Guía para Reclutadores](docs/RECRUITER.md)**: Tour ejecutivo y valor de negocio.
 
 ### 📚 Otros Recursos
-- 🕒 **[Historial de Cambios](#CHANGELOG.md)**: Registro detallado de versiones y mejoras.
-- 🗺️ **[Roadmap](#ROADMAP.md)**: Plan de desarrollo y próximos hitos.
-- 📑 **[Wiki del Proyecto](#wiki/home.md)**: Base de conocimientos colaborativa en GitLab.
-- 🤝 **[Guía de Contribución](#CONTRIBUTING.md)**: Cómo contribuir al proyecto.
-- 📜 **[Código de Conducta](#docs/CODE_OF_CONDUCT.md)**: Normas de la comunidad.
-- 📄 **[Licencia](#LICENSE)**: Términos de uso bajo licencia MIT.
+- 🕒 **[Historial de Cambios](CHANGELOG.md)**: Registro detallado de versiones y mejoras.
+- 🗺️ **[Roadmap](ROADMAP.md)**: Plan de desarrollo y próximos hitos.
+- 📑 **[Wiki del Proyecto](wiki/home.md)**: Base de conocimientos colaborativa en GitLab.
+- 🤝 **[Guía de Contribución](CONTRIBUTING.md)**: Cómo contribuir al proyecto.
+- 📜 **[Código de Conducta](docs/CODE_OF_CONDUCT.md)**: Normas de la comunidad.
+- 📄 **[Licencia](LICENSE)**: Términos de uso bajo licencia MIT.
 
 ---
 
@@ -105,13 +105,13 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 #### [📂 Caso A: AWS Amplify](./caso-a-amplify/index.html) `Nivel 0` `COMPLETADO`
 *   **Stack**: AWS Amplify + GitLab Auto-Mirroring.
 *   **Enfoque**: **Integración Continua nativa.** Ideal para prototipos rápidos. Aprende cómo AWS gestiona automáticamente el escalado, SSL y CDN.
-*   ☁️ [Guía Paso a Paso AWS](#caso-a-amplify/AWS_PASO_A_PASO.md)
+*   ☁️ [Guía Paso a Paso AWS](caso-a-amplify/AWS_PASO_A_PASO.md)
 *   👉 [Ver Demo en Vivo](https://main.d1uybq9oui7h8c.amplifyapp.com/)
 
 #### [📂 Caso B: S3 + GitLab CI](./caso-b-gitlab-s3/index.html) `Nivel 1` `COMPLETADO`
 *   **Stack**: GitLab Runners + AWS CLI + S3 Website Hosting.
 *   **Enfoque**: **Pipelines Artesanales.** Entiende qué pasa "bajo el capó". Aprendes sobre políticas de bucket, sincronización manual y gestión de secretos.
-*   ☁️ [Guía Paso a Paso AWS](#caso-b-gitlab-s3/AWS_PASO_A_PASO.md)
+*   ☁️ [Guía Paso a Paso AWS](caso-b-gitlab-s3/AWS_PASO_A_PASO.md)
 *   👉 [Ver Demo en Vivo](http://vladimir-caso-b-site-2026.s3-website.us-east-2.amazonaws.com/)
 
 ### 🔵 Nivel 2: Profesionalización e Infraestructura como Código (IaC)
@@ -119,13 +119,13 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 #### [📂 Caso C: Terraform + CloudFront](./caso-c-terraform-s3/index.html) `Nivel 2` `COMPLETADO`
 *   **Stack**: Terraform + S3 (OAC) + CloudFront + Remote State.
 *   **Enfoque**: **Infraestructura como Código (IaC).** Elimina el error humano. Aprende a centralizar el estado en la nube y proteger recursos con **Origin Access Control**.
-*   ☁️ [Guía Paso a Paso AWS](#caso-c-terraform-s3/AWS_PASO_A_PASO.md)
+*   ☁️ [Guía Paso a Paso AWS](caso-c-terraform-s3/AWS_PASO_A_PASO.md)
 *   👉 [Ver Demo en Vivo](https://d3otfpeykrm536.cloudfront.net/)
 
 #### [📂 Caso D: Serverless Basic (SAM)](./caso-d-serverless-basic/index.html) `Nivel 3` `COMPLETADO`
 *   **Stack**: API Gateway + AWS Lambda + DynamoDB.
 *   **Enfoque**: **Lógica Backend y Persistencia.** Añade vida a tus apps. Escalamiento a cero costos cuando no hay uso y potencia reactiva bajo demanda.
-*   ☁️ [Guía Paso a Paso AWS](#caso-d-serverless-basic/AWS_PASO_A_PASO.md)
+*   ☁️ [Guía Paso a Paso AWS](caso-d-serverless-basic/AWS_PASO_A_PASO.md)
 *   👉 [Demo Portafolio](https://staging.d3oq987bpa7ls7.amplifyapp.com/) / [API Endpoint](https://tc78a6xibg.execute-api.us-east-2.amazonaws.com)
 
 ### 🟠 Nivel 3: Gestión de Aplicaciones y Datos (Senior)
@@ -155,14 +155,14 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 #### [📂 Caso J: Dockerización de Microservicios](./caso-j-containers-ecs/public/index.html) `Nivel 9` `COMPLETADO`
 *   **Stack**: Docker + ECS Fargate + ECR + Terraform.
 *   **Enfoque**: **Portabilidad e Isolation.** Empaquetado industrial de apps para que corran igual en local y en la nube. Gestión de registros de imágenes.
-*   ☁️ [Guía Paso a Paso AWS](#caso-j-containers-ecs/AWS_PASO_A_PASO.md)
+*   ☁️ [Guía Paso a Paso AWS](caso-j-containers-ecs/AWS_PASO_A_PASO.md)
 *   👉 [Ver Demo en Vivo](http://vladimir-case-j-alb-683413891.us-east-2.elb.amazonaws.com/)
 
 #### [📂 Caso K: Kubernetes en AWS (EKS)](./caso-k-kubernetes-eks/README.md) `Nivel 10` `PLANIFICADO`
 *   **Stack**: AWS EKS + YAML + GitLab Kubernetes Agent.
 *   **Enfoque**: **Orquestación Real en AWS.** Kubernetes directo en la nube. Gestiona flotas de contenedores, auto-sanación y balanceo masivo.
-*   ☁️ [Guía Paso a Paso AWS](#caso-k-kubernetes-eks/AWS_PASO_A_PASO.md)
-*   🖼️ [Reporte de Visualización y Resultados](#caso-k-kubernetes-eks/VISUALIZATION.md)
+*   ☁️ [Guía Paso a Paso AWS](caso-k-kubernetes-eks/AWS_PASO_A_PASO.md)
+*   🖼️ [Reporte de Visualización y Resultados](caso-k-kubernetes-eks/VISUALIZATION.md)
 
 ### 🟣 Nivel 5: Gobernanza, Integraciones y Optimizaciones
 
