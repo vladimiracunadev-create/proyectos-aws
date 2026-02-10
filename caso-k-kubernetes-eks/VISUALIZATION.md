@@ -14,22 +14,27 @@ Se ha implementado una arquitectura de orquestación industrial utilizando **AWS
 
 ---
 
-## 🖼️ Galería de Evidencias (Screenshots)
+## 🖼️ Galería de Evidencias y Rutas en AWS
 
-### 1. Dashboard con Glassmorphism
-*Inserta aquí la imagen de la web cargada a través del ELB. Se debe apreciar el diseño tipo "espejo" y los blobs animados.*
+### 1. El Clúster EKS (Control Plane)
+**Ruta en Consola AWS**: `Elastic Kubernetes Service` > `Clusters` > `vladimir-eks-cluster`.
+- **Qué observar**: Verifica que el estado sea `Active` y explora la pestaña **Resources** para ver el estado de salud de los nodos y pods.
 
-> **Lo que se resolvió**: Se integró una interfaz premium que consume metadatos internos de Kubernetes mediante el **Downward API**.
+### 2. Dashboard con Glassmorphism (Punto de Salida)
+**Ruta en Consola AWS**: `EC2` > `Load Balancers`.
+- **Qué observar**: Busca el Load Balancer (ELB) de tipo `Network` o `Classic` creado automáticamente por Kubernetes. Copia el **DNS name** y pégalo en tu navegador para ver la interfaz moderna.
 
-### 2. Auto-Sanación (Self-Healing)
-*Inserta aquí una captura de la terminal ejecutando `kubectl delete pod` y la web mostrando un nuevo Pod ID segundos después.*
+### 3. Nodos de Cómputo (Data Plane)
+**Ruta en Consola AWS**: `Elastic Kubernetes Service` > `Clusters` > `vladimir-eks-cluster` > pestaña `Compute`.
+- **Qué observar**: Verás el `Managed Node Group` y las instancias EC2 (`t3.medium`) que están sosteniendo la flota de contenedores.
 
-> **Lo que se resolvió**: Resiliencia automática. Si un proceso falla, Kubernetes lo restaura sin intervención humana.
-
-### 3. Balanceo de Carga y Nodos
-*Inserta aquí capturas que muestren diferentes IPs de nodos o IDs de pods al refrescar la página.*
-
-> **Lo que se resolvió**: Distribución de tráfico y alta disponibilidad.
+### 4. Auto-Sanación (Self-Healing) en Acción
+**Ruta en Consola AWS**: `Elastic Kubernetes Service` > `Clusters` > `vladimir-eks-cluster` > pestaña `Resources` > `Pods`.
+- **Qué observar**: 
+    1. Abre la web y anota el **Pod ID**.
+    2. En la terminal (o consola), elimina un Pod.
+    3. Refresca la lista en AWS y verás un pod con estado `Pending` o `ContainerCreating` reemplazando al anterior.
+    4. Refresca la web y verás el nuevo **Pod ID**.
 
 ---
 
