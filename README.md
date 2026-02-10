@@ -89,7 +89,7 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   **Stack**: EventBridge + Step Functions.
 *   **Enfoque**: **Arquitecturas Reactivas.** Desacoplamiento total de servicios mediante el paso de mensajes y orquestación de flujos.
 
-#### [📂 Caso H: Observability & Health](./caso-h-observability/) `Nivel 7` `NUEVO`
+#### [📂 Caso H: Observability & Health](./caso-h-observability/) `Nivel 7` `PROYECTADO`
 *   **Stack**: CloudWatch + X-Ray + GitLab Observability.
 *   **Enfoque**: **Monitoreo Proactivo.** Trazabilidad distribuida para encontrar fallos antes que el usuario y tableros de salud integrados en GitLab.
 
@@ -105,7 +105,7 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   ☁️ [Guía Paso a Paso AWS](./caso-j-containers-ecs/AWS_PASO_A_PASO.md)
 *   👉 [Ver Demo en Vivo](http://vladimir-case-j-alb-683413891.us-east-2.elb.amazonaws.com/)
 
-#### [📂 Caso K: Kubernetes en AWS (EKS)](./caso-k-kubernetes-eks/) `Nivel 10` `NUEVO`
+#### [📂 Caso K: Kubernetes en AWS (EKS)](./caso-k-kubernetes-eks/) `Nivel 10` `PLANIFICADO`
 *   **Stack**: AWS EKS + YAML + GitLab Kubernetes Agent.
 *   **Enfoque**: **Orquestación Real en AWS.** Kubernetes directo en la nube conectado con GitLab. Gestiona flotas de contenedores, auto-sanación y balanceo masivo.
 
