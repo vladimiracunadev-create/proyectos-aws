@@ -5,7 +5,7 @@ metadata:
   labels:
     app: vladimir-api
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: vladimir-api
@@ -16,13 +16,30 @@ spec:
     spec:
       containers:
       - name: api
-        image: vladimiracunadev/vladimir-api:latest
+        # Nota: Deberás subir esta imagen a tu ECR o DockerHub
+        image: vladimiracunadev/vladimir-eks-app:latest
         ports:
         - containerPort: 3000
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
         resources:
           limits:
             memory: "256Mi"
             cpu: "250m"
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
 ---
 apiVersion: v1
 kind: Service

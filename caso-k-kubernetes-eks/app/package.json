@@ -1,0 +1,9 @@
+{
+    "name": "vladimir-eks-app",
+    "version": "1.0.0",
+    "description": "EKS Modern Dashboard Demo",
+    "main": "server.js",
+    "dependencies": {
+        "express": "^4.18.2"
+    }
+}

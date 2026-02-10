@@ -1,0 +1,155 @@
+:root {
+    --primary: #326CE5; /* K8s Blue */
+    --secondary: #ff9900;
+    --bg-dark: #0a0f1e;
+    --text-white: #f8fafc;
+    --blue-glow: rgba(50, 108, 229, 0.4);
+    --purple-glow: rgba(139, 92, 246, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-white);
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+.background-blobs {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    filter: blur(80px);
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: move 20s infinite alternate;
+}
+
+.blob-1 { width: 450px; height: 450px; background: var(--blue-glow); top: -100px; left: -100px; }
+.blob-2 { width: 400px; height: 400px; background: var(--purple-glow); bottom: -100px; right: -100px; animation-delay: -5s; }
+.blob-3 { width: 300px; height: 300px; background: rgba(50, 108, 229, 0.2); top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: -10s; }
+
+@keyframes move {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(60px, 120px) scale(1.1); }
+}
+
+.dashboard-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-header { text-align: center; }
+
+.badge {
+    display: inline-block;
+    background: rgba(50, 108, 229, 0.1);
+    border: 1px solid var(--primary);
+    padding: 0.5rem 1.2rem;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #93c5fd;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(to right, #fff, #60a5fa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle { font-size: 1.25rem; color: #94a3b8; font-weight: 300; }
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 28px;
+    padding: 2rem;
+    transition: all 0.4s ease;
+}
+
+.glass-card:hover {
+    background: rgba(255, 255, 255, 0.04);
+    transform: translateY(-8px);
+    border-color: rgba(50, 108, 229, 0.3);
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.status-card { display: flex; align-items: center; gap: 1.5rem; }
+
+.icon-container {
+    width: 65px; height: 65px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+}
+
+.card-content h3 { font-size: 1rem; color: #64748b; margin-bottom: 0.2rem; }
+.card-content p { font-size: 1.1rem; font-weight: 600; color: #fff; word-break: break-all; }
+
+.status-active { color: #4ade80 !important; display: flex; align-items: center; gap: 0.5rem; }
+.status-active::before {
+    content: ''; width: 10px; height: 10px; background: #4ade80; border-radius: 50%;
+    box-shadow: 0 0 12px #4ade80;
+}
+
+.detail { font-size: 0.75rem; color: #475569; }
+
+.api-output {
+    background: #000;
+    border-radius: 20px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.output-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1rem; color: #475569; font-size: 0.75rem;
+    letter-spacing: 1.5px;
+}
+
+.dot-indicator { width: 10px; height: 10px; background: #326CE5; border-radius: 50%; box-shadow: 0 0 10px #326CE5; }
+
+pre { color: #93c5fd; font-family: 'Consolas', monospace; font-size: 0.85rem; overflow-x: auto; line-height: 1.5; }
+
+.dashboard-footer { text-align: center; color: #475569; font-size: 0.85rem; margin-top: 2rem; }
+
+@media (max-width: 768px) {
+    h1 { font-size: 2.2rem; }
+    .status-grid { grid-template-columns: 1fr; }
+}

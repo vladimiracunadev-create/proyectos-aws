@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS EKS Dashboard | Caso K</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <main class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="badge">AWS EKS Enterprise</div>
+            <h1>Orquestación Real</h1>
+            <p class="subtitle">Gestión masiva y auto-sanación de contenedores</p>
+        </header>
+
+        <section class="status-grid">
+            <div class="glass-card status-card">
+                <div class="icon-container k8s-icon">☸️</div>
+                <div class="card-content">
+                    <h3>ID del Pod</h3>
+                    <p id="pod-name" class="status-active">Detectando...</p>
+                    <span class="detail">Unidad de ejecución EKS</span>
+                </div>
+            </div>
+
+            <div class="glass-card status-card">
+                <div class="icon-container node-icon">🖥️</div>
+                <div class="card-content">
+                    <h3>Host IP</h3>
+                    <p id="node-ip">0.0.0.0</p>
+                    <span class="detail">Nodo de infraestructura</span>
+                </div>
+            </div>
+
+            <div class="glass-card status-card">
+                <div class="icon-container health-icon">🛡️</div>
+                <div class="card-content">
+                    <h3>Auto-Healing</h3>
+                    <p>Enabled</p>
+                    <span class="detail">Zero downtime management</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-detail">
+            <div class="glass-card main-content">
+                <h2>El Capitán de la Flota</h2>
+                <p>A diferencia de ECS, <strong>EKS</strong> ofrece una flexibilidad total sobre el control plane. Si borras este Pod manualmente, Kubernetes detectará que falta un recurso y levantará uno nuevo en segundos para mantener el estado deseado.</p>
+                
+                <div class="api-output">
+                    <div class="output-header">
+                        <span>EKS Cluster Metadata</span>
+                        <div class="dot-indicator"></div>
+                    </div>
+                    <pre id="json-display">Analizando orquestador...</pre>
+                </div>
+            </div>
+        </section>
+
+        <footer class="dashboard-footer">
+            <p>Construido con ❤️ por Vladimir Acuña — Monorepo AWS GitLab</p>
+        </footer>
+    </main>
+
+    <script>
+        async function fetchStatus() {
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                document.getElementById('json-display').textContent = JSON.stringify(data, null, 4);
+                document.getElementById('pod-name').textContent = data.pod_name;
+                document.getElementById('node-ip').textContent = data.node_ip;
+            } catch (error) {
+                document.getElementById('json-display').textContent = "Error conectando con el orquestador EKS.";
+            }
+        }
+        fetchStatus();
+    </script>
+</body>
+</html>
