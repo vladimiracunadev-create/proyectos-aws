@@ -71,7 +71,7 @@ terraform {
 ```python
 # ❌ NUNCA hacer esto
 DATABASE_PASSWORD = "super-secret-password"
-API_KEY = "sk-1234567890abcdef"
+API_KEY = "sk-1234567890abcdef" # gitleaks:allow
 ```
 
 **Alternativa segura:**
