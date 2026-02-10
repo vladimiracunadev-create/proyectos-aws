@@ -37,8 +37,12 @@ A medida que avanzas por las carpetas, la complejidad y el profesionalismo aumen
 - **H - Observabilidad**: Encontrar fallos antes que el usuario (CloudWatch).
 - **I - GenAI**: Integración de modelos de lenguaje (Bedrock).
 
-### 🐳 Caso J: Dockerización (Microservicios)
-**Objetivo**: Independencia total. Empaquetamos la app con sus dependencias para que el despliegue sea idéntico en cualquier entorno (ECS/Fargate).
+### 🐳 Caso J: Dockerización (El Combo Industrial)
+**Objetivo**: Independencia total. Aprendes el flujo **"Blueprint vs Factory"**:
+*   **Docker (Blueprint)**: El plano de cómo se construye tu app.
+*   **ECR (Almacén)**: Donde guardas tus apps terminadas.
+*   **ECS (Director)**: Quien pone a funcionar tu app en **Fargate** (servidores invisibles). 
+*   *Bonus:* Incluye un **Dashboard Premium** para ver los datos en vivo.
 
 ### ☸️ Caso K: Kubernetes en AWS (Orquestación EKS)
 **Objetivo**: El nivel máximo. Kubernetes gestionando flotas de contenedores directamente en la infraestructura de AWS (Clusters Reales).

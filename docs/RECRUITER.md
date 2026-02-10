@@ -21,17 +21,18 @@ Este repositorio no es solo una colección de archivos; es un **ecosistema de in
 - **Identidad Moderna:** Configuración de AWS OIDC para eliminar el uso de IAM Access Keys permanentes en la nube.
 - **Container Security:** Imágenes Docker con usuario no-root, security contexts y resource limits en ECS.
 
-### 3. Portabilidad y Contenedores
+### 3. Portabilidad y Contenedores Industriales
 
-- **Docker-first:** Todo el tooling está encapsulado para garantizar que "funcione en mi máquina" y en el servidor de la misma forma.
+- **Image Supply Chain (Docker -> ECR -> ECS):** Demostración del flujo completo de empaquetado inmutable, almacenamiento seguro en registro privado y orquestación resiliente.
+- **Premium Dashboard (Caso J):** Ejemplo de integración total donde un contenedor Docker sirve una interfaz con **Glassmorphism**, demostrando que la robustez técnica no está reñida con una experiencia de usuario excepcional.
 
 ---
 
 ## 🧭 Tour de "Casos de Éxito"
 
-- **Despliegue Web con Amplify:** Ver caso-a-amplify/
-- **Serverless con Lambda:** Ver caso-d-serverless-basic/
-- **Contenedores con ECS:** Ver caso-j-containers-ecs/
+- **Despliegue Web con Amplify:** Ver [caso-a-amplify/](../caso-a-amplify/)
+- **Serverless Analytics con Lambda:** Ver [caso-d-serverless-basic/](../caso-d-serverless-basic/)
+- **Infraestructura de Grado Industrial (ECS Fargate):** Ver [caso-j-containers-ecs/](../caso-j-containers-ecs/)
 
 *(Los casos E-I y K-L están en fase de planificación)*
 
