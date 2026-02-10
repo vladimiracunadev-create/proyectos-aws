@@ -56,7 +56,7 @@ window.addEventListener('load', handleRoute);
 // Service Worker Registration
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').then(reg => {
+        navigator.serviceWorker.register('./sw.js').then(() => {
             console.log('SW registrado');
         }).catch(err => {
             console.error('SW fallo', err);
@@ -97,7 +97,7 @@ if (elements.installBtn) {
     });
 }
 
-window.addEventListener('appinstalled', (evt) => {
+window.addEventListener('appinstalled', () => {
     console.log('PWA instalada con éxito');
     if (elements.installContainer) {
         elements.installContainer.style.display = 'none';

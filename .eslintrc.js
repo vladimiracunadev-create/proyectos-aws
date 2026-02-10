@@ -14,4 +14,7 @@ module.exports = {
         "no-unused-vars": "warn",
         "no-console": "off",
     },
+    globals: {
+        marked: "readonly",
+    },
 };
