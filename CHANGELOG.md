@@ -9,6 +9,10 @@ El formato seguirá [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) y e
 - **Arquitectura**: Sección de "Claridad Conceptual" en la documentación para explicar la relación Docker (Local) vs AWS (ECR/ECS/Fargate).
 - **Diagramas**: Inclusión de diagramas Mermaid detallando la cadena de suministro de imágenes (Image Supply Chain).
 
+### Fixed
+- **Navegación**: Corrección de enlaces rotos (`wiki/home.md`, `docs/TOOLING.md`) en la PWA principal.
+- **Documentación**: Completado de contenido faltante en `docs/TOOLING.md` detallando el stack de herramientas.
+
 ## [1.2.0] - 2026-02-09
 ### Added
 - **Caso J**: Finalización del módulo de Dockerización con ECS Fargate.
