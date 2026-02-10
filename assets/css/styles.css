@@ -52,6 +52,7 @@ aside {
     font-weight: 700;
     background: linear-gradient(to right, #818cf8, #c084fc);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -96,6 +97,20 @@ aside {
     box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }
 
+.btn-install-pwa {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    color: white !important;
+    font-weight: 600;
+    margin-top: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.btn-install-pwa:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+    filter: brightness(1.1);
+}
+
 /* Main Content Area */
 main {
     flex: 1;
@@ -115,20 +130,39 @@ main {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Markdown Specific Styling */
-#content h1 { margin-bottom: 1.5rem; font-size: 2.5rem; }
-#content h2 { margin: 2rem 0 1rem; color: #818cf8; }
-#content p { margin-bottom: 1rem; }
-#content code { 
-    background: rgba(0,0,0,0.3); 
-    padding: 0.2rem 0.4rem; 
-    border-radius: 4px; 
-    font-size: 0.9em; 
+#content h1 {
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
 }
+
+#content h2 {
+    margin: 2rem 0 1rem;
+    color: #818cf8;
+}
+
+#content p {
+    margin-bottom: 1rem;
+}
+
+#content code {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
 #content pre {
     background: #0f172a;
     padding: 1.5rem;
@@ -140,8 +174,20 @@ main {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    aside { transform: translateX(-100%); }
-    body.sidebar-open aside { transform: translateX(0); }
-    main { margin-left: 0; padding: 1.5rem; }
-    .mobile-nav { display: block; }
+    aside {
+        transform: translateX(-100%);
+    }
+
+    body.sidebar-open aside {
+        transform: translateX(0);
+    }
+
+    main {
+        margin-left: 0;
+        padding: 1.5rem;
+    }
+
+    .mobile-nav {
+        display: block;
+    }
 }
