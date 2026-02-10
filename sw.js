@@ -1,9 +1,9 @@
 const CACHE_NAME = 'docs-v1';
 const ASSETS = [
-    '/',
-    '/index.html',
-    '/assets/css/styles.css',
-    '/assets/js/app.js',
+    './',
+    './index.html',
+    './assets/css/styles.css',
+    './assets/js/app.js',
     'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap',
     'https://cdn.jsdelivr.net/npm/marked/marked.min.js'
 ];

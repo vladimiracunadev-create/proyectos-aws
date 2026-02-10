@@ -2,7 +2,7 @@
     "name": "AWS Projects Docs",
     "short_name": "AWS Docs",
     "description": "Portal de documentación para proyectos AWS",
-    "start_url": "/",
+    "start_url": ".",
     "display": "standalone",
     "background_color": "#0f172a",
     "theme_color": "#4f46e5",
