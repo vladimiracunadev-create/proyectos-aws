@@ -5,6 +5,28 @@
 
 Empaquetar aplicaciones es el estándar de la industria moderna. Este caso demuestra cómo crear un entorno aislado y reproducible que corre igual en tu PC que en AWS ECS/Fargate.
 
+## 🔍 Claridad Conceptual: Docker vs AWS
+
+Es común preguntarse: **¿Por qué Docker está en el repositorio y no "dentro" de AWS?**
+
+### 1. Docker como el "Plano de Construcción" (Blueprint)
+El archivo `Dockerfile` y el código viven en tu repositorio para garantizar la **Portabilidad e Isolation**. Docker no es un servicio de nube, es un lenguaje estándar que dice: *"No importa dónde corra esto, estas son las instrucciones para construir mi app"*.
+
+### 2. AWS como la "Fábrica" de Ejecución
+AWS ofrece servicios que **entienden** este estándar Docker:
+*   **ECR (Elastic Container Registry):** Actúa como el almacén. Tu PC (con Docker instalado) "empuja" la imagen construida aquí.
+*   **ECS Cluster:** Es el director de la orquesta. No tiene servidores fijos; él decide cuándo y dónde ejecutar tus contenedores.
+*   **Fargate:** Es el "servidor invisible" que pone el CPU y la RAM.
+
+### 🔄 Flujo de Comunicación
+```mermaid
+graph LR
+    A[Repo/Local: Docker] -->|docker push| B(AWS ECR: Imágenes)
+    B -->|pull image| C(AWS ECS: Orquestador)
+    C -->|deploy| D[AWS Fargate: Runtime]
+    D -->|exponer| E(ALB: URL Pública)
+```
+
 ---
 
 ## 🎯 Objetivo

@@ -27,6 +27,17 @@ graph TD
     end
 ```
 
+## 🐳 Cadena de Suministro de Imágenes (Docker)
+
+A diferencia de los archivos estáticos, el código de aplicaciones empaquetadas sigue un flujo de **Contenerización Industrial**:
+
+1.  **Construcción (Local/CI)**: El `Dockerfile` define el entorno. Se genera una imagen inmutable.
+2.  **Registro (AWS ECR)**: La imagen se sube al registro privado de AWS.
+3.  **Orquestación (AWS ECS)**: El clúster monitorea el estado deseado y extrae la imagen de ECR.
+4.  **Ejecución (Fargate)**: La aplicación corre en infraestructura Serverless, aislada y escalable.
+
+---
+
 ## 🛠️ Stack Tecnológico
 - **Infraestructura**: Terraform (IaC), AWS SAM, Kubernetes Manifests.
 - **Servicios Cloud**: S3, CloudFront, Lambda, API Gateway, EKS, ECS.
