@@ -30,6 +30,10 @@ make case-k-deploy    # Levanta el clúster y despliega la app
 make case-k-destroy   # 🚨 BORRA TODO PARA EVITAR CARGOS EXTRAS
 ```
 
+## 🖼️ Evidencia de Resultados
+Dado que este clúster se destruye para optimizar costos, puedes ver las capturas y el reporte de funcionamiento aquí:
+👉 **[Reporte de Visualización y Resultados](./VISUALIZATION.md)**
+
 ## 🔗 Enlaces Relacionados
 - ⬅️ **[Regresar al Roadmap Principal](../README.md)**
 - 🏗️ **[Arquitectura de Red](../docs/ARCHITECTURE.md)**

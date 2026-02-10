@@ -1,6 +1,15 @@
 # 📊 Reporte de Visualización y Resultados - Caso K (EKS)
 
-> **Nota**: Este documento sirve como evidencia del despliegue exitoso del clúster de EKS, dado que la infraestructura se destruye tras la validación para optimizar costos.
+## 🎯 ¿Por qué este documento y no una Demo en Vivo?
+A diferencia de otros casos en este monorepo, el **Caso K (EKS)** utiliza este reporte estático como evidencia por motivos de **Responsabilidad Financiera (FinOps)**:
+
+1.  **Optimización de Costos**: AWS EKS tiene un cargo fijo por hora por el "Control Plane". Mantener una demo activa 24/7 de este nivel empresarial tendría un costo innecesario para un entorno de aprendizaje.
+2.  **Estrategia "Deploy & Destroy"**: Esta es una práctica común en entornos DevOps reales, donde la infraestructura se levanta bajo demanda, se valida y se destruye para ahorrar recursos.
+3.  **Evidencia de Maestría**: Este documento, junto con los archivos de Terraform y Kubernetes del repositorio, son la prueba de que el sistema fue desplegado, configurado y validado con éxito siguiendo estándares de la industria.
+
+---
+
+> **Nota**: Este reporte es tu bitácora de validación. La infraestructura se destruye tras la validación para cumplir con la política de costo cero.
 
 ---
 
