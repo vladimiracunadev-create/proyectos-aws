@@ -102,7 +102,7 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 
 ### 🟢 Nivel 1: Automatización y Hosting Estático
 
-#### [📂 Caso A: AWS Amplify](./caso-a-amplify/) `Nivel 0` `COMPLETADO`
+#### [📂 Caso A: AWS Amplify](./caso-a-amplify/index.html) `Nivel 0` `COMPLETADO`
 *   **Stack**: AWS Amplify + GitLab Auto-Mirroring.
 *   **Enfoque**: **Integración Continua nativa.** Ideal para prototipos rápidos. Aprende cómo AWS gestiona automáticamente el escalado, SSL y CDN.
 *   ☁️ [Guía Paso a Paso AWS](#caso-a-amplify/AWS_PASO_A_PASO.md)
@@ -152,13 +152,13 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 
 ### 🔴 Nivel 4: Contenedores y Escalamiento Grado Industrial
 
-#### [📂 Caso J: Dockerización de Microservicios](./caso-j-containers-ecs/index.html) `Nivel 9` `COMPLETADO`
+#### [📂 Caso J: Dockerización de Microservicios](./caso-j-containers-ecs/public/index.html) `Nivel 9` `COMPLETADO`
 *   **Stack**: Docker + ECS Fargate + ECR + Terraform.
 *   **Enfoque**: **Portabilidad e Isolation.** Empaquetado industrial de apps para que corran igual en local y en la nube. Gestión de registros de imágenes.
 *   ☁️ [Guía Paso a Paso AWS](#caso-j-containers-ecs/AWS_PASO_A_PASO.md)
 *   👉 [Ver Demo en Vivo](http://vladimir-case-j-alb-683413891.us-east-2.elb.amazonaws.com/)
 
-#### [📂 Caso K: Kubernetes en AWS (EKS)](./caso-k-kubernetes-eks/index.html) `Nivel 10` `PLANIFICADO`
+#### [📂 Caso K: Kubernetes en AWS (EKS)](./caso-k-kubernetes-eks/README.md) `Nivel 10` `PLANIFICADO`
 *   **Stack**: AWS EKS + YAML + GitLab Kubernetes Agent.
 *   **Enfoque**: **Orquestación Real en AWS.** Kubernetes directo en la nube. Gestiona flotas de contenedores, auto-sanación y balanceo masivo.
 *   ☁️ [Guía Paso a Paso AWS](#caso-k-kubernetes-eks/AWS_PASO_A_PASO.md)
