@@ -31,15 +31,32 @@ make help
 ## 📖 Documentación Avanzada
 Hemos organizado la base de conocimientos para que sea fácil de navegar:
 
-- 🏗️ **[Arquitectura](./docs/ARCHITECTURE.md)**: Visión técnica, diagramas Mermaid y stack.
+### 🎯 Inicio Rápido
 - 🚀 **[Guía de Instalación](./docs/INSTALL.md)**: Docker (DevContainers) vs Manual.
-- 🛠️ **[Especificaciones Técnicas](./docs/TECHNICAL_SPECS.md)**: Requerimientos de hardware y software.
-- 🛡️ **[Seguridad IAM](./docs/IAM_SECURITY.md)**: Políticas de acceso y privilegios mínimos.
 - 📘 **[Guía para Principiantes](./docs/BEGINNERS_GUIDE.md)**: Glosario y conceptos básicos.
+- ⚡ **[Referencia Rápida](./docs/QUICK_REFERENCE.md)**: Comandos esenciales y atajos.
+
+### 🏗️ Arquitectura y Stack
+- 🏗️ **[Arquitectura](./docs/ARCHITECTURE.md)**: Visión técnica, diagramas Mermaid y stack.
+- 🛠️ **[Especificaciones Técnicas](./docs/TECHNICAL_SPECS.md)**: Requerimientos de hardware y software.
+- 🔧 **[Tooling](./docs/TOOLING.md)**: Docker, Kubernetes, Makefile y validaciones.
+- 📊 **[Resumen de Implementación](./docs/IMPLEMENTATION_SUMMARY.md)**: Overview del tooling y seguridad.
+
+### 🛡️ Seguridad
+- 🛡️ **[Seguridad IAM](./docs/IAM_SECURITY.md)**: Políticas de acceso y privilegios mínimos.
+- ✅ **[Security Checklist](./docs/SECURITY_CHECKLIST.md)**: Lista de verificación completa de seguridad.
+- 🔐 **[Secretos Comprometidos](./docs/killed.md)**: Registro de secretos rotados.
+
+### 👔 Para Reclutadores
+- 👨‍💼 **[Guía para Reclutadores](./docs/RECRUITER.md)**: Tour ejecutivo y valor de negocio.
+
+### 📚 Otros Recursos
 - 🕒 **[Historial de Cambios](./CHANGELOG.md)**: Registro detallado de versiones y mejoras.
+- 🗺️ **[Roadmap](./ROADMAP.md)**: Plan de desarrollo y próximos hitos.
 - 📑 **[Wiki del Proyecto](../../wikis/home)**: Base de conocimientos colaborativa en GitLab.
-- 📄 **[Licencia](./LICENSE)**: Términos de uso bajo licencia MIT.
 - 🤝 **[Guía de Contribución](./CONTRIBUTING.md)**: Cómo contribuir al proyecto.
+- 📜 **[Código de Conducta](./docs/CODE_OF_CONDUCT.md)**: Normas de la comunidad.
+- 📄 **[Licencia](./LICENSE)**: Términos de uso bajo licencia MIT.
 
 ---
 
