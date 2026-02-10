@@ -124,7 +124,9 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 
 #### [📂 Caso K: Kubernetes en AWS (EKS)](./caso-k-kubernetes-eks/) `Nivel 10` `PLANIFICADO`
 *   **Stack**: AWS EKS + YAML + GitLab Kubernetes Agent.
-*   **Enfoque**: **Orquestación Real en AWS.** Kubernetes directo en la nube conectado con GitLab. Gestiona flotas de contenedores, auto-sanación y balanceo masivo.
+*   **Enfoque**: **Orquestación Real en AWS.** Kubernetes directo en la nube. Gestiona flotas de contenedores, auto-sanación y balanceo masivo.
+*   ☁️ [Guía Paso a Paso AWS](./caso-k-kubernetes-eks/AWS_PASO_A_PASO.md)
+*   🖼️ [Reporte de Visualización y Resultados](./caso-k-kubernetes-eks/VISUALIZATION.md)
 
 ### 🟣 Nivel 5: Gobernanza, Integraciones y Optimizaciones
 
