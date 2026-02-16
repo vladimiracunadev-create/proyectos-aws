@@ -1,45 +1,83 @@
-# ☁️ Guía Paso a Paso: Caso L (FinOps & Governance)
+# ☁️ Guía de Ingeniería: Caso L (FinOps & Governance)
 
-Esta guía detalla cómo implementar la gobernanza financiera e identidades seguras en tu cuenta de AWS.
-
----
-
-## 🪜 Fase 1: Control de Presupuesto (AWS Budgets)
-... (anteriormente definido) ...
-
-## 🪜 Fase 2: Identidad Segura (GitLab OIDC / Passwordless)
-... (anteriormente definido) ...
-
-## 🪜 Fase 3: Despliegue de la App de Monitoreo (Estrategia FinOps)
-Para que el tablero sea una "App de Producción" pero con **Costo $0**:
-1.  **Infraestructura (Terraform)**:
-    - Definir un bucket **S3** configurado como `website`.
-    - Configurar **CloudFront** como CDN para habilitar HTTPS de forma gratuita (AWS Certificate Manager).
-2.  **Pipeline de Despliegue**:
-    - GitLab CI sincronizará la carpeta `app/public/` hacia S3 cada vez que haya cambios en `main`.
-    - **Resultado**: El Dashboard de Monitoreo tendrá su propia URL de AWS (`https://d123.cloudfront.net`) independiente de GitLab.
+Esta guía detalla la implementación de la **Excelencia Operativa** mediante control de costos, seguridad de identidades "Passwordless" y gobernanza de infraestructura.
 
 ---
 
-## 🪜 Fase 3: Gobernanza de IAM & SCP
+## 🪜 Fase 1: Control Financiero Proactivo (AWS Budgets)
 
-1.  **Límite de Región**:
-    - Aplica una política que deniegue cualquier acción fuera de tu región principal (ej: `us-east-1`), excepto en servicios globales como IAM o Route53.
-2.  **Etiquetado Obligatorio (Tagging)**:
-    - Implementa una regla que impida crear recursos si no llevan el tag `Project = Caso-L` y `Owner = Vladimir`.
+1.  **Navegación**: En la consola de AWS, busca **Billing and Cost Management**. En el menú lateral izquierdo, selecciona **Budgets**.
+2.  **Creación**: Haz clic en el botón naranja **Create budget**.
+3.  **Tipo**: Selecciona **Cost budget - Recommended** y presiona **Next**.
+4.  **Detalles del Presupuesto**:
+    - **Budget name**: `Vladimir-Monthly-Alert`.
+    - **Period**: `Monthly` (Mensual).
+    - **Budget effective date**: `Fixed date`.
+    - **Budget amount**: Elige `Fixed` e ingresa `$5.00`. (Este es tu límite de seguridad).
+5.  **Configuración de Alertas**:
+    - Haz clic en **Add an alert threshold**.
+    - **Threshold**: `85%`.
+    - **Trigger**: `Actual` (Real).
+    - **Notification**: Ingresa tu correo electrónico personal.
+    - Agrega una segunda alerta al `100%` con el Trigger en `Forecasted` (Proyectado).
+6.  **Confirmación**: Revisa los detalles y haz clic en **Create budget**.
+
+---
+
+## 🪜 Fase 2: Identidad Zero-Trust (GitLab OIDC / Passwordless)
+
+*Objetivo: Desplegar en AWS desde GitLab sin usar Access Keys permanentes.*
+
+1.  **Configurar Proveedor de Identidad**:
+    - Ve a **IAM** -> **Identity Providers** -> **Add provider**.
+    - **Provider type**: `OpenID Connect`.
+    - **Provider URL**: `https://gitlab.com`. (Haz clic en **Get thumbprint**).
+    - **Audience**: `https://gitlab.com`.
+2.  **Crear el Rol de Despliegue**:
+    - Ve a **IAM** -> **Roles** -> **Create role**.
+    - **Trusted entity type**: `Web identity`.
+    - **Identity provider**: Selecciona `https://gitlab.com`.
+    - **Audience**: Selecciona `https://gitlab.com`.
+3.  **Políticas de Confianza (Trust Relationship)**:
+    - Edita la política para restringir el acceso solo a tu repositorio específico:
+    ```json
+    "StringLike": {
+      "gitlab.com:sub": "project_path:vladimir.acuna.dev-group/proyectos-aws-gitlab:ref_type:branch:ref:main"
+    }
+    ```
+4.  **Permisos**: Adjunta permisos de lectura/escritura limitados a S3 y CloudFront.
 
 ---
 
-## 🪜 Fase 4: Visualización Financiera (Dashboard Premium)
+## 🪜 Fase 3: Gobernanza y Guardrails (IAM & Tagging)
 
-1.  **Hosting Estático**: Siguiendo los principios de FinOps (ahorro de costos), este dashboard se aloja como contenido estático en **S3 o GitLab Pages**. No requiere una instancia EC2 o EKS dedicada, lo que reduce el gasto a casi **$0 USD**.
-2.  **Visualización**: Abre el archivo `app/public/index.html` para ver el diseño Glassmorphism con métricas proyectadas.
+1.  **Restricción de Región (Policy)**:
+    - Crea una política que deniegue cualquier servicio fuera de `us-east-1` o `us-east-2`. Esto evita gastos accidentales en regiones costosas.
+2.  **Política de Etiquetado Obligatorio**:
+    - Configura una **IAM Policy** que requiera que todo recurso (S3, EC2, etc.) tenga el Tag: `Project: CloudPortfolio` y `FinOps: CaseL`. Sin estos tags, la creación falla.
+
+---
+
+## 🪜 Fase 4: Despliegue de Alta Disponibilidad a Costo Cero
+
+1.  **Arquitectura**: La App de Monitoreo (`app/public/index.html`) se aloja en un **S3 Bucket** configurado para Static Website Hosting.
+2.  **Optimización CloudFront**:
+    - Se crea una **CloudFront Distribution** apuntando al bucket.
+    - Se habilita **HTTPS gratuito** y compresión **Brotli/Gzip** para velocidad máxima.
+3.  **Costo**: Esta arquitectura entra 100% en el **AWS Free Tier**, costando **$0 USD** para un portafolio personal.
 
 ---
 
-## 🧹 Limpieza
-A diferencia de los casos anteriores, **estos recursos deben permanecer activos**. 
-- Los presupuestos y el IAM OIDC no generan costos significativos y son tu red de seguridad para futuros proyectos.
+## 🪜 Fase 5: Automatización CI/CD (Pipeline Final)
+
+1.  **Job de Despliegue**: GitLab CI asume el rol creado en la Fase 2 usando el token OIDC temporal.
+2.  **Sincronización**: Se ejecuta `aws s3 sync caso-l-finops-optimization/app/public/ s3://tu-bucket --delete`.
+3.  **Invalidación**: Se ejecuta `aws cloudfront create-invalidation` para refrescar el caché del dashboard.
 
 ---
-_Misión: Mantener la nube bajo control total._
+
+## 🧹 Nota de Seguridad y Limpieza
+Estos recursos (Budgets y IAM Roles) **deben permanecer activos**. No generan costos y son el "cinturón de seguridad" de tu cuenta de AWS.
+
+---
+_Manual técnico diseñado para asegurar la madurez operativa del proyecto._
