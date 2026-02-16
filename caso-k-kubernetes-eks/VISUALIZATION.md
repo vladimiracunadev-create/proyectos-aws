@@ -41,8 +41,8 @@ A continuación se presentan los espacios para las capturas de pantalla que vali
 
 ![EKS Cluster Active](./img/eks-cluster-active.png "EKS Cluster Active State")
 
-### 4. Nodos de Cómputo (Managed Node Groups)
-> **Acción**: Captura de la pestaña **Compute** dentro del clúster, mostrando los nodos `t3.medium` en estado **Ready**.
+### 4. Nodos de Cómputo (Managed Nodes / Auto Mode)
+> **Acción**: Captura de la pestaña **Nodes** o **Resources** dentro del clúster, mostrando los nodos creados automáticamente en estado **Ready**.
 
 ![EKS Compute Nodes](./img/eks-compute-nodes.png "Listado de Nodos Saludables en EKS")
 
