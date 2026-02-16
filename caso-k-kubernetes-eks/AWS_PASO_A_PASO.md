@@ -123,7 +123,7 @@ Una vez el clúster y los nodos estén **Active**, es momento de desplegar el c�
 ### 1. Configurar Acceso Local (Kubeconfig)
 Debes "decirle" a tu terminal cómo hablar con el nuevo clúster de AWS:
 ```bash
-aws eks update-kubeconfig --region us-east-2 --name vladimir-eks-cluster
+aws eks update-kubeconfig --region us-east-1 --name vladimir-eks-cluster
 ```
 *   **Verificación**: Ejecuta `kubectl get nodes`. Deberías ver tus 2 nodos en estado `Ready`.
 
