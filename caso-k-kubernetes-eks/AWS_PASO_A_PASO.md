@@ -101,6 +101,49 @@ Esta es la fase más crítica para la seguridad. Kubernetes en AWS funciona bajo
 
 ---
 
+## 🚀 Fase 2: Conexión y Despliegue de Aplicación
+
+Una vez el clúster y los nodos estén **Active**, es momento de desplegar el código.
+
+### 1. Configurar Acceso Local (Kubeconfig)
+Debes "decirle" a tu terminal cómo hablar con el nuevo clúster de AWS:
+```bash
+aws eks update-kubeconfig --region us-east-2 --name vladimir-eks-cluster
+```
+*   **Verificación**: Ejecuta `kubectl get nodes`. Deberías ver tus 2 nodos en estado `Ready`.
+
+### 2. Despliegue de Manifiestos
+Aplica la configuración de Kubernetes que define la aplicación, el diseño premium y el balanceador de carga:
+1.  Asegúrate de estar en la raíz de la carpeta del proyecto.
+2.  Ejecuta:
+    ```bash
+    kubectl apply -f deployment.yaml
+    ```
+3.  **Verificación de Pods**:
+    ```bash
+    kubectl get pods
+    ```
+    Espera a que las 3 réplicas digan `Running`.
+
+---
+
+## 🌐 Fase 3: Acceso y Verificación Final
+
+### 1. Obtener URL de la Aplicación
+Kubernetes solicitará a AWS un **Load Balancer** automáticamente. Para encontrar su dirección:
+```bash
+kubectl get service vladimir-app-service
+```
+*   Busca la columna **EXTERNAL-IP**. Verás una dirección larga terminada en `.elb.amazonaws.com`.
+*   Copia esa dirección y pégala en tu navegador para ver el dashboard premium.
+
+### 2. Prueba de Resiliencia (Self-Healing)
+Para demostrar que el despliegue es industrial, borra un pod manualmente y mira cómo Kubernetes lo recrea:
+1.  `kubectl delete pod <nombre-de-un-pod>`
+2.  `kubectl get pods` -> Verás que hay uno nuevo creándose automáticamente para mantener las 3 réplicas.
+
+---
+
 ## 🚨 Fase 4: Estrategia Maestra de Limpieza (FinOps)
 
 **¡ORDEN CRÍTICO!** Si borras la VPC antes que el clúster, podrías dejar recursos "huérfanos" (como Load Balancers) que seguirán cobrando.
