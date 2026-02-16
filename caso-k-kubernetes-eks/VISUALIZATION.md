@@ -25,9 +25,16 @@ A continuación se presentan los espacios para las capturas de pantalla que vali
 ![VPC Configuration](./img/vpc-config.png "Configuración de Red VPC en AWS")
 
 ### 2. Identidad y Accesos (IAM)
-> **Acción**: Captura del listado de roles IAM mostrando `Vladimir-EKS-Cluster-Role` y `Vladimir-EKS-Node-Role`.
 
-![IAM Roles](./img/eks-iam-roles.png "Roles IAM para EKS y Nodos")
+#### 2.1. Rol del Clúster (Control Plane)
+> **Acción**: Captura del rol `Vladimir-EKS-Cluster-Role` mostrando la política `AmazonEKSClusterPolicy` adjunta.
+
+![EKS Cluster Role](./img/eks-cluster-role.png "Rol IAM para el Clúster EKS")
+
+#### 2.2. Rol de los Nodos (Worker Nodes)
+> **Acción**: Captura del rol `Vladimir-EKS-Node-Role` mostrando las 3 políticas obligatorias (`WorkerNode`, `CNI`, `ECRReadOnly`).
+
+![EKS Node Role](./img/eks-node-role.png "Rol IAM para los Nodos EKS")
 
 ### 3. El Clúster EKS (Control Plane)
 > **Acción**: Sube una captura de `EKS > Clusters > vladimir-eks-cluster` mostrando el estado **Active**.
