@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vladimir-api
+  name: vladimir-app
   labels:
-    app: vladimir-api
+    app: vladimir-app
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: vladimir-api
+      app: vladimir-app
   template:
     metadata:
       labels:
-        app: vladimir-api
+        app: vladimir-app
     spec:
       containers:
-      - name: api
+      - name: app
         # Nota: Deberás subir esta imagen a tu ECR o DockerHub
         image: vladimiracunadev/vladimir-eks-app:latest
         ports:
@@ -44,10 +44,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: vladimir-api-service
+  name: vladimir-app-service
 spec:
   selector:
-    app: vladimir-api
+    app: vladimir-app
   ports:
     - protocol: TCP
       port: 80

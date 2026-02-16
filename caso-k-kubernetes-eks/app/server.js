@@ -11,7 +11,7 @@ app.get('/api/status', (req, res) => {
     res.json({
         status: 'success',
         platform: 'AWS EKS (Elastic Kubernetes Service)',
-        orchestrator: 'Kubernetes v1.27',
+        orchestrator: 'Kubernetes v1.32',
         pod_name: process.env.POD_NAME || 'local-pod',
         node_ip: process.env.NODE_IP || '127.0.0.1',
         namespace: process.env.POD_NAMESPACE || 'default',
