@@ -5,32 +5,19 @@ Esta guía detalla cómo implementar la gobernanza financiera e identidades segu
 ---
 
 ## 🪜 Fase 1: Control de Presupuesto (AWS Budgets)
+... (anteriormente definido) ...
 
-1.  **Crear el Budget**:
-    - Ve a la consola de **AWS Billing and Cost Management** -> **Budgets**.
-    - Botón **Create budget**.
-    - Elige **Cost budget** (Recomendado).
-2.  **Configuración**:
-    - **Name**: `Vladimir-Monthly-Budget`.
-    - **Amount**: `$5.00 USD` (Umbral de seguridad para laboratorios).
-    - **Alerts**: Configura una alerta al **85%** de uso real y otra al **100%** de uso proyectado.
-3.  **Canal de Notificación**:
-    - Ingresa tu correo electrónico para recibir alertas SNS inmediatas.
+## 🪜 Fase 2: Identidad Segura (GitLab OIDC / Passwordless)
+... (anteriormente definido) ...
 
----
-
-## 🪜 Fase 2: Identidad Segura (GitLab OIDC)
-
-*Eliminaremos la necesidad de usar `AWS_ACCESS_KEY_ID` y `AWS_SECRET_ACCESS_KEY`.*
-
-1.  **Identity Provider**:
-    - Ve a **IAM** -> **Identity Providers** -> **Add provider**.
-    - **Provider type**: `OpenID Connect`.
-    - **Provider URL**: `https://gitlab.com`.
-    - **Audience**: `https://gitlab.com`.
-2.  **Crear Rol de Confianza**:
-    - Crea un rol con una política de confianza que permita a GitLab asumir el rol basándose en tu `project_path`.
-    - Adjunta solo los permisos necesarios (Least Privilege).
+## 🪜 Fase 3: Despliegue de la App de Monitoreo (Estrategia FinOps)
+Para que el tablero sea una "App de Producción" pero con **Costo $0**:
+1.  **Infraestructura (Terraform)**:
+    - Definir un bucket **S3** configurado como `website`.
+    - Configurar **CloudFront** como CDN para habilitar HTTPS de forma gratuita (AWS Certificate Manager).
+2.  **Pipeline de Despliegue**:
+    - GitLab CI sincronizará la carpeta `app/public/` hacia S3 cada vez que haya cambios en `main`.
+    - **Resultado**: El Dashboard de Monitoreo tendrá su propia URL de AWS (`https://d123.cloudfront.net`) independiente de GitLab.
 
 ---
 
