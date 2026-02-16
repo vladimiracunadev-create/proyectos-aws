@@ -187,11 +187,23 @@ Para demostrar que el despliegue es industrial, borra un pod manualmente y mira 
 ---
 
 ## 🔍 Resolución de Problemas Comunes
-- **Error: "the server has asked for the client to provide credentials"**: 
-  - Esto significa que `kubectl` no puede autenticarse con el clúster. 
-  - **Solución 1 (Rápida)**: Agrega `--validate=false` al comando: `kubectl apply -f deployment.yaml --validate=false`.
-  - **Solución 2 (Identidad)**: Ejecuta `aws sts get-caller-identity` y asegúrate de que el ARN que aparece sea el mismo que usaste para crear el clúster.
-  - **Solución 3 (Versión)**: Asegúrate de tener la **versión 2** del AWS CLI (`aws --version`).
+- **Error: "ErrImagePull" o "ImagePullBackOff"**: 
+  - Esto ocurre porque el clúster no encuentra la imagen en el registro público.
+  - **Solución**: Debes construir y subir la imagen a tu Docker Hub:
+    ```bash
+    # 1. Entra a la carpeta de la app
+    cd caso-k-kubernetes-eks/app
+    # 2. Construye la imagen (reemplaza 'vladimiracunadev' con tu usuario)
+    docker build -t vladimiracunadev/vladimir-eks-app:latest .
+    # 3. Sube la imagen
+    docker push vladimiracunadev/vladimir-eks-app:latest
+    ```
+- **Error: "push access denied" en Docker**:
+  - Significa que no estás autenticado en tu terminal o el nombre de usuario es incorrecto.
+  - **Solución**:
+    1. Ejecuta `docker login` e ingresa tus credenciales de Docker Hub.
+    2. Asegúrate de que el prefijo `vladimiracunadev/` coincida con tu **Docker ID**. Si tu usuario es distinto, debes cambiarlo en el comando `docker build` y también en el archivo `deployment.yaml`.
+- **External-IP: <pending>**: Es normal. AWS tarda de 2 a 5 minutos en aprovisionar el Load Balancer físico. Vuelve a ejecutar `kubectl get svc` en un momento.
 - **Pods en estado "Pending"**: Verifica que los nodos tengan recursos suficientes (`kubectl describe node`).
 - **ELB no carga**: Los Load Balancers clásicos de AWS pueden tardar hasta 5 minutos en propagar el DNS.
 
