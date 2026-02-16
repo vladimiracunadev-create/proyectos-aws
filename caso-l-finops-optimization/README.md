@@ -1,20 +1,30 @@
-# 💰 Caso L: FinOps & Cost Optimization (Excelencia Operativa)
+# 💰 Caso L: FinOps & Governance (Excelencia Operativa)
 
-[![Nivel-11](https://img.shields.io/badge/Nivel-11_Gobernanza-orange?style=for-the-badge)]()
-[![Status](https://img.shields.io/badge/Status-Nuevo-blue?style=for-the-badge)]()
+[![Nivel-11](https://img.shields.io/badge/Nivel-11_Senior-gold?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Diseñado_&_Planificado-blue?style=for-the-badge)]()
 
-La nube no es barata si no se sabe administrar. Este caso final de la suite se enfoca en la eficiencia financiera, asegurando que cada dólar invertido en AWS genere el máximo valor.
+"La nube no solo se trata de construir, sino de administrar con responsabilidad". El **Caso L** es la culminación de la madurez cloud, donde la infraestructura se encuentra con la gobernanza financiera y la seguridad de identidades.
 
 ---
 
 ## 🎯 Objetivo
-Control total del gasto. Aprenderás a implementar presupuestos automáticos, analizar sugerencias de ahorro mediante IA (**Compute Optimizer**) y monitorear el gasto por proyecto.
+Lograr la **Excelencia Operativa**. Implementarás mecanismos para que el presupuesto sea predecible, los accesos sean seguros (Passwordless) y la infraestructura cumpla con estándares corporativos.
 
-## 🛠️ Herramientas de Control
-- **AWS Budgets**: Alertas de gasto en tiempo real.
-- **Cost Explorer**: Análisis histórico y proyecciones.
-- **Trusted Advisor**: Recomendaciones de seguridad y costos.
+## 🏗️ Stack de Gobernanza
+- **AWS Budgets**: Guardianes del presupuesto (Alertas vía SNS).
+- **GitLab CI + OIDC**: Eliminación de llaves permanentes (Zero Trust).
+- **IAM Governance**: Políticas de privilegio mínimo y límites de región.
+- **Cost Explorer Metadata**: Estrategia de etiquetado (Tagging) para auditoría.
+
+## 📊 Beneficio para el Negocio
+- 📉 **Reducción de Riesgos**: Se eliminan las brechas por llaves filtradas.
+- 💰 **Previsibilidad**: ¡Adiós a las facturas sorpresa de AWS!
+- 🛡️ **Cumplimiento (Compliance)**: Auditoría total de quién gasta qué y en dónde.
 
 ## 🔗 Enlaces Relacionados
 - ⬅️ **[Regresar al Roadmap Principal](../README.md)**
-- 🛠️ **[Especificaciones Técnicas](../docs/TECHNICAL_SPECS.md)**
+- 📘 **[Guía para Reclutadores](../docs/RECRUITER.md)**
+- 🧪 **[Dashboard FinOps (Simulación)](./index.html)**
+
+---
+> **Preparado por Vladimir Acuña — Optimizado para Ingeniería Cloud Senior.**
