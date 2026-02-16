@@ -58,7 +58,32 @@ Esta guía detalla la implementación de la **Excelencia Operativa** mediante co
 
 ---
 
-## 🪜 Fase 4: Despliegue de Alta Disponibilidad a Costo Cero
+## 🪜 Fase 5: Configuración en GitLab CI/CD (El Puente)
+
+*Para que GitLab pueda "hablar" con AWS sin contraseñas, debemos configurar el proyecto:*
+
+1.  **Variables de Entorno (GitLab)**:
+    - Ve a **Settings** -> **CI/CD** -> **Variables**.
+    - Agrega `AWS_ROLE_ARN`: El ARN del rol que creaste en la Fase 2 (ej: `arn:aws:iam::123:role/GitLabDeployRole`).
+    - Agrega `AWS_REGION`: `us-east-1`.
+2.  **Configuración del Pipeline (`.gitlab-ci.yml`)**:
+    - Debes declarar el uso de **ID Tokens**. Este es el "pasaporte" que GitLab le presenta a AWS:
+    ```yaml
+    variables:
+      # Este es el token OIDC que AWS validará
+      ID_TOKEN: $[[ inputs.id_token ]] 
+
+    deploy_job:
+      id_tokens:
+        GITLAB_OIDC_TOKEN:
+          aud: https://gitlab.com
+      script:
+        - # Comandos para asumir el rol usando el TOKEN
+    ```
+
+---
+
+## 🪜 Fase 6: Despliegue de Alta Disponibilidad a Costo Cero
 
 1.  **Arquitectura**: La App de Monitoreo (`app/public/index.html`) se aloja en un **S3 Bucket** configurado para Static Website Hosting.
 2.  **Optimización CloudFront**:
