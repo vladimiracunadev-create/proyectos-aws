@@ -43,11 +43,10 @@ Esta guía detalla cómo implementar la gobernanza financiera e identidades segu
 
 ---
 
-## 🪜 Fase 4: Visualización Financiera
+## 🪜 Fase 4: Visualización Financiera (Dashboard Premium)
 
-1.  **Cost Explorer**:
-    - Habilita Cost Explorer para ver gráficos históricos.
-    - Crea un reporte guardado filtrado por los tags definidos en la Fase 3.
+1.  **Hosting Estático**: Siguiendo los principios de FinOps (ahorro de costos), este dashboard se aloja como contenido estático en **S3 o GitLab Pages**. No requiere una instancia EC2 o EKS dedicada, lo que reduce el gasto a casi **$0 USD**.
+2.  **Visualización**: Abre el archivo `app/public/index.html` para ver el diseño Glassmorphism con métricas proyectadas.
 
 ---
 

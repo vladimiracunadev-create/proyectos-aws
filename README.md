@@ -170,7 +170,7 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   **Stack**: AWS Budgets + GitLab OIDC + IAM Governance.
 *   **Enfoque**: **Excelencia Operativa.** Integración profunda de GitLab con AWS, control de costos y políticas de gobernanza corporativa.
 *   ☁️ [Guía Paso a Paso AWS](caso-l-finops-optimization/AWS_PASO_A_PASO.md)
-*   🧪 [Dashboard FinOps (Simulación)](caso-l-finops-optimization/index.html)
+*   🧪 [Dashboard FinOps (Simulación)](caso-l-finops-optimization/app/public/index.html)
 
 ---
 

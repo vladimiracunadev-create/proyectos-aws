@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinOps Dashboard | Caso L</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <div class="title-group">
+                <h1>FinOps Control Center</h1>
+                <p style="color: #94a3b8; margin-top: 5px;">Caso L: Gobernanza & Optimización Cloud</p>
+            </div>
+            <div class="status-badge">OIDC ACTIVE</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-val">$2.10</span>
+                <span class="stat-label">Gasto Mes Real</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-val">$4.85</span>
+                <span class="stat-label">Proyección Fin Mes</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-val">0</span>
+                <span class="stat-label">Secretos Expuestos</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-val">us-east-1</span>
+                <span class="stat-label">Región Principal</span>
+            </div>
+        </div>
+
+        <div class="budget-container">
+            <div class="budget-header">
+                <span>Presupuesto Mensual: $5.00</span>
+                <span style="color: #10b981;">42% Utilizado</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="governance-section">
+            <h3 style="margin-bottom: 20px;">Políticas Activas (Guardrails)</h3>
+            <div class="governance-list">
+                <div class="gov-item"><span class="check-icon">✔</span> GitLab OIDC (No-Password Auth)</div>
+                <div class="gov-item"><span class="check-icon">✔</span> Region Limit Control (us-east-1)</div>
+                <div class="gov-item"><span class="check-icon">✔</span> Mandatory Tagging Policy</div>
+                <div class="gov-item"><span class="check-icon">✔</span> Cost Anomaly Detection</div>
+                <div class="gov-item"><span class="check-icon">✔</span> Zero Open Bucket Rules</div>
+                <div class="gov-item"><span class="check-icon">✔</span> Automated IAM Rotation</div>
+            </div>
+        </div>
+
+        <div class="footer-nav">
+            <a href="../../README.md" class="btn">Volver al Roadmap</a>
+            <a href="../../AWS_PASO_A_PASO.md" class="btn">Ver Guía Paso a Paso</a>
+        </div>
+    </div>
+</body>
+
+</html>
