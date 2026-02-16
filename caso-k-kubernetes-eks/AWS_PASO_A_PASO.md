@@ -173,7 +173,11 @@ Para demostrar que el despliegue es industrial, borra un pod manualmente y mira 
 ---
 
 ## 🔍 Resolución de Problemas Comunes
-- **Error: "Unauthorized" al usar kubectl**: Revisa que tus credenciales de `aws configure` sean las mismas que crearon el clúster.
+- **Error: "the server has asked for the client to provide credentials"**: 
+  - Esto significa que `kubectl` no puede autenticarse con el clúster. 
+  - **Solución 1 (Rápida)**: Agrega `--validate=false` al comando: `kubectl apply -f deployment.yaml --validate=false`.
+  - **Solución 2 (Identidad)**: Ejecuta `aws sts get-caller-identity` y asegúrate de que el ARN que aparece sea el mismo que usaste para crear el clúster.
+  - **Solución 3 (Versión)**: Asegúrate de tener la **versión 2** del AWS CLI (`aws --version`).
 - **Pods en estado "Pending"**: Verifica que los nodos tengan recursos suficientes (`kubectl describe node`).
 - **ELB no carga**: Los Load Balancers clásicos de AWS pueden tardar hasta 5 minutos en propagar el DNS.
 
