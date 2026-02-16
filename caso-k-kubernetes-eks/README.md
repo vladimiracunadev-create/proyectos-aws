@@ -1,5 +1,13 @@
 # ☸️ Caso K: Kubernetes en AWS (Orquestación EKS)
 
+## 🚀 Despliegue Operativo (Caso K)
+
+**¡El proyecto ya se encuentra en vivo!** Puedes acceder al dashboard premium desplegado en Amazon EKS aquí:
+
+👉 **[Dashboard Operativo en AWS](http://k8s-default-vladimir-fd9bd8dc79-d4392d3db0728cc7.elb.us-east-1.amazonaws.com)**
+
+---
+
 [![Nivel-10](https://img.shields.io/badge/Nivel-10_Enterprise-blueviolet?style=for-the-badge)]()
 [![Status](https://img.shields.io/badge/Status-Nuevo-blue?style=for-the-badge)]()
 

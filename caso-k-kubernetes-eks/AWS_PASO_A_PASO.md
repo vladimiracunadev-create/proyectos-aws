@@ -1,4 +1,6 @@
-# 🪜 AWS Paso a Paso - Caso K: Despliegue de EKS Industrial
+# 🪜 AWS Paso a Paso - **Estado**: ¡100% OPERATIVO! ✅
+- **URL**: [k8s-default-vladimir-fd9bd8dc79-d4392d3db0728cc7.elb.us-east-1.amazonaws.com](http://k8s-default-vladimir-fd9bd8dc79-d4392d3db0728cc7.elb.us-east-1.amazonaws.com)
+- **Región**: `us-east-1` (N. Virginia).
 
 Este documento detalla el proceso técnico para levantar un clúster de **Kubernetes (EKS)** en AWS, desplegar la aplicación con diseño premium y realizar la limpieza de recursos.
 
@@ -160,11 +162,12 @@ Aplica la configuración de Kubernetes que define la aplicación, el diseño pre
 
 ### 1. Obtener URL de la Aplicación
 Kubernetes solicitará a AWS un **Load Balancer** automáticamente. Para encontrar su dirección:
-```bash
-kubectl get service vladimir-app-service
-```
-*   Busca la columna **EXTERNAL-IP**. Verás una dirección larga terminada en `.elb.amazonaws.com`.
-*   Copia esa dirección y pégala en tu navegador para ver el dashboard premium.
+5.  **Verificación Final**:
+    ```bash
+    kubectl get service vladimir-app-service
+    ```
+    - Copia el **EXTERNAL-IP** (DNS de AWS).
+    - ¡Pégalo en tu navegador y disfruta de tu app operativa! 🚀
 
 ### 2. Prueba de Resiliencia (Self-Healing)
 Para demostrar que el despliegue es industrial, borra un pod manualmente y mira cómo Kubernetes lo recrea:

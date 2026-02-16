@@ -5,6 +5,17 @@ Este reporte sirve como evidencia técnica del despliegue exitoso del **Caso K (
 
 ---
 
+### 5. Dashboard Operativo en AWS 👉 **¡ÉXITO TOTAL!** ✅
+La aplicación ha sido desplegada con éxito tras resolver retos de red y permisos. Es accesible globalmente a través del Load Balancer de AWS.
+
+- **URL**: [Dashboard en Vivo](http://k8s-default-vladimir-fd9bd8dc79-d4392d3db0728cc7.elb.us-east-1.amazonaws.com)
+- **Status**: `Running` (3 réplicas)
+- **Infraestructura**: EKS Auto Mode + AWS Load Balancer
+
+---
+
+*Reporte de Cierre del Caso K.*
+
 ## 🏗️ Resumen de la Implementación
 Se ha migrado de una infraestructura puramente automatizada (Terraform) a una metodología híbrida que permite el despliegue manual desde la **Consola de AWS**, permitiendo un control total sobre cada componente.
 
