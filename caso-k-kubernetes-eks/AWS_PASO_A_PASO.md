@@ -31,22 +31,31 @@ Si prefieres realizar el despliegue mediante clics para entender cada componente
 10. Haz clic en **Create VPC** y espera a que el diagrama de flujo termine (aprox. 1 min).
 
 ### 2. Gestión de Identidad (IAM Roles)
-Necesitas crear dos roles de confianza antes de lanzar el clúster:
+Esta es la fase más crítica para la seguridad. Kubernetes en AWS funciona bajo un modelo de **responsabilidad compartida**, donde el clúster (plano de control) y los trabajadores (nodos) requieren permisos distintos para interactuar con la API de AWS.
 
-#### A. Rol para el Plano de Control (EKS Cluster)
-1.  Ve a **IAM** -> **Roles** -> **Create role**.
-2.  Select entity: **AWS Service**. Service: **EKS**. Use case: **EKS - Cluster**.
-3.  Permissions: Debe tener `AmazonEKSClusterPolicy`.
-4.  Name: `Vladimir-EKS-Cluster-Role`.
+#### A. Rol para el Plano de Control (EKS Cluster Role)
+*   **Propósito**: Permite que el servicio administrado EKS cree y gestione recursos en tu nombre (como Load Balancers, interfaces de red y grupos de seguridad).
+*   **Pasos Detallados**:
+    1.  Ve a **IAM** -> **Roles** -> **Create role**.
+    2.  **Trusted Entity**: Selecciona **AWS Service**.
+    3.  **Use Case**: Busca **EKS** en la lista y selecciona **EKS - Cluster**. Esto configura automáticamente la "Trust Relationship" para que el servicio `eks.amazonaws.com` pueda asumir este rol.
+    4.  **Permissions**: AWS adjuntará por defecto la política `AmazonEKSClusterPolicy`. Esta política otorga los permisos necesarios para que EKS gestione la infraestructura del clúster.
+    5.  **Name**: `Vladimir-EKS-Cluster-Role`.
 
-#### B. Rol para los Nodos (Worker Nodes)
-1.  IAM -> Roles -> **Create role**.
-2.  Select entity: **AWS Service**. Use case: **EC2**.
-3.  Busca y selecciona estas **3 políticas**:
-    - `AmazonEKSWorkerNodePolicy`
-    - `AmazonEKS_CNI_Policy`
-    - `AmazonEC2ContainerRegistryReadOnly`
-4.  Name: `Vladimir-EKS-Node-Role`.
+#### B. Rol para los Nodos (Worker Node Role)
+*   **Propósito**: Permite que las instancias EC2 (los nodos) se unan al clúster y realicen tareas operativas.
+*   **Políticas Requeridas (Explicación)**:
+    - `AmazonEKSWorkerNodePolicy`: Permite a los nodos conectarse a la API de EKS.
+    - `AmazonEKS_CNI_Policy`: Permite que el plugin de red de Kubernetes gestione las IPs de las interfaces de red (ENIs) en la VPC.
+    - `AmazonEC2ContainerRegistryReadOnly`: Permite que los nodos descarguen (pull) tus imágenes de Docker desde ECR.
+*   **Pasos Detallados**:
+    1.  **IAM** -> **Roles** -> **Create role**.
+    2.  **Trusted Entity**: Selecciona **AWS Service** -> **EC2**.
+    3.  **Permissions**: Busca y marca manualmente las 3 políticas mencionadas arriba.
+    4.  **Name**: `Vladimir-EKS-Node-Role`.
+
+> [!TIP]
+> Sin estos roles correctamente configurados, el clúster se quedará en estado "Pending" o los nodos nunca aparecerán como "Ready". 
 
 ### 3. Lanzamiento del Clúster EKS
 1.  Ve a **EKS** -> **Clusters** -> **Add cluster** -> **Create**.
