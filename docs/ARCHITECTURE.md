@@ -36,6 +36,10 @@ A diferencia de los archivos estáticos, el código de aplicaciones empaquetadas
 3.  **Orquestación (AWS ECS)**: El clúster monitorea el estado deseado y extrae la imagen de ECR.
 4.  **Ejecución (Fargate)**: La aplicación corre en infraestructura Serverless, aislada y escalable.
 
+### ⚖️ ECS vs EKS: ¿Cuándo usar cada uno?
+- **AWS ECS (Caso J)**: Ideal para equipos pequeños que buscan simplicidad y rapidez sin gestionar la complejidad de Kubernetes.
+- **AWS EKS (Caso K)**: El estándar para aplicaciones que requieren portabilidad total, ecosistema nativo de Kubernetes (Helm, Operators) y control absoluto sobre la orquestación. Es la opción de "Nivel 10" por su curva de aprendizaje y potencia ilimitada.
+
 ---
 
 ## 🛠️ Stack Tecnológico

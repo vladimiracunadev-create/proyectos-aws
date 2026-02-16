@@ -58,11 +58,17 @@ El proyecto resuelve problemas críticos que enfrentan las empresas modernas al 
 **Solución**: Backend reactivo que escala a cero. Integración de API Gateway con persistencia NoSQL.
 **Habilidad**: Backend, Serverless, NoSQL Design.
 
-### 4. **[Caso K] Orquestación Industrial (Amazon EKS)**
-**Problema**: Gestión de flotas de contenedores a gran escala con alta disponibilidad.
-**Solución**: Despliegue de un clúster EKS 1.32 con Load Balancers y auto-scaling.
-**Habilidad**: Kubernetes, Helm/Manifests, EKS Auto Mode.
-**Demo**: [Dashboard EKS (Estado: Desconectado por ahorros FinOps)](http://k8s-default-vladimir-fd9bd8dc79-d4392d3db0728cc7.elb.us-east-1.amazonaws.com)
+### 4. **[Caso K] Orquestación Industrial (Amazon EKS)** ☸️
+**¿Por qué este enfoque?**: Mientras que ECS es excelente para aplicaciones sencillas, **Kubernetes (EKS)** es el estándar de facto para arquitecturas complejas y agnósticas a la nube. Este caso demuestra la capacidad de gestionar infraestructuras de gran escala.
+
+- **Problema**: Gestión de flotas de contenedores con alta disponibilidad y necesidad de estándares abiertos.
+- **Alcance**: Orquestación real con balanceo L7 avanzado y gestión de estado.
+- **Poder**: **Self-Healing Activo**. El clúster se auto-repara ante fallos sin intervención humana.
+- **Alternativas**: 
+  - *ECS*: Más simple, pero conlleva un "Vendor Lock-in" más fuerte. 
+  - *Serverless (Lambda)*: Más económico, pero con límites de tiempo (timeout) y estado.
+- **Habilidad**: Kubernetes Expert, Helm, EKS Auto Mode & Cloud Networking.
+- **Demo**: [Dashboard EKS (Estado: Hibernado por ahorro FinOps)](http://k8s-default-vladimir-fd9bd8dc79-d4392d3db0728cc7.elb.us-east-1.amazonaws.com)
 
 ---
 

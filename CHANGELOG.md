@@ -3,6 +3,15 @@
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato seguirá [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) y este proyecto utiliza [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2026-02-16
+### Added
+- **Caso K (Kubernetes EKS)**: Finalización del hito de orquestación industrial.
+    - Despliegue de clúster EKS v1.32 con Auto Mode.
+    - Implementación de balanceo de carga L7 (AWS Load Balancer Controller).
+    - Validación de resiliencia mediante pruebas de **Self-Healing**.
+    - Guía de limpieza FinOps para gestión de costos en la nube.
+- **Documentación Estratégica**: Actualización de guías para reclutadores y novatos con el rationale técnico de Kubernetes.
+
 ## [1.3.0] - 2026-02-10
 ### Added
 - **Caso J (Premium Dashboard)**: Evolución de la interfaz técnica JSON a un Dashboard industrial con **Glassmorphism** y animaciones.
