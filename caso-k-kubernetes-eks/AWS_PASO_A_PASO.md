@@ -59,7 +59,7 @@ Esta es la fase más crítica para la seguridad. Kubernetes en AWS funciona bajo
 
 ### 3. Lanzamiento del Clúster EKS
 1.  Ve a **EKS** -> **Clusters** -> **Add cluster** -> **Create**.
-2.  **Name**: `vladimir-eks-cluster`. **Kubernetes version**: `1.27`.
+2.  **Name**: `vladimir-eks-cluster`. **Kubernetes version**: `1.31`.
 3.  **Cluster service role**: Selecciona el `Vladimir-EKS-Cluster-Role` creado antes.
 4.  **Networking**: 
     - **VPC**: Selecciona `vladimir-eks-vpc`.
