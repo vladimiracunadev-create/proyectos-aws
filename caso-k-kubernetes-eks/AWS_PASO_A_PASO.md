@@ -7,7 +7,7 @@ Este documento detalla el proceso técnico para levantar un clúster de **Kubern
 ## 📋 Requisitos Previos
 1. **AWS CLI** configurado con permisos de Administrador.
 2. **Terraform** instalado (v1.0+).
-3. **kubectl** instalado (compatible con la versión 1.27 de K8s).
+3. **kubectl** instalado (compatible con la versión 1.31 de K8s).
 4. **Docker** instalado para la gestión de imágenes (opcional si usas imágenes existentes).
 
 ---
