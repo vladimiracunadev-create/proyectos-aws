@@ -15,28 +15,37 @@ Se ha migrado de una infraestructura puramente automatizada (Terraform) a una me
 
 ---
 
-## 🖼️ Galería de Evidencias (Para Cargar)
+## 🖼️ Galería de Evidencias (Flujo de Despliegue)
 
-A continuación se presentan los espacios para las capturas de pantalla que validan la implementación manual. 
+A continuación se presentan los espacios para las capturas de pantalla que validan cada fase del despliegue manual, siguiendo el orden del **Walkthrough**.
 
-### 1. Estado del Clúster EKS
+### 1. Infraestructura de Red (VPC)
+> **Acción**: Captura de la consola de VPC mostrando la red `vladimir-eks`, las 4 subredes y los NAT Gateways creados.
+
+![VPC Configuration](./img/eks-vpc-config.png "Configuración de Red VPC en AWS")
+
+### 2. Identidad y Accesos (IAM)
+> **Acción**: Captura del listado de roles IAM mostrando `Vladimir-EKS-Cluster-Role` y `Vladimir-EKS-Node-Role`.
+
+![IAM Roles](./img/eks-iam-roles.png "Roles IAM para EKS y Nodos")
+
+### 3. El Clúster EKS (Control Plane)
 > **Acción**: Sube una captura de `EKS > Clusters > vladimir-eks-cluster` mostrando el estado **Active**.
 
 ![EKS Cluster Active](./img/eks-cluster-active.png "EKS Cluster Active State")
 
-### 2. Dashboard Premium (Glassmorphism)
-> **Acción**: Sube una captura de la interfaz web accediendo a través del DNS del Load Balancer.
-> **Ruta**: `EC2 > Load Balancers`.
+### 4. Nodos de Cómputo (Managed Node Groups)
+> **Acción**: Captura de la pestaña **Compute** dentro del clúster, mostrando los nodos `t3.medium` en estado **Ready**.
+
+![EKS Compute Nodes](./img/eks-compute-nodes.png "Listado de Nodos Saludables en EKS")
+
+### 5. Aplicación y Dashboard Premium (Glassmorphism)
+> **Acción**: Captura del navegador accediendo a la App a través del DNS del Load Balancer.
 
 ![Dashboard Moderno](./img/eks-dashboard-glassmorphism.png "Dashboard Moderno con Glassmorphism")
 
-### 3. Salud de los Nodos (Managed Node Groups)
-> **Acción**: Captura de la pestaña **Compute** dentro del clúster, mostrando los nodos en estado **Ready**.
-
-![EKS Compute Nodes](./img/eks-compute-nodes.png "Listado de Nodos en EKS")
-
-### 4. Prueba de Auto-Sanación (Self-Healing)
-> **Acción**: Collage mostrando el comando `kubectl delete pod` y cómo Kubernetes levanta uno nuevo instantáneamente en la consola de AWS.
+### 6. Prueba de Auto-Sanación (Self-Healing)
+> **Acción**: Collage mostrando el comando `kubectl delete pod` y la recuperación inmediata en la consola.
 
 ![Self-Healing Demo](./img/eks-self-healing-demo.png "Prueba de Auto-sanación exitosa")
 
