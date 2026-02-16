@@ -87,15 +87,30 @@ Esta es la fase más crítica para la seguridad. Kubernetes en AWS funciona bajo
 5.  Mantén el resto por defecto y haz clic en **Create**. (Toma entre 10 y 15 minutos).
 
 ### 4. Configuración de Cómputo (Nodos)
-> [!IMPORTANT]
-> **Si usas EKS Auto Mode (Recomendado)**: No necesitas buscar la pestaña **"Informática" (Compute)** ni añadir un "Node Group" manualmente. AWS creará los nodos automáticamente cuando despliegues la aplicación en la Fase 2. Puedes saltar al siguiente paso.
 
-**Si usas Modo Estándar**:
-1.  Una vez el clúster pase a estado **Active**, ve a la pestaña **"Informática" (Compute)**.
-2.  Haz clic en **Add node group**.
-3.  **Name**: `vladimir-standard-nodes`. **Node IAM Role**: `Vladimir-EKS-Node-Role`.
-4.  **Instance type**: `t3.medium`. **Scaling**: 2 nodos.
-5.  Haz clic en **Create**.
+Existen dos maneras de manejar el cómputo en EKS. Dependiendo de lo que hayas visto al crear el clúster, elige tu camino:
+
+#### 🟢 Opción A: EKS Auto Mode (El más sencillo y recomendado)
+Si al crear el clúster seleccionaste o te apareció por defecto el **Auto Mode**, no verás opciones de "Node Groups" tradicionales.
+*   **Acción**: ¡No necesitas buscar ninguna pestaña ni crear nada manualmente! 
+*   **Concepto**: EKS gestiona el cómputo como un recurso "serverless". Los nodos aparecerán mágicamente en la pestaña **"Recursos" (Resources)** o **"Nodos" (Nodes)** una vez que despliegues la aplicación en la Fase 2.
+*   **Siguiente paso**: Salta directamente a la **Fase 2**.
+
+#### 🟡 Opción B: Modo Estándar (Manual)
+Si prefieres el control manual o no usas Auto Mode, sigue estos clics minuciosos:
+1.  En la página de tu clúster, haz clic en la pestaña **"Informática" (Compute)**.
+2.  Desplázate hacia abajo hasta encontrar **Managed Node Groups** y haz clic en **Add node group**.
+3.  **Configuración de Identidad**:
+    - **Name**: `vladimir-standard-nodes`.
+    - **Node IAM Role**: Selecciona el `Vladimir-EKS-Node-Role` (que creamos en la Fase 1).
+4.  **Configuración de Cómputo (Compute Configuration)**:
+    - **AMI type**: Amazon Linux 2 (AL2_x86_64).
+    - **Instance type**: Selecciona `t3.medium`.
+5.  **Configuración de Escalado (Scaling Configuration)**:
+    - **Minimum size**: 2. **Maximum size**: 2. **Desired size**: 2.
+6.  **Red (Networking)**:
+    - Asegúrate de que solo las **subredes privadas** estén seleccionadas para mayor seguridad.
+7.  Haz clic en **Create**. Los nodos tardarán unos 5 minutos en estar listos (**Ready**).
 
 ---
 
