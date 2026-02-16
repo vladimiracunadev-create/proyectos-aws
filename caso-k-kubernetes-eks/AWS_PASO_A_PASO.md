@@ -34,12 +34,30 @@ Si prefieres realizar el despliegue mediante clics para entender cada componente
 Esta es la fase más crítica para la seguridad. Kubernetes en AWS funciona bajo un modelo de **responsabilidad compartida**, donde el clúster (plano de control) y los trabajadores (nodos) requieren permisos distintos para interactuar con la API de AWS.
 
 #### A. Rol para el Plano de Control (EKS Cluster Role)
-*   **Propósito**: Permite que el servicio administrado EKS cree y gestione recursos en tu nombre (como Load Balancers, interfaces de red y grupos de seguridad).
+*   **Propósito**: Permite que el servicio administrado EKS gestione recursos en tu nombre. En las versiones modernas (1.31+), si utilizas **EKS Auto Mode**, el clúster toma el control total de cómputo, red y almacenamiento, por lo que requiere permisos extra.
 *   **Pasos Detallados**:
     1.  Ve a **IAM** -> **Roles** -> **Create role**.
-    2.  **Trusted Entity**: Selecciona **AWS Service**.
-    3.  **Use Case**: Busca **EKS** en la lista y selecciona **EKS - Cluster**. Esto configura automáticamente la "Trust Relationship" para que el servicio `eks.amazonaws.com` pueda asumir este rol.
-    4.  **Permissions**: AWS adjuntará por defecto la política `AmazonEKSClusterPolicy`. Esta política otorga los permisos necesarios para que EKS gestione la infraestructura del clúster.
+    2.  **Trusted Entity**: AWS Service. **Use Case**: EKS - Cluster.
+    3.  **Permisos (Crucial para Modo Automático)**: Debes adjuntar las siguientes **5 políticas**:
+        - `AmazonEKSClusterPolicy` (La estándar).
+        - `AmazonEKSBlockStoragePolicy` (Para gestionar discos EBS).
+        - `AmazonEKSComputePolicy` (Para gestionar nodos automáticos).
+        - `AmazonEKSLoadBalancingPolicy` (Para gestionar el tráfico).
+        - `AmazonEKSNetworkingPolicy` (Para gestionar la red).
+    4.  **Configuración de Confianza (Trust Policy)**: 
+        Al finalizar la creación, debes editar la pestaña **Trust relationships** y asegurarte de que incluya la acción `"sts:TagSession"`.
+        ```json
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": { "Service": "eks.amazonaws.com" },
+              "Action": [ "sts:AssumeRole", "sts:TagSession" ]
+            }
+          ]
+        }
+        ```
     5.  **Name**: `Vladimir-EKS-Cluster-Role`.
 
 #### B. Rol para los Nodos (Worker Node Role)
