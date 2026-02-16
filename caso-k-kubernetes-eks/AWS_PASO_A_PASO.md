@@ -203,6 +203,19 @@ Para demostrar que el despliegue es industrial, borra un pod manualmente y mira 
   - **Solución**:
     1. Ejecuta `docker login` e ingresa tus credenciales de Docker Hub.
     2. Asegúrate de que el prefijo `vladimiracunadev/` coincida con tu **Docker ID**. Si tu usuario es distinto, debes cambiarlo en el comando `docker build` y también en el archivo `deployment.yaml`.
+- **Error: "Failed build model... unable to resolve at least one subnet"**:
+  - AWS no sabe cuáles de tus subredes son públicas para poner el Balanceador.
+  - **Solución (Tags en VPC)**: 
+    1. Ve a la consola de **VPC** -> **Subnets**.
+    2. Selecciona tus **2 Subredes Públicas** (las que creaste al inicio).
+    3. Ve a la pestaña **Tags** -> **Manage tags**.
+    4. Añade el siguiente tag exactamente:
+       - **Key**: `kubernetes.io/role/elb`
+       - **Value**: `1`
+    5. Selecciona tus **2 Subredes Privadas** y añade el tag:
+       - **Key**: `kubernetes.io/role/internal-elb`
+       - **Value**: `1`
+  - Tras esto, el Load Balancer se creará en menos de 1 minuto.
 - **External-IP: <pending>**: Es normal. AWS tarda de 2 a 5 minutos en aprovisionar el Load Balancer físico. Vuelve a ejecutar `kubectl get svc` en un momento.
 - **Pods en estado "Pending"**: Verifica que los nodos tengan recursos suficientes (`kubectl describe node`).
 - **ELB no carga**: Los Load Balancers clásicos de AWS pueden tardar hasta 5 minutos en propagar el DNS.
