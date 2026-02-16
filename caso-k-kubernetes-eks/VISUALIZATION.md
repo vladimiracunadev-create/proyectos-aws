@@ -61,6 +61,21 @@ A continuación se presentan los espacios para las capturas de pantalla que vali
 > **Acción**: Captura del navegador accediendo a la App a través del DNS del Load Balancer.
 
 ![Dashboard Moderno](./img/eks-dashboard-glassmorphism.png "Dashboard Moderno con Glassmorphism")
+### 6. Prueba de Auto-Sanación (Self-Healing) ✅
+**¿Qué estamos viendo aquí?**
+Esta es la característica más potente de Kubernetes. En sistemas tradicionales, si un proceso falla, un humano debe levantarlo. En este proyecto:
+
+1.  **Estado Deseado**: Configuramos `replicas: 3` en el `deployment.yaml`.
+2.  **El Incidente**: Al ejecutar `kubectl delete pod`, estamos simulando un fallo crítico de hardware o software.
+3.  **La Respuesta**: El **Control Plane** de EKS detecta que solo hay 2 pods vivos (discrepancia).
+4.  **La Sanación**: En milisegundos, Kubernetes ordena crear un nuevo Pod para volver a tener 3. 
+
+**Resultado Final**: Disponibilidad del 100% incluso ante fallos.
+- **Evidencia**: `Age: 5s` en el nuevo pod contra `Age: 50m` en los antiguos.
+
+---
+
+*Fin del Reporte Técnico de Visualización - Caso K.*
 
 ### 6. Prueba de Auto-Sanación (Self-Healing)
 > **Acción**: Collage mostrando el comando `kubectl delete pod` y la recuperación inmediata en la consola.
