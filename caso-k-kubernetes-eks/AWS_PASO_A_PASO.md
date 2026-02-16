@@ -7,7 +7,7 @@ Este documento detalla el proceso técnico para levantar un clúster de **Kubern
 ## 📋 Requisitos Previos
 1. **AWS CLI** configurado con permisos de Administrador.
 2. **Terraform** instalado (v1.0+).
-3. **kubectl** instalado (compatible con la versión 1.31 de K8s).
+3. **kubectl** instalado (compatible con la versión 1.31 o 1.32 de K8s).
 4. **Docker** instalado para la gestión de imágenes (opcional si usas imágenes existentes).
 
 ---
@@ -43,23 +43,24 @@ Esta es la fase más crítica para la seguridad. Kubernetes en AWS funciona bajo
     5.  **Name**: `Vladimir-EKS-Cluster-Role`.
 
 #### B. Rol para los Nodos (Worker Node Role)
-*   **Propósito**: Permite que las instancias EC2 (los nodos) se unan al clúster y realicen tareas operativas.
-*   **Políticas Requeridas (Explicación)**:
-    - `AmazonEKSWorkerNodePolicy`: Permite a los nodos conectarse a la API de EKS.
-    - `AmazonEKS_CNI_Policy`: Permite que el plugin de red de Kubernetes gestione las IPs de las interfaces de red (ENIs) en la VPC.
-    - `AmazonEC2ContainerRegistryReadOnly`: Permite que los nodos descarguen (pull) tus imágenes de Docker desde ECR.
-*   **Pasos Detallados**:
-    1.  **IAM** -> **Roles** -> **Create role**.
-    2.  **Trusted Entity**: Selecciona **AWS Service** -> **EC2**.
-    3.  **Permissions**: Busca y marca manualmente las 3 políticas mencionadas arriba.
-    4.  **Name**: `Vladimir-EKS-Node-Role`.
+*   **¿Por qué es necesario?**: A diferencia de una instancia EC2 normal, un nodo de EKS necesita "hablar" con el clúster para recibir instrucciones y con otros servicios de AWS para funcionar.
+*   **Anatomía del Rol**:
+    - **Trusted Entity**: Debe ser **EC2** (`ec2.amazonaws.com`). Esto permite que las máquinas virtuales "asuman" la identidad del rol.
+    - **Políticas (El Tridente de Permisos)**:
+        1. `AmazonEKSWorkerNodePolicy`: El "DNI" del nodo. Sin esto, el nodo no puede registrarse en el clúster.
+        2. `AmazonEKS_CNI_Policy`: El "Cerebro de Red". Permite que los Pods tengan IPs reales de tu VPC. Si falla, los Pods no tendrán internet ni comunicación entre ellos.
+        3. `AmazonEC2ContainerRegistryReadOnly`: El "Pasaporte de Imágenes". Permite bajar el código de tu aplicación desde los repositorios de Amazon (ECR).
+*   **Nombre Sugerido**: `Vladimir-EKS-Node-Role`.
+
+> [!IMPORTANT]
+> **Relación de Confianza (Trust Relationship)**: Al crear el rol, AWS te preguntará por el servicio. Asegúrate de elegir **EC2** para los nodos y **EKS** para el clúster. Si los cruzas, nada funcionará y recibirás errores de "Unauthorized".
 
 > [!TIP]
 > Sin estos roles correctamente configurados, el clúster se quedará en estado "Pending" o los nodos nunca aparecerán como "Ready". 
 
 ### 3. Lanzamiento del Clúster EKS
 1.  Ve a **EKS** -> **Clusters** -> **Add cluster** -> **Create**.
-2.  **Name**: `vladimir-eks-cluster`. **Kubernetes version**: `1.31`.
+2.  **Name**: `vladimir-eks-cluster`. **Kubernetes version**: `1.32`.
 3.  **Cluster service role**: Selecciona el `Vladimir-EKS-Cluster-Role` creado antes.
 4.  **Networking**: 
     - **VPC**: Selecciona `vladimir-eks-vpc`.
