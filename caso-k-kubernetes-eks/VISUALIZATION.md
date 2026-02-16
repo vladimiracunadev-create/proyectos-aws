@@ -22,7 +22,7 @@ A continuación se presentan los espacios para las capturas de pantalla que vali
 ### 1. Infraestructura de Red (VPC)
 > **Acción**: Captura de la consola de VPC mostrando la red `vladimir-eks`, las 4 subredes y los NAT Gateways creados.
 
-![VPC Configuration](./img/eks-vpc-config.png "Configuración de Red VPC en AWS")
+![VPC Configuration](./img/vpc-config.png "Configuración de Red VPC en AWS")
 
 ### 2. Identidad y Accesos (IAM)
 > **Acción**: Captura del listado de roles IAM mostrando `Vladimir-EKS-Cluster-Role` y `Vladimir-EKS-Node-Role`.
