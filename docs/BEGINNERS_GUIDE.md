@@ -46,6 +46,8 @@ A medida que avanzas por las carpetas, la complejidad y el profesionalismo aumen
 
 ### ☸️ Caso K: Kubernetes en AWS (Orquestación EKS)
 **Objetivo**: El nivel máximo. Kubernetes gestionando flotas de contenedores directamente en la infraestructura de AWS (Clusters Reales).
+*   **Estado Final**: Despliegue validado con éxito.
+*   **Nota**: El entorno se encuentra actualmente **Desactivado** para evitar altos costos de mantenimiento ($0.10/hora base), demostrando buenas prácticas de FinOps.
 
 ### 🟣 Caso L: FinOps (Optimización Financiera)
 **Objetivo**: Excelencia operativa. Aprender a controlar los costos de la nube para que el proyecto sea sostenible y eficiente.

@@ -58,10 +58,11 @@ El proyecto resuelve problemas críticos que enfrentan las empresas modernas al 
 **Solución**: Backend reactivo que escala a cero. Integración de API Gateway con persistencia NoSQL.
 **Habilidad**: Backend, Serverless, NoSQL Design.
 
-### 3. **[Caso J] Contenedores de Grado Industrial (ECS Fargate)**
-**Problema**: Diferencias entre entornos ("en mi máquina funciona") y complejidad de gestión de parches.
-**Solución**: Dockerización completa de una aplicación con interfaz **Glassmorphism**, desplegada en un clúster resiliente de ECS.
-**Habilidad**: Docker, ECS/ECR, UX/UI Moderna.
+### 4. **[Caso K] Orquestación Industrial (Amazon EKS)**
+**Problema**: Gestión de flotas de contenedores a gran escala con alta disponibilidad.
+**Solución**: Despliegue de un clúster EKS 1.32 con Load Balancers y auto-scaling.
+**Habilidad**: Kubernetes, Helm/Manifests, EKS Auto Mode.
+**Demo**: [Dashboard EKS (Estado: Desconectado por ahorros FinOps)](http://k8s-default-vladimir-fd9bd8dc79-d4392d3db0728cc7.elb.us-east-1.amazonaws.com)
 
 ---
 

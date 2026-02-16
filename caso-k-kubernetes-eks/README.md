@@ -4,7 +4,7 @@
 
 **¡El proyecto ya se encuentra en vivo!** Puedes acceder al dashboard premium desplegado en Amazon EKS aquí:
 
-👉 **[Dashboard Operativo en AWS](http://k8s-default-vladimir-fd9bd8dc79-d4392d3db0728cc7.elb.us-east-1.amazonaws.com)**
+👉 **[Dashboard Operativo en AWS (ESTADO: DESACTIVADO POR COSTOS FINOPS)](http://k8s-default-vladimir-fd9bd8dc79-d4392d3db0728cc7.elb.us-east-1.amazonaws.com)**
 
 ---
 
