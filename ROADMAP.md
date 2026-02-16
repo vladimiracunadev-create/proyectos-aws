@@ -13,6 +13,7 @@ Este roadmap refleja el estado actual del proyecto y las próximas prioridades p
 - [x] **Caso C**: Terraform + CloudFront con OAC (Origin Access Control)
 - [x] **Caso D**: Serverless API con Lambda, API Gateway y DynamoDB
 - [x] **Caso J**: Docker Dashboard Premium con ECS Fargate, ECR y Load Balancer
+- [x] **Caso K**: Orquestación Real con AWS EKS, Load Balancer L7 y Self-Healing
 
 ### Infraestructura y Herramientas
 
@@ -151,4 +152,4 @@ Al completar todos los casos, se habrán dominado:
 
 ---
 
-_Última actualización: 2026-02-10_
+_Última actualización: 2026-02-16_
