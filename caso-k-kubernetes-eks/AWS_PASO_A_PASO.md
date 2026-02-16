@@ -12,37 +12,77 @@ Este documento detalla el proceso técnico para levantar un clúster de **Kubern
 
 ---
 
+## 🖥️ Fase 1.5: Despliegue Manual Detallado (Consola Web AWS)
+
+Si prefieres realizar el despliegue mediante clics para entender cada componente, sigue esta guía minuciosa:
+
+### 1. Infraestructura de Red (VPC)
+1.  Ve a **VPC Dashboard** -> Botón naranja **Create VPC**.
+2.  Selecciona la opción **"VPC and more"** (genera automáticamente subredes y tablas de ruteo).
+3.  **Name tag auto-generation**: Escribe `vladimir-eks`.
+4.  **IPv4 CIDR block**: `10.0.0.0/16`.
+5.  **Number of Availability Zones (AZs)**: **2** (para alta disponibilidad).
+6.  **Number of Public subnets**: **2**.
+7.  **Number of Private subnets**: **2** (Aquí es donde vivirán tus nodos EKS).
+8.  **NAT Gateways**: Selecciona **1 per AZ**. 
+    > [!IMPORTANT]
+    > Esto permite que tus nodos en subredes privadas salgan a internet para descargar imágenes de contenedores. Tiene un costo asociado por hora.
+9.  **VPC Endpoints**: Selecciona **None** para ahorrar costos adicionales.
+10. Haz clic en **Create VPC** y espera a que el diagrama de flujo termine (aprox. 1 min).
+
+### 2. Gestión de Identidad (IAM Roles)
+Necesitas crear dos roles de confianza antes de lanzar el clúster:
+
+#### A. Rol para el Plano de Control (EKS Cluster)
+1.  Ve a **IAM** -> **Roles** -> **Create role**.
+2.  Select entity: **AWS Service**. Service: **EKS**. Use case: **EKS - Cluster**.
+3.  Permissions: Debe tener `AmazonEKSClusterPolicy`.
+4.  Name: `Vladimir-EKS-Cluster-Role`.
+
+#### B. Rol para los Nodos (Worker Nodes)
+1.  IAM -> Roles -> **Create role**.
+2.  Select entity: **AWS Service**. Use case: **EC2**.
+3.  Busca y selecciona estas **3 políticas**:
+    - `AmazonEKSWorkerNodePolicy`
+    - `AmazonEKS_CNI_Policy`
+    - `AmazonEC2ContainerRegistryReadOnly`
+4.  Name: `Vladimir-EKS-Node-Role`.
+
+### 3. Lanzamiento del Clúster EKS
+1.  Ve a **EKS** -> **Clusters** -> **Add cluster** -> **Create**.
+2.  **Name**: `vladimir-eks-cluster`. **Kubernetes version**: `1.27`.
+3.  **Cluster service role**: Selecciona el `Vladimir-EKS-Cluster-Role` creado antes.
+4.  **Networking**: 
+    - **VPC**: Selecciona `vladimir-eks-vpc`.
+    - **Subnets**: Asegúrate de que las 4 estén seleccionadas (2 públicas, 2 privadas).
+    - **Cluster endpoint access**: **Public and private** (recomendado para facilidad de uso).
+5.  Mantén el resto por defecto y haz clic en **Create**. (Toma entre 10 y 15 minutos).
+
+### 4. Configuración del Grupo de Nodos (Cómputo)
+1.  Una vez el clúster pase a estado **Active**, ve a la pestaña **Compute**.
+2.  Haz clic en **Add node group**.
+3.  **Name**: `vladimir-standard-nodes`.
+4.  **Node IAM Role**: Selecciona `Vladimir-EKS-Node-Role`.
+5.  **Node Group compute configuration**:
+    - **AMI type**: Amazon Linux 2 (AL2_x86_64).
+    - **Instance type**: `t3.medium`.
+6.  **Node Group scaling configuration**:
+    - **Minimum/Desired size**: `2`. **Maximum size**: `2`.
+7.  **Node Group network configuration**: Asegúrate de que solo las **Private subnets** estén seleccionadas para máxima seguridad.
+8.  Haz clic en **Create**.
+
 ---
 
-## 🖥️ Fase 1.5: Despliegue Manual (Consola Web AWS)
+## 🚨 Fase 4: Estrategia Maestra de Limpieza (FinOps)
 
-Si prefieres no usar CLI/Terraform, sigue estos pasos precisos:
+**¡ORDEN CRÍTICO!** Si borras la VPC antes que el clúster, podrías dejar recursos "huérfanos" (como Load Balancers) que seguirán cobrando.
 
-### 1. Red (VPC)
-- Ve a **VPC Dashboard** -> **Create VPC**.
-- Selecciona **"VPC and more"**.
-- Configura: 2 AZs, 2 Public Subnets, 2 Private Subnets.
-- NAT Gateways: **1 per AZ** (necesario para nodos).
-- Clic en **Create VPC**.
-
-### 2. Identidad (IAM Roles)
-- **EKS Cluster Role**: Crea un rol para EKS con `AmazonEKSClusterPolicy`.
-- **EKS Node Role**: Crea un rol para EC2 con `AmazonEKSWorkerNodePolicy`, `AmazonEKS_CNI_Policy` y `AmazonEC2ContainerRegistryReadOnly`.
-
-### 3. Clúster y Cómputo
-- **Clúster**: Crea el clúster en la VPC previa, seleccionando el Cluster Role.
-- **Node Group**: En la pestaña **Compute**, añade un grupo de nodos con el Node Role, tipo `t3.medium`, y escalado 1-2.
-
----
-
-## 🚨 Fase 4: Limpieza y FinOps (Crítico)
-
-**¡ATENCIÓN!** Para evitar cargos de ~$72 USD mensuales, debes destruir los recursos en este orden exacto:
-
-1. **Eliminar Node Group**: Ve a la pestaña Compute del clúster y borra el grupo de nodos primero.
-2. **Eliminar Clúster EKS**: Una vez los nodos se hayan eliminado, borra el clúster.
-3. **Eliminar VPC**: Borra la VPC `vladimir-eks`. Esto eliminará el NAT Gateway (que tiene costo por hora) y las subnets.
-4. **Verificación Final**: Revisa que no queden volúmenes EBS ni Load Balancers activos en EC2.
+1.  **Cierre de Aplicación**: En tu terminal, ejecuta `kubectl delete -f caso-k-kubernetes-eks/deployment.yaml`. Esto eliminará el Load Balancer automáticamente.
+2.  **Eliminar Node Group**: En la consola de EKS -> Pestaña Compute -> Selecciona el grupo de nodos y dale a **Delete**. Espera a que desaparezca.
+3.  **Eliminar Clúster EKS**: Una vez los nodos ya no existan, pulsa **Delete** en la página principal del clúster. Confirmar escribiendo el nombre del clúster.
+4.  **Eliminar VPC**: Ve al dashboard de VPC -> Selecciona `vladimir-eks-vpc` -> Acciones -> **Delete VPC**. 
+    - AWS te confirmará que borrará subredes, NAT Gateways e IGWs asociados. Escribe `delete` para confirmar.
+5.  **Auditoría de Residuos**: Ve a **EC2** -> **Load Balancers** y **Target Groups**. Asegúrate de que la lista esté vacía. Revisa también **EBS Volumes**; debería estar libre de discos creados por los nodos.
 
 ---
 
