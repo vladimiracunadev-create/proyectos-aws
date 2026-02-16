@@ -176,16 +176,31 @@ Para demostrar que el despliegue es industrial, borra un pod manualmente y mira 
 
 ---
 
-## 🚨 Fase 4: Estrategia Maestra de Limpieza (FinOps)
+## 🧹 Limpieza Final (Estrategia FinOps) - ¡DINERO REAL! 💰🔥
+Para evitar cargos innecesarios, sigue este orden EXACTO de eliminación. Si saltas un paso, AWS podría bloquear la eliminación de los siguientes recursos.
 
-**¡ORDEN CRÍTICO!** Si borras la VPC antes que el clúster, podrías dejar recursos "huérfanos" (como Load Balancers) que seguirán cobrando.
+### 🪜 Paso a Paso para "Matar" todo:
 
-1.  **Cierre de Aplicación**: En tu terminal, ejecuta `kubectl delete -f caso-k-kubernetes-eks/deployment.yaml`. Esto eliminará el Load Balancer automáticamente.
-2.  **Eliminar Node Group**: En la consola de EKS -> Pestaña **"Informática" (Compute)** -> Selecciona el grupo de nodos y dale a **Delete**. Espera a que desaparezca.
-3.  **Eliminar Clúster EKS**: Una vez los nodos ya no existan, pulsa **Delete** en la página principal del clúster. Confirmar escribiendo el nombre del clúster.
-4.  **Eliminar VPC**: Ve al dashboard de VPC -> Selecciona `vladimir-eks-vpc` -> Acciones -> **Delete VPC**. 
-    - AWS te confirmará que borrará subredes, NAT Gateways e IGWs asociados. Escribe `delete` para confirmar.
-5.  **Auditoría de Residuos**: Ve a **EC2** -> **Load Balancers** y **Target Groups**. Asegúrate de que la lista esté vacía. Revisa también **EBS Volumes**; debería estar libre de discos creados por los nodos.
+1.  **Eliminar Balanceador (Servicio K8s)**:
+    - En tu terminal: `kubectl delete service vladimir-app-service`.
+    - *Esto elimina el recurso que genera cobro por tráfico.*
+
+2.  **Eliminar Nodos de Cómputo**:
+    - Ve a **EKS** -> **Clusters** -> `vladimir-eks-cluster` -> Pestaña **"Informática" (Compute)**.
+    - Selecciona el **Node Group** y dale a **Delete**.
+    - Espera a que los nodos desaparezcan antes de seguir.
+
+3.  **Eliminar Clúster EKS**:
+    - Ve a la lista de clústeres, selecciona `vladimir-eks-cluster` y dale a **Delete**.
+    - (Toma ~5-10 minutos).
+
+4.  **Eliminar Red (VPC)**:
+    - Ve a la consola de **VPC**.
+    - Selecciona `vladimir-eks-vpc` (VPC ID real).
+    - **Actions** -> **Delete VPC**.
+    - Esto borrará automáticamente: Subredes, NAT Gateways e Internet Gateways.
+
+5.  **Bonus**: Elimina la VPC duplicada si aún existe para mayor limpieza.
 
 ---
 
