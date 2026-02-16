@@ -104,8 +104,10 @@ Si prefieres el control manual o no usas Auto Mode, sigue estos clics minuciosos
     - **Name**: `vladimir-standard-nodes`.
     - **Node IAM Role**: Selecciona el `Vladimir-EKS-Node-Role` (que creamos en la Fase 1).
 4.  **Configuración de Cómputo (Compute Configuration)**:
-    - **AMI type**: Amazon Linux 2 (AL2_x86_64).
-    - **Instance type**: Selecciona `t3.medium`.
+    - **Tipo de AMI**: Selecciona **Amazon Linux 2023 (AL2023_x86_64_STANDARD)**. Es la versión más moderna y eficiente.
+    - **Tipo de capacidad**: On-Demand (Bajo demanda).
+    - **Tipos de instancias**: Selecciona **t3.medium** (es el mínimo recomendado para que el clúster no se sature).
+    - **Tamaño del disco**: Ingresa **20 GiB** (suficiente para el laboratorio).
 5.  **Configuración de Escalado (Scaling Configuration)**:
     - **Minimum size**: 2. **Maximum size**: 2. **Desired size**: 2.
 6.  **Red (Networking)**:
