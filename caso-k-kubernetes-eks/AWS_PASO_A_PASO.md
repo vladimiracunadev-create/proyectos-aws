@@ -86,18 +86,16 @@ Esta es la fase más crítica para la seguridad. Kubernetes en AWS funciona bajo
     - **Cluster endpoint access**: **Public and private** (recomendado para facilidad de uso).
 5.  Mantén el resto por defecto y haz clic en **Create**. (Toma entre 10 y 15 minutos).
 
-### 4. Configuración del Grupo de Nodos (Cómputo)
+### 4. Configuración de Cómputo (Nodos)
+> [!IMPORTANT]
+> **Si usas EKS Auto Mode (Recomendado)**: No necesitas buscar la pestaña "Compute" ni añadir un "Node Group" manualmente. AWS creará los nodos automáticamente cuando despliegues la aplicación en la Fase 2. Puedes saltar al siguiente paso.
+
+**Si usas Modo Estándar**:
 1.  Una vez el clúster pase a estado **Active**, ve a la pestaña **Compute**.
 2.  Haz clic en **Add node group**.
-3.  **Name**: `vladimir-standard-nodes`.
-4.  **Node IAM Role**: Selecciona `Vladimir-EKS-Node-Role`.
-5.  **Node Group compute configuration**:
-    - **AMI type**: Amazon Linux 2 (AL2_x86_64).
-    - **Instance type**: `t3.medium`.
-6.  **Node Group scaling configuration**:
-    - **Minimum/Desired size**: `2`. **Maximum size**: `2`.
-7.  **Node Group network configuration**: Asegúrate de que solo las **Private subnets** estén seleccionadas para máxima seguridad.
-8.  Haz clic en **Create**.
+3.  **Name**: `vladimir-standard-nodes`. **Node IAM Role**: `Vladimir-EKS-Node-Role`.
+4.  **Instance type**: `t3.medium`. **Scaling**: 2 nodos.
+5.  Haz clic en **Create**.
 
 ---
 
