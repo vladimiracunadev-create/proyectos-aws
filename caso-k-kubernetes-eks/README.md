@@ -4,7 +4,7 @@
 [![Status](https://img.shields.io/badge/Status-Nuevo-blue?style=for-the-badge)]()
 
 > [!CAUTION]
-> **ADVERTENCIA DE COSTOS**: EKS no está incluido en el Free Tier de AWS. Este laboratorio tiene un costo aproximado de **$0.10 USD/hora**. Sigue la estrategia de limpieza inmediatamente después de verificar.
+> **ADVERTENCIA DE COSTOS CRÍTICA**: EKS no está incluido en el Free Tier de AWS. Este laboratorio tiene un costo aproximado de **$0.10 USD/hora** ($72 USD/mes) solo por el clúster, más NAT Gateway y cómputo. **Sigue la estrategia de limpieza inmediatamente después de verificar.** Ver [AWS_PASO_A_PASO.md](./AWS_PASO_A_PASO.md) para instrucciones de eliminación.
 
 ---
 

@@ -12,77 +12,37 @@ Este documento detalla el proceso técnico para levantar un clúster de **Kubern
 
 ---
 
-## 🚀 Fase 1: Infraestructura (Terraform)
+---
 
-### Opción A: Usando Makefile (Recomendado)
-```bash
-# Navega a la raíz del proyecto
-make case-k-init      # Inicializa los plugins de AWS y el estado remoto
-make case-k-deploy    # Despliega VPC, Clúster EKS y Manifiestos
-```
+## 🖥️ Fase 1.5: Despliegue Manual (Consola Web AWS)
 
-### Opción B: Comandos Nativos (Manual)
-1. **Inicialización**:
-   ```bash
-   cd caso-k-kubernetes-eks/terraform
-   terraform init
-   ```
-2. **Despliegue de Red y Clúster**:
-   ```bash
-   terraform apply -auto-approve
-   ```
-   *Nota: Este proceso toma entre 15 y 20 minutos.*
+Si prefieres no usar CLI/Terraform, sigue estos pasos precisos:
+
+### 1. Red (VPC)
+- Ve a **VPC Dashboard** -> **Create VPC**.
+- Selecciona **"VPC and more"**.
+- Configura: 2 AZs, 2 Public Subnets, 2 Private Subnets.
+- NAT Gateways: **1 per AZ** (necesario para nodos).
+- Clic en **Create VPC**.
+
+### 2. Identidad (IAM Roles)
+- **EKS Cluster Role**: Crea un rol para EKS con `AmazonEKSClusterPolicy`.
+- **EKS Node Role**: Crea un rol para EC2 con `AmazonEKSWorkerNodePolicy`, `AmazonEKS_CNI_Policy` y `AmazonEC2ContainerRegistryReadOnly`.
+
+### 3. Clúster y Cómputo
+- **Clúster**: Crea el clúster en la VPC previa, seleccionando el Cluster Role.
+- **Node Group**: En la pestaña **Compute**, añade un grupo de nodos con el Node Role, tipo `t3.medium`, y escalado 1-2.
 
 ---
 
-## ☸️ Fase 2: Conexión y Orquestación
+## 🚨 Fase 4: Limpieza y FinOps (Crítico)
 
-### 1. Actualizar el Contexto de kubectl
-Para que tu terminal hable con el nuevo clúster en la nube:
-```bash
-aws eks update-kubeconfig --region us-east-2 --name vladimir-eks-cluster
-```
+**¡ATENCIÓN!** Para evitar cargos de ~$72 USD mensuales, debes destruir los recursos en este orden exacto:
 
-### 2. Despliegue de la Aplicación
-```bash
-kubectl apply -f caso-k-kubernetes-eks/deployment.yaml
-```
-
-### 3. Verificación de Recursos
-```bash
-kubectl get nodes        # Debes ver los nodos t3.medium en estado Ready
-kubectl get pods         # Debes ver 3 pods de vladimir-api corriendo
-kubectl get svc          # Copia la EXTERNAL-IP del LoadBalancer
-```
-
----
-
-## 🎨 Fase 3: Validación Visual
-1. Espera 2-3 minutos a que el Load Balancer de AWS esté activo.
-2. Pega la URL obtenida en tu navegador.
-3. **Prueba de Fuego (Auto-Sanación)**:
-   ```bash
-   # Borra un pod manualmente
-   kubectl delete pod <nombre-de-un-pod>
-   # Observa cómo Kubernetes levanta uno nuevo instantáneamente
-   kubectl get pods -w
-   ```
-
----
-
-## 🚨 Fase 4: Limpieza (FinOps)
-**¡IMPORTANTE!** Para no generar cargos innecesarios en tu cuenta de AWS, ejecuta la limpieza inmediatamente después de tus pruebas.
-
-### Opción A: Usando Makefile
-```bash
-make case-k-destroy
-```
-
-### Opción B: Manual
-```bash
-cd caso-k-kubernetes-eks/terraform
-terraform destroy -auto-approve
-```
+1. **Eliminar Node Group**: Ve a la pestaña Compute del clúster y borra el grupo de nodos primero.
+2. **Eliminar Clúster EKS**: Una vez los nodos se hayan eliminado, borra el clúster.
+3. **Eliminar VPC**: Borra la VPC `vladimir-eks`. Esto eliminará el NAT Gateway (que tiene costo por hora) y las subnets.
+4. **Verificación Final**: Revisa que no queden volúmenes EBS ni Load Balancers activos en EC2.
 
 ---
 
