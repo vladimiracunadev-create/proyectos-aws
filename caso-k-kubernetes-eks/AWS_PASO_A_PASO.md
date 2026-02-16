@@ -88,10 +88,10 @@ Esta es la fase más crítica para la seguridad. Kubernetes en AWS funciona bajo
 
 ### 4. Configuración de Cómputo (Nodos)
 > [!IMPORTANT]
-> **Si usas EKS Auto Mode (Recomendado)**: No necesitas buscar la pestaña "Compute" ni añadir un "Node Group" manualmente. AWS creará los nodos automáticamente cuando despliegues la aplicación en la Fase 2. Puedes saltar al siguiente paso.
+> **Si usas EKS Auto Mode (Recomendado)**: No necesitas buscar la pestaña **"Informática" (Compute)** ni añadir un "Node Group" manualmente. AWS creará los nodos automáticamente cuando despliegues la aplicación en la Fase 2. Puedes saltar al siguiente paso.
 
 **Si usas Modo Estándar**:
-1.  Una vez el clúster pase a estado **Active**, ve a la pestaña **Compute**.
+1.  Una vez el clúster pase a estado **Active**, ve a la pestaña **"Informática" (Compute)**.
 2.  Haz clic en **Add node group**.
 3.  **Name**: `vladimir-standard-nodes`. **Node IAM Role**: `Vladimir-EKS-Node-Role`.
 4.  **Instance type**: `t3.medium`. **Scaling**: 2 nodos.
@@ -147,7 +147,7 @@ Para demostrar que el despliegue es industrial, borra un pod manualmente y mira 
 **¡ORDEN CRÍTICO!** Si borras la VPC antes que el clúster, podrías dejar recursos "huérfanos" (como Load Balancers) que seguirán cobrando.
 
 1.  **Cierre de Aplicación**: En tu terminal, ejecuta `kubectl delete -f caso-k-kubernetes-eks/deployment.yaml`. Esto eliminará el Load Balancer automáticamente.
-2.  **Eliminar Node Group**: En la consola de EKS -> Pestaña Compute -> Selecciona el grupo de nodos y dale a **Delete**. Espera a que desaparezca.
+2.  **Eliminar Node Group**: En la consola de EKS -> Pestaña **"Informática" (Compute)** -> Selecciona el grupo de nodos y dale a **Delete**. Espera a que desaparezca.
 3.  **Eliminar Clúster EKS**: Una vez los nodos ya no existan, pulsa **Delete** en la página principal del clúster. Confirmar escribiendo el nombre del clúster.
 4.  **Eliminar VPC**: Ve al dashboard de VPC -> Selecciona `vladimir-eks-vpc` -> Acciones -> **Delete VPC**. 
     - AWS te confirmará que borrará subredes, NAT Gateways e IGWs asociados. Escribe `delete` para confirmar.
