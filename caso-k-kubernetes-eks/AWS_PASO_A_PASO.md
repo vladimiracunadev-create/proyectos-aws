@@ -86,6 +86,20 @@ Esta es la fase más crítica para la seguridad. Kubernetes en AWS funciona bajo
     - **Cluster endpoint access**: **Public and private** (recomendado para facilidad de uso).
 5.  Mantén el resto por defecto y haz clic en **Create**. (Toma entre 10 y 15 minutos).
 
+### 3.1. Configurar Acceso al Clúster (Access Entries) - ¡PASO OBLIGATORIO!
+Kubernetes rechaza a cualquier usuario que no sea el "dueño" original del clúster. Como tu terminal usa el usuario `terraform-user`, debemos darle permisos administrativos en la consola:
+1.  En la consola de EKS, entra en tu clúster **vladimir-eks-cluster**.
+2.  Haz clic en la pestaña **"Acceso" (Access)**.
+3.  En la sección **Access entries**, haz clic en el botón naranja **Create access entry**.
+4.  **IAM user or role ARN**: Pega `arn:aws:iam::689978033715:user/terraform-user`.
+5.  Haz clic en **Next**.
+6.  En **Add access policy**, haz clic en el botón **Add policy**.
+7.  En el desplegable, selecciona: **AmazonEKSClusterAdminPolicy**.
+8.  **Access scope**: Déjalo como **Cluster**.
+9.  Haz clic en **Add policy**, luego en **Next** y finalmente en **Create**.
+> [!IMPORTANT]
+> Una vez creada la entrada de acceso, tu terminal ya tendrá "superpoderes" para desplegar la aplicación sin errores de credenciales.
+
 ### 4. Configuración de Cómputo (Nodos)
 
 Existen dos maneras de manejar el cómputo en EKS. Dependiendo de lo que hayas visto al crear el clúster, elige tu camino:
