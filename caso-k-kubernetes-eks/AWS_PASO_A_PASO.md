@@ -206,8 +206,11 @@ Para demostrar que el despliegue es industrial, borra un pod manualmente y mira 
 - **Error: "Failed build model... unable to resolve at least one subnet"**:
   - AWS no sabe cuáles de tus subredes son públicas para poner el Balanceador.
   - **Solución (Tags en VPC)**: 
+    > [!IMPORTANT]
+    > **Verifica tu VPC ID**: Como tienes dos VPCs con el mismo nombre, ve a la consola de **EKS** -> **Clusters** -> **vladimir-eks-cluster** -> Pestaña **Networking**. Copia el **VPC ID** (ej: `vpc-0a1b2c...`).
     1. Ve a la consola de **VPC** -> **Subnets**.
-    2. Selecciona tus **2 Subredes Públicas** (las que creaste al inicio).
+    2. Asegúrate de filtrar las subredes que pertenezcan EXCLUSIVAMENTE a ese **VPC ID** detectado en el paso anterior.
+    3. Selecciona tus **2 Subredes Públicas** de ESA VPC.
     3. Ve a la pestaña **Tags** -> **Manage tags**.
     4. Añade el siguiente tag exactamente:
        - **Key**: `kubernetes.io/role/elb`
