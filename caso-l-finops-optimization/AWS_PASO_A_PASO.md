@@ -66,6 +66,21 @@ Esta guía detalla la implementación de la **Excelencia Operativa** mediante co
 4.  **Asignar Nombre y Crear (Paso 3 del Asistente)**:
     - **Role name (Nombre del rol)**: Escribe `GitLabDeployRole`. (¡Este es el campo obligatorio que te falta!).
     - Ve al final de la página y haz clic en **Create role (Crear rol)**.
+
+> [!TIP]
+> **¿Problemas con la consola? (Solución Rápida)**
+> Si el asistente de AWS falla o se queda cargando, puedes crear el rol instantáneamente usando la terminal (CloudShell o local). Copia y pega este bloque completo:
+>
+> 1. Crea el archivo de confianza:
+>    ```bash
+>    echo '{ "Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": { "Federated": "arn:aws:iam::689978033715:oidc-provider/gitlab.com" }, "Action": "sts:AssumeRoleWithWebIdentity", "Condition": { "StringEquals": { "gitlab.com:aud": "https://gitlab.com" }, "StringLike": { "gitlab.com:sub": "project_path:vladimir.acuna.dev-group/proyectos-aws-gitlab:ref_type:branch:ref:main" } } } ] }' > trust.json
+>    ```
+> 2. Crea el rol y adjunta permisos:
+>    ```bash
+>    aws iam create-role --role-name GitLabDeployRole --assume-role-policy-document file://trust.json
+>    aws iam attach-role-policy --role-name GitLabDeployRole --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess
+>    aws iam attach-role-policy --role-name GitLabDeployRole --policy-arn arn:aws:iam::aws:policy/CloudFrontFullAccess
+>    ```
 4.  **Permisos**: Adjunta permisos de lectura/escritura limitados a S3 y CloudFront.
 
 ---
