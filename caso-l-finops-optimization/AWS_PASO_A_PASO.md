@@ -86,15 +86,69 @@ Esta guía detalla la implementación de la **Excelencia Operativa** mediante co
 ---
 
 ## 🪜 Fase 3: Gobernanza y Guardrails (IAM & Tagging)
+    
+1.  **Crear Política de Restricción de Región**:
+    - Ve a **IAM** -> **Policies (Políticas)** -> **Create policy (Crear política)**.
+    - Pestaña **JSON**. Borra todo y pega este código (Bloquea todo fuera de US East 1 y 2):
+    ```json
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "DenyOutsideRegions",
+                "Effect": "Deny",
+                "NotAction": [
+                    "cloudfront:*",
+                    "iam:*",
+                    "route53:*",
+                    "support:*",
+                    "budgets:*"
+                ],
+                "Resource": "*",
+                "Condition": {
+                    "StringNotEquals": {
+                        "aws:RequestedRegion": [
+                            "us-east-1",
+                            "us-east-2"
+                        ]
+                    }
+                }
+            }
+        ]
+    }
+    ```
+    - **Next** -> Nombre: `DenyNonUSRegions` -> **Create policy**.
 
-1.  **Restricción de Región (Policy)**:
-    - Crea una política que deniegue cualquier servicio fuera de `us-east-1` o `us-east-2`. Esto evita gastos accidentales en regiones costosas.
-2.  **Política de Etiquetado Obligatorio**:
-    - Configura una **IAM Policy (Política de IAM)** que requiera que todo recurso (S3, EC2, etc.) tenga el Tag: `Project: CloudPortfolio` y `FinOps: CaseL`. Sin estos tags, la creación falla.
+2.  **Crear Política de Etiquetado Obligatorio (Tagging)**:
+    - Repite el proceso (**Create policy** -> **JSON**).
+    - Pega este código (Exige tags `Project` y `FinOps` al crear recursos):
+    ```json
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "RequireTags",
+                "Effect": "Deny",
+                "Action": [
+                    "ec2:RunInstances",
+                    "s3:CreateBucket"
+                ],
+                "Resource": "*",
+                "Condition": {
+                    "StringNotEquals": {
+                        "aws:RequestTag/Project": "CloudPortfolio",
+                        "aws:RequestTag/FinOps": "CaseL"
+                    }
+                }
+            }
+        ]
+    }
+    ```
+    - **Next** -> Nombre: `EnforceTaggingPolicy` -> **Create policy**.
 
 ---
 
-## 🪜 Fase 5: Configuración en GitLab CI/CD (El Puente)
+## 🪜 Fase 4: Configuración en GitLab CI/CD (El Puente)
 
 *Para que GitLab pueda "hablar" con AWS sin contraseñas, debemos configurar el proyecto:*
 
@@ -119,7 +173,7 @@ Esta guía detalla la implementación de la **Excelencia Operativa** mediante co
 
 ---
 
-## 🪜 Fase 6: Despliegue de Alta Disponibilidad a Costo Cero
+## 🪜 Fase 5: Despliegue de Alta Disponibilidad a Costo Cero
 
 1.  **Arquitectura**: La App de Monitoreo (`app/public/index.html`) se aloja en un **S3 Bucket** configurado para **Static Website Hosting (Alojamiento de sitios web estáticos)**.
 2.  **Optimización CloudFront**:
@@ -129,7 +183,7 @@ Esta guía detalla la implementación de la **Excelencia Operativa** mediante co
 
 ---
 
-## 🪜 Fase 5: Automatización CI/CD (Pipeline Final)
+## 🪜 Fase 6: Automatización CI/CD (Pipeline Final)
 
 1.  **Job de Despliegue**: GitLab CI asume el rol creado en la Fase 2 usando el token OIDC temporal.
 2.  **Sincronización**: Se ejecuta `aws s3 sync caso-l-finops-optimization/app/public/ s3://tu-bucket --delete`.
