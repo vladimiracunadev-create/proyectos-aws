@@ -51,7 +51,7 @@ Esta guía detalla la implementación de la **Excelencia Operativa** mediante co
         {
           "Effect": "Allow",
           "Principal": {
-            "Federated": "arn:aws:iam::TU_CUENTA:oidc-provider/gitlab.com"
+            "Federated": "arn:aws:iam::689978033715:oidc-provider/gitlab.com"
           },
           "Action": "sts:AssumeRoleWithWebIdentity",
           "Condition": {
