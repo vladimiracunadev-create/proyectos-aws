@@ -33,17 +33,10 @@ Esta guía detalla la implementación de la **Excelencia Operativa** mediante co
     - **Provider type (Tipo de proveedor)**: `OpenID Connect`.
     - **Provider URL (URL del proveedor)**: `https://gitlab.com`. (Haz clic en **Get thumbprint (Obtener huella digital)**).
     - **Audience (Audiencia)**: `https://gitlab.com`.
-2.  **Crear el Rol de Despliegue (Parte 1: Asistente)**:
+2.  **Crear el Rol de Despliegue (Método Directo)**:
     - Ve a **IAM** -> **Roles (Roles)** -> **Create role (Crear rol)**.
-    - **Trusted entity type (Tipo de entidad de confianza)**: `Web identity` (Identidad web).
-    - **Identity provider (Proveedor de identidad)**: Selecciona `https://gitlab.com`.
-    - **Audience (Audiencia)**: Selecciona `https://gitlab.com`.
-    - **Importante**: Haz clic en **Next (Siguiente)**, asigna los permisos necesarios (o sáltalo por ahora), ponle nombre al rol (ej: `GitLabDeployRole`) y haz clic en **Create role (Crear rol)**.
-3.  **Configurar Restricción de Repositorio (Parte 2: Edición)**:
-    - Busca y entra al rol que acabas de crear.
-    - Ve a la pestaña **Trust relationships (Relaciones de confianza)**.
-    - Haz clic en **Edit trust policy (Editar política de confianza)**.
-    - Modifica el JSON para agregar la restricción `StringLike`. Tu JSON debe verse similar a esto (manteniendo la estructura existente):
+    - **Trusted entity type (Tipo de entidad de confianza)**: Selecciona **Custom trust policy (Política de confianza personalizada)**.
+    - **Código**: Borra lo que haya en el editor y pega el siguiente JSON completo:
     ```json
     {
       "Version": "2012-10-17",
@@ -66,6 +59,11 @@ Esta guía detalla la implementación de la **Excelencia Operativa** mediante co
       ]
     }
     ```
+    - Haz clic en **Next (Siguiente)**.
+3.  **Permisos y Finalización**:
+    - **Add permissions (Agregar permisos)**: Busca y selecciona permisos básicos como `AmazonS3FullAccess` o crea una política mínima según necesites.
+    - **Name (Nombre)**: `GitLabDeployRole`.
+    - Finaliza con **Create role (Crear rol)**.
 4.  **Permisos**: Adjunta permisos de lectura/escritura limitados a S3 y CloudFront.
 
 ---
