@@ -123,7 +123,7 @@ pages:
   stage: deploy
   script:
     - mkdir -p public
-    - cp index.html manifest.json sw.js *.md public/
+    - cp index.html manifest.json sw.js *.md *.txt public/
     - cp -r assets docs wiki apps caso-* public/
     - find public -name ".git" -type d -exec rm -rf {} +
   artifacts:

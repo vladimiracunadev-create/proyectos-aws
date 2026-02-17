@@ -1,0 +1,48 @@
+# Portfolio de Infraestructura AWS & DevSecOps - Vladimir Acuña
+
+> **Contexto para LLMs**: Este archivo describe la estructura, tecnologías y convenciones de este repositorio monorepo. Úsalo para entender el contexto antes de sugerir cambios.
+
+## 📌 Descripción del Proyecto
+Este es un portafolio técnico que demuestra competencias avanzadas en **AWS**, **DevOps**, **Seguridad** y **Desarrollo Fullstack**.
+Contiene 12 casos de estudio (Caso A - Caso L) que van desde despliegues básicos hasta arquitecturas complejas con Kubernetes, Serverless y FinOps.
+
+## 🛠 Tech Stack
+- **Nube**: AWS (S3, CloudFront, EC2, ECS, EKS, Lambda, DynamoDB, Cognito, Bedrock).
+- **IaC**: Terraform, CloudFormation, AWS CDK, SAM.
+- **CI/CD**: GitLab CI/CD (Pipelines seguros, OIDC, Gitleaks, tfsec).
+- **Contenedores**: Docker, Kubernetes (EKS), Amazon ECS (Fargate).
+- **Backend**: Node.js (Lambda), Python (Boto3/LangChain).
+- **Frontend**: HTML5/JS (Vanilla), PWA (Progressive Web App).
+
+## 📂 Estructura del Repositorio
+
+### Casos de Estudio (Módulos)
+- `/caso-a-amplify`: Hosting web rápido con AWS Amplify.
+- `/caso-b-gitlab-s3`: CI/CD legacy desplegando a S3.
+- `/caso-c-terraform-s3`: Infraestructura como Código (Terraform) para sitio estático seguro (OAC).
+- `/caso-d-serverless-basic`: API REST con API Gateway + Lambda + DynamoDB (SAM).
+- `/caso-e-dynamodb-persistence`: Patrones de acceso a datos NoSQL.
+- `/caso-f-security-cognito`: Autenticación y Autorización (Oauth2/OIDC).
+- `/caso-g-event-driven`: Arquitectura orientada a eventos (EventBridge + SQS).
+- `/caso-h-observability`: Monitoreo avanzado (CloudWatch, X-Ray).
+- `/caso-i-genai-bedrock`: Inteligencia Artificial Generativa con AWS Bedrock.
+- `/caso-j-containers-ecs`: Orquestación de contenedores en ECS Fargate.
+- `/caso-k-kubernetes-eks`: Cluster de Kubernetes gestionado (EKS).
+- `/caso-l-finops-optimization`: Optimización de costos y gobernanza.
+
+### Directorios Clave
+- `/docs`: Documentación técnica centralizada.
+- `/wiki`: Documentación de conocimiento (Knowledge Base).
+- `/apps`: Aplicaciones móviles/nativas.
+- `.gitlab-ci.yml`: Definición de pipelines de CI/CD.
+- `Makefile`: Comandos de utilidad para gestión local.
+
+## 📝 Convenciones
+- **Idioma**: La documentación principal (`AWS_PASO_A_PASO.md` dentro de cada caso) está en **Español**.
+- **Commits**: Seguir Conventional Commits (e.g., `feat:`, `fix:`, `docs:`).
+- **Ramas**: `main` es la rama de producción protegida.
+- **Seguridad**: No subir credenciales (commits verificados por Gitleaks).
+
+## 🚀 Despliegue (GitLab Pages)
+La documentación raíz y los artefactos se despliegan en GitLab Pages.
+El pipeline copia archivos Markdown y assets estáticos a la carpeta `public/`.
