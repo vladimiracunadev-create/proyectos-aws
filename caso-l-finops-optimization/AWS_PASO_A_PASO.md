@@ -33,16 +33,37 @@ Esta guía detalla la implementación de la **Excelencia Operativa** mediante co
     - **Provider type (Tipo de proveedor)**: `OpenID Connect`.
     - **Provider URL (URL del proveedor)**: `https://gitlab.com`. (Haz clic en **Get thumbprint (Obtener huella digital)**).
     - **Audience (Audiencia)**: `https://gitlab.com`.
-2.  **Crear el Rol de Despliegue**:
+2.  **Crear el Rol de Despliegue (Parte 1: Asistente)**:
     - Ve a **IAM** -> **Roles (Roles)** -> **Create role (Crear rol)**.
     - **Trusted entity type (Tipo de entidad de confianza)**: `Web identity` (Identidad web).
     - **Identity provider (Proveedor de identidad)**: Selecciona `https://gitlab.com`.
     - **Audience (Audiencia)**: Selecciona `https://gitlab.com`.
-3.  **Políticas de Confianza - Trust Relationship (Relación de confianza)**:
-    - Edita la política para restringir el acceso solo a tu repositorio específico:
+    - **Importante**: Haz clic en **Next (Siguiente)**, asigna los permisos necesarios (o sáltalo por ahora), ponle nombre al rol (ej: `GitLabDeployRole`) y haz clic en **Create role (Crear rol)**.
+3.  **Configurar Restricción de Repositorio (Parte 2: Edición)**:
+    - Busca y entra al rol que acabas de crear.
+    - Ve a la pestaña **Trust relationships (Relaciones de confianza)**.
+    - Haz clic en **Edit trust policy (Editar política de confianza)**.
+    - Modifica el JSON para agregar la restricción `StringLike`. Tu JSON debe verse similar a esto (manteniendo la estructura existente):
     ```json
-    "StringLike": {
-      "gitlab.com:sub": "project_path:vladimir.acuna.dev-group/proyectos-aws-gitlab:ref_type:branch:ref:main"
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Principal": {
+            "Federated": "arn:aws:iam::TU_CUENTA:oidc-provider/gitlab.com"
+          },
+          "Action": "sts:AssumeRoleWithWebIdentity",
+          "Condition": {
+            "StringEquals": {
+              "gitlab.com:aud": "https://gitlab.com"
+            },
+            "StringLike": {
+              "gitlab.com:sub": "project_path:vladimir.acuna.dev-group/proyectos-aws-gitlab:ref_type:branch:ref:main"
+            }
+          }
+        }
+      ]
     }
     ```
 4.  **Permisos**: Adjunta permisos de lectura/escritura limitados a S3 y CloudFront.
