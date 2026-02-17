@@ -60,10 +60,12 @@ Esta guía detalla la implementación de la **Excelencia Operativa** mediante co
     }
     ```
     - Haz clic en **Next (Siguiente)**.
-3.  **Permisos y Finalización**:
-    - **Add permissions (Agregar permisos)**: Busca y selecciona permisos básicos como `AmazonS3FullAccess` o crea una política mínima según necesites.
-    - **Name (Nombre)**: `GitLabDeployRole`.
-    - Finaliza con **Create role (Crear rol)**.
+3.  **Agregar Permisos (Paso 2 del Asistente)**:
+    - En la pantalla "Add permissions", busca y selecciona políticas como `AmazonS3FullAccess` y `CloudFrontFullAccess` (para este caso de uso).
+    - Haz clic en **Next (Siguiente)**.
+4.  **Asignar Nombre y Crear (Paso 3 del Asistente)**:
+    - **Role name (Nombre del rol)**: Escribe `GitLabDeployRole`. (¡Este es el campo obligatorio que te falta!).
+    - Ve al final de la página y haz clic en **Create role (Crear rol)**.
 4.  **Permisos**: Adjunta permisos de lectura/escritura limitados a S3 y CloudFront.
 
 ---
