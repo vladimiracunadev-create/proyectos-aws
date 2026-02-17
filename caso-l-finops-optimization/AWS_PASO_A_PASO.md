@@ -150,26 +150,47 @@ Esta guía detalla la implementación de la **Excelencia Operativa** mediante co
 
 ## 🪜 Fase 4: Configuración en GitLab CI/CD (El Puente)
 
-*Para que GitLab pueda "hablar" con AWS sin contraseñas, debemos configurar el proyecto:*
+*Para que GitLab pueda "hablar" con AWS sin contraseñas, configuraremos el proyecto con los datos exactos:*
 
 1.  **Variables de Entorno (GitLab)**:
-    - Ve a **Settings (Ajustes)** -> **CI/CD** -> **Variables (Variables)**.
-    - Agrega `AWS_ROLE_ARN`: El ARN del rol que creaste en la Fase 2 (ej: `arn:aws:iam::123:role/GitLabDeployRole`).
-    - Agrega `AWS_REGION`: `us-east-1`.
-2.  **Configuración del Pipeline (`.gitlab-ci.yml`)**:
-    - Debes declarar el uso de **ID Tokens**. Este es el "pasaporte" que GitLab le presenta a AWS:
-    ```yaml
-    variables:
-      # Este es el token OIDC que AWS validará
-      ID_TOKEN: $[[ inputs.id_token ]] 
+    - Ve a tu proyecto en GitLab.
+    - En el menú izquierdo, ve a **Settings (Ajustes)** -> **CI/CD**.
+    - Busca la sección **Variables** y haz clic en **Expand (Expandir)**.
+    - Haz clic en **Add variable (Agregar variable)** para cada una de las siguientes (desmarca "Protect variable" si no estás en ramas protegidas, o asegúrate de estar en `main`):
 
-    deploy_job:
+    | Key (Clave) | Value (Valor) | Descripción |
+    | :--- | :--- | :--- |
+    | `AWS_ROLE_ARN` | `arn:aws:iam::689978033715:role/GitLabDeployRole` | El rol que creamos en la Fase 2. (Copia y pega este valor exacto). |
+    | `AWS_REGION` | `us-east-1` | La región donde operamos. |
+    | `S3_BUCKET_CASE_L` | `finops-vladimir-portfolio-case-l` | Nombre único para tu bucket (puedes cambiarlo si ya existe). |
+
+2.  **Configuración del Pipeline (`.gitlab-ci.yml`)**:
+    - Abre el archivo `.gitlab-ci.yml` en la raíz de tu repositorio.
+    - Agrega (o asegúrate de tener) este bloque para probar la conexión OIDC (puedes agregarlo al final o en la sección de deploy):
+
+    ```yaml
+    # Job de prueba para verificar que GitLab puede asumir el rol
+    verify_oidc_connection:
+      stage: deploy
+      image: amazon/aws-cli:latest
       id_tokens:
         GITLAB_OIDC_TOKEN:
           aud: https://gitlab.com
       script:
-        - # Comandos para asumir el rol usando el TOKEN
+        - echo "Iniciando autenticación OIDC..."
+        - >
+          export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s"
+          $(aws sts assume-role-with-web-identity
+          --role-arn ${AWS_ROLE_ARN}
+          --role-session-name "GitLabRunner-${CI_PROJECT_ID}-${CI_PIPELINE_ID}"
+          --web-identity-token ${GITLAB_OIDC_TOKEN}
+          --duration-seconds 3600
+          --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]'
+          --output text))
+        - aws sts get-caller-identity
+        - echo "¡Conexión exitosa! Ahora somos el rol ${AWS_ROLE_ARN}"
     ```
+    *(Nota: Este job imprimirá tu identidad de AWS en los logs del pipeline para confirmar que funciona).*
 
 ---
 
