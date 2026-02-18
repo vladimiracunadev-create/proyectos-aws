@@ -194,21 +194,99 @@ Esta guía detalla la implementación de la **Excelencia Operativa** mediante co
 
 ---
 
-## 🪜 Fase 5: Despliegue de Alta Disponibilidad a Costo Cero
+## 🪜 Fase 5: Infraestructura (S3 para Alojamiento Web)
 
-1.  **Arquitectura**: La App de Monitoreo (`app/public/index.html`) se aloja en un **S3 Bucket** configurado para **Static Website Hosting (Alojamiento de sitios web estáticos)**.
-2.  **Optimización CloudFront**:
-    - Se crea una **CloudFront Distribution (Distribución de CloudFront)** apuntando al bucket.
-    - Se habilita **HTTPS gratuito** y compresión **Brotli/Gzip** para velocidad máxima.
-3.  **Costo**: Esta arquitectura entra 100% en el **AWS Free Tier**, costando **$0 USD** para un portafolio personal.
+*Crearemos el servidor web "serverless" usando comandos de AWS CLI (puedes ejecutarlos en tu terminal o en CloudShell).*
+
+1.  **Definir Nombre del Bucket**:
+    (Usa el mismo nombre que definiste en las variables de GitLab):
+    ```bash
+    export BUCKET_NAME="finops-vladimir-portfolio-case-l"
+    export REGION="us-east-2"
+    ```
+
+2.  **Crear el Bucket**:
+    ```bash
+    aws s3 mb s3://$BUCKET_NAME --region $REGION
+    ```
+
+3.  **Configurar Acceso Público (Sitio Web Estático)**:
+    *Para este caso de uso (Portfolio Free Tier), usaremos un bucket público estándar.*
+    
+    a. **Desactivar Bloqueo de Acceso Público**:
+    ```bash
+    aws s3api put-public-access-block --bucket $BUCKET_NAME --public-access-block-configuration "BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"
+    ```
+    
+    b. **Añadir Política de Lectura Pública**:
+    Crea un archivo `policy.json` con este contenido (cambia `NOMBRE_DE_TU_BUCKET` por tu nombre real):
+    ```json
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "PublicReadGetObject",
+                "Effect": "Allow",
+                "Principal": "*",
+                "Action": "s3:GetObject",
+                "Resource": "arn:aws:s3:::NOMBRE_DE_TU_BUCKET/*"
+            }
+        ]
+    }
+    ```
+    Y aplícala:
+    ```bash
+    aws s3api put-bucket-policy --bucket $BUCKET_NAME --policy file://policy.json
+    ```
+
+4.  **Activar Alojamiento Web**:
+    ```bash
+    aws s3 website s3://$BUCKET_NAME --index-document index.html
+    ```
+    
+    **¡Listo!** Tu sitio web estará disponible en:
+    `http://finops-vladimir-portfolio-case-l.s3-website-us-east-2.amazonaws.com`
 
 ---
 
 ## 🪜 Fase 6: Automatización CI/CD (Pipeline Final)
 
-1.  **Job de Despliegue**: GitLab CI asume el rol creado en la Fase 2 usando el token OIDC temporal.
-2.  **Sincronización**: Se ejecuta `aws s3 sync caso-l-finops-optimization/app/public/ s3://tu-bucket --delete`.
-3.  **Invalidación**: Se ejecuta `aws cloudfront create-invalidation` para refrescar el caché del dashboard.
+Agrega este job final a tu `.gitlab-ci.yml`. Este job se encargará de subir tu aplicación cada vez que hagas un cambio.
+
+*Copia y pega esto al final de `.gitlab-ci.yml`:*
+
+```yaml
+# --- Despliegue Final a Producción (Case L) ---
+deploy_case_l_final:
+  stage: deploy
+  image: 
+    name: amazon/aws-cli:latest
+    entrypoint: [""]
+  id_tokens:
+    GITLAB_OIDC_TOKEN:
+      aud: https://gitlab.com
+  script:
+    - echo "Autenticando con AWS OIDC..."
+    - >
+      export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s"
+      $(aws sts assume-role-with-web-identity
+      --role-arn ${AWS_ROLE_ARN}
+      --role-session-name "GitLabDeploy-${CI_PIPELINE_ID}"
+      --web-identity-token ${GITLAB_OIDC_TOKEN}
+      --duration-seconds 3600
+      --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]'
+      --output text))
+    - echo "Desplegando archivos a S3..."
+    # Sincroniza la carpeta pública de tu app con el bucket S3
+    - aws s3 sync caso-l-finops-optimization/app/public/ s3://${S3_BUCKET_CASE_L} --delete
+    - echo "✅ Despliegue completado."
+    - echo "🌍 Tu sitio web: http://${S3_BUCKET_CASE_L}.s3-website-${AWS_REGION}.amazonaws.com"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - caso-l-finops-optimization/**/*
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+```
 
 ---
 
