@@ -157,3 +157,35 @@ verify_oidc_connection:
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
 
+
+# --- Despliegue Final a Producción (Case L) ---
+deploy_case_l_final:
+  stage: deploy
+  image: 
+    name: amazon/aws-cli:latest
+    entrypoint: [""]
+  id_tokens:
+    GITLAB_OIDC_TOKEN:
+      aud: https://gitlab.com
+  script:
+    - echo "Autenticando con AWS OIDC..."
+    - >
+      export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s"
+      $(aws sts assume-role-with-web-identity
+      --role-arn ${AWS_ROLE_ARN}
+      --role-session-name "GitLabDeploy-${CI_PIPELINE_ID}"
+      --web-identity-token ${GITLAB_OIDC_TOKEN}
+      --duration-seconds 3600
+      --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]'
+      --output text))
+    - echo "Desplegando archivos a S3..."
+    # Sincroniza la carpeta pública de tu app con el bucket S3
+    - aws s3 sync caso-l-finops-optimization/app/public/ s3://${S3_BUCKET_CASE_L} --delete
+    - echo "✅ Despliegue completado."
+    - echo "🌍 Tu sitio web: http://${S3_BUCKET_CASE_L}.s3-website-${AWS_REGION}.amazonaws.com"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - caso-l-finops-optimization/**/*
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+
