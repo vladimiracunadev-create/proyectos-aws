@@ -135,7 +135,9 @@ pages:
 # --- OIDC Verification Job (Case L) ---
 verify_oidc_connection:
   stage: deploy
-  image: amazon/aws-cli:latest
+  image: 
+    name: amazon/aws-cli:latest
+    entrypoint: [""]
   id_tokens:
     GITLAB_OIDC_TOKEN:
       aud: https://gitlab.com
