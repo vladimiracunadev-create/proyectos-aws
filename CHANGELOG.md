@@ -10,6 +10,7 @@ El formato seguirá [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) y e
     - Configuración de **GitLab OIDC** para autenticación Zero Trust entre GitLab y AWS.
     - Gobernanza IAM con políticas de límites regionales (Ohio Only) y etiquetado obligatorio.
     - Despliegue automatizado de sitio web estático en S3 con políticas de acceso público.
+    - **Automatización de Datos**: Dashboard estático ahora muestra costos reales de AWS (JSON Generation).
 
 ## [3.1.0] - 2026-02-16
 ### Added

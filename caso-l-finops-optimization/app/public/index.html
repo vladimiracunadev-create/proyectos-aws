@@ -21,11 +21,11 @@
 
         <div class="stats-grid">
             <div class="stat-card">
-                <span class="stat-val">$2.10</span>
+                <span class="stat-val" id="cost-display">Cargando...</span>
                 <span class="stat-label">Gasto Mes Real</span>
             </div>
             <div class="stat-card">
-                <span class="stat-val">$4.85</span>
+                <span class="stat-val" id="forecast-display">---</span>
                 <span class="stat-label">Proyección Fin Mes</span>
             </div>
             <div class="stat-card">
@@ -33,20 +33,71 @@
                 <span class="stat-label">Secretos Expuestos</span>
             </div>
             <div class="stat-card">
-                <span class="stat-val">us-east-1</span>
+                <span class="stat-val" id="region-display">us-east-2</span>
                 <span class="stat-label">Región Principal</span>
             </div>
         </div>
 
         <div class="budget-container">
             <div class="budget-header">
-                <span>Presupuesto Mensual: $5.00</span>
-                <span style="color: #10b981;">42% Utilizado</span>
+                <span id="budget-limit-display">Presupuesto Mensual: $5.00</span>
+                <span id="budget-status-text" style="color: #94a3b8;">Verificando estado...</span>
             </div>
             <div class="progress-bar">
-                <div class="progress-fill"></div>
+                <div class="progress-fill" id="budget-bar" style="width: 0%;"></div>
+            </div>
+            <div style="font-size: 0.8rem; color: #64748b; margin-top: 10px; text-align: right;">
+                Última actualización: <span id="last-updated">---</span>
             </div>
         </div>
+
+    <script>
+        async function loadFinOpsData() {
+            try {
+                const response = await fetch('costs.json');
+                if (!response.ok) throw new Error('No data');
+                const data = await response.json();
+
+                // Actualizar Costos
+                document.getElementById('cost-display').innerText = `$${data.gasto_mes_actual}`;
+                document.getElementById('forecast-display').innerText = `$${data.gasto_proyectado}`;
+                document.getElementById('region-display').innerText = data.region_activa;
+                document.getElementById('last-updated').innerText = data.ultima_actualizacion;
+
+                // Actualizar Presupuesto
+                const limit = data.limite_presupuesto;
+                const percent = (data.gasto_mes_actual / limit) * 100;
+                
+                document.getElementById('budget-limit-display').innerText = `Presupuesto Mensual: $${limit}`;
+                const statusSpan = document.getElementById('budget-status-text');
+                const bar = document.getElementById('budget-bar');
+                
+                bar.style.width = `${Math.min(percent, 100)}%`;
+                
+                if (percent > 100) {
+                    statusSpan.innerText = `⚠️ EXCEDIDO (${percent.toFixed(0)}%)`;
+                    statusSpan.style.color = '#ef4444'; // Rojo
+                    bar.style.backgroundColor = '#ef4444';
+                } else if (percent > 85) {
+                    statusSpan.innerText = `⚠️ ALERTA (${percent.toFixed(0)}%)`;
+                    statusSpan.style.color = '#f59e0b'; // Naranja
+                    bar.style.backgroundColor = '#f59e0b';
+                } else {
+                    statusSpan.innerText = `✅ OK (${percent.toFixed(0)}% Utilizado)`;
+                    statusSpan.style.color = '#10b981'; // Verde
+                    bar.style.backgroundColor = '#10b981';
+                }
+
+            } catch (error) {
+                console.error("Error loading FinOps data:", error);
+                document.getElementById('cost-display').innerText = "$0.00*";
+                document.getElementById('budget-status-text').innerText = "Datos no disponibles (Modo Offline)";
+            }
+        }
+
+        // Cargar al inicio
+        loadFinOpsData();
+    </script>
 
         <div class="governance-section">
             <h3 style="margin-bottom: 20px;">Políticas Activas (Guardrails)</h3>

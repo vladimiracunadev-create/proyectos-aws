@@ -249,7 +249,27 @@ Esta guía detalla la implementación de la **Excelencia Operativa** mediante co
 
 ---
 
-## 🪜 Fase 6: Automatización CI/CD (Pipeline Final)
+---
+
+## 🪜 Fase 7: Automatización de Datos (FinOps Real)
+
+*Para evitar facturas sorpresa, mostraremos los costos reales de AWS en el dashboard estático.*
+
+1.  **Script de Generación (`generate_finops_data.py`)**:
+    Este script usa `boto3` para consultar la API de **Cost Explorer** y **Budgets**, generando un archivo `costs.json` con:
+    -   Gasto acumulado del mes.
+    -   Proyección a fin de mes.
+    -   Estado de la alerta de presupuesto.
+
+2.  **Integración CI/CD**:
+    En `.gitlab-ci.yml`, hemos añadido un job `refresh_finops_data` que se ejecuta automáticamente (Schedule) o manualmente para actualizar este JSON en S3.
+
+3.  **Frontend Dinámico**:
+    El archivo `index.html` ahora lee este JSON y actualiza los indicadores visuales (colores de alerta, barras de progreso) según tus gastos reales.
+
+---
+
+## 🪜 Fase 8: Automatización CI/CD (Pipeline Final)
 
 Agrega este job final a tu `.gitlab-ci.yml`. Este job se encargará de subir tu aplicación cada vez que hagas un cambio.
 

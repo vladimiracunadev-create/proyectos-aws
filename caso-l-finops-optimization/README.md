@@ -15,6 +15,7 @@ Lograr la **Excelencia Operativa**. Implementarás mecanismos para que el presup
 - **GitLab CI + OIDC**: Eliminación de llaves permanentes (Zero Trust).
 - **IAM Governance**: Políticas de privilegio mínimo y límites de región.
 - **S3 Hosting**: Alojamiento estático seguro y optimizado.
+- **Datos Reales**: Integración con Cost Explorer y Budgets para visualización en vivo (vía JSON estático).
 
 ## 📊 Beneficio para el Negocio
 - 📉 **Reducción de Riesgos**: Se eliminan las brechas por llaves filtradas.

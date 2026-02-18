@@ -134,7 +134,24 @@ pages:
 
 # --- Job de Verificación eliminado (integrado en deploy) ---
 
-# --- Despliegue Final a Producción (Case L) ---
+# --- Actualización de Datos FinOps (Case L) ---
+refresh_finops_data:
+  stage: deploy
+  image: python:3.9
+  id_tokens:
+    GITLAB_OIDC_TOKEN:
+      aud: https://gitlab.com
+  before_script:
+    - pip install boto3
+  script:
+    - echo "Generando datos de costos..."
+    - export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s" $(aws sts assume-role-with-web-identity --role-arn ${AWS_ROLE_ARN} --role-session-name "GitLabFinOps-${CI_PIPELINE_ID}" --web-identity-token ${GITLAB_OIDC_TOKEN} --duration-seconds 3600 --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' --output text))
+    - python3 caso-l-finops-optimization/generate_finops_data.py
+    - echo "Subiendo costs.json a S3..."
+    - aws s3 cp caso-l-finops-optimization/app/public/costs.json s3://${S3_BUCKET_CASE_L}/costs.json --acl public-read
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+
 # --- Despliegue Final a Producción (Case L) ---
 deploy_case_l_final:
   stage: deploy
