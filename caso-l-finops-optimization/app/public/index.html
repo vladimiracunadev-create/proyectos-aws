@@ -69,10 +69,12 @@
                     const spent = data.gasto_mes_real;
                     const percent = (spent / limit) * 100;
 
-                    // Cálculo de saldo (Positivo o Negativo)
+                    // Cálculo de saldo
                     const balance = limit - spent;
-                    const balanceSign = balance < 0 ? "" : "+";
-                    const balanceColor = balance < 0 ? "#ef4444" : "#10b981";
+                    const balanceSign = balance >= 0 ? "+" : ""; // Si es negativo, el signo ya viene en el número
+
+                    // Lógica de Colores: Rojo si el balance es negativo o cero, Verde si es positivo
+                    const balanceColor = balance <= 0 ? "#ef4444" : "#10b981";
 
                     document.getElementById('budget-limit-display').innerText = `Presupuesto: $${limit} | Disponible: ${balanceSign}$${balance.toFixed(2)}`;
                     document.getElementById('budget-limit-display').style.color = balanceColor;
@@ -82,7 +84,7 @@
 
                     bar.style.width = `${Math.min(percent, 100)}%`;
 
-                    if (percent > 100) {
+                    if (percent >= 100) {
                         statusSpan.innerText = `⚠️ EXCEDIDO (${percent.toFixed(0)}%)`;
                         statusSpan.style.color = '#ef4444'; // Rojo
                         bar.style.backgroundColor = '#ef4444';
@@ -120,9 +122,7 @@
         </div>
 
         <div class="footer-nav">
-            <a href="https://vladimir.acuna.dev-group.gitlab.io/proyectos-aws-gitlab/" class="btn">Volver al Roadmap</a>
-            <a href="https://vladimir.acuna.dev-group.gitlab.io/proyectos-aws-gitlab/#caso-l-finops-optimization/AWS_PASO_A_PASO.md"
-                class="btn">Ver Guía Paso a Paso</a>
+            <a href="https://proyectos-aws-gitlab-9fb818.gitlab.io/" class="btn">Volver al Portafolio</a>
         </div>
     </div>
 </body>
