@@ -3,6 +3,14 @@
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato seguirá [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) y este proyecto utiliza [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2026-02-17
+### Added
+- **Caso L (FinOps & Governance)**: Finalización del módulo de excelencia operativa y seguridad.
+    - Implementación de **AWS Budgets** para alertas de costos ("monthly-alert").
+    - Configuración de **GitLab OIDC** para autenticación Zero Trust entre GitLab y AWS.
+    - Gobernanza IAM con políticas de límites regionales (Ohio Only) y etiquetado obligatorio.
+    - Despliegue automatizado de sitio web estático en S3 con políticas de acceso público.
+
 ## [3.1.0] - 2026-02-16
 ### Added
 - **Caso K (Kubernetes EKS)**: Finalización del hito de orquestación industrial.

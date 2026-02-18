@@ -1,7 +1,7 @@
 # 💰 Caso L: FinOps & Governance (Excelencia Operativa)
 
 [![Nivel-11](https://img.shields.io/badge/Nivel-11_Senior-gold?style=for-the-badge)]()
-[![Status](https://img.shields.io/badge/Status-Diseñado_&_Planificado-blue?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Completado-green?style=for-the-badge)]()
 
 "La nube no solo se trata de construir, sino de administrar con responsabilidad". El **Caso L** es la culminación de la madurez cloud, donde la infraestructura se encuentra con la gobernanza financiera y la seguridad de identidades.
 
@@ -14,7 +14,7 @@ Lograr la **Excelencia Operativa**. Implementarás mecanismos para que el presup
 - **AWS Budgets**: Guardianes del presupuesto (Alertas vía SNS).
 - **GitLab CI + OIDC**: Eliminación de llaves permanentes (Zero Trust).
 - **IAM Governance**: Políticas de privilegio mínimo y límites de región.
-- **Cost Explorer Metadata**: Estrategia de etiquetado (Tagging) para auditoría.
+- **S3 Hosting**: Alojamiento estático seguro y optimizado.
 
 ## 📊 Beneficio para el Negocio
 - 📉 **Reducción de Riesgos**: Se eliminan las brechas por llaves filtradas.
@@ -24,7 +24,7 @@ Lograr la **Excelencia Operativa**. Implementarás mecanismos para que el presup
 ## 🔗 Enlaces Relacionados
 - ⬅️ **[Regresar al Roadmap Principal](../README.md)**
 - 📘 **[Guía para Reclutadores](../docs/RECRUITER.md)**
-- 🧪 **[Dashboard FinOps (Simulación)](./index.html)**
+- 👉 **[Ver Demo en Vivo](http://finops-vladimir-portfolio-case-l.s3-website.us-east-2.amazonaws.com)**
 
 ---
 > **Preparado por Vladimir Acuña — Optimizado para Ingeniería Cloud Senior.**

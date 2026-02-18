@@ -70,6 +70,14 @@ El proyecto resuelve problemas críticos que enfrentan las empresas modernas al 
 - **Habilidad**: Kubernetes Expert, Helm, EKS Auto Mode & Cloud Networking.
 - **Demo**: [Dashboard EKS (Estado: Hibernado por ahorro FinOps)](http://k8s-default-vladimir-fd9bd8dc79-d4392d3db0728cc7.elb.us-east-1.amazonaws.com)
 
+### 5. **[Caso L] FinOps & Governance** 🛡️
+**¿Por qué este enfoque?**: La nube permite ir muy rápido, pero sin control, los costos y la seguridad se disparan. Este caso demuestra la madurez operativa necesaria para entornos empresariales.
+
+- **Problema**: Fugas de credenciales y facturas sorpresa por recursos olvidados.
+- **Solución**: Implementación de **Zero Trust** (OIDC) y **Presupuestos Activos** (AWS Budgets).
+- **Habilidad**: FinOps, Identity Federation, Compliance & Governance.
+- **Demo**: [Sitio Web Seguro](http://finops-vladimir-portfolio-case-l.s3-website.us-east-2.amazonaws.com)
+
 ---
 
 ## 🛡️ Seguridad y Mejores Prácticas

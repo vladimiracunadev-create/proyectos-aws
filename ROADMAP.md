@@ -14,6 +14,7 @@ Este roadmap refleja el estado actual del proyecto y las próximas prioridades p
 - [x] **Caso D**: Serverless API con Lambda, API Gateway y DynamoDB
 - [x] **Caso J**: Docker Dashboard Premium con ECS Fargate, ECR y Load Balancer
 - [x] **Caso K**: Orquestación Real con AWS EKS, Load Balancer L7 y Self-Healing
+- [x] **Caso L**: FinOps & Governance con AWS Budgets, OIDC y S3 Hosting Seguro
 
 ### Infraestructura y Herramientas
 
@@ -94,13 +95,7 @@ Este roadmap refleja el estado actual del proyecto y las próximas prioridades p
 - [ ] **Auto-scaling**: HPA y Cluster Autoscaler
 - [ ] **Service Mesh**: Istio para observabilidad
 
-### 9. FinOps y Gobernanza (Caso L)
 
-- [ ] **AWS Budgets**: Alertas de costos
-- [ ] **Cost Explorer**: Análisis de uso
-- [ ] **Resource Groups**: Etiquetado y organización
-- [ ] **AWS Organizations**: Multi-account setup (opcional)
-- [ ] **Service Control Policies**: Governance corporativa
 
 ---
 
