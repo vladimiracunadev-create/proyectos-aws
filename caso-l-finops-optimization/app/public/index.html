@@ -51,53 +51,61 @@
             </div>
         </div>
 
-    <script>
-        async function loadFinOpsData() {
-            try {
-                const response = await fetch('costs.json');
-                if (!response.ok) throw new Error('No data');
-                const data = await response.json();
+        <script>
+            async function loadFinOpsData() {
+                try {
+                    const response = await fetch('costs.json');
+                    if (!response.ok) throw new Error('No data');
+                    const data = await response.json();
 
-                // Actualizar Costos
-                document.getElementById('cost-display').innerText = `$${data.gasto_mes_actual}`;
-                document.getElementById('forecast-display').innerText = `$${data.gasto_proyectado}`;
-                document.getElementById('region-display').innerText = data.region_activa;
-                document.getElementById('last-updated').innerText = data.ultima_actualizacion;
+                    // Actualizar Costos: Usar las claves exactas del Python script
+                    document.getElementById('cost-display').innerText = `$${data.gasto_mes_real}`;
+                    document.getElementById('forecast-display').innerText = `$${data.proyeccion_fin_mes}`;
+                    document.getElementById('region-display').innerText = data.region_activa;
+                    document.getElementById('last-updated').innerText = data.ultima_actualizacion;
 
-                // Actualizar Presupuesto
-                const limit = data.limite_presupuesto;
-                const percent = (data.gasto_mes_actual / limit) * 100;
-                
-                document.getElementById('budget-limit-display').innerText = `Presupuesto Mensual: $${limit}`;
-                const statusSpan = document.getElementById('budget-status-text');
-                const bar = document.getElementById('budget-bar');
-                
-                bar.style.width = `${Math.min(percent, 100)}%`;
-                
-                if (percent > 100) {
-                    statusSpan.innerText = `⚠️ EXCEDIDO (${percent.toFixed(0)}%)`;
-                    statusSpan.style.color = '#ef4444'; // Rojo
-                    bar.style.backgroundColor = '#ef4444';
-                } else if (percent > 85) {
-                    statusSpan.innerText = `⚠️ ALERTA (${percent.toFixed(0)}%)`;
-                    statusSpan.style.color = '#f59e0b'; // Naranja
-                    bar.style.backgroundColor = '#f59e0b';
-                } else {
-                    statusSpan.innerText = `✅ OK (${percent.toFixed(0)}% Utilizado)`;
-                    statusSpan.style.color = '#10b981'; // Verde
-                    bar.style.backgroundColor = '#10b981';
+                    // Actualizar Presupuesto y Cálculo de Déficit
+                    const limit = data.presupuesto_mensual;
+                    const spent = data.gasto_mes_real;
+                    const percent = (spent / limit) * 100;
+
+                    // Cálculo de saldo (Positivo o Negativo)
+                    const balance = limit - spent;
+                    const balanceSign = balance < 0 ? "" : "+";
+                    const balanceColor = balance < 0 ? "#ef4444" : "#10b981";
+
+                    document.getElementById('budget-limit-display').innerText = `Presupuesto: $${limit} | Disponible: ${balanceSign}$${balance.toFixed(2)}`;
+                    document.getElementById('budget-limit-display').style.color = balanceColor;
+
+                    const statusSpan = document.getElementById('budget-status-text');
+                    const bar = document.getElementById('budget-bar');
+
+                    bar.style.width = `${Math.min(percent, 100)}%`;
+
+                    if (percent > 100) {
+                        statusSpan.innerText = `⚠️ EXCEDIDO (${percent.toFixed(0)}%)`;
+                        statusSpan.style.color = '#ef4444'; // Rojo
+                        bar.style.backgroundColor = '#ef4444';
+                    } else if (percent > 85) {
+                        statusSpan.innerText = `⚠️ ALERTA (${percent.toFixed(0)}%)`;
+                        statusSpan.style.color = '#f59e0b'; // Naranja
+                        bar.style.backgroundColor = '#f59e0b';
+                    } else {
+                        statusSpan.innerText = `✅ OK (${percent.toFixed(0)}%)`;
+                        statusSpan.style.color = '#10b981'; // Verde
+                        bar.style.backgroundColor = '#10b981';
+                    }
+
+                } catch (error) {
+                    console.error("Error loading FinOps data:", error);
+                    document.getElementById('cost-display').innerText = "$0.00*";
+                    document.getElementById('budget-status-text').innerText = "Datos no disponibles (Modo Offline)";
                 }
-
-            } catch (error) {
-                console.error("Error loading FinOps data:", error);
-                document.getElementById('cost-display').innerText = "$0.00*";
-                document.getElementById('budget-status-text').innerText = "Datos no disponibles (Modo Offline)";
             }
-        }
 
-        // Cargar al inicio
-        loadFinOpsData();
-    </script>
+            // Cargar al inicio
+            loadFinOpsData();
+        </script>
 
         <div class="governance-section">
             <h3 style="margin-bottom: 20px;">Políticas Activas (Guardrails)</h3>
@@ -112,8 +120,9 @@
         </div>
 
         <div class="footer-nav">
-            <a href="../../README.md" class="btn">Volver al Roadmap</a>
-            <a href="../../AWS_PASO_A_PASO.md" class="btn">Ver Guía Paso a Paso</a>
+            <a href="https://vladimir.acuna.dev-group.gitlab.io/proyectos-aws-gitlab/" class="btn">Volver al Roadmap</a>
+            <a href="https://vladimir.acuna.dev-group.gitlab.io/proyectos-aws-gitlab/#caso-l-finops-optimization/AWS_PASO_A_PASO.md"
+                class="btn">Ver Guía Paso a Paso</a>
         </div>
     </div>
 </body>

@@ -94,9 +94,9 @@ def generate_json():
         forecast_cost = current_cost
 
     data = {
-        "ultima_actualizacion": datetime.datetime.now().strftime("%d/%m/%Y %H:%M"),
-        "gasto_mes_real": current_cost,
-        "proyeccion_fin_mes": forecast_cost,
+        "ultima_actualizacion": datetime.datetime.now().strftime("%d-%m-%Y %H:%M"),
+        "gasto_mes_real": abs(current_cost),
+        "proyeccion_fin_mes": abs(forecast_cost),
         "presupuesto_mensual": limit,
         "estado_presupuesto": status,
         "region_activa": REGION,
