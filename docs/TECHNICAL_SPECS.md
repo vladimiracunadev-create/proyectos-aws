@@ -20,6 +20,16 @@ Este documento detalla qué necesitas para que este proyecto funcione en cualqui
 
 ---
 
+## 📈 Límites de Almacenamiento (GitLab SaaS)
+
+Para mantener la salud del monorepo y evitar cargos o bloqueos, este proyecto sigue los límites de la capa gratuita de GitLab.com:
+
+- **Repositorio (Git/LFS)**: **10 GB** (Límite por proyecto).
+- **Almacenamiento Total (Namespace)**: **5 GB** (Incluye artefactos, registros de contenedores y caché).
+- **Acción Preventiva**: El proyecto implementa políticas de expiración de artefactos para mantenerse por debajo de los **500 MB**.
+
+---
+
 ## 🛠️ Requerimientos de Software
 
 Para ejecutar este proyecto, debes tener instalado:

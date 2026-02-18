@@ -63,6 +63,16 @@ Utilizado para empaquetar aplicaciones y garantizar portabilidad.
 
 ---
 
+## 📈 Gestión de Almacenamiento (CI/CD)
+
+Para optimizar el uso de cuotas en GitLab SaaS, implementamos una estrategia de **Limpieza Proactiva**:
+
+1.  **Expiración de Artefactos**: Los artefactos generados (como el portal `public/` o planes de Terraform) se configuran con `expire_in: 1 day`. Esto evita acumular gigabytes de archivos históricos innecesarios.
+2.  **Optimización de Caché**: Usamos claves de caché dinámicas (`node_modules`) con políticas `pull-push` para minimizar la redundancia de datos entre ejecuciones.
+3.  **Monitoreo**: Se recomienda revisar periódicamente **Usage Quotas** en GitLab para identificar artefactos huérfanos o crecimientos inesperados.
+
+---
+
 ## 📦 Estructura del Proyecto
 
 El proyecto sigue una estructura de monorepo donde cada "Caso" (A, B, C...) tiene su propio directorio, pero comparten herramientas comunes en la raíz.
