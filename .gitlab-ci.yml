@@ -179,8 +179,7 @@ deploy_case_l_final:
       --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]'
       --output text))
     - echo "Desplegando archivos a S3..."
-    # Sincroniza la carpeta pública de tu app con el bucket S3
-    - aws s3 sync caso-l-finops-optimization/app/public/ s3://${S3_BUCKET_CASE_L} --delete
+    - "aws s3 sync caso-l-finops-optimization/app/public/ s3://${S3_BUCKET_CASE_L} --delete"
     - echo "✅ Despliegue completado."
     - echo "🌍 Tu sitio web: http://${S3_BUCKET_CASE_L}.s3-website-${AWS_REGION}.amazonaws.com"
   rules:
