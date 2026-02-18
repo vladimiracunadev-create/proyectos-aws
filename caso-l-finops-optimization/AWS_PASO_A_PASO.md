@@ -245,7 +245,7 @@ Esta guía detalla la implementación de la **Excelencia Operativa** mediante co
     ```
     
     **¡Listo!** Tu sitio web estará disponible en:
-    `http://finops-vladimir-portfolio-case-l.s3-website-us-east-2.amazonaws.com`
+    `http://finops-vladimir-portfolio-case-l.s3-website.us-east-2.amazonaws.com`
 
 ---
 
@@ -280,7 +280,7 @@ deploy_case_l_final:
     # Sincroniza la carpeta pública de tu app con el bucket S3
     - aws s3 sync caso-l-finops-optimization/app/public/ s3://${S3_BUCKET_CASE_L} --delete
     - echo "✅ Despliegue completado."
-    - echo "🌍 Tu sitio web: http://${S3_BUCKET_CASE_L}.s3-website-${AWS_REGION}.amazonaws.com"
+    - echo "🌍 Tu sitio web: http://${S3_BUCKET_CASE_L}.s3-website.${AWS_REGION}.amazonaws.com"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
       changes:

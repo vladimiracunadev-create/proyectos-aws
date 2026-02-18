@@ -166,13 +166,11 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 
 ### 🟣 Nivel 5: Gobernanza, Integraciones y Optimizaciones
 
-#### [📂 Caso L: FinOps & Governance](./caso-l-finops-optimization/README.md) `Nivel 11` `DISEÑADO & PLANIFICADO`
+#### [📂 Caso L: FinOps & Governance](./caso-l-finops-optimization/README.md) `Nivel 11` `COMPLETADO`
 *   **Stack**: AWS Budgets + GitLab OIDC + IAM Governance.
 *   **Enfoque**: **Excelencia Operativa.** Integración profunda de GitLab con AWS, control de costos y políticas de gobernanza corporativa.
 *   ☁️ [Guía Paso a Paso AWS (OIDC + Budgets)](caso-l-finops-optimization/AWS_PASO_A_PASO.md)
-*   📖 [Documentación Técnica (Renderizada)](https://vladimir-acuna-dev-group.gitlab.io/proyectos-aws-gitlab/caso-l-finops-optimization/README.md)
-*   🧪 **Demo / Despliegue de Prueba**: Proyectado en **AWS S3 + CloudFront** (Aprovechando Free Tier para hosting estático de alta disponibilidad).
-    - [Ver Prototipo de Interfaz (CSS Premium)](https://vladimir-acuna-dev-group.gitlab.io/proyectos-aws-gitlab/caso-l-finops-optimization/app/public/index.html)
+*   👉 [Ver Demo en Vivo](http://finops-vladimir-portfolio-case-l.s3-website.us-east-2.amazonaws.com)
 
 ---
 
