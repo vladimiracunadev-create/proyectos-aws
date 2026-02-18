@@ -18,6 +18,8 @@ Checklist completo de auditoría y hardening de seguridad implementado.
 | Archivos .env commitados | ✅ Mitigado | `.gitignore` incluye `.env*` |
 | Terraform state con secrets | ✅ Mitigado | `*.tfstate` en `.gitignore` |
 | Claves privadas (.pem, .key) | ✅ Mitigado | Extensiones bloqueadas en `.gitignore` |
+| Fuga de Access Keys | ✅ Mitigado | **Zero-Trust (OIDC)**: Eliminación de llaves permanentes |
+| Desvío de presupuesto | ✅ Mitigado | **AWS Budgets**: Alertas activas en tiempo real |
 
 **Verificación:**
 

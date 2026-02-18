@@ -14,8 +14,9 @@ Se ha implementado exitosamente una **capa de tooling profesional** con Docker, 
 | **Archivos modificados** | 3 |
 | **Líneas de código** | ~2,500 |
 | **Documentación** | 5 documentos |
-| **Security checks** | 27/27 (100%) |
-| **Smoke tests** | 8 |
+| **Security checks** | 35/35 (100%) |
+| **Smoke tests** | 10 |
+| **Casos AWS** | 8 Completados |
 
 ---
 
@@ -52,8 +53,12 @@ proyectos-aws/
 ├── .yamllint.yml                   # Configuración yamllint
 ├── .markdownlint.json              # Configuración markdownlint
 ├── .gitignore                      # Actualizado (60+ líneas)
-├── SECURITY.md                     # Actualizado con OIDC
-└── README.md                       # Actualizado con tooling
+├── caso-l-finops-optimization/
+│   ├── app/public/index.html       # FinOps Dashboard
+│   ├── AWS_PASO_A_PASO.md          # Guía detallada
+│   └── README.md                   # Resumen del caso
+├── generate_finops_data.py          # Script de automatización FinOps
+├── hub.sh                          # Hub CLI (Linux/Mac)
 ```
 
 ---

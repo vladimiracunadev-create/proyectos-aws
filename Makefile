@@ -14,6 +14,12 @@ TF_DIR = caso-c-terraform-s3
 help: ## Muestra este mensaje de ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
+case-l-deploy: ## Genera datos de FinOps y sincroniza el sitio estático S3
+	@echo "Generando datos de costos..."
+	python generate_finops_data.py
+	@echo "Sincronizando a S3..."
+	aws s3 sync caso-l-finops-optimization/app/public/ s3://finops-vladimir-portfolio-case-l --delete
+
 serve: ## Levanta servidor local en puerto 8000 (requiere Python)
 	@echo "Iniciando servidor en http://localhost:8000..."
 	python -m http.server 8000

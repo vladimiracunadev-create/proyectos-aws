@@ -52,6 +52,36 @@ Esta política otorga los permisos necesarios para que Terraform pueda crear y g
 
 
 Recomendaciones:
-- Crea un usuario o rol específico para CI y asigna esta política.
-- Usa credenciales rotativas y evita claves de larga vida.
-- Protege estas variables como "Protected" y "Masked" en GitLab CI/CD.
+- **Zero-Trust (OIDC)**: Prefiere el uso de proveedores de identidad (OIDC) sobre Access Keys permanentes.
+- **Roles**: Crea roles específicos para CI y asigna políticas de privilegio mínimo.
+- **Rotación**: Si usas Access Keys, asegúrate de rotarlas cada 90 días.
+- **Protección**: Usa variables "Masked" y "Protected" en GitLab para los ARNs de los roles.
+
+---
+
+### Ejemplo de Trust Policy (GitLab OIDC)
+
+Esta es la política de confianza que permite a GitLab asumir el rol sin contraseñas:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::689978033715:oidc-provider/gitlab.com"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "gitlab.com:aud": "https://gitlab.com"
+        },
+        "StringLike": {
+          "gitlab.com:sub": "project_path:vladimir.acuna.dev-group/proyectos-aws-gitlab:ref_type:branch:ref:main"
+        }
+      }
+    }
+  ]
+}
+```

@@ -44,8 +44,8 @@ A diferencia de los archivos estáticos, el código de aplicaciones empaquetadas
 
 ## 🛠️ Stack Tecnológico
 - **Infraestructura**: Terraform (IaC), AWS SAM, Kubernetes Manifests.
-- **Servicios Cloud**: S3, CloudFront, Lambda, API Gateway, EKS, ECS.
-- **Automatización**: Makefile, GitLab CI/CD, Docker (DevContainers).
+- **Servicios Cloud**: S3, CloudFront, Lambda, API Gateway, EKS, ECS, **AWS Budgets**, **Cost Explorer**.
+- **Automatización**: Makefile, GitLab CI/CD, Docker (DevContainers), **OIDC**.
 - **Calidad**: ESLint, Prettier, HTMLHint, tfsec, gitleaks.
 
 ## 🔐 Estrategia de Seguridad

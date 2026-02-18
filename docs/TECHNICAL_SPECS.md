@@ -58,6 +58,13 @@ El usuario que ejecute este proyecto (ya sea tú en tu PC o GitLab en el pipelin
 ### 3. Terraform State
 - Acceso de lectura/escritura al bucket de estado global: `vladimir-terraform-state-2026`.
 
+### 4. FinOps & Governance (Caso L)
+- `budgets:ViewBudget`
+- `ce:GetCostAndUsage`
+- `ce:GetCostForecast`
+- `iam:CreateRole` (para OIDC)
+- `iam:AttachRolePolicy`
+
 ---
 
 ## 🚀 Portabilidad (Instalación en otra máquina)

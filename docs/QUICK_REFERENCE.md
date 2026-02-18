@@ -28,6 +28,7 @@ make security-scan         # Ejecuta escaneo de secretos con pre-commit
 make k8s-demo             # Despliega job de validación en kind
 make k8s-clean            # Limpia recursos de Kubernetes
 make k8s-delete-cluster   # Elimina cluster kind
+make case-l-deploy        # Genera datos FinOps y sincroniza S3
 ```
 
 ---
