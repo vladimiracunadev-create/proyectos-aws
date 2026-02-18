@@ -161,7 +161,7 @@ Esta guía detalla la implementación de la **Excelencia Operativa** mediante co
     | Key (Clave) | Value (Valor) | Descripción |
     | :--- | :--- | :--- |
     | `AWS_ROLE_ARN` | `arn:aws:iam::689978033715:role/GitLabDeployRole` | El rol que creamos en la Fase 2. (Copia y pega este valor exacto). |
-    | `AWS_REGION` | `us-east-1` | La región donde operamos. |
+    | `AWS_REGION` | `us-east-2` | La región donde operamos (Ohio). |
     | `S3_BUCKET_CASE_L` | `finops-vladimir-portfolio-case-l` | Nombre único para tu bucket (puedes cambiarlo si ya existe). |
 
 2.  **Configuración del Pipeline (`.gitlab-ci.yml`)**:
