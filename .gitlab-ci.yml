@@ -39,8 +39,10 @@ scan_infrastructure:
     - tfsec caso-c-terraform-s3
 
 cache:
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
     - node_modules/
+  policy: pull-push
 
 # --- Global Checks ---
 lint:
@@ -129,6 +131,7 @@ pages:
   artifacts:
     paths:
       - public
+    expire_in: 1 day  # El sitio vive en Pages, no necesitamos guardar el histórico de artefactos pesados.
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
 
