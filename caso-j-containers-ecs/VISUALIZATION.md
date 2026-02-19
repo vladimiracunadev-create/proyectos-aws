@@ -13,6 +13,16 @@ La aplicación Dockerizada ha sido desplegada con éxito en el orquestador ECS F
 - **Infraestructura**: AWS ECS Fargate + ECR Private + ALB
 - **Tecnología**: Docker Container (Node.js Express + Frontend Premium)
 
+> [!CAUTION]
+> **ESTRATEGIA FINOPS (Gobernanza de Costos)**
+> 
+> A diferencia de los casos A-G (que usan capa gratuita o Serverless puro), **este caso genera costos por hora**.
+> *   **Application Load Balancer (ALB)**: ~$0.0225/hora (~$16/mes) + LCU.
+> *   **ECS Fargate**: Costo por vCPU y GB RAM por segundo.
+> *   **IPv4 Pública**: $0.005/hora (~$3.6/mes).
+>
+> **Decisión Arquitectónica**: Al igual que en el **Caso K (Kubernetes)**, implementamos una estrategia de **"Evidenciar y Destruir"**. No es rentable mantener este servicio activo para un portafolio estático. La evidencia de que el sistema funcionó queda inmortalizada en este reporte.
+
 ---
 
 *Reporte de Cierre del Caso J.*
@@ -94,15 +104,32 @@ A continuación se presentan los espacios para las capturas de pantalla que vali
 
 ---
 
-## 🏁 Instrucciones de Cierre (FinOps)
+## 🏁 Instrucciones de Cierre (Baja del Servicio)
 
-Una vez tomadas estas capturas y actualizadas en este documento (o en la carpeta `img/`), procede **inmediatamente** a destruir la infraestructura:
+Para evitar cargos sorpresa en la facturación de AWS, sigue este procedimiento estricto de eliminación una vez capturadas las evidencias.
+
+### Opción A: Vía Makefile (Recomendado)
+Desde la raíz del proyecto, ejecuta:
 
 ```bash
 make case-j-destroy
 ```
 
-> **Verificación**: Confirma en la consola de AWS (ECS y EC2 Load Balancers) que los recursos ya no existen.
+### Opción B: Vía Terraform Directo
+Si el comando anterior falla o prefieres control manual:
+
+```bash
+cd caso-j-containers-ecs/terraform
+terraform destroy -auto-approve
+```
+
+### 🕵️ Verificación de Costos (¡Obligatorio!)
+No confíes solo en el comando. Ve a la consola de AWS y verifica:
+1.  **EC2 > Load Balancers**: Que el ALB `vladimir-case-j-alb` ya no exista.
+2.  **ECS > Clusters**: Que el clúster `vladimir-case-j-cluster` esté eliminado o vacío.
+3.  **CloudWatch > Log Groups**: (Opcional) Puedes borrar los grupos de logs `/ecs/vladimir-case-j-task` si deseas limpieza total.
+
+> **Nota**: Las imágenes en **ECR** tienen un costo de almacenamiento insignificante (centavos), pero puedes borrarlas si deseas limpieza absoluta en ECR.
 
 ---
-*Documentación generada para el portafolio de Vladimir Acuña.*
+*Documentación generada para el portafolio de Vladimir Acuña. Infraestructura destruida bajo principios FinOps.*

@@ -46,11 +46,12 @@ Portabilidad absoluta. Aprenderás a escribir Dockerfiles eficientes, gestionar 
 Dado que estos recursos se destruyen para optimizar costos, puedes ver las capturas y el reporte de funcionamiento aquí:
 👉 **[Reporte de Visualización y Resultados](./VISUALIZATION.md)**
 
-## 💰 Gestión de Costos
-Para minimizar el gasto de AWS (ya que el ALB y Fargate tienen costos horarios), sigue esta estrategia:
-1. **Desplegar**: `make case-j-apply`
-2. **Validar y Capturar**: Toma las fotos para el reporte `VISUALIZATION.md`.
-3. **Destruir Inmediatamente**: `make case-j-destroy`.
+## 💰 Gestión de Costos (FinOps)
+> [!CAUTION]
+> **ADVERTENCIA DE COSTOS**: Este laboratorio utiliza un Application Load Balancer (ALB) y tareas Fargate que **NO son gratuitos**.
+>
+> **Estrategia**: Despliega, captura tu evidencia y **destruye inmediatamente**.
+> 👉 Las instrucciones de baja están detalladas en el **[Reporte de Visualización](./VISUALIZATION.md#instrucciones-de-cierre-baja-del-servicio)**.
 
 ## 🛠️ Stack Tecnológico
 - **Docker**: Motor de contenedores.
