@@ -33,27 +33,51 @@ Se ha construido una imagen Docker optimizada, subida a un registro privado (ECR
 A continuación se presentan los espacios para las capturas de pantalla que validan cada fase del despliegue, demostrando la operatividad del sistema antes de su destrucción programada.
 
 ### 1. Construcción y Registro (Docker & ECR)
-> **Acción**: Captura de la consola AWS ECR mostrando el repositorio `vladimir-case-j-repo` con la imagen `latest` subida. O captura de terminal mostrando el `docker push` exitoso.
+> **Instrucciones Paso a Paso**:
+> 1. Ve a la **Consola de AWS** y busca el servicio **Elastic Container Registry (ECR)**.
+> 2. En el menú izquierdo, haz clic en **Repositories**.
+> 3. Entra al repositorio llamado `vladimir-case-j-repo`.
+> 4. **Captura**: Toma una foto donde se vea el **URI del repositorio** y al menos una imagen con la etiqueta `latest`.
 
 ![ECR Repository](./img/ecr-repo-evidence.png "Repositorio ECR con Imagen Docker")
 
 ### 2. El Clúster ECS (Orquestador)
-> **Acción**: Captura de la consola ECS mostrando el Cluster `vladimir-case-j-cluster` en estado **Active**.
+> **Instrucciones Paso a Paso**:
+> 1. Busca el servicio **Elastic Container Service (ECS)**.
+> 2. Haz clic en **Clusters** en el menú izquierdo.
+> 3. Deberías ver un cluster llamado `vladimir-case-j-cluster`.
+> 4. **Captura**: Toma una foto de la lista de clusters mostrando el **Status: Active**.
 
 ![ECS Cluster Status](./img/ecs-cluster-active.png "Estado Activo del Clúster ECS")
 
 ### 3. Definición de Tarea y Servicio (Fargate)
-> **Acción**: Captura del Servicio `vladimir-case-j-service` mostrando el estado **Active** y `Desired tasks: 1`.
+> **Instrucciones Paso a Paso**:
+> 1. Haz clic dentro del cluster `vladimir-case-j-cluster`.
+> 2. Ve a la pestaña **Services** (abajo).
+> 3. Haz clic en el servicio llamado `vladimir-case-j-service`.
+> 4. **Captura**: Toma una foto de la pestaña **Health and metrics** o **Configuration** donde se vea:
+>    - **Status**: Active
+>    - **Desired tasks**: 1
+>    - **Running tasks**: 1
 
 ![ECS Service Running](./img/ecs-service-running.png "Servicio ECS Ejecutando Tareas Fargate")
 
 ### 4. Application Load Balancer (ALB)
-> **Acción**: Captura de la consola EC2 > Load Balancers mostrando el ALB activo y su **DNS Name**.
+> **Instrucciones Paso a Paso**:
+> 1. Ve al servicio **EC2**.
+> 2. En el menú izquierdo, baja hasta la sección **Load Balancing** y haz clic en **Load Balancers**.
+> 3. Selecciona el balanceador `vladimir-case-j-alb`.
+> 4. **Captura**: Toma una foto del panel "Description" o "Details" donde se vea:
+>    - **DNS Name**: (Ej: `vladimir-case-j-alb-...us-east-2.elb.amazonaws.com`)
+>    - **State**: Active
 
 ![ALB Active](./img/alb-active-dns.png "Balanceador de Carga Activo")
 
 ### 5. Dashboard Premium (Resultado Final)
-> **Acción**: Captura del navegador accediendo a la App a través del DNS del Load Balancer, mostrando la interfaz "Glassmorphism" y el mensaje de éxito.
+> **Instrucciones Paso a Paso**:
+> 1. Copia el **DNS Name** del paso anterior (ALB).
+> 2. Pégalo en una nueva pestaña de tu navegador (asegúrate de usar `http://` y no `https://` si no configuraste certificado).
+> 3. **Captura**: Toma una foto de la página web completa mostrando el diseño "Glassmorphism" y el mensaje de éxito.
 
 ![Dashboard Docker](./img/docker-dashboard-premium.png "Aplicación Dockerizada Corriendo en AWS")
 
