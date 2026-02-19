@@ -42,6 +42,16 @@ graph LR
 ## 🎯 Objetivo
 Portabilidad absoluta. Aprenderás a escribir Dockerfiles eficientes, gestionar registros de imágenes (**ECR**) y desplegar servicios que pueden escalar de forma masiva.
 
+## 🖼️ Evidencia de Resultados
+Dado que estos recursos se destruyen para optimizar costos, puedes ver las capturas y el reporte de funcionamiento aquí:
+👉 **[Reporte de Visualización y Resultados](./VISUALIZATION.md)**
+
+## 💰 Gestión de Costos
+Para minimizar el gasto de AWS (ya que el ALB y Fargate tienen costos horarios), sigue esta estrategia:
+1. **Desplegar**: `make case-j-apply`
+2. **Validar y Capturar**: Toma las fotos para el reporte `VISUALIZATION.md`.
+3. **Destruir Inmediatamente**: `make case-j-destroy`.
+
 ## 🛠️ Stack Tecnológico
 - **Docker**: Motor de contenedores.
 - **Estado**: ✅ COMPLETADO
