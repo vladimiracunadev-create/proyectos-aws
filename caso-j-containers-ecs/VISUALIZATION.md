@@ -35,7 +35,7 @@ A continuación se presentan los espacios para las capturas de pantalla que vali
 ### 1. Construcción y Registro (Docker & ECR)
 > **Instrucciones Paso a Paso**:
 > 1. Ve a la **Consola de AWS** y busca el servicio **Elastic Container Registry (ECR)**.
-> 2. En el menú izquierdo, haz clic en **Repositories**.
+> 2. En el menú izquierdo, haz clic en **Repositories** (Repositorios).
 > 3. Entra al repositorio llamado `vladimir-case-j-repo`.
 > 4. **Captura**: Toma una foto donde se vea el **URI del repositorio** y al menos una imagen con la etiqueta `latest`.
 
@@ -44,32 +44,32 @@ A continuación se presentan los espacios para las capturas de pantalla que vali
 ### 2. El Clúster ECS (Orquestador)
 > **Instrucciones Paso a Paso**:
 > 1. Busca el servicio **Elastic Container Service (ECS)**.
-> 2. Haz clic en **Clusters** en el menú izquierdo.
+> 2. Haz clic en **Clusters** (Clústeres) en el menú izquierdo.
 > 3. Deberías ver un cluster llamado `vladimir-case-j-cluster`.
-> 4. **Captura**: Toma una foto de la lista de clusters mostrando el **Status: Active**.
+> 4. **Captura**: Toma una foto de la lista de clusters mostrando el **Status: Active** (Estado: Activo).
 
 ![ECS Cluster Status](./img/ecs-cluster-active.png "Estado Activo del Clúster ECS")
 
 ### 3. Definición de Tarea y Servicio (Fargate)
 > **Instrucciones Paso a Paso**:
 > 1. Haz clic dentro del cluster `vladimir-case-j-cluster`.
-> 2. Ve a la pestaña **Services** (abajo).
+> 2. Ve a la pestaña **Services** (Servicios) en la parte inferior.
 > 3. Haz clic en el servicio llamado `vladimir-case-j-service`.
-> 4. **Captura**: Toma una foto de la pestaña **Health and metrics** o **Configuration** donde se vea:
->    - **Status**: Active
->    - **Desired tasks**: 1
->    - **Running tasks**: 1
+> 4. **Captura**: Toma una foto de la pestaña **Health and metrics** (Salud y métricas) o **Configuration** (Configuración) donde se vea:
+>    - **Status**: Active (Estado: Activo)
+>    - **Desired tasks**: 1 (Tareas deseadas: 1)
+>    - **Running tasks**: 1 (Tareas en ejecución: 1)
 
 ![ECS Service Running](./img/ecs-service-running.png "Servicio ECS Ejecutando Tareas Fargate")
 
 ### 4. Application Load Balancer (ALB)
 > **Instrucciones Paso a Paso**:
 > 1. Ve al servicio **EC2**.
-> 2. En el menú izquierdo, baja hasta la sección **Load Balancing** y haz clic en **Load Balancers**.
+> 2. En el menú izquierdo, baja hasta la sección **Load Balancing** (Balanceo de carga) y haz clic en **Load Balancers** (Balanceadores de carga).
 > 3. Selecciona el balanceador `vladimir-case-j-alb`.
-> 4. **Captura**: Toma una foto del panel "Description" o "Details" donde se vea:
->    - **DNS Name**: (Ej: `vladimir-case-j-alb-...us-east-2.elb.amazonaws.com`)
->    - **State**: Active
+> 4. **Captura**: Toma una foto del panel "Description" (Descripción) o "Details" (Detalles) donde se vea:
+>    - **DNS Name**: (Nombre DNS) (Ej: `vladimir-case-j-alb-...us-east-2.elb.amazonaws.com`)
+>    - **State**: Active (Estado: Activo)
 
 ![ALB Active](./img/alb-active-dns.png "Balanceador de Carga Activo")
 
