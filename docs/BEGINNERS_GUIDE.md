@@ -63,6 +63,7 @@ A medida que avanzas por las carpetas, la complejidad y el profesionalismo aumen
 2.  **Validación local**: Corres `make lint` y `make tf-security`.
 3.  **Push**: Subes a GitLab.
 4.  **Pipeline**: El robot de GitLab despierta, audita la seguridad y despliega automáticamente en AWS.
+5.  **Fin del día (FinOps)**: Antes de cerrar tu laptop, corre `make finops-check` para asegurarte de no dejar nada costoso encendido.
 
 ---
 ¿Listo para aprender? **¡Empieza explorando las carpetas y rompiendo cosas!** Es la mejor forma de dominar el Cloud Computing. 🚀🦾

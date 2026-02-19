@@ -74,6 +74,7 @@ El usuario que ejecute este proyecto (ya sea tú en tu PC o GitLab en el pipelin
 - `ce:GetCostForecast`
 - `iam:CreateRole` (para OIDC)
 - `iam:AttachRolePolicy`
+- **Auditoría de Costos (CLI)**: Capacidad de listar recursos cross-region (`ec2:Describe*`, `eks:ListClusters`, `rds:DescribeDBInstances`) mediante el script `make finops-check`.
 
 ---
 

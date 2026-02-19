@@ -9,10 +9,20 @@ S3_BUCKET ?= vladimir-caso-b-site-2026
 REGION ?= us-east-2
 TF_DIR = caso-c-terraform-s3
 
-.PHONY: help install lint format serve upload deploy-b tf-init tf-plan tf-apply tf-security docker-build k8s-lint clean case-k-init case-k-deploy case-k-destroy
+.PHONY: help install lint format serve upload deploy-b tf-init tf-plan tf-apply tf-security docker-build k8s-lint clean case-k-init case-k-deploy case-k-destroy finops-check
 
 help: ## Muestra este mensaje de ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
+
+finops-check: ## 💰 Escanea recursos activos en AWS (Multi-Región) para evitar cobros
+	@if [ -f /bin/bash ]; then \
+		echo "Detectado entorno Bash. Ejecutando script .sh..."; \
+		chmod +x ./scripts/aws-resource-audit.sh; \
+		./scripts/aws-resource-audit.sh; \
+	else \
+		echo "Detectado entorno Windows/PowerShell. Ejecutando script .ps1..."; \
+		powershell -ExecutionPolicy Bypass -File ./scripts/aws-resource-audit.ps1; \
+	fi
 
 case-l-deploy: ## Genera datos de FinOps y sincroniza el sitio estático S3
 	@echo "Generando datos de costos..."

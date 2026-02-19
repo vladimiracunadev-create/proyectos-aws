@@ -78,6 +78,14 @@ El proyecto resuelve problemas críticos que enfrentan las empresas modernas al 
 - **Habilidad**: FinOps, Identity Federation, Compliance & Governance.
 - **Demo**: [Sitio Web Seguro](http://finops-vladimir-portfolio-case-l.s3-website.us-east-2.amazonaws.com)
 
+### 6. **[Scripting] Tooling Propio & Automatización** 🛠️
+**¿Por qué es relevante?**: Un ingeniero senior no solo utiliza las herramientas existentes; crea las propias para cubrir brechas de observabilidad eficiente.
+
+- **Problema**: La consola de AWS es lenta para revisar múltiples regiones en busca de "recursos olvidados" (costos vampiro).
+- **Solución**: Desarrollo de un motor de auditoría multiplataforma (PowerShell + Bash) integrado en el `Makefile`.
+- **Habilidad**: Scripting avanzado, AWS CLI Automation y Cultura FinOps.
+- **Herramienta**: `make finops-check` (Escanea EC2, EKS, RDS y Redes en < 5 segundos).
+
 ---
 
 ## 🛡️ Seguridad y Mejores Prácticas

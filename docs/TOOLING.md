@@ -73,6 +73,17 @@ Para optimizar el uso de cuotas en GitLab SaaS, implementamos una estrategia de 
 
 ---
 
+## 💻 Scripts Operativos
+Este monorepo incluye herramientas personalizadas para el mantenimiento diario:
+
+### 8. Auditoría de Costos (FinOps)
+Herramienta Cross-Platform (PowerShell/Bash) para escanear recursos activos en múltiples regiones.
+- **Comando**: `make finops-check`
+- **Ubicación**: `scripts/aws-resource-audit.ps1` (Windows) y `scripts/aws-resource-audit.sh` (Linux/Mac).
+- **Cobertura**: EC2, RDS, EKS, ECS, NAT Gateways, ALBs.
+
+---
+
 ## 📦 Estructura del Proyecto
 
 El proyecto sigue una estructura de monorepo donde cada "Caso" (A, B, C...) tiene su propio directorio, pero comparten herramientas comunes en la raíz.
