@@ -87,7 +87,7 @@ case-j-apply: ## Aplica la infraestructura del Caso J
 	@echo "Aplicando infraestructura para Caso J..."
 	cd $(TF_J_DIR) && terraform apply -auto-approve tfplan
 
-case-j-destroy: ## Destruye la infraestructura del Caso J
+case-j-destroy: ## 🚨 ELIMINA TODO EL CASO J (EVITA CARGOS EXTRAS)
 	@echo "ATENCION: Destruyendo infraestructura de $(TF_J_DIR)..."
 	cd $(TF_J_DIR) && terraform destroy -auto-approve
 

@@ -3,6 +3,12 @@
 [![Nivel-9](https://img.shields.io/badge/Nivel-9_Contenedores-blue?style=for-the-badge)]()
 [![Status](https://img.shields.io/badge/Status-Nuevo-blue?style=for-the-badge)]()
 
+> [!CAUTION]
+> **ADVERTENCIA DE COSTOS**: Este laboratorio utiliza un Application Load Balancer (ALB) y tareas Fargate que **NO son gratuitos**.
+>
+> **Estrategia**: Despliega, captura tu evidencia y **destruye inmediatamente**.
+> 👉 Las instrucciones de baja están detalladas en el **[Reporte de Visualización](./VISUALIZATION.md#instrucciones-de-cierre-baja-del-servicio)**.
+
 Empaquetar aplicaciones es el estándar de la industria moderna. Este caso demuestra cómo crear un entorno aislado y reproducible que corre igual en tu PC que en AWS ECS/Fargate, ahora con una interfaz **Premium Dashboard**.
 
 ---
@@ -42,16 +48,16 @@ graph LR
 ## 🎯 Objetivo
 Portabilidad absoluta. Aprenderás a escribir Dockerfiles eficientes, gestionar registros de imágenes (**ECR**) y desplegar servicios que pueden escalar de forma masiva.
 
+## 🛠️ Comandos de Supervivencia
+```bash
+make case-j-init      # Inicializa los planos de infraestructura
+make case-j-apply     # Crea la infraestructura (ALB + ECS)
+make case-j-destroy   # 🚨 BORRA TODO PARA EVITAR CARGOS EXTRAS
+```
+
 ## 🖼️ Evidencia de Resultados
 Dado que estos recursos se destruyen para optimizar costos, puedes ver las capturas y el reporte de funcionamiento aquí:
 👉 **[Reporte de Visualización y Resultados](./VISUALIZATION.md)**
-
-## 💰 Gestión de Costos (FinOps)
-> [!CAUTION]
-> **ADVERTENCIA DE COSTOS**: Este laboratorio utiliza un Application Load Balancer (ALB) y tareas Fargate que **NO son gratuitos**.
->
-> **Estrategia**: Despliega, captura tu evidencia y **destruye inmediatamente**.
-> 👉 Las instrucciones de baja están detalladas en el **[Reporte de Visualización](./VISUALIZATION.md#instrucciones-de-cierre-baja-del-servicio)**.
 
 ## 🛠️ Stack Tecnológico
 - **Docker**: Motor de contenedores.

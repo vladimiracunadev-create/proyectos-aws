@@ -102,3 +102,26 @@ Tras el despliegue inicial exitoso, se realizó una actualización de "Hot Reloa
 1.  Se rediseñó la interfaz usando **Glassmorphism**.
 2.  Se actualizó el `Dockerfile` para incluir activos estáticos.
 3.  Se realizó un `docker push` con el tag `latest` y un `force-new-deployment` en ECS para aplicar los cambios visuales sin tiempo de inactividad.
+
+---
+
+## 🧹 Limpieza Final (Estrategia FinOps) - ¡DINERO REAL! 💰🔥
+
+Para evitar cargos innecesarios, sigue este orden EXACTO de eliminación. Si saltas un paso, AWS podría bloquear la eliminación de los siguientes recursos.
+
+### 🪜 Paso a Paso para "Matar" todo:
+
+1.  **Ejecutar Terraform Destroy**:
+    - Desde la raíz: `make case-j-destroy`
+    - O manualmente en `terraform/`: `terraform destroy -auto-approve`
+
+2.  **Verificación en Consola (Obligatorio)**:
+    - **EC2 > Load Balancers**: Verifica que el ALB haya desaparecido. (Costo: $0.0225/hr).
+    - **ECS > Clusters**: Verifica que el clúster esté vacío o borrado.
+    - **CloudWatch Log Groups**: Borra `/ecs/vladimir-case-j-task` para limpieza total.
+
+3.  **Repositorio ECR**:
+    - Las imágenes no generan costo de cómputo, pero sí de almacenamiento (mínimo). Puedes borrar el repositorio `vladimir-case-j-repo` si deseas limpieza absoluta.
+
+---
+*Guía técnica profesional para el portafolio de Vladimir Acuña.*

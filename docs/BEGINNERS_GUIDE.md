@@ -43,6 +43,7 @@ A medida que avanzas por las carpetas, la complejidad y el profesionalismo aumen
 *   **ECR (Almacén)**: Donde guardas tus apps terminadas.
 *   **ECS (Director)**: Quien pone a funcionar tu app en **Fargate** (servidores invisibles). 
 *   *Bonus:* Incluye un **Dashboard Premium** para ver los datos en vivo.
+- **Nota FinOps**: Entorno **Desactivado** para evitar gastos innecesarios, aplicando madurez en la gestión de la nube.
 
 ### ☸️ Caso K: Kubernetes en AWS (Orquestación EKS)
 **Objetivo**: El nivel máximo. Kubernetes gestionando flotas de contenedores directamente en la infraestructura de AWS.
