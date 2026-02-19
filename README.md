@@ -46,6 +46,7 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 - ⚡ **[Referencia Rápida](docs/QUICK_REFERENCE.md)**: Comandos esenciales y atajos.
 
 ### 🏗️ Arquitectura y Stack
+- 📂 **[Estructura de Archivos](docs/FILE_STRUCTURE.md)**: Mapa detallado de carpetas y archivos del sistema.
 - 🏗️ **[Arquitectura](docs/ARCHITECTURE.md)**: Visión técnica, diagramas Mermaid y stack.
 - 🛠️ **[Especificaciones Técnicas](docs/TECHNICAL_SPECS.md)**: Requerimientos de hardware y software.
 - 🔧 **[Tooling](docs/TOOLING.md)**: Docker, Kubernetes, Makefile y validaciones.
@@ -55,6 +56,9 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 - 🛡️ **[Seguridad IAM](docs/IAM_SECURITY.md)**: Políticas de acceso y privilegios mínimos.
 - ✅ **[Security Checklist](docs/SECURITY_CHECKLIST.md)**: Lista de verificación completa de seguridad.
 - 🔐 **[Secretos Comprometidos](docs/killed.md)**: Registro de secretos rotados.
+
+### 💰 FinOps & Auditoría
+- 💰 **[Manual de FinOps](docs/FINOPS_MANUAL.md)**: Auditoría de costos y semáforo de riesgo financiero.
 
 ### 👔 Para Reclutadores
 - 👨‍💼 **[Guía para Reclutadores](docs/RECRUITER.md)**: Tour ejecutivo y valor de negocio.
