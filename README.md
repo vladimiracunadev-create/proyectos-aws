@@ -40,9 +40,6 @@ make help
 ## 📖 Documentación Avanzada
 Hemos organizado la base de conocimientos para que sea fácil de navegar:
 
-> 📂 **[Estructura de Archivos del Sistema](docs/FILE_STRUCTURE.md)** — Mapa completo de cada archivo y directorio del repositorio.
-> 💰 **[Manual de FinOps](docs/FINOPS_MANUAL.md)** — Auditoría de costos AWS y semáforo de riesgo financiero.
-
 ### 🎯 Inicio Rápido
 - 🚀 **[Guía de Instalación](docs/INSTALL.md)**: Docker (DevContainers) vs Manual.
 - 📘 **[Guía para Principiantes](docs/BEGINNERS_GUIDE.md)**: Glosario y conceptos básicos.
