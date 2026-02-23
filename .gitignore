@@ -1,5 +1,64 @@
+# Dependencies
 **/node_modules/
 **/dist/
 **/build/
+
+# Environment variables y secretos
 **/.env
+**/.env.*
+!**/.env.example
+**/secrets/
+**/credentials/
+
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+**/.terraform/
+**/.terraform.lock.hcl
+**/terraform.tfvars
+**/terraform.tfvars.json
+**/*.auto.tfvars
+**/*.auto.tfvars.json
+**/override.tf
+**/override.tf.json
+**/*_override.tf
+**/*_override.tf.json
+
+# AWS y credenciales
+**/.aws/
+**/aws-credentials
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.cer
+**/*.crt
+!**/public.crt
+**/*.jks
+**/*.keystore
+
+# Logs y temporales
+**/logs/
+**/*.log
+**/tmp/
+**/temp/
+**/.cache/
+
+# IDE y OS
 **/.DS_Store
+**/.vscode/
+**/.idea/
+**/*.swp
+**/*.swo
+*~
+
+# Pre-commit
+**/.pre-commit-cache/
+
+# Docker
+**/.dockerignore
+
+# Kubernetes secrets (si se generan localmente)
+**/k8s/**/secrets.yaml
+**/k8s/**/*-secret.yaml

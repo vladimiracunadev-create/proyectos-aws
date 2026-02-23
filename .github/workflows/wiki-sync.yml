@@ -1,0 +1,26 @@
+﻿name: Wiki Sync
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docs/wiki/**'
+
+permissions:
+  contents: write
+
+jobs:
+  upload-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Sync to Wiki
+        uses: Andrew-Chen-Wang/github-wiki-action@v4
+        with:
+          path: docs/wiki
+          strategy: clone
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
