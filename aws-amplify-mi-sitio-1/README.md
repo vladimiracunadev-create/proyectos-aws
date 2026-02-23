@@ -1,0 +1,31 @@
+# 🌐 AWS Amplify Portfolio
+
+Este subproyecto contiene el portafolio profesional de Vladimir Acuña, diseñado para ser desplegado de forma continua utilizando **AWS Amplify Console**. Es una Single Page Application (SPA) con capacidades de **PWA (Progressive Web App)**.
+
+## ✨ Características
+
+- **Aesthetica Premium:** Diseño moderno con Glassmorphism y animaciones fluidas.
+- **Multilingüe:** Soporte nativo para Español e Inglés.
+- **Vistas Especializadas:** Filtros de contenido para Reclutadores, vista Normal y vista Profunda (técnica).
+- **Offline Ready:** Service Workers para navegación sin conexión y carga ultrarrápida.
+- **Seguridad:** Content Security Policy (CSP) estricta.
+
+## 🛠️ Stack Tecnológico
+
+- **Frontend:** Vanilla HTML5, CSS3 y JavaScript moderno.
+- **PWA:** Web Manifest y Service Workers personalizados.
+- **Infraestructura:** AWS Amplify (Hosting, CI/CD, SSL).
+
+## 📂 Estructura
+
+- `index.html`: Punto de entrada principal con estructura semántica.
+- `styles.css`: Sistema de diseño basado en variables y flexbox/grid.
+- `app.js`: Lógica de la interfaz, cambio de idiomas y vistas.
+- `pwa.js`: Gestión del ciclo de vida de la PWA.
+- `assets/`: Activos visuales y documentos PDF (CV, portafolio).
+
+## 🚀 Despliegue
+
+Este proyecto se despliega automáticamente en AWS Amplify al realizar un push a las ramas `main` (producción) o `dev` (staging).
+
+Para más detalles sobre la configuración en AWS, consulta [AWS_PASO_A_PASO.md](./AWS_PASO_A_PASO.md).
