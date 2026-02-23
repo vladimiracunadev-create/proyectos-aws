@@ -1,0 +1,24 @@
+{
+    "name": "Vladimir Acuña · Portafolio",
+    "short_name": "VladiPortafolio",
+    "description": "Portafolio de Vladimir Acuña — Modernización legacy, DevOps e IA local.",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#0f172a",
+    "theme_color": "#3b82f6",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "assets/icons/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        },
+        {
+            "src": "assets/icons/icon.svg",
+            "sizes": "192x192 512x512",
+            "type": "image/svg+xml",
+            "purpose": "maskable"
+        }
+    ]
+}

@@ -1,4 +1,4 @@
-name: Despliegue a S3 - Proyecto Scrum
+﻿name: Despliegue a S3 - Proyecto Scrum
 
 on:
   push:
@@ -12,10 +12,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout del código
+      - name: Checkout del cÃ³digo
         uses: actions/checkout@v3
 
-      - name: ¿Dónde estoy y qué veo?
+      - name: Â¿DÃ³nde estoy y quÃ© veo?
         run: |
           echo "La carpeta actual es:"
           pwd
