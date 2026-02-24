@@ -29,3 +29,7 @@ ImplementaciÃ³n de **"Documentation as Code"**.
 - **Auth:** OpenID Connect (OIDC) para AWS.
 - **Scanners:** TruffleHog, detect-secrets, GitHub Dependency Graph.
 - **Estilo:** Markdown-CLI, Yamllint.
+
+---
+> [!IMPORTANT]
+> **Inmersión Técnica**: Consulta el manual de [Ingeniería de CI/CD (OIDC & Workflows)](https://github.com/vladimiracunadev-create/proyectos-aws/blob/main/docs/CI_CD_ENGINEERING_DEEP_DIVE.md) para un análisis de bajo nivel de la automatización.

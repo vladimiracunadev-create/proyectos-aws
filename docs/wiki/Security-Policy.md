@@ -109,6 +109,9 @@ Los hooks incluyen:
        aws-region: us-east-1
    ```
 
+> [!NOTE]
+> **Ingeniería de Bajo Nivel**: Para un desglose técnico del "Handshake" OIDC y cómo se gestionan los tokens JWT en el pipeline, consulta [CI_CD_ENGINEERING_DEEP_DIVE.md](../../docs/CI_CD_ENGINEERING_DEEP_DIVE.md).
+
 ### Escaneo de Seguridad Automatizado
 
 El repositorio ejecuta automÃ¡ticamente en cada push a `main`:

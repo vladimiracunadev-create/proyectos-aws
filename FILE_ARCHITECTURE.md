@@ -1,55 +1,76 @@
-# 🏗️ Arquitectura de Archivos del Sistema (FILE_ARCHITECTURE)
+# 🏗️ Arquitectura Profunda del Sistema (FILE_ARCHITECTURE)
 
-Este documento proporciona un análisis profundo de la estructura del monorepo, explicando el propósito y la interacción de cada archivo crítico.
+Este documento desglosa el "ADN" técnico del monorepo, analizando la lógica interna de los scripts de orquestación y la interconexión de sus componentes.
 
 ---
 
-## 📂 Mapa Genético del Monorepo
+## 🧬 Anatomía del Orquestador: `hub.ps1` (PowerShell)
 
-```text
-proyectos-aws/
-├── .github/workflows/      # 🤖 Cerebro de Automatización (CI/CD)
-│   ├── despliegue.yml      # Flujo de producción para S3
-│   └── security-scan.yml   # Auditoría de seguridad (SAST/Secrets)
-├── aws-amplify-mi-sitio-1/ # 🌐 Proyecto A: Portfolio Amplify (PWA)
-├── aws-s3-scrum-mi-sitio-1/# 🏉 Proyecto B: Portfolio S3 (Scrum focused)
-├── docs/                   # 📚 Base de Conocimiento (Wiki)
-├── .secrets.baseline       # 🔐 Huellas de seguridad para evitar fugas
-├── Makefile                # 🛠️ Orquestador atómico (Linux/Mac/WSL2)
-├── hub.ps1                 # 🛠️ Hub CLI para Windows (PowerShell)
-└── amplify.yml             # ☁️ Descriptor de Build para AWS Amplify
+El `hub.ps1` no es solo un lanzador de comandos; es una capa de abstracción que gestiona la paridad entre Windows y el entorno de contenedores.
+
+### 1. Parámetros y Utilidades (`Write-ColorOutput`)
+- **Lógica**: Centraliza la salida visual para asegurar que los errores sean rojos y los éxitos verdes, mejorando la **DX (Developer Experience)**.
+- **Función `Show-Help`**: Actúa como la única fuente de verdad para el uso del CLI local.
+
+### 2. Gestión de Proyectos (`List-Projects`)
+- **Lógica**: Utiliza el comando `Get-ChildItem` con un filtro `aws-*`. 
+- **Profundidad**: Realiza un conteo recursivo de archivos por proyecto antes de mostrarlo, lo que da visibilidad inmediata sobre la complejidad del subproyecto detectado.
+
+### 3. Motor de Validación (`Invoke-Validate`)
+- **Check de Salud de Docker**: Antes de cualquier tarea, verifica `docker info`. Si Docker no está corriendo, aborta el proceso para evitar errores de cuelgue de PowerShell.
+- **Detección Automática de Imágenes**: Si la imagen `proyectos-aws/tooling` no existe, el script decide inteligentemente:
+  - Intenta usar `make tooling-build` (si `make` está instalado).
+  - Si no, ejecuta un `docker build` directo apuntando a `tooling/Dockerfile.tooling`.
+- **Montaje de Volumen**: Ejecuta el contenedor montando el path local como **SÓLO LECTURA** (`:ro`), protegiendo el código fuente durante las auditorías de seguridad.
+
+---
+
+## 🛠️ El Motor Industrial: `Makefile`
+
+Diseñado para ser el estándar de oro en entornos Linux, macOS y WSL2.
+
+### Comandos de "Ingeniería de Planta"
+- **`tooling-validate`**: Ejecuta `/opt/tooling/scripts/validate.sh` dentro de un entorno aislado. Esto garantiza que un "Fail" en local sea idéntico a un "Fail" en GitHub Actions.
+- **`k8s-demo`**: Utiliza `kind` (Kubernetes in Docker). 
+  - **Lógica**: Crea el cluster, carga la imagen local (`kind load`) y aplica manifiestos de `kubectl`.
+  - **Seguridad**: Aplica políticas de red (`NetworkPolicy`) y contextos de seguridad (`SecurityContext`) que son la referencia técnica de este repositorio.
+- **`security-scan`**: Inyecta `detect-secrets` sobre todos los archivos, filtrando mediante el `.antigravityignore` y la lógica de pre-commit.
+
+---
+
+## ☁️ Configuración de Nube: `amplify.yml`
+
+Este archivo es el contrato con **AWS Amplify Console**.
+
+```yaml
+version: 1
+applications:
+  - appRoot: aws-amplify-mi-sitio-1
+    frontend:
+      phases:
+        build:
+          commands: [] # No requiere build process al ser Vanilla JS
+      artifacts:
+        baseDirectory: . # Sirve desde la raíz del subproyecto
+        files:
+          - '**/*' # Incluye todos los archivos, optimizando el PWA
 ```
+**Análisis**: Al definir `appRoot`, permitimos que Amplify ignore el resto del monorepo, optimizando los tiempos de build y reduciendo el consumo de recursos (FinOps).
 
 ---
 
-## 🧩 Análisis de Componentes Críticos
+## 📊 Catálogo de Activos Dinámicos (`assets/`)
 
-### 1. El Orquestador Local (`hub.ps1` & `Makefile`)
-- **Propósito**: Estandarizar las operaciones. Un desarrollador no necesita recordar comandos complejos de Docker o AWS; usa el Hub.
-- **ADN**: El `hub.ps1` detecta el sistema operativo y delega tareas a contenedores de "tooling" para garantizar que el resultado sea idéntico en local y en la nube.
-
-### 2. Control de Seguridad (`.secrets.baseline`)
-- **Propósito**: Actúa como un "filtro de ruido". Registra qué archivos tienen contenido que *parece* un secreto pero es inofensivo, permitiendo que `detect-secrets` se enfoque en amenazas reales.
-
-### 3. Configuración de Nube (`amplify.yml`)
-- **Propósito**: Indica a AWS Amplify cómo construir y servir el subproyecto. Controla el caché, los headers de seguridad y el directorio de despliegue.
+Cada subproyecto (`aws-amplify-*` y `aws-s3-*`) mantiene una carpeta `assets/` con una arquitectura idéntica:
+- **`icons/icon.svg`**: Un solo activo vectorial para generar todos los tamaños de iconos de la PWA.
+- **`cv-completo.pdf` vs `cv-reducido.pdf`**: Estrategia de segmentación de información para diferentes perfiles de reclutador.
+- **`LEEME_PDFS.txt`**: Documentación interna para asegurar que los PDFs estén actualizados y no sean archivos corruptos.
 
 ---
 
-## 🧬 Ciclo de Vida de los Archivos
-
-1. **Creación**: Los nuevos archivos se crean sobre la rama `dev`.
-2. **Validación**: El archivo es procesado por los pre-commit hooks.
-3. **Integración**: Fluye hacia `main` tras validación en PR.
-4. **Despliegue**: Se transforma en activos estáticos en S3 o Amplify.
+## 🔐 Archivos de Control Invisible
+- **`.secrets.baseline`**: Un archivo JSON que contiene los hashes de los falsos positivos. Es la "memoria" del sistema de seguridad.
+- **`.github/workflows/wiki-sync.yml`**: Un bridge que usa un token de GitHub para empujar cambios desde `docs/wiki/` al repositorio `.wiki` oculto de GitHub.
 
 ---
-
-## 🛠️ Archivos de Soporte (Hidden Gems)
-
-- **`NOTICE` & `LICENSE`**: Cumplimiento legal del software.
-- **`amplify.yml`**: Configuración de CI/CD nativa de AWS para apps SPA.
-- **`.github/workflows/wiki-sync.yml`**: Mantiene la Wiki de GitHub sincronizada con el contenido de la carpeta `docs/`.
-
----
-*Entender la estructura es el primer paso para dominar la infraestructura.*
+*Este documento es una pieza viva del ecosistema. Si modificas un script principal, actualiza su profunda explicación aquí.*
