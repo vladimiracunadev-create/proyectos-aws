@@ -1,52 +1,49 @@
-# 🖥️ Especificaciones del Sistema (SYSTEM_SPECS)
+# 🖥️ Especificaciones Profundas del Sistema (SYSTEM_SPECS)
 
-Este documento detalla los requerimientos físicos y lógicos necesarios para desarrollar, probar y desplegar los proyectos de este ecosistema.
+Este documento justifica las decisiones tecnológicas y detalla los requerimientos exactos para mantener la integridad del ecosistema `proyectos-aws`.
 
 ---
 
-## 💻 Requerimientos de Hardware
+## 💻 El Rationale del Hardware
 
-| Componente | Mínimo (MVP) | Recomendado (Max Tested) |
+### 1. Perfil de Desarrollo Recomendado (Referencia: i7-8550U)
+- **Por qué 16GB RAM?**: Docker Desktop y WSL2 consumen una media de 4GB a 8GB solo para mantener el daemon y las capas de caché de imágenes. 16GB garantizan que el IDE (VS Code) y el navegador (con múltiples pestañas de AWS) no sufran latencia.
+- **Virtualización**: Se requiere soporte para **Second Level Address Translation (SLAT)** para que WSL2 funcione con el motor de utilidad de Windows.
+
+### 2. Almacenamiento y I/O
+- **IOPS**: Se recomienda SSD con al menos 500 MB/s de lectura/escritura. Las operaciones de `docker build` y `npm install` son intensivas en I/O.
+- **Espacio**: 50GB dedicados permiten almacenar múltiples versiones de la imagen de `tooling` (aprox. 1.5GB cada una) y el caché de las capas de Linux.
+
+---
+
+## 🛠️ Matriz de Software y Justificación Técnica
+
+| Herramienta | Versión | Justificación de Ingeniería |
 | :--- | :--- | :--- |
-| **Procesador** | Dual-Core 2.0GHz | Intel Core i7-8550U (o equivalente) |
-| **Memoria RAM** | 4 GB | 16 GB (DDR4) |
-| **Almacenamiento** | 10 GB HDD/SSD | 50 GB SSD (NVMe recomendado) |
-| **Virtualización** | Soportada en BIOS | Intel VT-x / AMD-V habilitado |
-
-> [!NOTE]
-> La virtualización es crítica para el uso fluido de **Docker Desktop** y la validación de seguridad local.
+| **Node.js** | v24.11.1 | Uso de las últimas APIs de Fetch nativo y mejoras en el motor V8 para despliegues PWA. |
+| **Docker** | v29.2.0 | Soporte para `buildx` avanzado y mejoras en la gestión de volúmenes `:ro` (ReadOnly). |
+| **Git** | v2.53.0 | Trazabilidad mejorada y soporte para estrategias de merge avanzadas como `ort`. |
+| **AWS CLI** | v2.32.16 | Compatibilidad total con los estados de OIDC y los últimos servicios de Amplify. |
 
 ---
 
-## 🛠️ Stack de Software (Tooling)
+## 📡 Requerimientos de Red y Seguridad
 
-| Herramienta | Versión Mínima | Versión de Referencia |
-| :--- | :--- | :--- |
-| **Sistema Operativo** | Windows 10 / Ubuntu 20.04 | Windows 11 Home (Build 26200) |
-| **Node.js** | v18.0.0 | v24.11.1 |
-| **Docker** | v20.0.0 | v29.2.0 |
-| **Git** | v2.30.0 | v2.53.0 |
-| **AWS CLI** | v2.20.0 | v2.32.16 |
-| **PowerShell** | v5.1 | v7.0+ (Sugerido para hub.ps1) |
+### 1. Latencia y DNS
+- **Resolución**: El sistema depende de la resolución rápida de `token.actions.githubusercontent.com` para la autenticación OIDC.
+- **Firewall**: Deben permitirse conexiones salientes en los puertos 80, 443 (HTTPS) y 22 (SSH para Git).
 
----
-
-## 🌐 Conectividad y Nube
-
-- **Ancho de Banda**: Mínimo 5 Mbps para sincronización de S3 y despliegues en Amplify.
-- **Acceso IAM**: Requiere permisos para gestionar S3, Amplify y Roles de IAM (OIDC).
-- **DNS**: Acceso a `*.amplifyapp.com` y endpoints regionales de AWS.
+### 2. Contexto de Ejecución (Windows)
+- **PowerShell Execution Policy**: El script `hub.ps1` requiere `RemoteSigned` para cargar funciones externas de validación. 
+- **Docker Socket**: El acceso al socket de Docker debe estar habilitado para que los scripts del Hub puedan orquestar contenedores.
 
 ---
 
-## ✅ Matriz de Compatibilidad
+## 🧪 Pruebas de Estrés (Benchmarks Locales)
 
-| Entorno | Estado | Notas |
-| :--- | :--- | :--- |
-| **Windows Native** | ✅ Estable | Uso de `hub.ps1` y PowerShell. |
-| **WSL2 (Ubuntu)** | ✅ Recomendado | Máxima paridad con los jobs de GitHub Actions. |
-| **macOS** | ⚠️ Parcial | Requiere adaptación manual del Hub CLI a scripts `.sh`. |
-| **Linux (Bare Metal)** | ✅ Estable | Uso nativo de `Makefile` y Docker. |
+- **Tiempo de Build Tooling**: < 180s (enRecommended Hardware).
+- **Latencia de Despliegue (Sync)**: < 45s para cambios menores en archivos estáticos.
+- **Arranque de K8s Demo**: < 5 min desde el comando `make k8s-demo` hasta la disponibilidad del endpoint.
 
 ---
-*Última actualización de especificaciones basada en auditoría de entorno v4.x.x.*
+*Este documento establece la línea base de calidad física para el software.*

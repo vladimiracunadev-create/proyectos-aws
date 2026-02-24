@@ -137,10 +137,17 @@ El `Makefile` actÃºa como la **interfaz unificada** del proyecto. No necesitas
 .\hub.ps1 help
 ```
 
-#### Â¿Por quÃ© un Hub CLI?
-A diferencia del `Makefile`, los scripts `hub.sh` y `hub.ps1` ofrecen una lÃ³gica mÃ¡s dinÃ¡mica para la **gestiÃ³n de mÃºltiples proyectos** dentro del monorepo. Detectan automÃ¡ticamente directorios, validan pre-requisitos y ofrecen una experiencia consistente tanto en entornos Windows como POSIX.
+#### ¿Por qué un Hub CLI?
+A diferencia del `Makefile`, los scripts `hub.sh` y `hub.ps1` ofrecen una lógica más dinámica para la **gestión de múltiples proyectos** dentro del monorepo. Detectan automáticamente directorios, validan pre-requisitos y ofrecen una experiencia consistente tanto en entornos Windows como POSIX.
 
----
+> [!IMPORTANT]
+> **Ingeniería de Bajo Nivel**: Para entender cómo `hub.ps1` gestiona la detección de imágenes Docker y el montaje de volúmenes `:ro` (ReadOnly) para protección de código, consulta el análisis detallado en [FILE_ARCHITECTURE.md](../../FILE_ARCHITECTURE.md#anatomía-del-orquestador-hubps1-powershell).
+
+#### Orquestación Industrial con Makefile
+El `Makefile` no solo agrupa comandos; gestiona dependencias entre tareas. Por ejemplo, `tooling-validate` depende de que la imagen exista o de que `tooling-build` se ejecute primero en entornos Linux.
+
+> [!TIP]
+> **Detalle del Makefile**: Puedes ver el desglose de las directivas `.PHONY` y la integración con el cluster `kind` en [FILE_ARCHITECTURE.md](../../FILE_ARCHITECTURE.md#el-motor-industrial-makefile).
 
 ### 5. Kubernetes Demo
 
