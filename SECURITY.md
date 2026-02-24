@@ -2,6 +2,11 @@
 
 Este repositorio implementa un modelo de **Defensa en Profundidad** para proteger la integridad de los despliegues en la nube y evitar la fuga de credenciales.
 
+> [!NOTE]
+> Los escaneos de seguridad están configurados para reportar hallazgos sin bloquear el despliegue (`continue-on-error: true`), permitiendo visibilidad constante sin detener la agilidad de desarrollo.
+> 
+> **Requisito CI/CD:** Para que el escaneo de dependencias funcione, debes habilitar el **Dependency graph** en los ajustes de seguridad de tu repositorio en GitHub.
+
 ---
 
 ## 🛡️ Matriz de Herramientas de Seguridad
