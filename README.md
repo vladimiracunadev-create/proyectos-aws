@@ -123,6 +123,11 @@ Ver [SECURITY.md](SECURITY.md) para la política completa.
 ## 📚 Documentación Adicional
 
 - [👨‍💼 Guía para Reclutadores](docs/RECRUITER.md) - Valor de negocio y resumen técnico
+- [🏢 Arquitectura de Archivos](FILE_ARCHITECTURE.md) - Análisis profundo del monorepo
+- [🖥️ Especificaciones del Sistema](SYSTEM_SPECS.md) - Requisitos de Hardware/Software (Min/Max)
+- [🛠️ Setup de Entorno](ENVIRONMENT_SETUP.md) - Guía para nuevos colaboradores
+- [📖 Glosario Técnico](GLOSSARY.md) - Definiciones clave de infraestructura
+- [📝 Changelog](CHANGELOG.md) - Historial detallado de versiones
 - [🔒 SECURITY.md](SECURITY.md) - Política de seguridad
 - [🤝 CONTRIBUTING.md](CONTRIBUTING.md) - Guía de contribución
 - [📅 ROADMAP.md](ROADMAP.md) - Roadmap del proyecto
