@@ -1,34 +1,44 @@
 # 👨‍💼 Guía para Reclutadores / Empresas
 
-Este repositorio no es solo una colección de archivos; es un **ecosistema de ingeniería** diseñado para demostrar cómo manejo entornos de producción reales, seguridad y escalabilidad.
+Este repositorio es un **ecosistema de ingeniería** diseñado para demostrar madurez técnica, seguridad y una visión clara del ciclo de vida del software (SDLC).
 
-## 🌟 Valor de Negocio
+## 🧭 Visión General de la Arquitectura
 
-1. **Reducción de Riesgos:** Implementación de pipelines de seguridad (SAST, Secret Scanning) que previenen fugas de datos antes de que lleguen a producción.
-2. **Time-to-Market (TTM):** Flujo de trabajo `dev -> PR -> main` automatizado, permitiendo despliegues continuos y confiables en AWS S3 y Amplify.
-3. **Eficiencia de Costos:** Uso de servicios Serverless (S3, Amplify) y orquestación ligera con Kubernetes para optimizar recursos.
+```mermaid
+graph TD
+    subgraph "Local - Developer Experience (DX)"
+        A[VS Code] --> B[Pre-commit Hooks]
+        B --> C[Hub CLI / Tooling Docker]
+    end
+    
+    subgraph "CI/CD - Trust & Security"
+        C --> D{GitHub / GitLab}
+        D -->|OIDC Auth| E[Security Scans SAST]
+        E --> F[GitHub Actions / GitLab CI]
+    end
+    
+    subgraph "AWS - Industrial Cloud"
+        F --> G[(S3 Static Hosting)]
+        F --> H[AWS Amplify Console]
+        G --> I[FinOps / Budgets]
+        H --> I
+    end
+    
+    style I fill:#f96,stroke:#333,stroke-width:2px
+```
 
-## 🛠️ Destacados Técnicos
+## 🌟 Valor Diferencial
 
-### 1. CI/CD y Automatización Profesional
-- **GitHub Actions:** Workflows complejos que incluyen validación de sintaxis, escaneo de secretos con TruffleHog y despliegues automáticos.
-- **Makefile & Hub CLI:** Capa de abstracción que estandariza las operaciones del desarrollador, facilitando el onboarding de nuevos miembros.
+1. **Seguridad Anticipada (Shift Left):** Auditoría de secretos y dependencias desde el entorno local, no solo en la nube.
+2. **Infraestructura como Código (IaC):** Flujos de trabajo que eliminan la configuración manual ("ClickOps"), garantizando reproducibilidad.
+3. **Control de Costos (FinOps):** Arquitecturas Serverless diseñadas para escalar a bajo costo con monitoreo de presupuestos.
+4. **DX (Developer Experience):** Herramientas (Hub CLI) que reducen el tiempo de onboarding y estandarizan la calidad del código en todo el equipo.
 
-### 2. Seguridad por Diseño (Security by Design)
-- **Zero Trust Local:** Uso de pre-commit hooks para evitar que secretos sigan el flujo hacia el servidor.
-- **Identidad Moderna:** Configuración de AWS OIDC para eliminar el uso de IAM Access Keys permanentes en la nube.
-- **K8S Hardening:** Manifiestos con `securityContext` restrictivo y `NetworkPolicies` para aislar cargas de trabajo.
+## 🛠️ Evidencias Técnicas
 
-### 3. Portabilidad y Contenedores
-- **Docker-first:** Todo el tooling está encapsulado para garantizar que "funcione en mi máquina" y en el servidor de la misma forma.
+- **Despliegue Multi-branch:** Ver [AWS_PASO_A_PASO.md](../aws-amplify-mi-sitio-1/AWS_PASO_A_PASO.md) en la carpeta de Amplify.
+- **Ecosistema de Validación:** Ver [TOOLING.md](TOOLING.md) para entender la capa de abstracción en Docker.
+- **Políticas de Calidad:** Ver [killed.md](killed.md) para conocer las prácticas de ingeniería que rechazo y por qué.
 
 ---
-
-## 🧭 Tour de "Casos de Éxito"
-
-- **Despliegue Web Dinámico:** Ver [aws-amplify-mi-sitio-1/](file:///c:/proyectos-aws/aws-amplify-mi-sitio-1)
-- **Infraestructura como Código:** Ver configuración en [.github/workflows/](file:///c:/proyectos-aws/.github/workflows)
-- **Políticas de Seguridad:** Ver [SECURITY.md](file:///c:/proyectos-aws/SECURITY.md) y [docs/killed.md](file:///c:/proyectos-aws/docs/killed.md)
-
----
-*Este proyecto demuestra no solo que sé codificar, sino que entiendo el ciclo de vida completo de una aplicación profesional.*
+*Este proyecto demuestra mi capacidad para transformar requisitos de negocio en arquitecturas resilientes, seguras y económicamente viables.*

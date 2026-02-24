@@ -2,13 +2,12 @@
 
 Portafolio profesional optimizado para despliegue estático en **AWS S3** utilizando **GitHub Actions** para la automatización total. Este proyecto demuestra una arquitectura de CI/CD moderna aprovechando **OIDC** para mayor seguridad.
 
-## ✨ Características
+## ✨ Características Industriales
 
-- **Arquitectura Estática:** Servido directamente desde un bucket S3 para máximo rendimiento y bajo costo.
-- **CI/CD Automatizado:** Sincronización inteligente con `aws s3 sync`.
-- **PWA Integrada:** Manifiesto y modo offline completo.
-- **Multilingüe:** Interfaz conmutable entre Español e Inglés.
-- **Seguridad:** Despliegue sin credenciales estáticas (Keyless) mediante GitHub OIDC.
+- **🛡️ Seguridad Zero Trust:** Despliegue mediante GitHub OIDC, eliminando la necesidad de rotar credenciales estáticas.
+- **📈 Observabilidad Estática:** Monitoreo de tráfico y latencia a través de métricas nativas de S3.
+- **💰 Optimización de Costos:** Arquitectura puramente estática que minimiza el gasto operativo en AWS.
+- **⚡ Performance Edge:** Optimizado para futura integración con CloudFront CDN.
 
 ## 🛠️ Stack Tecnológico
 

@@ -1,65 +1,49 @@
+# 🗺️ Roadmap: Cloud Portfolio (AWS Monorepo)
+
+Este roadmap define la evolución técnica del ecosistema, priorizando la **profesionalización del CI/CD**, **FinOps**, **Observabilidad** y **Seguridad**.
 
 ---
 
-## `ROADMAP.md` (con hitos + epics claros)
+## 🏗️ Fase 1: Cimientos y Automatización (Q1 2026)
 
-```md
-# 🗺️ Roadmap (Cloud Portfolio: AWS Monorepo)
+### 1) Entornos y Aislamiento (CI/CD)
+- [x] **Amplify Multi-branch**: Despliegue automático para `main` y `dev`.
+- [x] **S3 Sync**: Sincronización desde `main` activada por GitHub Actions.
+- [ ] **Dual Environment (S3)**: Implementar despliegue paralelo a un bucket de `staging` desde la rama `dev`.
+- [ ] **Inyectores de Entorno**: Etiquetas visuales en el DOM ("DEV" / "PROD") basadas en la rama de despliegue.
 
-Este roadmap prioriza **profesionalización del CI/CD**, separación clara de entornos, IaC, observabilidad y seguridad.
-
----
-
-## ✅ Estado actual
-- [x] S3 + GitHub Actions (deploy automático a `main`)
-- [x] Amplify con ramas `main` / `dev` (deploy por rama)
-- [x] PR flow `dev` → `main` funcionando
-
----
-
-## 🎯 Próximos hitos (corto plazo)
-
-### 1) Entornos bien definidos (DEV/PROD)
-- [ ] S3: desplegar también desde `dev` a un entorno DEV
-  - Opción A: **2 buckets** (prod/dev)
-  - Opción B: **1 bucket** con prefijos `/prod` y `/dev`
-- [ ] Indicador visual “ENV: DEV/PROD” en las demos
-- [ ] Checklist de validación post-deploy (Amplify + S3)
-
-### 2) Seguridad y buenas prácticas
-- [ ] IAM least privilege para GitHub Actions (policy mínima)
-- [ ] Templates de Issues / PR
-- [ ] Reglas de rama (proteger `main`, requerir PR)
+### 2) Experiencia del Desarrollador (DX)
+- [x] **Hub CLI**: Scripts PowerShell y Bash para simplificar comandos comunes.
+- [x] **Documentación como Código**: Wiki automatizada y READMEs técnicos.
+- [ ] **Doctor Checks**: Ampliar validaciones de entorno (versiones de Node, AWS CLI, Docker).
 
 ---
 
-## 🚀 Mediano plazo
+## 🛡️ Fase 2: Seguridad y Resiliencia (Q2 2026)
 
-### 3) CloudFront + performance (opcional pero pro)
-- [ ] CloudFront delante de S3
-- [ ] Invalidation automatizada al desplegar (si aplica)
-- [ ] Headers de cache control/documentación
+### 3) Hardening de Infraestructura
+- [x] **GitHub OIDC**: Eliminación de credenciales estáticas en Actions.
+- [ ] **CloudFront Integration**: Añadir CDN delante de los buckets S3 para mejorar latencia y seguridad (WAF).
+- [ ] **IAM Least Privilege**: Auditoría y restricción de políticas de los roles de CI.
 
-### 4) IaC (Terraform)
-- [ ] Terraform para S3 website + policies + (opcional) CloudFront
-- [ ] Terraform para recursos de laboratorio (con módulos)
-
----
-
-## 🧱 Largo plazo
-
-### 5) Serverless API (aws-lambda-api-1)
-- [ ] API mínima (Hello/healthcheck + logging)
-- [ ] Deploy (SAM o Terraform)
-- [ ] Integración con front demo
-
-### 6) Observabilidad y costos
-- [ ] CloudWatch logs/metrics básicos
-- [ ] Presupuesto y alertas (AWS Budgets)
-- [ ] Documentar costos estimados
+### 4) Observabilidad y Calidad
+- [ ] **Smoke Tests Post-deploy**: Pruebas automatizadas de salud tras cada despliegue.
+- [ ] **Security Matrix**: Dashboard de vulnerabilidades (SAST/Dependencias) consolidado.
 
 ---
 
-## 📌 Cómo se gestiona
-- Issues etiquetados: `ci`, `infra`, `security`, `docs`, `feature`, `bug`
-- Board (Kanban): Backlog → In Progress → Review → Done
+## 💰 Fase 3: Gobernanza y Escalamiento (Q3-Q4 2026)
+
+### 5) FinOps (Gobernanza de Costos)
+- [ ] **AWS Budgets**: Implementación de alarmas de costo por subproyecto.
+- [ ] **Cost Breakdown**: Añadir sección en la documentación con el coste estimado por "Demo".
+
+### 6) Nuevas Arquitecturas
+- [ ] **Serverless API Layer**: Introducción de AWS Lambda (Node.js/Python) para demos dinámicas.
+- [ ] **Event-Driven Patterns**: Uso de EventBridge o SQS para orquestar flujos entre demos.
+
+---
+
+## 📌 Gestión del Proyecto
+- **Etiquetas**: `ci/cd`, `infra`, `security`, `finops`, `dx`.
+- **Estrategia**: Todo cambio debe originarse en `dev` y pasar por revisión (PR) antes de llegar a `main`.

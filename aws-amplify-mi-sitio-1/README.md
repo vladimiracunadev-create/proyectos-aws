@@ -2,13 +2,12 @@
 
 Este subproyecto contiene el portafolio profesional de Vladimir Acuña, diseñado para ser desplegado de forma continua utilizando **AWS Amplify Console**. Es una Single Page Application (SPA) con capacidades de **PWA (Progressive Web App)**.
 
-## ✨ Características
+## ✨ Características Industriales
 
-- **Aesthetica Premium:** Diseño moderno con Glassmorphism y animaciones fluidas.
-- **Multilingüe:** Soporte nativo para Español e Inglés.
-- **Vistas Especializadas:** Filtros de contenido para Reclutadores, vista Normal y vista Profunda (técnica).
-- **Offline Ready:** Service Workers para navegación sin conexión y carga ultrarrápida.
-- **Seguridad:** Content Security Policy (CSP) estricta.
+- **📈 Observabilidad:** Integración de Google Analytics y logs de build en Amplify Console para monitoreo de salud.
+- **💰 FinOps Ready:** Configurado para monitoreo a través de AWS Budgets a nivel de aplicación.
+- **🛡️ Resiliencia PWA:** Service Workers con estrategias de caché agresivas para garantizar disponibilidad offline.
+- **🚀 CI/CD Atómico:** Despliegues inmutables con rollback instantáneo en caso de fallos.
 
 ## 🛠️ Stack Tecnológico
 
