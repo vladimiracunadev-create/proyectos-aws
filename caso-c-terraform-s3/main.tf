@@ -39,6 +39,7 @@ locals {
 # ----------------------------
 # S3 (bodega privada)
 # ----------------------------
+#tfsec:ignore:aws-s3-enable-bucket-logging - Proyecto demo/portafolio: logging requiere bucket adicional y genera costo extra.
 resource "aws_s3_bucket" "site" {
   bucket        = local.bucket_name
   force_destroy = var.force_destroy_bucket
@@ -67,6 +68,7 @@ resource "aws_s3_bucket_versioning" "site" {
   }
 }
 
+#tfsec:ignore:aws-s3-encryption-customer-key - Proyecto demo/portafolio: AES256 (SSE-S3) es suficiente. CMK añade costo y complejidad de KMS innecesarios aquí.
 resource "aws_s3_bucket_server_side_encryption_configuration" "site" {
   bucket = aws_s3_bucket.site.id
   rule {
@@ -86,6 +88,8 @@ resource "aws_cloudfront_origin_access_control" "oac" {
   signing_protocol                  = "sigv4"
 }
 
+#tfsec:ignore:aws-cloudfront-enable-waf - Proyecto demo/portafolio: WAF tiene costo mínimo de ~$5/mes + reglas. No justificado para un entorno de aprendizaje.
+#tfsec:ignore:aws-cloudfront-enable-logging - Proyecto demo/portafolio: logging de CloudFront requiere un bucket S3 adicional con permisos especiales.
 resource "aws_cloudfront_distribution" "cdn" {
   enabled             = true
   default_root_object = "index.html"
@@ -117,6 +121,7 @@ resource "aws_cloudfront_distribution" "cdn" {
     }
   }
 
+  #tfsec:ignore:aws-cloudfront-use-secure-tls-policy - Proyecto demo/portafolio: certificado por defecto de CloudFront. TLS personalizado requiere dominio propio + ACM.
   viewer_certificate {
     cloudfront_default_certificate = true
   }
