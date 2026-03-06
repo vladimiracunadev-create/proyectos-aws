@@ -143,12 +143,12 @@ pages:
 # Job MANUAL con allow_failure: true.
 # Solo ejecuta terraform fmt/validate (sin AWS). No requiere secretos.
 # Desacoplado del pipeline principal: no bloquea otros stages.
+# NOTA: when:manual va SOLO dentro de rules: (no a nivel de job, incompatible en GitLab CI).
 case_m_validate:
   stage: test
   image:
     name: hashicorp/terraform:1.14.3
     entrypoint: [""]
-  when: manual
   allow_failure: true
   rules:
     - changes:
@@ -156,17 +156,15 @@ case_m_validate:
       when: manual
     - when: never
   script:
-    - echo "=== Caso M: Validación offline (sin credenciales AWS) ==="
+    - echo "=== Caso M Validacion offline sin credenciales AWS ==="
     - cd caso-m-resiliencia-failover/infra/terraform
-    - echo "--- terraform fmt ---"
-    - terraform fmt -check -recursive || (echo "WARN: Formato incorrecto. Ejecuta 'terraform fmt -recursive' localmente." && exit 1)
-    - echo "--- terraform init (backend local) ---"
+    - echo "--- terraform fmt check ---"
+    - terraform fmt -check -recursive
+    - echo "--- terraform init backend=false ---"
     - terraform init -backend=false
     - echo "--- terraform validate ---"
     - terraform validate
-    - echo "=== Validación completada sin errores ==="
-  # Nota: Este job NO ejecuta 'terraform plan' ni 'terraform apply'.
-  # Esos comandos requieren credenciales AWS y se activan en Fase 1+.
+    - echo "=== Validacion completada sin errores ==="
 
 # --- Actualización de Datos FinOps (Case L) ---
 refresh_finops_data:
