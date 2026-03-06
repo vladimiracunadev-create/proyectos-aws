@@ -57,9 +57,17 @@ Utilizado para empaquetar aplicaciones y garantizar portabilidad.
 - **Markdownlint**: Para asegurar la consistencia en la documentación.
 
 ### 7. Seguridad
-- **tfsec**: Escaneo estático de seguridad para código Terraform (`make tf-security`).
+- **tfsec**: Escaneo estático de seguridad para código Terraform (`make tf-security`). Se utiliza una estrategia de **ignores documentados** para balancear seguridad y costos.
 - **gitleaks**: Detección de secretos en el código.
 - **npm audit**: Auditoría de vulnerabilidades en dependencias.
+
+---
+
+## 🏗️ Estrategia de Despliegue (Job Splitting)
+
+Para superar las limitaciones de imágenes Docker en CI (ej: imagen de Terraform sin AWS CLI), hemos implementado una estrategia de **Job Splitting**:
+1.  **Terraform Apply**: Crea la infraestructura pura.
+2.  **AWS Invalidation**: Job separado con imagen `aws-cli` que limpia caché de CloudFront inmediatamente después.
 
 ---
 

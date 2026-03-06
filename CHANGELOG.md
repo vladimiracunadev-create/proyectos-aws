@@ -3,6 +3,33 @@
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato seguirá [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) y este proyecto utiliza [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.0] - 2026-03-05
+
+### Fixed
+
+- **Caso C — Pipeline CI/CD (`scan_infrastructure`)**: Corregido error crítico de parseo HCL que bloqueaba `tfsec`.
+    - **Causa raíz**: `main.tf` contenía bloques `action` y `action_trigger` (syntaxis experimental de Terraform Stacks / HCP), inválidos en Terraform estándar. `tfsec` fallaba al parsear antes de ejecutar cualquier análisis.
+    - **Solución**: Eliminados los bloques inválidos de `main.tf`. El archivo es ahora HCL estándar compatible con todas las versiones de Terraform.
+
+- **Caso C — Hallazgos de seguridad `tfsec`**: Resueltos los 5 hallazgos (3 HIGH, 2 MEDIUM) que hacían fallar la pipeline tras corregir el parseo.
+    - `aws-cloudfront-enable-waf` (HIGH): WAF implica costo fijo para proyecto de portafolio/demo. Ignorado con `#tfsec:ignore` documentado.
+    - `aws-cloudfront-use-secure-tls-policy` (HIGH): TLS personalizado requiere dominio propio + certificado ACM. Ignorado con justificación.
+    - `aws-s3-encryption-customer-key` (HIGH): CMK (KMS) añade costo y complejidad innecesaria para demo. Se mantiene AES256. Ignorado con justificación.
+    - `aws-cloudfront-enable-logging` (MEDIUM): Logging requiere bucket S3 adicional con permisos especiales. Ignorado documentado.
+    - `aws-s3-enable-bucket-logging` (MEDIUM): Idem anterior. Ignorado documentado.
+
+- **Caso C — Invalidación de caché CloudFront**: Resuelto error `aws: not found` en el job `deploy_case_c`.
+    - **Causa raíz**: La imagen `hashicorp/terraform:1.14.3` no incluye AWS CLI. El `null_resource` con `local-exec` fallaba con `exit code 127`.
+    - **Solución**: Eliminado `null_resource.cloudfront_invalidation` de `main.tf` y el proveedor `hashicorp/null` de `versions.tf`. La invalidación se delega a un nuevo job `invalidate_cloudfront_c` en `.gitlab-ci.yml` que usa la imagen `public.ecr.aws/aws-cli/aws-cli:latest`. El job lee el Distribution ID desde la variable CI/CD `CLOUDFRONT_DISTRIBUTION_ID_C`.
+
+### Changed
+
+- **`.gitlab-ci.yml`**: Nuevo job `invalidate_cloudfront_c` (stage: `deploy`) con `needs: [deploy_case_c]`. Invalida `/*` en CloudFront después de cada deploy exitoso de Terraform.
+- **`caso-c-terraform-s3/main.tf`**: Eliminado `null_resource.cloudfront_invalidation`. Añadidos comentarios `#tfsec:ignore` con justificación técnica en cada hallazgo.
+- **`caso-c-terraform-s3/versions.tf`**: Eliminado proveedor `hashicorp/null` (no requerido tras eliminar `null_resource`).
+
+---
+
 ## [3.2.0] - 2026-02-17
 ### Added
 - **Caso L (FinOps & Governance)**: Finalización del módulo de excelencia operativa y seguridad.

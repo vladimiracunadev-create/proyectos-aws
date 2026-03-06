@@ -45,7 +45,7 @@ Estos archivos controlan **cómo se construye, valida y despliega** todo el proy
 | Archivo | Importancia | Descripción |
 |---------|:-----------:|-------------|
 | **`Makefile`** | 🔴 Crítica | Centro de automatización. Contiene ~20 comandos (`make help`, `make deploy-b`, `make finops-check`, `make case-k-deploy`, etc.). Es el primer punto de contacto para cualquier operación. |
-| **`.gitlab-ci.yml`** | 🔴 Crítica | Pipeline CI/CD principal. Define 7 jobs: `secret_detection`, `dependency_scan`, `scan_infrastructure`, `lint`, `deploy_case_b`, `deploy_case_c`, `pages`, `refresh_finops_data`, `deploy_case_l_final`. Ejecuta seguridad, linting y despliegues. |
+| **`.gitlab-ci.yml`** | 🔴 Crítica | Pipeline CI/CD principal. Define jobs de seguridad (`secret_detection`, `dependency_scan`, `scan_infrastructure`), calidad (`lint`) y despliegue modular para los Casos B, C, L y M. Implementa un flujo profesional de **Plan -> Apply -> Invalidate** para CloudFront. |
 | **`README.md`** | 🔴 Crítica | Punto de entrada. Contiene la visión general, Quick Start, enlaces a toda la documentación y el catálogo de los 12 casos de estudio con demos en vivo. |
 | **`index.html`** | 🟠 Alta | Portal web interactivo (PWA) con diseño Glassmorphism. Dashboard para navegar la documentación visualmente. |
 | **`package.json`** | 🟠 Alta | Define las dependencias de desarrollo (ESLint, Prettier, HTMLHint, Stylelint, Commitlint, Husky) y los scripts de linting (`npm run lint`, `npm run format`). |

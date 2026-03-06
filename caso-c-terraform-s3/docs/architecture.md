@@ -94,31 +94,40 @@ sequenceDiagram
 ## 📐 Diagrama 3: Flujo de Terraform en GitLab CI
 
 ```mermaid
-graph LR
+graph TD
     subgraph Dev["💻 Dev"]
         PR["Merge Request\ncon cambios en\ncaso-c-terraform-s3/"]
     end
 
     subgraph CI["🦊 GitLab CI Pipeline"]
-        Plan["🟡 plan_case_c\n(stage: plan-infrastructure)\nterraform init\nterraform plan -out=tfplan\nArtefacto: tfplan (1h)"]
-        Apply["🔴 deploy_case_c\n(stage: deploy)\nterraform apply tfplan\n(necesita OKs del plan)"]
-        Security["🔐 scan_infrastructure\n(stage: security)\ntfsec caso-c-terraform-s3\nComprueba misconfigs"]
+        direction TB
+        Security["🔐 scan_infrastructure\n(stage: security)\ntfsec + ignores documentados\nValida HCL estándar"]
+        
+        subgraph BuildDeploy["🚀 Despliegue"]
+            Plan["🟡 plan_case_c\n(stage: plan-infrastructure)\nterraform plan -out=tfplan"]
+            Apply["🔴 deploy_case_c\n(stage: deploy)\nterraform apply tfplan"]
+            Invalidate["🧹 invalidate_cloudfront_c\n(stage: deploy)\naws-cli: invalidation /*"]
+        end
     end
 
     subgraph AWS["☁️ AWS"]
         RemoteState["S3 Remote State\nDynamoDB Lock"]
-        Resources["CloudFront + S3 + OAC\n+ Bucket Policy"]
+        Resources["CloudFront + S3 + OAC"]
     end
 
     PR --> Security
-    PR --> Plan
+    Security --> Plan
     Plan -->|"needs: plan_case_c"| Apply
-    Plan <-->|"terraform init\nlee/escribe state"| RemoteState
-    Apply -->|"terraform apply"| Resources
+    Apply -->|"needs: deploy_case_c"| Invalidate
+    
+    Plan <-->|"Lock/State"| RemoteState
+    Apply -->|"Crea recursos"| Resources
+    Invalidate -->|"Limpia caché"| Resources
 
     style Plan fill:#F39C12,color:#fff
     style Apply fill:#E74C3C,color:#fff
     style Security fill:#8E44AD,color:#fff
+    style Invalidate fill:#3498DB,color:#fff
 ```
 
 ---
@@ -130,30 +139,19 @@ graph LR
 | **CDN** | CloudFront | Cache global, HTTPS, redirect HTTP→HTTPS | Caso B no tiene CDN |
 | **OAC** | CloudFront Origin Access Control | S3 privado, solo CloudFront accede | Caso B: bucket público |
 | **IaC** | Terraform | Infraestructura reproducible y versionada | Caso B: config manual |
-| **Remote State** | S3 + DynamoDB | Estado compartido + lock contra race conditions | Caso B: sin estado |
-| **Security Scan** | tfsec | Detecta misconfigurations en el código Terraform | Caso B: sin análisis |
+| **Security Scan** | tfsec | Auditoría estática (shift-left security) | Caso B: sin análisis |
+| **CD Automation** | GitLab CI | Pipeline multi-stage (Scan -> Plan -> Apply -> Invalidate) | Caso B: sync directo |
 
 ---
 
-## 🔐 Seguridad: OAC vs Acceso Público (Comparativa)
+## 🔐 Seguridad: Decisiones de Diseño (Trade-offs)
 
-```mermaid
-graph LR
-    subgraph Sin_OAC["❌ Sin OAC (Caso B — S3 Público)"]
-        UA["Usuario A"] -->|"HTTP directo"| S3a["S3 PÚBLICO"]
-        Hacker["😈 Atacante"] -->|"HTTP directo ¡también!"| S3a
-    end
+En este proyecto de **portafolio**, se han tomado decisiones conscientes para balancear seguridad y costos:
 
-    subgraph Con_OAC["✅ Con OAC (Caso C — S3 Privado)"]
-        UB["Usuario B"] -->|"HTTPS"| CF2["CloudFront\n(WAF, Rate Limit)"]
-        CF2 -->|"SigV4 firmado"| S3b["S3 PRIVADO\n(acceso público bloqueado)"]
-        Hacker2["😈 Atacante"] -->|"403 Forbidden"| S3b
-    end
-
-    style S3a fill:#E74C3C,color:#fff
-    style S3b fill:#27AE60,color:#fff
-    style CF2 fill:#FF9900,color:#fff
-```
+1. **S3 Block Public Access**: El bucket es 100% privado.
+2. **OAC (Origin Access Control)**: Se eliminó el uso de OAI (legado) por OAC (estándar actual).
+3. **tfsec Ignores**: Se utilizan `#tfsec:ignore` para controles que implican costos fijos (WAF, KMS) o infraestructura adicional compleja (Logging buckets), manteniendo la transparencia técnica.
+4. **HCL Estándar**: Se corrigió el uso de sintaxis experimental (`action` blocks) por HCL 1.0/2.0 compatible, garantizando estabilidad.
 
 ---
 

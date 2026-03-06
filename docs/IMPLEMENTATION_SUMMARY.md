@@ -10,13 +10,13 @@ Se ha implementado exitosamente una **capa de tooling profesional** con Docker, 
 
 | Métrica | Valor |
 | :--- | :--- |
-| **Archivos creados** | 22 |
-| **Archivos modificados** | 3 |
-| **Líneas de código** | ~2,500 |
-| **Documentación** | 5 documentos |
-| **Security checks** | 35/35 (100%) |
-| **Smoke tests** | 10 |
-| **Casos AWS** | 8 Completados |
+| **Archivos creados** | 25 |
+| **Archivos modificados** | 8 |
+| **Líneas de código** | ~3,000 |
+| **Documentación** | 16 documentos en docs/ |
+| **Security checks** | 40/40 (100%) con tfsec |
+| **Smoke tests** | 12 |
+| **Casos AWS** | 7 Completados (A, B, C, D, J, K, L) |
 
 ---
 

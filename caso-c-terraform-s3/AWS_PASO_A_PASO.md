@@ -39,8 +39,6 @@ make tf-apply
 
 ---
 
-## 👀 3. Verificación
-
 Al terminar `tf-apply`, Terraform te mostrará outputs importantes, incluyendo la URL de tu distribución CloudFront (`d1234abcd.cloudfront.net`).
 
 Si te la perdiste, recupérala con:
@@ -52,7 +50,15 @@ Visita esa URL. ¡Tu sitio está alojado en una CDN global con HTTPS gratis!
 
 ---
 
-## 🧹 4. Limpieza (Destruir)
+## 🔐 4. Seguridad y Auditoría
+
+Este caso incluye **tfsec** para auditoría estática. Si ejecutas `make tf-security`, verás que algunos hallazgos (WAF, KMS, Logging) están omitidos mediante `#tfsec:ignore`. 
+- **¿Por qué?**: En este entorno demo, priorizamos la eficiencia de costos. 
+- **Automatización**: El pipeline de GitLab no permitirá el despliegue si `tfsec` detecta errores no documentados/ignorados.
+
+---
+
+## 🧹 5. Limpieza (Destruir)
 
 Terraform lleva un registro de todo lo que creó, así que puede destruirlo con precisión quirúrgica.
 

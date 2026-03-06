@@ -82,7 +82,7 @@ docker run --rm proyectos-aws/tooling:1.0.0 whoami
 
 - **secret_detection:** gitleaks (escaneo de historial y codebase)
 - **dependency_scan:** npm audit (vulnerabilidades conocidas)
-- **scan_infrastructure:** tfsec (análisis estático de IaC)
+- **scan_infrastructure:** tfsec (análisis estático de IaC). Implementa políticas de **Shift-Left Security** con ignores documentados (`#tfsec:ignore`) para balancear seguridad y eficiencia de costos en entornos demo.
 
 **Triggers:**
 
