@@ -24,6 +24,7 @@ El formato seguirá [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) y e
 
 ### Added
 
+- **Arquitectura Maestra Unificada**: Reescritura profunda de **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)**, consolidando diagramas y lógica de los 8 casos de estudio (A-M) en una única visión global coherente y profesional.
 - **Documentación Global (Integridad)**: Actualización masiva de documentos clave para reflejar el estado actual del proyecto.
     - **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)**: Integración del **Caso M** en diagramas Mermaid y documentación del patrón **Professional Tier (Job Splitting)**.
     - **[SECURITY_CHECKLIST.md](./docs/SECURITY_CHECKLIST.md)**: Actualizado con políticas de Shift-Left Security y gestión de ignores en `tfsec`.
