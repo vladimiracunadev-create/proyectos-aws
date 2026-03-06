@@ -95,9 +95,19 @@ Este roadmap refleja el estado actual del proyecto y las próximas prioridades p
 - [ ] **Auto-scaling**: HPA y Cluster Autoscaler
 - [ ] **Service Mesh**: Istio para observabilidad
 
+### 9. Resiliencia & Failover (Caso M) — `FUTURO / PLANIFICADO`
+
+> **Importancia**: Esto es lo que diferencia un demo de un sistema profesional. Los roles SRE,
+> Cloud Architect y Platform Engineer exigen demostrar continuidad operacional.
+
+- [ ] **Fase 0** (✅ **COMPLETADA**): Scaffold + documentación + plantillas IaC + scripts placeholder.
+- [ ] **Fase 1**: ALB Multi-AZ + ECS con `desired_count ≥ 2` + endpoint `/healthz` + GameDay.
+- [ ] **Fase 2**: Warm Standby en `us-west-2` + Route 53 Failover Routing (RTO < 120s).
+- [ ] **Fase 3**: Automatización GameDay + CloudWatch Dashboards + (opcional) Global Accelerator.
+- [ ] 📂 [Ver carpeta del Caso M](./caso-m-resiliencia-failover/README.md)
 
 
----
+
 
 ## 🔧 Mejoras Continuas
 

@@ -176,6 +176,34 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   ☁️ [Guía Paso a Paso AWS (OIDC + Budgets)](caso-l-finops-optimization/AWS_PASO_A_PASO.md)
 *   👉 [Ver Demo en Vivo](http://finops-vladimir-portfolio-case-l.s3-website.us-east-2.amazonaws.com)
 
+### 🔴 Nivel 6: SRE Enterprise — Confiabilidad y Continuidad Operacional
+
+#### [📂 Caso M: Resiliencia & Failover](./caso-m-resiliencia-failover/README.md) `Nivel 12` `FUTURO / PLANIFICADO`
+*   **Stack**: ALB Multi-AZ + ECS Fargate + Route 53 Failover + (Fase 3) Global Accelerator.
+*   **Enfoque**: **Confiabilidad y Recuperación ante Desastres (DR).** Esto es lo que diferencia un demo de un sistema profesional: la capacidad de detectar fallos y conmutar (failover) con runbooks y pruebas. Demuestra Alta Disponibilidad (Multi-AZ) y Recuperación ante Desastre (Multi-Región) con RTO < 120 segundos.
+*   **Qué demuestra a un reclutador:** dominio de Reliability / Resilience / DR; estándar mínimo exigido en roles SRE/Cloud/Arquitectura a nivel empresa.
+*   **Estado actual:** Fase 0 completada (scaffold + docs + plantillas IaC). La infraestructura real se activará en Fase 1-3.
+*   **GameDay futuro:** el caso es completamente demostrable con una sesión de 2-3 horas.
+*   🏗️ [Arquitectura Multi-AZ + Multi-Región](caso-m-resiliencia-failover/docs/architecture.md)
+*   📋 [Runbook de Failover y Failback](caso-m-resiliencia-failover/docs/runbook-failover.md)
+*   🗺️ [Roadmap por Fases (0→3)](caso-m-resiliencia-failover/docs/roadmap.md)
+*   ☁️ [Guía Paso a Paso AWS](caso-m-resiliencia-failover/AWS_PASO_A_PASO.md)
+
+---
+
+## 📌 Backlog & Roadmap
+
+El repositorio sigue un plan de crecimiento incremental. El estado detallado de cada fase se encuentra en el [ROADMAP.md](ROADMAP.md) global.
+
+| Caso | Estado | Próxima Acción |
+|---|---|---|
+| E — Persistence Pro (DynamoDB) | PROYECTADO | Fase 1: Single Table Design |
+| F — Security First (Cognito) | PROYECTADO | Fase 1: User Pools + WAF |
+| G — Event Driven (EventBridge) | PROYECTADO | Fase 1: Bus de eventos |
+| H — Observability (CloudWatch) | PROYECTADO | Fase 1: Dashboards + X-Ray |
+| I — GenAI (Bedrock) | PROYECTADO | Fase 1: LLM Integration |
+| **M — Resiliencia & Failover** | **FUTURO (Fase 0 ✅)** | **Fase 1: Multi-AZ + ALB** |
+
 ---
 
 ## 🤝 Comunidad y Contribución
