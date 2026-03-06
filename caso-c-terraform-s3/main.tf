@@ -163,17 +163,10 @@ resource "aws_s3_object" "website" {
 }
 
 # ----------------------------
-# INVALIDACIÓN (SIN resource): se hace con ACTION
+# MARCADOR DE DEPLOY
+# Cambia cuando cambia cualquier archivo en website/ y dispara
+# una invalidación de CloudFront vía null_resource + local-exec.
 # ----------------------------
-action "aws_cloudfront_create_invalidation" "all" {
-  config {
-    distribution_id = aws_cloudfront_distribution.cdn.id
-    paths           = ["/*"]
-  }
-}
-
-# “Marcador” que cambia cuando cambia cualquier archivo en website/
-# y DISPARA 1 invalidación (after_create/after_update).
 resource "aws_s3_object" "deploy_marker" {
   bucket       = aws_s3_bucket.site.id
   key          = "_deploy.txt"
@@ -181,11 +174,18 @@ resource "aws_s3_object" "deploy_marker" {
   content_type = "text/plain; charset=utf-8"
 
   depends_on = [aws_s3_object.website]
+}
 
-  lifecycle {
-    action_trigger {
-      events  = [after_create, after_update]
-      actions = [action.aws_cloudfront_create_invalidation.all]
-    }
+# Invalida la caché de CloudFront cada vez que cambia el deployment_id
+# (es decir, cuando cambian los archivos en website/).
+resource "null_resource" "cloudfront_invalidation" {
+  triggers = {
+    deployment_id = local.deployment_id
   }
+
+  provisioner "local-exec" {
+    command = "aws cloudfront create-invalidation --distribution-id ${aws_cloudfront_distribution.cdn.id} --paths '/*'"
+  }
+
+  depends_on = [aws_s3_object.deploy_marker]
 }
