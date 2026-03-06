@@ -20,6 +20,12 @@ graph TD
     F --> G[S3: Assets]
     F --> H[CloudFront: CDN]
     F --> I[EKS/ECS: Apps]
+    F --> K[Route 53: Failover]
+    end
+    
+    subgraph "Resilience (Caso M)"
+    K --> L[Región Primaria]
+    K --> M[Región Secundaria]
     end
     
     subgraph "State Management"
@@ -36,6 +42,17 @@ A diferencia de los archivos estáticos, el código de aplicaciones empaquetadas
 3.  **Orquestación (AWS ECS)**: El clúster monitorea el estado deseado y extrae la imagen de ECR.
 4.  **Ejecución (Fargate)**: La aplicación corre en infraestructura Serverless, aislada y escalable.
 
+---
+
+## 🏗️ Patrones de Despliegue: Professional Tier (Job Splitting)
+
+Para entornos industriales (como el **Caso C** y superiores), implementamos el patrón de **Job Splitting**. Este patrón separa las responsabilidades del pipeline para superar limitaciones de herramientas y mejorar la observabilidad:
+
+1.  **Stage: Security**: Escaneo estático con `tfsec`.
+2.  **Stage: Plan**: Generación de `tfplan` inmutable.
+3.  **Stage: Deploy (IaC)**: Aplicación del plan con la imagen oficial de Terraform.
+4.  **Stage: Post-Deploy (Invalidation)**: Invalidación de caché CDN (CloudFront) usando una imagen especializada de `aws-cli`, garantizando que el usuario vea los cambios inmediatamente.
+
 ### ⚖️ ECS vs EKS: ¿Cuándo usar cada uno?
 - **AWS ECS (Caso J)**: Ideal para equipos pequeños que buscan simplicidad y rapidez sin gestionar la complejidad de Kubernetes.
 - **AWS EKS (Caso K)**: El estándar para aplicaciones que requieren portabilidad total, ecosistema nativo de Kubernetes (Helm, Operators) y control absoluto sobre la orquestación. Es la opción de "Nivel 10" por su curva de aprendizaje y potencia ilimitada.
@@ -44,8 +61,8 @@ A diferencia de los archivos estáticos, el código de aplicaciones empaquetadas
 
 ## 🛠️ Stack Tecnológico
 - **Infraestructura**: Terraform (IaC), AWS SAM, Kubernetes Manifests.
-- **Servicios Cloud**: S3, CloudFront, Lambda, API Gateway, EKS, ECS, **AWS Budgets**, **Cost Explorer**.
-- **Automatización**: Makefile, GitLab CI/CD, Docker (DevContainers), **OIDC**.
+- **Servicios Cloud**: S3, CloudFront, Lambda, API Gateway, EKS, ECS, **Route 53 (Failover)**, **AWS Budgets**, **Cost Explorer**.
+- **Automatización**: Makefile, GitLab CI/CD, Docker (DevContainers), **OIDC**, **CloudFront Invalidation Job**.
 - **Calidad**: ESLint, Prettier, HTMLHint, tfsec, gitleaks.
 
 ## 🔐 Estrategia de Seguridad

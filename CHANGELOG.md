@@ -22,11 +22,29 @@ El formato seguirá [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) y e
     - **Causa raíz**: La imagen `hashicorp/terraform:1.14.3` no incluye AWS CLI. El `null_resource` con `local-exec` fallaba con `exit code 127`.
     - **Solución**: Eliminado `null_resource.cloudfront_invalidation` de `main.tf` y el proveedor `hashicorp/null` de `versions.tf`. La invalidación se delega a un nuevo job `invalidate_cloudfront_c` en `.gitlab-ci.yml` que usa la imagen `public.ecr.aws/aws-cli/aws-cli:latest`. El job lee el Distribution ID desde la variable CI/CD `CLOUDFRONT_DISTRIBUTION_ID_C`.
 
+### Added
+
+- **Documentación Global (Integridad)**: Actualización masiva de documentos clave para reflejar el estado actual del proyecto.
+    - **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)**: Integración del **Caso M** en diagramas Mermaid y documentación del patrón **Professional Tier (Job Splitting)**.
+    - **[SECURITY_CHECKLIST.md](./docs/SECURITY_CHECKLIST.md)**: Actualizado con políticas de Shift-Left Security y gestión de ignores en `tfsec`.
+    - **[IMPLEMENTATION_SUMMARY.md](./docs/IMPLEMENTATION_SUMMARY.md)**: Nuevas métricas (7 casos completados, 40+ security checks).
+    - **[TOOLING.md](./docs/TOOLING.md)**: Documentación de la estrategia de Job Splitting para despliegues.
+
 ### Changed
 
 - **`.gitlab-ci.yml`**: Nuevo job `invalidate_cloudfront_c` (stage: `deploy`) con `needs: [deploy_case_c]`. Invalida `/*` en CloudFront después de cada deploy exitoso de Terraform.
 - **`caso-c-terraform-s3/main.tf`**: Eliminado `null_resource.cloudfront_invalidation`. Añadidos comentarios `#tfsec:ignore` con justificación técnica en cada hallazgo.
 - **`caso-c-terraform-s3/versions.tf`**: Eliminado proveedor `hashicorp/null` (no requerido tras eliminar `null_resource`).
+
+---
+
+## [3.2.5] - 2026-02-23
+### Added
+- **Arquitecturas (Deep Expansion)**: Mejora radical de la documentación técnica.
+    - Inclusión de diagramas **Mermaid** detallados en todos los casos de estudio (A-L).
+    - Estandarización de badges y enlaces `🏗️ Arquitectura (Mermaid)` en los READMEs de cada carpeta.
+- **Caso M (Resiliencia & Failover)**: Inicialización del **Nivel 12**. 
+    - **Fase 0** (Scaffold + Docs) completada: Runbook de failover, roadmap multiregión y plantillas IaC iniciales.
 
 ---
 
@@ -102,4 +120,4 @@ El formato seguirá [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) y e
 - Documentación base de aprendizaje.
 
 ---
-_Ultima actualización: 2026-02-10_
+_Ultima actualización: 2026-03-05_
