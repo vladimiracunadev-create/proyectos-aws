@@ -24,7 +24,9 @@ Lograr la **Excelencia Operativa**. Implementarás mecanismos para que el presup
 
 ## 🔗 Enlaces Relacionados
 - ⬅️ **[Regresar al Roadmap Principal](../README.md)**
+- 🏗️ **[Arquitectura Detallada (Mermaid)](./docs/architecture.md)**
 - 📘 **[Guía para Reclutadores](../docs/RECRUITER.md)**
+- ☁️ **[Guía Paso a Paso AWS](./AWS_PASO_A_PASO.md)**
 - 👉 **[Ver Demo en Vivo](http://finops-vladimir-portfolio-case-l.s3-website.us-east-2.amazonaws.com)**
 
 ---

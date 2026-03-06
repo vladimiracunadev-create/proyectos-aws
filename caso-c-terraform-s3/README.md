@@ -33,7 +33,7 @@ Este caso utiliza **Origin Access Control (OAC)**, lo que significa que el bucke
 
 ## 🔗 Enlaces Relacionados
 - ⬅️ **[Regresar al Roadmap Principal](../README.md)**
-- 🏗️ **[Arquitectura Detallada](../docs/ARCHITECTURE.md)**
+- 🏗️ **[Arquitectura Detallada (Mermaid)](./docs/architecture.md)**
 - 🛡️ **[Seguridad IAM](../docs/IAM_SECURITY.md)**
 - 🚀 **[Guía de Instalación](../docs/INSTALL.md)**
 - ☁️ **[Guía Paso a Paso AWS](./AWS_PASO_A_PASO.md)**

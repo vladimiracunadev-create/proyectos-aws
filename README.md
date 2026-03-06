@@ -109,12 +109,14 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 #### [📂 Caso A: AWS Amplify](./caso-a-amplify/index.html) `Nivel 0` `COMPLETADO`
 *   **Stack**: AWS Amplify + GitLab Auto-Mirroring.
 *   **Enfoque**: **Integración Continua nativa.** Ideal para prototipos rápidos. Aprende cómo AWS gestiona automáticamente el escalado, SSL y CDN.
+*   🏗️ [Arquitectura (Mermaid)](caso-a-amplify/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-a-amplify/AWS_PASO_A_PASO.md)
 *   👉 [Ver Demo en Vivo](https://main.d1uybq9oui7h8c.amplifyapp.com/)
 
 #### [📂 Caso B: S3 + GitLab CI](./caso-b-gitlab-s3/index.html) `Nivel 1` `COMPLETADO`
 *   **Stack**: GitLab Runners + AWS CLI + S3 Website Hosting.
 *   **Enfoque**: **Pipelines Artesanales.** Entiende qué pasa "bajo el capó". Aprendes sobre políticas de bucket, sincronización manual y gestión de secretos.
+*   🏗️ [Arquitectura (Mermaid)](caso-b-gitlab-s3/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-b-gitlab-s3/AWS_PASO_A_PASO.md)
 *   👉 [Ver Demo en Vivo](http://vladimir-caso-b-site-2026.s3-website.us-east-2.amazonaws.com/)
 
@@ -123,12 +125,14 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 #### [📂 Caso C: Terraform + CloudFront](./caso-c-terraform-s3/index.html) `Nivel 2` `COMPLETADO`
 *   **Stack**: Terraform + S3 (OAC) + CloudFront + Remote State.
 *   **Enfoque**: **Infraestructura como Código (IaC).** Elimina el error humano. Aprende a centralizar el estado en la nube y proteger recursos con **Origin Access Control**.
+*   🏗️ [Arquitectura (Mermaid)](caso-c-terraform-s3/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-c-terraform-s3/AWS_PASO_A_PASO.md)
 *   👉 [Ver Demo en Vivo](https://d3otfpeykrm536.cloudfront.net/)
 
 #### [📂 Caso D: Serverless Basic (SAM)](./caso-d-serverless-basic/index.html) `Nivel 3` `COMPLETADO`
 *   **Stack**: API Gateway + AWS Lambda + DynamoDB.
 *   **Enfoque**: **Lógica Backend y Persistencia.** Añade vida a tus apps. Escalamiento a cero costos cuando no hay uso y potencia reactiva bajo demanda.
+*   🏗️ [Arquitectura (Mermaid)](caso-d-serverless-basic/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-d-serverless-basic/AWS_PASO_A_PASO.md)
 *   👉 [Demo Portafolio](https://staging.d3oq987bpa7ls7.amplifyapp.com/) / [API Endpoint](https://tc78a6xibg.execute-api.us-east-2.amazonaws.com)
 
@@ -159,12 +163,14 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 #### [📂 Caso J: Dockerización de Microservicios](./caso-j-containers-ecs/README.md) `Nivel 9` `COMPLETADO`
 *   **Stack**: Docker + ECS Fargate + ECR + Terraform.
 *   **Enfoque**: **Portabilidad e Isolation.** Empaquetado industrial de apps para que corran igual en local y en la nube. Gestión de registros de imágenes.
+*   🏗️ [Arquitectura (Mermaid)](caso-j-containers-ecs/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-j-containers-ecs/AWS_PASO_A_PASO.md)
 *   🖼️ [Reporte de Visualización y Resultados](caso-j-containers-ecs/VISUALIZATION.md)
 
 #### [📂 Caso K: Kubernetes en AWS (EKS)](./caso-k-kubernetes-eks/README.md) `Nivel 10` `COMPLETADO (VALIDADO)`
 *   **Stack**: AWS EKS + YAML + GitLab Kubernetes Agent.
 *   **Enfoque**: **Orquestación Real en AWS.** Kubernetes directo en la nube. Gestiona flotas de contenedores, auto-sanación y balanceo masivo.
+*   🏗️ [Arquitectura (Mermaid)](caso-k-kubernetes-eks/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-k-kubernetes-eks/AWS_PASO_A_PASO.md)
 *   🖼️ [Reporte de Visualización y Resultados](caso-k-kubernetes-eks/VISUALIZATION.md)
 
@@ -173,6 +179,7 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 #### [📂 Caso L: FinOps & Governance](./caso-l-finops-optimization/README.md) `Nivel 11` `COMPLETADO`
 *   **Stack**: AWS Budgets + GitLab OIDC + IAM Governance.
 *   **Enfoque**: **Excelencia Operativa.** Integración profunda de GitLab con AWS, control de costos y políticas de gobernanza corporativa.
+*   🏗️ [Arquitectura (Mermaid)](caso-l-finops-optimization/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS (OIDC + Budgets)](caso-l-finops-optimization/AWS_PASO_A_PASO.md)
 *   👉 [Ver Demo en Vivo](http://finops-vladimir-portfolio-case-l.s3-website.us-east-2.amazonaws.com)
 

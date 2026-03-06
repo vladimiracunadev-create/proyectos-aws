@@ -44,4 +44,6 @@ Dado que este clúster se destruye para optimizar costos, puedes ver las captura
 
 ## 🔗 Enlaces Relacionados
 - ⬅️ **[Regresar al Roadmap Principal](../README.md)**
-- 🏗️ **[Arquitectura de Red](../docs/ARCHITECTURE.md)**
+- 🏗️ **[Arquitectura Detallada (Mermaid)](./docs/architecture.md)**
+- ☁️ **[Guía Paso a Paso AWS](./AWS_PASO_A_PASO.md)**
+- 🖼️ **[Reporte de Visualización](./VISUALIZATION.md)**
