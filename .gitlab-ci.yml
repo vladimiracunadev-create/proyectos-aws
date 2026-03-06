@@ -117,6 +117,27 @@ deploy_case_c:
   environment:
     name: production/case-c
 
+# Invalida la caché de CloudFront tras el deploy de Terraform.
+# Job separado porque la imagen de Terraform no incluye AWS CLI.
+invalidate_cloudfront_c:
+  stage: deploy
+  image:
+    name: public.ecr.aws/aws-cli/aws-cli:latest
+    entrypoint: [""]
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - caso-c-terraform-s3/**/*
+  needs:
+    - deploy_case_c
+  script:
+    - echo "Invalidando caché de CloudFront..."
+    - aws cloudfront create-invalidation --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID_C" --paths "/*"
+    - echo "Invalidación enviada correctamente."
+  environment:
+    name: production/case-c
+
+
 
 
 
