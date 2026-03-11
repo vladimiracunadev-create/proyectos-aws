@@ -1,4 +1,4 @@
-﻿import json
+import json
 import os
 import time
 import uuid
@@ -17,7 +17,299 @@ ddb_client = boto3.client("dynamodb")
 serializer = TypeSerializer()
 
 
-def response(status_code: int, body: dict) -> dict:
+LANDING_PAGE = """<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caso E | DynamoDB Persistence Pro</title>
+  <style>
+    :root {
+      --bg: #07131c;
+      --panel: rgba(10, 23, 34, 0.82);
+      --line: rgba(157, 228, 255, 0.16);
+      --text: #eef9ff;
+      --muted: #98bbd2;
+      --accent: #52d6a6;
+      --accent-2: #28b8ff;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(40, 184, 255, 0.22), transparent 28%),
+        radial-gradient(circle at right, rgba(82, 214, 166, 0.18), transparent 24%),
+        linear-gradient(180deg, #07131c 0%, #0d1d2c 100%);
+    }
+    .shell { width: min(1180px, calc(100% - 28px)); margin: 0 auto; padding: 28px 0 56px; }
+    .hero, .panel {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--panel);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+    }
+    .hero { padding: 28px; margin-bottom: 18px; }
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--accent-2);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.78rem;
+    }
+    h1 { margin: 0; font-size: clamp(2.1rem, 6vw, 4rem); line-height: 0.96; }
+    .lead { color: var(--muted); max-width: 70ch; margin: 14px 0 0; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+    .panel { padding: 22px; }
+    .panel h2 { margin: 0 0 12px; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .stat {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .stat strong { display:block; font-size: 1.35rem; margin-bottom: 4px; }
+    .stat span { color: var(--muted); font-size: 0.92rem; }
+    .layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+    label { display: block; margin: 10px 0 6px; color: #d8edff; font-size: 0.94rem; }
+    input, select, button, pre {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    input, select {
+      padding: 12px 14px;
+      color: var(--text);
+      background: rgba(255,255,255,0.04);
+    }
+    button {
+      padding: 12px 16px;
+      margin-top: 14px;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #05131d;
+      font-weight: 800;
+    }
+    .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top: 10px; }
+    .actions button { width: auto; margin-top: 0; }
+    .hint, .list, .footnote { color: var(--muted); }
+    .list { margin: 0; padding-left: 18px; }
+    .code {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(0,0,0,0.26);
+      border: 1px solid rgba(255,255,255,0.07);
+      font-family: Consolas, monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    pre {
+      min-height: 260px;
+      margin: 0;
+      padding: 18px;
+      overflow: auto;
+      background: rgba(0, 0, 0, 0.28);
+      color: #dff4ff;
+    }
+    @media (max-width: 880px) {
+      .grid { grid-template-columns: 1fr; }
+      .shell { width: min(100% - 18px, 1180px); }
+      .hero, .panel { padding: 18px; }
+      .actions { flex-direction: column; }
+      .actions button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <p class="eyebrow">Caso E · DynamoDB · Single Table Design</p>
+      <h1>Persistence Pro en AWS</h1>
+      <p class="lead">
+        Esta URL ya no devuelve un 404: ahora explica el caso, muestra qué resuelve la arquitectura
+        y permite probar en vivo la API desplegada sobre API Gateway + Lambda + DynamoDB.
+      </p>
+      <div class="stats">
+        <div class="stat"><strong>1 tabla</strong><span>`pk/sk` + 2 GSIs</span></div>
+        <div class="stat"><strong>4 endpoints</strong><span>crear y consultar sin scans</span></div>
+        <div class="stat"><strong>1 transacción</strong><span>ORDER + AUDIT atómicos</span></div>
+        <div class="stat"><strong>Región</strong><span>us-east-2</span></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>Qué demuestra este caso</h2>
+        <ul class="list">
+          <li>Modelado por patrones de acceso en lugar de diseño relacional.</li>
+          <li>Consulta por cliente usando la clave primaria.</li>
+          <li>Consulta por estado y por producto usando GSI1 y GSI2.</li>
+          <li>Persistencia transaccional para orden y evento de auditoría.</li>
+        </ul>
+        <div class="code">POST /orders
+GET /customers/{customerId}/orders
+GET /orders/status/{status}
+GET /products/{productId}/orders</div>
+      </article>
+
+      <article class="panel">
+        <h2>API desplegada</h2>
+        <p class="hint">La base URL actual es esta misma. Todas las acciones de prueba usan el mismo origen.</p>
+        <div class="code" id="baseUrl"></div>
+        <p class="footnote">Si compartes esta URL, la persona ve la explicación y además puede ejecutar pruebas reales.</p>
+      </article>
+    </section>
+
+    <section class="layout">
+      <article class="panel">
+        <h2>Crear orden</h2>
+        <form id="orderForm">
+          <label for="customerId">Customer ID</label>
+          <input id="customerId" name="customerId" value="cust-001" required />
+
+          <label for="customerName">Cliente</label>
+          <input id="customerName" name="customerName" value="Acme SPA" required />
+
+          <label for="productId">Product ID</label>
+          <input id="productId" name="productId" value="prod-erp" required />
+
+          <label for="productName">Producto</label>
+          <input id="productName" name="productName" value="ERP Suite" required />
+
+          <label for="status">Estado</label>
+          <select id="status" name="status">
+            <option value="PENDING">PENDING</option>
+            <option value="PAID">PAID</option>
+            <option value="CANCELLED">CANCELLED</option>
+          </select>
+
+          <label for="total">Total</label>
+          <input id="total" name="total" type="number" step="0.01" value="1499.99" required />
+
+          <button type="submit">Guardar orden en DynamoDB</button>
+        </form>
+      </article>
+
+      <article class="panel">
+        <h2>Consultas en vivo</h2>
+        <label for="queryCustomerId">Customer ID</label>
+        <input id="queryCustomerId" value="cust-001" />
+
+        <label for="queryStatus">Estado</label>
+        <input id="queryStatus" value="PENDING" />
+
+        <label for="queryProductId">Product ID</label>
+        <input id="queryProductId" value="prod-erp" />
+
+        <div class="actions">
+          <button type="button" data-query="customer">Órdenes por cliente</button>
+          <button type="button" data-query="status">Órdenes por estado</button>
+          <button type="button" data-query="product">Órdenes por producto</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Respuesta</h2>
+      <pre id="result">Esperando acciones...</pre>
+    </section>
+  </main>
+
+  <script>
+    const resultNode = document.getElementById("result");
+    const form = document.getElementById("orderForm");
+    const baseUrl = window.location.origin;
+    document.getElementById("baseUrl").textContent = baseUrl;
+
+    function setResult(payload) {
+      resultNode.textContent = JSON.stringify(payload, null, 2);
+    }
+
+    async function request(path, options = {}) {
+      const response = await fetch(`${baseUrl}${path}`, {
+        headers: { "content-type": "application/json" },
+        ...options,
+      });
+      const contentType = response.headers.get("content-type") || "";
+      const payload = contentType.includes("application/json")
+        ? await response.json()
+        : { ok: response.ok, raw: await response.text() };
+
+      if (!response.ok) {
+        throw new Error(payload.error || payload.message || "Error desconocido");
+      }
+
+      return payload;
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+      payload.total = Number(payload.total);
+      setResult({ status: "Procesando..." });
+
+      try {
+        const response = await request("/orders", {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+        setResult(response);
+      } catch (error) {
+        setResult({ ok: false, error: error.message });
+      }
+    });
+
+    document.querySelectorAll("[data-query]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const query = button.dataset.query;
+        const customerId = document.getElementById("queryCustomerId").value.trim();
+        const status = document.getElementById("queryStatus").value.trim();
+        const productId = document.getElementById("queryProductId").value.trim();
+
+        const routes = {
+          customer: `/customers/${customerId}/orders`,
+          status: `/orders/status/${status}`,
+          product: `/products/${productId}/orders`,
+        };
+
+        setResult({ status: "Consultando..." });
+
+        try {
+          const response = await request(routes[query], { method: "GET" });
+          setResult(response);
+        } catch (error) {
+          setResult({ ok: false, error: error.message });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+"""
+
+
+def response_json(status_code: int, body: dict) -> dict:
     return {
         "statusCode": status_code,
         "headers": {
@@ -30,12 +322,18 @@ def response(status_code: int, body: dict) -> dict:
     }
 
 
+def response_html(status_code: int, html: str) -> dict:
+    return {
+        "statusCode": status_code,
+        "headers": {
+            "content-type": "text/html; charset=utf-8",
+        },
+        "body": html,
+    }
+
+
 def serialize_item(item: dict) -> dict:
     return {key: serializer.serialize(value) for key, value in item.items()}
-
-
-def now_iso() -> str:
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
 def decimal_to_native(value):
@@ -125,7 +423,7 @@ def create_order(event: dict) -> dict:
     )
 
     payload = decimal_to_native(order_item)
-    return response(201, {"ok": True, "message": "Orden creada", "order": payload})
+    return response_json(201, {"ok": True, "message": "Orden creada", "order": payload})
 
 
 def get_customer_orders(customer_id: str) -> dict:
@@ -138,7 +436,7 @@ def get_customer_orders(customer_id: str) -> dict:
         ScanIndexForward=False,
     )
     items = decimal_to_native(result.get("Items", []))
-    return response(200, {"ok": True, "items": items, "count": len(items)})
+    return response_json(200, {"ok": True, "items": items, "count": len(items)})
 
 
 def get_orders_by_status(status: str) -> dict:
@@ -152,7 +450,7 @@ def get_orders_by_status(status: str) -> dict:
         ScanIndexForward=False,
     )
     items = decimal_to_native(result.get("Items", []))
-    return response(200, {"ok": True, "items": items, "count": len(items)})
+    return response_json(200, {"ok": True, "items": items, "count": len(items)})
 
 
 def get_product_orders(product_id: str) -> dict:
@@ -165,7 +463,7 @@ def get_product_orders(product_id: str) -> dict:
         ScanIndexForward=False,
     )
     items = decimal_to_native(result.get("Items", []))
-    return response(200, {"ok": True, "items": items, "count": len(items)})
+    return response_json(200, {"ok": True, "items": items, "count": len(items)})
 
 
 def handler(event, context):
@@ -178,7 +476,10 @@ def handler(event, context):
 
     try:
         if method == "OPTIONS":
-            return response(200, {"ok": True})
+            return response_json(200, {"ok": True})
+
+        if method == "GET" and path == "/":
+            return response_html(200, LANDING_PAGE)
 
         if method == "POST" and path.endswith("/orders"):
             return create_order(event)
@@ -192,8 +493,8 @@ def handler(event, context):
         if method == "GET" and "/products/" in path and path.endswith("/orders"):
             return get_product_orders(path_params.get("productId", ""))
 
-        return response(404, {"ok": False, "error": "Ruta no soportada"})
+        return response_json(404, {"ok": False, "error": "Ruta no soportada"})
     except ValueError as exc:
-        return response(400, {"ok": False, "error": str(exc)})
+        return response_json(400, {"ok": False, "error": str(exc)})
     except Exception as exc:
-        return response(500, {"ok": False, "error": "Error interno", "detail": str(exc)})
+        return response_json(500, {"ok": False, "error": "Error interno", "detail": str(exc)})

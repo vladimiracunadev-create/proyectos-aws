@@ -1,4 +1,4 @@
-﻿AWSTemplateFormatVersion: "2010-09-09"
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: caso-e-dynamodb-persistence - API serverless para modelado NoSQL con DynamoDB
 
@@ -78,6 +78,12 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: !Ref OrdersTable
       Events:
+        RootPage:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /
+            Method: GET
         CreateOrder:
           Type: HttpApi
           Properties:
