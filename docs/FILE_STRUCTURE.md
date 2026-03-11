@@ -193,14 +193,14 @@ Cada directorio `caso-X-*` es un **proyecto autocontenido**. Aquí la anatomía 
 | `amplify.yml` | Configuración de build del frontend en Amplify. |
 | `AWS_PASO_A_PASO.md` | Guía de despliegue de API Gateway + Lambda + DynamoDB. |
 
-### Caso E: `caso-e-dynamodb-persistence/` — DynamoDB `Nivel 4`
+### Caso E: `caso-e-dynamodb-persistence/` — DynamoDB `Nivel 4` `COMPLETADO (VALIDADO)`
 | Archivo/Dir | Descripción |
 |-------------|-------------|
 | `backend/template.yaml` | Infraestructura SAM para HTTP API, Lambda y tabla DynamoDB con GSIs. |
 | `backend/src/app.py` | API Python que crea órdenes y resuelve consultas por cliente, estado y producto. |
 | `backend/events/` | Eventos JSON de prueba para `sam local invoke`. |
-| `frontend/` | Cliente HTML/JS para crear órdenes y probar los patrones de acceso. |
-| `docs/architecture.md` | Diagramas Mermaid del Single Table Design y los flujos de consulta. |
+| `frontend/` | Cliente HTML/JS local para crear órdenes y probar los patrones de acceso. |
+| `docs/architecture.md` | Diagramas Mermaid del Single Table Design, la landing y los flujos de consulta. |
 | `AWS_PASO_A_PASO.md` | Guía detallada para desplegar, probar y destruir el caso. |
 
 ### Caso J: `caso-j-containers-ecs/` — Docker + ECS `Nivel 9`

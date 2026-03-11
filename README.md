@@ -139,7 +139,7 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 
 ### 🟠 Nivel 3: Gestión de Aplicaciones y Datos (Senior)
 
-#### [📂 Caso E: Persistence Pro](./caso-e-dynamodb-persistence/README.md) `Nivel 4` `COMPLETADO`
+#### [📂 Caso E: Persistence Pro](./caso-e-dynamodb-persistence/README.md) `Nivel 4` `COMPLETADO (VALIDADO)`
 *   **Stack**: API Gateway + Lambda + DynamoDB (Single Table Design + GSI) + AWS SAM.
 *   **Enfoque**: **Modelado NoSQL Senior.** Diseña por patrones de acceso, crea auditoría transaccional y consulta por cliente, estado y producto sin scans.
 *   🏗️ [Arquitectura (Mermaid)](caso-e-dynamodb-persistence/docs/architecture.md)
@@ -208,7 +208,7 @@ El repositorio sigue un plan de crecimiento incremental. El estado detallado de 
 
 | Caso | Estado | Próxima Acción |
 |---|---|---|
-| E — Persistence Pro (DynamoDB) | PROYECTADO | Fase 1: Single Table Design |
+| E — Persistence Pro (DynamoDB) | COMPLETADO (VALIDADO) | Operativo: API + landing + DynamoDB |
 | F — Security First (Cognito) | PROYECTADO | Fase 1: User Pools + WAF |
 | G — Event Driven (EventBridge) | PROYECTADO | Fase 1: Bus de eventos |
 | H — Observability (CloudWatch) | PROYECTADO | Fase 1: Dashboards + X-Ray |

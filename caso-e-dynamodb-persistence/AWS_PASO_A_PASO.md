@@ -1,16 +1,16 @@
-# Guia Paso a Paso AWS - Caso E
+# Guía Paso a Paso AWS - Caso E
 
-## 0. Definicion de operativo
+## 0. Definición de operativo
 
-Para este repositorio, el Caso E solo debe marcarse como operativo cuando se cumplan estos puntos:
+Para este repositorio, el Caso E se considera operativo cuando se cumplen estos puntos:
 
 - `sam build` termina sin errores.
-- `sam deploy --guided` crea el stack en AWS.
+- `sam deploy` crea el stack en AWS.
 - Responden correctamente los endpoints `POST /orders`, `GET /customers/{customerId}/orders`, `GET /orders/status/{status}` y `GET /products/{productId}/orders`.
-- El frontend apunta a la `ApiBaseUrl` real y devuelve respuestas validas.
-- Se documenta la URL final o las evidencias del despliegue.
+- La landing en la raíz `/` permite explicar y probar la API.
+- Se documenta la URL final y la tabla desplegada.
 
-Estado actual validado el 2026-03-11:
+Estado actual validado el **2026-03-11**:
 
 - `sam build` ejecutado con éxito.
 - Stack desplegado: `caso-e-dynamodb-persistence`.
@@ -18,9 +18,9 @@ Estado actual validado el 2026-03-11:
 - API Base URL: `https://gqqm27j47c.execute-api.us-east-2.amazonaws.com`.
 - Tabla DynamoDB: `persistence_pro_orders`.
 
-Este caso crea una API serverless para practicar **Amazon DynamoDB** con enfoque en modelado
-NoSQL real. La infraestructura se despliega con **AWS SAM** y el frontend sirve como cliente
-de prueba para validar los patrones de acceso.
+Este caso crea una API serverless para practicar **Amazon DynamoDB** con un enfoque real de modelado
+NoSQL. La infraestructura se despliega con **AWS SAM** y la landing pública sirve como interfaz de
+prueba para validar los patrones de acceso.
 
 ---
 
@@ -28,15 +28,17 @@ de prueba para validar los patrones de acceso.
 
 Necesitas tener instalado:
 
-- AWS CLI configurado con una cuenta valida.
+- AWS CLI configurado con una cuenta válida.
 - AWS SAM CLI.
 - Python 3.12 o compatible para pruebas locales.
+- Docker, si quieres usar `sam local` de forma completa.
 
 Verifica:
 
 ```bash
 aws sts get-caller-identity
 sam --version
+python --version
 ```
 
 ---
@@ -49,12 +51,13 @@ Dentro de `caso-e-dynamodb-persistence/backend/template.yaml` se crean:
 - 2 GSIs (`gsi1`, `gsi2`)
 - 1 HTTP API
 - 1 Lambda
+- 1 ruta raíz `/` que devuelve una landing HTML
 
-La tabla usa `PAY_PER_REQUEST`, asi que no debes estimar capacidad manual.
+La tabla usa `PAY_PER_REQUEST`, así que no necesitas estimar capacidad manual.
 
 ---
 
-## 3. Compilar la aplicacion
+## 3. Compilar la aplicación
 
 ```bash
 cd caso-e-dynamodb-persistence/backend
@@ -74,17 +77,38 @@ sam deploy --guided
 Valores recomendados:
 
 - `Stack Name`: `caso-e-dynamodb-persistence`
-- `AWS Region`: `us-east-1` o `us-east-2`
+- `AWS Region`: `us-east-2`
 - `Confirm changes before deploy`: `Y`
 - `Allow SAM CLI IAM role creation`: `Y`
 - `Disable rollback`: `N`
 - `Save arguments to samconfig.toml`: `Y`
 
-Cuando termine, SAM mostrara la salida `ApiBaseUrl`.
+También puedes usar un despliegue no interactivo como el que se ejecutó en este caso:
+
+```bash
+sam deploy \
+  --stack-name caso-e-dynamodb-persistence \
+  --region us-east-2 \
+  --resolve-s3 \
+  --capabilities CAPABILITY_IAM \
+  --no-confirm-changeset \
+  --no-fail-on-empty-changeset
+```
 
 ---
 
-## 5. Probar la API en AWS
+## 5. URL operativa resultante
+
+Tras el despliegue validado, la salida real fue:
+
+- **API Base URL**: `https://gqqm27j47c.execute-api.us-east-2.amazonaws.com`
+- **Tabla**: `persistence_pro_orders`
+
+La raíz `/` devuelve una página web que explica el caso y permite probar la API en vivo.
+
+---
+
+## 6. Probar la API en AWS
 
 ### Crear una orden
 
@@ -121,7 +145,7 @@ curl "$API_BASE_URL/products/prod-erp/orders"
 
 ---
 
-## 6. Probar en local con eventos de ejemplo
+## 7. Probar en local con eventos de ejemplo
 
 Desde la carpeta `backend/`:
 
@@ -142,29 +166,25 @@ Luego el frontend puede apuntar a `http://127.0.0.1:3000`.
 
 ---
 
-## 7. Conectar el frontend
+## 8. Conectar el frontend o usar la landing pública
 
-Abre `caso-e-dynamodb-persistence/frontend/index.html` en tu navegador o publicalo en Amplify/S3.
+Tienes dos formas de probar el caso:
 
-En el campo `API base URL`, pega una de estas opciones:
+1. Abrir `caso-e-dynamodb-persistence/frontend/index.html` y configurar la `API base URL`.
+2. Abrir directamente `https://gqqm27j47c.execute-api.us-east-2.amazonaws.com/`.
 
-- URL de `sam local start-api`
-- URL de `ApiBaseUrl` entregada por SAM en AWS
+La landing pública ya incluye:
 
-Flujo recomendado de prueba:
-
-1. Crear una orden.
-2. Consultar por cliente.
-3. Consultar por estado.
-4. Consultar por producto.
-
-Asi validas que la misma escritura soporta varios accesos sin scans.
+- explicación del caso
+- formulario de creación de órdenes
+- consultas por cliente, estado y producto
+- resultados resumidos y JSON completo
 
 ---
 
-## 8. Como leer el modelo DynamoDB
+## 9. Cómo leer el modelo DynamoDB
 
-La tabla guarda al menos dos tipos de items:
+La tabla guarda al menos dos tipos de items.
 
 ### Item de negocio `ORDER`
 
@@ -177,7 +197,7 @@ GSI2PK  = PRODUCT#prod-erp
 GSI2SK  = 2026-03-11T18:00:00Z#uuid
 ```
 
-### Item de auditoria `AUDIT`
+### Item de auditoría `AUDIT`
 
 ```text
 PK = ORDER#uuid
@@ -186,44 +206,45 @@ SK = EVENT#2026-03-11T18:00:00Z
 
 Esto permite:
 
-- agrupar ordenes por cliente
+- agrupar órdenes por cliente
 - buscar por estado
 - buscar por producto
 - mantener trazabilidad de eventos
 
 ---
 
-## 9. Paso a paso en la consola AWS
+## 10. Paso a paso en la consola AWS
 
 Si quieres revisar visualmente lo desplegado:
 
 1. Abre **CloudFormation** y entra al stack `caso-e-dynamodb-persistence`.
 2. Revisa la pestaña **Resources** para ver tabla, API y Lambda.
-3. En **Lambda**, abre la funcion `OrdersApiFunction`.
+3. En **Lambda**, abre la función `OrdersApiFunction`.
 4. En **DynamoDB**, abre la tabla `persistence_pro_orders`.
-5. Revisa la seccion **Indexes** para confirmar `gsi1` y `gsi2`.
-6. En **API Gateway**, valida las rutas `/orders`, `/customers/...`, `/orders/status/...` y `/products/...`.
+5. Revisa la sección **Indexes** para confirmar `gsi1` y `gsi2`.
+6. En **API Gateway**, valida las rutas `/`, `/orders`, `/customers/...`, `/orders/status/...` y `/products/...`.
 
 ---
 
-## 10. Limpieza
+## 11. Limpieza
 
 Cuando termines el laboratorio:
 
 ```bash
-sam delete --stack-name caso-e-dynamodb-persistence
+sam delete --stack-name caso-e-dynamodb-persistence --region us-east-2
 ```
 
 Esto elimina API Gateway, Lambda y DynamoDB.
 
 ---
 
-## 11. Extension recomendada
+## 12. Extensión recomendada
 
-La evolucion natural de este caso es:
+La evolución natural de este caso es:
 
 - enviar eventos a SQS o EventBridge
-- agregar actualizacion de estados con auditoria
+- agregar actualización de estados con auditoría
 - crear dashboards operativos para pedidos `PENDING` y `PAID`
+- publicar métricas de negocio y observabilidad en el futuro Caso H
 
 Eso conecta directamente con el futuro **Caso G - Event Driven**.

@@ -16,7 +16,7 @@ Se ha implementado exitosamente una **capa de tooling profesional** con Docker, 
 | **Documentación** | 16 documentos en docs/ |
 | **Security checks** | 40/40 (100%) con tfsec |
 | **Smoke tests** | 12 |
-| **Casos AWS** | 7 Completados (A, B, C, D, J, K, L) |
+| **Casos AWS** | 8 Completados (A, B, C, D, E, J, K, L) |
 
 ---
 
