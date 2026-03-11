@@ -51,6 +51,7 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 - 🛠️ **[Especificaciones Técnicas](docs/TECHNICAL_SPECS.md)**: Requerimientos de hardware y software.
 - 🔧 **[Tooling](docs/TOOLING.md)**: Docker, Kubernetes, Makefile y validaciones.
 - 📊 **[Resumen de Implementación](docs/IMPLEMENTATION_SUMMARY.md)**: Overview del tooling y seguridad.
+- **[Skills del Monorepo](docs/SKILLS.md)**: Libreria de skills de Codex para casos AWS, CI en GitLab, docs, Terraform y FinOps.
 
 ### 🛡️ Seguridad
 - 🛡️ **[Seguridad IAM](docs/IAM_SECURITY.md)**: Políticas de acceso y privilegios mínimos.
