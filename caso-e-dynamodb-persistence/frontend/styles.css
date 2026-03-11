@@ -1,0 +1,140 @@
+﻿:root {
+  --bg: #09131d;
+  --panel: rgba(9, 26, 39, 0.84);
+  --line: rgba(133, 196, 255, 0.18);
+  --text: #eef7ff;
+  --muted: #9fc0d9;
+  --accent: #43c4a1;
+  --accent-strong: #1fd5ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(31, 213, 255, 0.18), transparent 28%),
+    radial-gradient(circle at right, rgba(67, 196, 161, 0.2), transparent 22%),
+    linear-gradient(180deg, #071018 0%, #0e1d2a 100%);
+}
+
+.shell {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0 56px;
+}
+
+.hero {
+  padding: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent-strong);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.78rem;
+}
+
+h1,
+h2,
+label,
+button {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  line-height: 1;
+}
+
+.lead,
+.hint {
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.panel {
+  backdrop-filter: blur(14px);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.22);
+}
+
+form,
+.filters {
+  display: grid;
+  gap: 10px;
+}
+
+label {
+  font-size: 0.95rem;
+  color: #d8edff;
+}
+
+input,
+select,
+button,
+pre {
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+input,
+select {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+}
+
+button {
+  padding: 12px 16px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: #041018;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(1.06);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+pre {
+  margin: 0;
+  padding: 18px;
+  min-height: 240px;
+  overflow: auto;
+  background: rgba(0, 0, 0, 0.28);
+  color: #dff3ff;
+}
+
+@media (max-width: 640px) {
+  .shell {
+    width: min(100% - 20px, 1120px);
+  }
+
+  .panel,
+  .hero {
+    padding: 18px;
+  }
+}

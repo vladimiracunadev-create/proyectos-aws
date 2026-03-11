@@ -1,0 +1,14 @@
+﻿{
+  "version": "2.0",
+  "routeKey": "GET /customers/{customerId}/orders",
+  "rawPath": "/customers/cust-001/orders",
+  "pathParameters": {
+    "customerId": "cust-001"
+  },
+  "requestContext": {
+    "http": {
+      "method": "GET",
+      "path": "/customers/cust-001/orders"
+    }
+  }
+}

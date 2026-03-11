@@ -1,0 +1,14 @@
+﻿{
+  "version": "2.0",
+  "routeKey": "GET /orders/status/{status}",
+  "rawPath": "/orders/status/PENDING",
+  "pathParameters": {
+    "status": "PENDING"
+  },
+  "requestContext": {
+    "http": {
+      "method": "GET",
+      "path": "/orders/status/PENDING"
+    }
+  }
+}

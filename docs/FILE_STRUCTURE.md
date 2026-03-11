@@ -17,7 +17,7 @@ proyectos-aws-gitlab/
 ├── caso-b-gitlab-s3/       # Caso B: S3 + GitLab CI
 ├── caso-c-terraform-s3/    # Caso C: Terraform + CloudFront
 ├── caso-d-serverless-basic/# Caso D: Lambda + API Gateway
-├── caso-e-dynamodb-*/      # Caso E: DynamoDB (Proyectado)
+├── caso-e-dynamodb-*/      # Caso E: DynamoDB Persistence
 ├── caso-f-security-*/      # Caso F: Cognito (Proyectado)
 ├── caso-g-event-driven/    # Caso G: EventBridge (Proyectado)
 ├── caso-h-observability/   # Caso H: CloudWatch (Proyectado)
@@ -193,6 +193,16 @@ Cada directorio `caso-X-*` es un **proyecto autocontenido**. Aquí la anatomía 
 | `amplify.yml` | Configuración de build del frontend en Amplify. |
 | `AWS_PASO_A_PASO.md` | Guía de despliegue de API Gateway + Lambda + DynamoDB. |
 
+### Caso E: `caso-e-dynamodb-persistence/` — DynamoDB `Nivel 4`
+| Archivo/Dir | Descripción |
+|-------------|-------------|
+| `backend/template.yaml` | Infraestructura SAM para HTTP API, Lambda y tabla DynamoDB con GSIs. |
+| `backend/src/app.py` | API Python que crea órdenes y resuelve consultas por cliente, estado y producto. |
+| `backend/events/` | Eventos JSON de prueba para `sam local invoke`. |
+| `frontend/` | Cliente HTML/JS para crear órdenes y probar los patrones de acceso. |
+| `docs/architecture.md` | Diagramas Mermaid del Single Table Design y los flujos de consulta. |
+| `AWS_PASO_A_PASO.md` | Guía detallada para desplegar, probar y destruir el caso. |
+
 ### Caso J: `caso-j-containers-ecs/` — Docker + ECS `Nivel 9`
 | Archivo | Descripción |
 |---------|-------------|
@@ -236,5 +246,5 @@ Cada directorio `caso-X-*` es un **proyecto autocontenido**. Aquí la anatomía 
 
 ---
 
-> **Última actualización:** 2026-02-19
+> **Última actualización:** 2026-03-11
 > **Mantenido por:** Vladimir Acuña

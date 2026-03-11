@@ -1,0 +1,12 @@
+﻿{
+  "version": "2.0",
+  "routeKey": "POST /orders",
+  "rawPath": "/orders",
+  "requestContext": {
+    "http": {
+      "method": "POST",
+      "path": "/orders"
+    }
+  },
+  "body": "{\"customerId\":\"cust-001\",\"customerName\":\"Acme SPA\",\"productId\":\"prod-erp\",\"productName\":\"ERP Suite\",\"total\":1499.99,\"status\":\"PENDING\"}"
+}

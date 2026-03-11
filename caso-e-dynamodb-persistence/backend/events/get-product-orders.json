@@ -1,0 +1,14 @@
+﻿{
+  "version": "2.0",
+  "routeKey": "GET /products/{productId}/orders",
+  "rawPath": "/products/prod-erp/orders",
+  "pathParameters": {
+    "productId": "prod-erp"
+  },
+  "requestContext": {
+    "http": {
+      "method": "GET",
+      "path": "/products/prod-erp/orders"
+    }
+  }
+}
