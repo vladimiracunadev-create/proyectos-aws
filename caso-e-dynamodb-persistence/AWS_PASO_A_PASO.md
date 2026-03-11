@@ -1,4 +1,14 @@
-﻿# Guia Paso a Paso AWS - Caso E
+# Guia Paso a Paso AWS - Caso E
+
+## 0. Definicion de operativo
+
+Para este repositorio, el Caso E solo debe marcarse como operativo cuando se cumplan estos puntos:
+
+- `sam build` termina sin errores.
+- `sam deploy --guided` crea el stack en AWS.
+- Responden correctamente los endpoints `POST /orders`, `GET /customers/{customerId}/orders`, `GET /orders/status/{status}` y `GET /products/{productId}/orders`.
+- El frontend apunta a la `ApiBaseUrl` real y devuelve respuestas validas.
+- Se documenta la URL final o las evidencias del despliegue.
 
 Este caso crea una API serverless para practicar **Amazon DynamoDB** con enfoque en modelado
 NoSQL real. La infraestructura se despliega con **AWS SAM** y el frontend sirve como cliente

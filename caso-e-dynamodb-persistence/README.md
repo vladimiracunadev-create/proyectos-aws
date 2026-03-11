@@ -1,7 +1,7 @@
-﻿# Caso E: Persistence Pro (Modelado NoSQL)
+# Caso E: Persistence Pro (Modelado NoSQL)
 
 [![Nivel-4](https://img.shields.io/badge/Nivel-4_Datos-green?style=for-the-badge)]()
-[![Status](https://img.shields.io/badge/Status-Implementado-success?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Proyectado-lightgrey?style=for-the-badge)]()
 
 Este caso lleva el laboratorio serverless al siguiente nivel: una API sobre **Amazon DynamoDB**
 diseñada desde los **patrones de acceso** y no desde las tablas relacionales. La implementación
@@ -9,6 +9,23 @@ demuestra **Single Table Design**, **GSI**, **transacciones** y consultas eficie
 estado y producto.
 
 ---
+
+## Estado real
+
+Estado actual del repositorio:
+
+- El scaffold del caso ya existe.
+- La API, el template SAM, los eventos de prueba y el frontend demo ya están creados.
+- La arquitectura Mermaid y la guía paso a paso ya están documentadas.
+- Aún falta desplegar y validar en AWS para marcarlo como `COMPLETADO`.
+
+Criterio para pasar a `COMPLETADO`:
+
+1. Ejecutar `sam build` sin errores.
+2. Ejecutar `sam deploy --guided`.
+3. Probar los 4 endpoints en AWS.
+4. Confirmar que el frontend consulta la API desplegada.
+5. Guardar la URL real y evidencias del despliegue.
 
 ## Objetivo
 
