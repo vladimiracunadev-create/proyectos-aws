@@ -10,6 +10,14 @@ Para este repositorio, el Caso E solo debe marcarse como operativo cuando se cum
 - El frontend apunta a la `ApiBaseUrl` real y devuelve respuestas validas.
 - Se documenta la URL final o las evidencias del despliegue.
 
+Estado actual validado el 2026-03-11:
+
+- `sam build` ejecutado con éxito.
+- Stack desplegado: `caso-e-dynamodb-persistence`.
+- Región: `us-east-2`.
+- API Base URL: `https://gqqm27j47c.execute-api.us-east-2.amazonaws.com`.
+- Tabla DynamoDB: `persistence_pro_orders`.
+
 Este caso crea una API serverless para practicar **Amazon DynamoDB** con enfoque en modelado
 NoSQL real. La infraestructura se despliega con **AWS SAM** y el frontend sirve como cliente
 de prueba para validar los patrones de acceso.

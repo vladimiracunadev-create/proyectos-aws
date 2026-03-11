@@ -1,7 +1,7 @@
 # Caso E: Persistence Pro (Modelado NoSQL)
 
 [![Nivel-4](https://img.shields.io/badge/Nivel-4_Datos-green?style=for-the-badge)]()
-[![Status](https://img.shields.io/badge/Status-Proyectado-lightgrey?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/Status-Deployed-success?style=for-the-badge)]()
 
 Este caso lleva el laboratorio serverless al siguiente nivel: una API sobre **Amazon DynamoDB**
 diseñada desde los **patrones de acceso** y no desde las tablas relacionales. La implementación
@@ -17,15 +17,15 @@ Estado actual del repositorio:
 - El scaffold del caso ya existe.
 - La API, el template SAM, los eventos de prueba y el frontend demo ya están creados.
 - La arquitectura Mermaid y la guía paso a paso ya están documentadas.
-- Aún falta desplegar y validar en AWS para marcarlo como `COMPLETADO`.
+- El stack fue desplegado y validado en AWS el 11 de marzo de 2026.
 
-Criterio para pasar a `COMPLETADO`:
+Validación completada:
 
-1. Ejecutar `sam build` sin errores.
-2. Ejecutar `sam deploy --guided`.
-3. Probar los 4 endpoints en AWS.
-4. Confirmar que el frontend consulta la API desplegada.
-5. Guardar la URL real y evidencias del despliegue.
+1. `sam build` ejecutado con éxito.
+2. Stack `caso-e-dynamodb-persistence` desplegado en `us-east-2`.
+3. Probados con éxito los endpoints de creación y consulta.
+4. URL operativa: `https://gqqm27j47c.execute-api.us-east-2.amazonaws.com`
+5. Tabla creada: `persistence_pro_orders`.
 
 ## Objetivo
 
@@ -43,6 +43,13 @@ Aprender a modelar persistencia NoSQL de forma senior:
 - **Compute**: AWS Lambda en Python 3.12.
 - **Persistencia**: DynamoDB con `pk/sk`, `gsi1` y `gsi2`.
 - **IaC**: AWS SAM / CloudFormation.
+
+## Endpoint desplegado
+
+- **API Base URL**: `https://gqqm27j47c.execute-api.us-east-2.amazonaws.com`
+- **Stack**: `caso-e-dynamodb-persistence`
+- **Región**: `us-east-2`
+- **Tabla**: `persistence_pro_orders`
 
 ## Patrones de acceso cubiertos
 

@@ -1,8 +1,8 @@
-﻿const apiBaseUrlInput = document.getElementById("apiBaseUrl");
+const apiBaseUrlInput = document.getElementById("apiBaseUrl");
 const resultNode = document.getElementById("result");
 const form = document.getElementById("orderForm");
 
-const storedBaseUrl = window.localStorage.getItem("case-e-api-base-url") || "";
+const storedBaseUrl = window.localStorage.getItem("case-e-api-base-url") || "https://gqqm27j47c.execute-api.us-east-2.amazonaws.com";
 apiBaseUrlInput.value = storedBaseUrl;
 
 function setResult(payload) {
