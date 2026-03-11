@@ -1,36 +1,36 @@
 ﻿# Skills Del Monorepo
 
-This document explains the custom Codex skills stored in `skills/` for this repository.
+Este documento describe los skills de Codex almacenados en `skills/` para este repositorio.
 
-## Purpose
+## Proposito
 
-These skills package recurring repository workflows so future Codex sessions can work faster and with fewer inconsistencies.
+Estos skills empaquetan flujos repetidos del repositorio para que futuras sesiones de Codex trabajen mas rapido y con menos inconsistencias.
 
-## Current Skills
+## Skills Actuales
 
 ### `aws-case-scaffolder`
 
-Use this skill to create or expand a `caso-*` module with the same layout used across the repository.
+Usa este skill para crear o ampliar un modulo `caso-*` con la misma estructura usada en el repositorio.
 
 ### `gitlab-aws-pipeline-editor`
 
-Use this skill when editing `.gitlab-ci.yml`, deployment jobs, OIDC flows, or case-specific CI behavior.
+Usa este skill cuando edites `.gitlab-ci.yml`, jobs de despliegue, flujos OIDC o comportamiento de CI por caso.
 
 ### `docs-portal-sync`
 
-Use this skill to keep `README.md`, `docs/`, `wiki/`, `index.html`, and GitLab Pages navigation aligned.
+Usa este skill para mantener alineados `README.md`, `docs/`, `wiki/`, `index.html` y la navegacion de GitLab Pages.
 
 ### `terraform-aws-demo-patterns`
 
-Use this skill when creating or updating Terraform for AWS demos in this monorepo.
+Usa este skill cuando crees o actualices Terraform para demos de AWS dentro de este monorepo.
 
 ### `finops-audit-and-budgeting`
 
-Use this skill for cost visibility, FinOps scripts, budget-related automation, and dashboard data generation.
+Usa este skill para visibilidad de costos, scripts de FinOps, automatizacion relacionada con presupuestos y generacion de datos para dashboards.
 
-## Location
+## Ubicacion
 
-The skill sources live in `skills/`:
+Las fuentes de los skills viven en `skills/`:
 
 - `skills/README.md`
 - `skills/aws-case-scaffolder/SKILL.md`
@@ -39,7 +39,7 @@ The skill sources live in `skills/`:
 - `skills/terraform-aws-demo-patterns/SKILL.md`
 - `skills/finops-audit-and-budgeting/SKILL.md`
 
-## Notes
+## Notas
 
-- Markdown in the skills was kept in ASCII to avoid encoding drift.
-- The skills are repository-specific and intentionally reflect the AWS and GitLab patterns already present here.
+- El markdown de los skills se mantuvo en ASCII para evitar deriva de encoding.
+- Los skills son especificos de este repositorio y reflejan intencionalmente los patrones de AWS y GitLab ya presentes aqui.
