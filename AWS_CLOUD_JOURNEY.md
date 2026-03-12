@@ -1,26 +1,96 @@
 # AWS Cloud Journey
 
 > Autor: Vladimir Acuna
-> Proposito: resumir todo lo aprendido en este repositorio, conectando cada caso con practicas reales de AWS y con la documentacion oficial.
+> Edicion: 3.0 - Author's Cut
+> Proposito: construir un libro propio, con criterio tecnico, caracter editorial y una lectura progresiva sobre madurez cloud en AWS.
+> Base documental: este repositorio, su documentacion interna y referencias oficiales de AWS.
 > Ultima actualizacion documental: 12 de marzo de 2026
 
 ---
 
-## 1. Que representa este repositorio
+## Manifiesto
 
-Este monorepo no es una coleccion de demos aisladas. Es una ruta de madurez cloud:
+Este libro no intenta competir con la documentacion oficial de AWS ni reemplazar los grandes libros de arquitectura cloud. Su valor es otro: convertir experiencia practica, decisiones reales y errores evitados en una narrativa propia.
 
-1. Empezar con hosting estatico y despliegues simples.
-2. Pasar a automatizacion reproducible con IaC.
-3. Incorporar backend serverless y persistencia NoSQL.
-4. Subir a contenedores y orquestacion.
-5. Terminar en gobierno, costo, seguridad y resiliencia.
+Lo distintivo de este material es que no parte desde teoria abstracta, sino desde un repositorio vivo que evoluciona por niveles:
 
-La idea central aprendida aqui es simple: en AWS no gana quien "levanta mas servicios", sino quien elige el servicio correcto, reduce operacion manual y mantiene seguridad, costo y confiabilidad bajo control.
+- primero aprender a publicar,
+- luego automatizar,
+- despues modelar datos y backend,
+- mas tarde operar contenedores,
+- y finalmente gobernar costo, seguridad y resiliencia.
+
+Ese recorrido le da identidad. No es un libro generico sobre AWS. Es un libro sobre como se construye criterio tecnico en AWS.
 
 ---
 
-## 2. Mapa de la jornada
+## Como leer este libro
+
+Hay tres formas validas de recorrerlo:
+
+### Ruta 1: aprendizaje progresivo
+
+Ideal para quienes vienen subiendo de nivel en cloud engineering.
+
+1. Fundamentos de AWS
+2. Hosting estatico
+3. IaC y CDN
+4. Serverless
+5. DynamoDB y modelado
+6. Contenedores
+7. Kubernetes
+8. FinOps, IAM y resiliencia
+
+### Ruta 2: lectura ejecutiva
+
+Ideal para reclutadores, lideres tecnicos o gerencia.
+
+- leer el resumen ejecutivo,
+- revisar la tabla de madurez,
+- saltar a los casos `C`, `E`, `L` y `M`.
+
+### Ruta 3: lectura de arquitecto
+
+Ideal para comparar trade-offs.
+
+- leer principios de diseno,
+- revisar las decisiones por caso,
+- terminar con los patrones transversales y la hoja de evolucion.
+
+---
+
+## Resumen ejecutivo
+
+Este repositorio demuestra una progresion realista de madurez cloud sobre AWS:
+
+| Etapa | Capacidad principal | Servicios clave | Leccion central |
+|---|---|---|---|
+| Fundamentos | Entender la nube antes de operar | IAM, Regions, AZ, VPC | Sin contexto, cualquier despliegue es fragil |
+| Hosting | Publicar rapido y con criterio | Amplify, S3 | La velocidad sirve, pero el control importa |
+| Profesionalizacion | Hacer infraestructura repetible | Terraform, CloudFront, DynamoDB state lock | Lo manual no escala ni audita bien |
+| Serverless | Backend elastico y eventos | API Gateway, Lambda, DynamoDB, SAM | Menos servidores no significa menos arquitectura |
+| Datos | Modelar por patrones de acceso | DynamoDB, GSI, TransactWriteItems | El diseño de datos define el rendimiento |
+| Contenedores | Portabilidad y ejecucion durable | Docker, ECR, ECS Fargate, ALB | Contenerizar es estandarizar |
+| Orquestacion | Operar plataformas mas complejas | EKS, kubectl, YAML, Terraform | Kubernetes aporta poder y tambien costo operativo |
+| Gobernanza | Controlar riesgo y gasto | IAM, OIDC, Budgets, Cost Explorer | Seniority tambien es operar con responsabilidad |
+| Resiliencia | Prepararse para fallos reales | Route 53, health checks, Multi-AZ, failover | La continuidad se diseña y se ensaya |
+
+---
+
+## Tesis central del libro
+
+La nube no se domina memorizando servicios. Se domina cuando cada decision tecnica ya incorpora cuatro preguntas desde el principio:
+
+1. Es seguro.
+2. Es operable.
+3. Es financieramente razonable.
+4. Resiste fallos acordes al contexto del negocio.
+
+Si una arquitectura despliega pero no responde esas cuatro preguntas, todavia no es una arquitectura madura.
+
+---
+
+## Mapa de la jornada
 
 ```mermaid
 graph TB
@@ -37,146 +107,129 @@ graph TB
 
 ---
 
-## 3. Fundamentos que se consolidan en toda la documentacion
+## Principios de diseno que atraviesan todo el repositorio
 
-### 3.1 Modelo de responsabilidad compartida
+### 1. Servicios administrados primero
 
-AWS asegura la infraestructura global, pero la configuracion de permisos, cifrado, exposicion publica, politicas, redes y datos sigue siendo responsabilidad del cliente. Este repositorio lo demuestra varias veces:
+Siempre que la necesidad lo permite, conviene delegar undifferentiated heavy lifting a AWS. Esto aparece con claridad en Amplify, CloudFront, Lambda, DynamoDB, Fargate y el control plane de EKS.
 
-- En `Caso B`, un bucket S3 mal expuesto deja la aplicacion publica sin controles adicionales.
-- En `Caso C`, CloudFront + OAC reduce esa exposicion.
-- En `Caso L`, OIDC reemplaza llaves permanentes, que son uno de los riesgos mas comunes en pipelines.
-- En `Caso M`, la alta disponibilidad no aparece sola: se disena, se prueba y se documenta.
+### 2. Seguridad desde el primer diseno
 
-### 3.2 Region, AZ y eleccion del servicio
+La seguridad no aparece como apendice. Se ve en el paso de buckets publicos a origen privado con CloudFront, en el uso de IAM de minimo privilegio y en la transicion desde access keys permanentes hacia OIDC.
 
-Otra leccion fuerte del repo es que la arquitectura no se decide solo por tecnologia, sino por tipo de carga:
+### 3. Infraestructura declarativa sobre operacion manual
 
-- `Amplify` y `S3` sirven muy bien para frontends estaticos.
-- `Lambda` funciona mejor para trafico intermitente y eventos.
-- `ECS Fargate` es adecuado para contenedores sin querer administrar nodos.
-- `EKS` se justifica cuando se necesita Kubernetes real, estandares enterprise o portabilidad del ecosistema.
+El paso desde consola hacia Terraform y SAM no es estetico. Es una mejora en auditabilidad, repetibilidad y control del cambio.
 
-### 3.3 Well-Architected en la practica
+### 4. Cost awareness continuo
 
-Aunque no todos los casos lo nombren explicitamente, el repositorio toca los pilares clasicos:
+El repositorio no romantiza AWS. Expone claramente que ALB, NAT Gateway, Fargate y EKS tienen costos reales. Por eso FinOps no aparece al final como un capitulo financiero, sino como un criterio de arquitectura.
 
-- Excelencia operativa: CI/CD, runbooks, validaciones, destruccion controlada.
-- Seguridad: IAM, OIDC, minimo privilegio, buckets privados, politicas.
-- Confiabilidad: Multi-AZ, health checks, failover planeado.
-- Eficiencia de desempeno: CDN, serverless, autoscaling, patrones de acceso en DynamoDB.
-- Optimizacion de costos: Budgets, PAY_PER_REQUEST, limpieza de laboratorios costosos.
-- Sostenibilidad: uso de servicios administrados y apagado de recursos no esenciales.
+### 5. Evolucion por capas, no por moda
+
+El repositorio no salta de HTML a Kubernetes por vanidad tecnica. Cada etapa agrega una necesidad nueva y eso le da legitimidad a la complejidad siguiente.
 
 ---
 
-## 4. Lo aprendido por etapa
+## Fundamentos que deben quedar claros antes de cualquier despliegue
 
-### 4.1 Paso 0: comprender AWS antes de desplegar
+### Modelo de responsabilidad compartida
 
-Antes de usar servicios, el repo obliga a entender conceptos base:
+AWS protege la infraestructura global; el cliente protege configuraciones, identidades, cifrado, datos, politicas y exposicion publica. Este repo lo prueba con ejemplos concretos:
 
-- Regiones y zonas de disponibilidad no son lo mismo.
-- IAM define quien puede hacer que accion sobre que recurso.
-- VPC y subredes importan cuando se entra a ECS, EKS o arquitecturas resilientes.
-- DNS, CDN, certificados y endpoints no son "extras"; son parte del producto final.
+- en `Caso B`, un bucket mal configurado expone contenido,
+- en `Caso C`, CloudFront + OAC reduce esa superficie,
+- en `Caso L`, OIDC elimina una parte importante del riesgo asociado a secretos de larga duracion,
+- en `Caso M`, la resiliencia depende del diseno del cliente, no de una promesa generica del proveedor.
 
-Aprendizaje real:
+### Regiones, AZ y diseno de disponibilidad
 
-- No conviene empezar por Kubernetes ni por multi-region.
-- Primero se domina el camino corto: contenido estatico, permisos, despliegue, observabilidad basica.
+Una region no es una zona de disponibilidad. Una AZ no es una estrategia de disaster recovery. Y un servicio administrado no garantiza por si solo continuidad operacional multi-region.
 
-Referencias AWS:
+### IAM como lenguaje de control
 
-- [AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html)
-- [Shared Responsibility Model](https://docs.aws.amazon.com/whitepapers/latest/aws-risk-and-compliance/shared-responsibility-model.html)
+IAM no es solo un requisito de acceso; es el lenguaje con el que se expresa la politica de seguridad del sistema. En este libro, IAM aparece como base de deploy, gobierno, OIDC, limitacion regional y minimo privilegio.
 
 ---
 
-### 4.2 Caso A: AWS Amplify
+## Capitulo I. Fundamentos y hosting
 
-#### Que se construyo
+### Caso A: AWS Amplify
 
-Un despliegue rapido de frontend conectado al repo, con build administrado y hosting gestionado.
+#### Lo que demuestra
 
-#### Que se aprendio
+`Caso A` demuestra el camino de menor friccion para publicar rapido un frontend moderno conectado a un repositorio.
 
-- Amplify acelera el time-to-market.
-- AWS recomienda Amplify como opcion moderna para hosting estatico seguro sobre CDN.
-- La experiencia de ramas y previews es muy util para equipos pequenos y validacion rapida.
+#### Aprendizajes tecnicos
 
-#### Lo importante tecnicamente
+- Amplify acelera la salida a produccion para frontends estaticos o JAMstack.
+- La integracion con branches y previews mejora feedback de cambios.
+- La abstraccion de hosting, certificados y CDN reduce tiempo operativo.
 
-- Amplify abstrae S3, CloudFront y certificados.
-- La simplicidad tiene un costo: menos control fino sobre la infraestructura.
-- Sirve muy bien para portfolio, prototipos y frontends desacoplados.
+#### Trade-off real
 
-#### Criterio de seniority
+Lo que se gana en velocidad se pierde en control fino. Para muchos casos de portfolio, laboratorio o MVP, eso es correcto. Para entornos con requisitos estrictos de networking, compliance o personalizacion de borde, suele ser insuficiente.
 
-La madurez no esta en evitar Amplify, sino en saber cuando usarlo y cuando migrar a un stack mas controlado.
+#### Leccion editorial del libro
+
+La madurez tecnica no consiste en despreciar soluciones sencillas. Consiste en saber cuando una solucion sencilla ya cumplio su trabajo.
 
 Referencias AWS:
 
 - [Web previews for pull requests - AWS Amplify Hosting](https://docs.aws.amazon.com/amplify/latest/userguide/pr-previews.html)
-- [Hosting a static website using Amazon S3](https://docs.aws.amazon.com/console/s3/hostingstaticwebsite)
 - [Deploying a static website to AWS Amplify Hosting from an S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/website-hosting-amplify.html)
 
 ---
 
-### 4.3 Caso B: S3 + GitLab CI
+### Caso B: S3 + GitLab CI
 
-#### Que se construyo
+#### Lo que demuestra
 
-Un pipeline artesanal que publica archivos estaticos en S3 usando `aws s3 sync`.
+`Caso B` lleva el control del despliegue a un pipeline visible y manualmente entendible.
 
-#### Que se aprendio
+#### Aprendizajes tecnicos
 
-- Aqui se entiende que CI/CD real no es magia: son credenciales, permisos, sincronizacion y errores de despliegue.
-- `aws s3 sync --delete` deja el bucket alineado con el repo, lo que reduce drift en contenido.
-- El hosting web nativo de S3 funciona, pero implica aceptar endpoints HTTP y normalmente acceso publico.
+- `aws s3 sync --delete` ayuda a mantener consistencia entre fuente y destino.
+- El pipeline revela la mecanica real de credenciales, permisos y jobs de deploy.
+- El hosting estatico nativo de S3 es excelente para aprender fundamentos de publicacion web en AWS.
 
-#### Leccion clave
+#### Riesgo y realidad
 
-AWS hoy recomienda usar Amplify o CloudFront delante de S3 cuando se necesita hosting seguro con HTTPS. Este caso sigue siendo valioso porque ensena los fundamentos, pero no es el destino final para un entorno serio.
+Este caso tambien deja una leccion importante: S3 website hosting expone limitaciones claras para usos mas serios, especialmente si se necesita HTTPS robusto, menor exposicion publica o mejores practicas de seguridad.
 
-#### Riesgos aprendidos
+#### Anti-patron identificado
 
-- Desactivar Block Public Access sin una razon clara es un riesgo.
-- Guardar access keys largas en CI es una deuda de seguridad.
-- S3 website endpoint es util para aprender, no para todos los casos productivos.
+Persistir con access keys largas en CI cuando ya existe OIDC.
 
 Referencias AWS:
 
 - [Tutorial: Configuring a static website on Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html)
 - [Enabling website hosting](https://docs.aws.amazon.com/AmazonS3/latest/userguide/EnableWebsiteHosting.html)
-- [Tutorial: Configuring a static website using a custom domain registered with Route 53](https://docs.aws.amazon.com/AmazonS3/latest/userguide/website-hosting-custom-domain-walkthrough.html)
 
 ---
 
-### 4.4 Caso C: Terraform + CloudFront + S3 privado
+## Capitulo II. Infraestructura como codigo y distribucion segura
 
-#### Que se construyo
+### Caso C: Terraform + CloudFront + S3 privado
 
-Infraestructura declarativa para publicar un sitio con S3 privado, CloudFront y estado remoto de Terraform.
+#### Lo que demuestra
 
-#### Que se aprendio
+Este caso marca la salida definitiva del ClickOps como estrategia principal.
 
-- IaC elimina la dependencia de memoria humana y de ClickOps repetitivo.
-- El estado remoto compartido evita despliegues caoticos.
-- El bloqueo del state evita corrupcion cuando varias personas actuan sobre la misma infraestructura.
-- CloudFront + S3 privado es mucho mejor patron que S3 website publico para servir contenido con HTTPS.
+#### Aprendizajes tecnicos
 
-#### OAC vs OAI
+- Terraform convierte infraestructura en un activo versionable.
+- State remoto y locking reducen riesgo de corrupcion operativa.
+- CloudFront delante de S3 privado mejora seguridad, entrega global y control de cache.
+- OAC representa una postura moderna respecto del acceso a origen S3.
 
-Una mejora especialmente importante del repositorio es adoptar `Origin Access Control (OAC)`:
+#### Decision de arquitectura destacada
 
-- AWS recomienda OAC por sobre OAI.
-- OAC soporta regiones modernas, SSE-KMS y peticiones firmadas.
-- Si el origen es el endpoint web de S3, OAC no aplica; para usar OAC se necesita el bucket S3 como origen privado normal.
+Pasar de bucket web publico a bucket privado con distribucion en CloudFront es una mejora tecnica y conceptual. Ya no se trata solo de publicar; se trata de publicar bien.
 
-#### Leccion de arquitectura
+#### Profesionalismo real
 
-Este caso marca el paso de "subir archivos" a "definir una plataforma repetible". Es el punto donde el repositorio empieza a parecerse a una practica profesional.
+Aqui aparece algo clave para un libro propio: explicar no solo que se hizo, sino por que es mejor que la etapa anterior.
 
 Referencias AWS:
 
@@ -185,29 +238,28 @@ Referencias AWS:
 
 ---
 
-### 4.5 Caso D: API Gateway + Lambda + DynamoDB con SAM
+## Capitulo III. Serverless y backend elastico
 
-#### Que se construyo
+### Caso D: API Gateway + Lambda + DynamoDB con SAM
 
-Un backend serverless con API Gateway, Lambda y DynamoDB, desplegado con AWS SAM.
+#### Lo que demuestra
 
-#### Que se aprendio
+Este caso introduce backend sin gestionar servidores permanentes y obliga a pensar en integracion, permisos, latencia, costo y ciclo de vida de datos.
 
-- Serverless reduce operacion cuando la carga es intermitente.
-- `SAM` simplifica plantillas de CloudFormation y acelera el ciclo build/deploy.
-- `DynamoDB PAY_PER_REQUEST` es ideal para demos y trafico variable.
-- `TTL` es util para datos efimeros y para evitar basura operativa.
+#### Aprendizajes tecnicos
 
-#### Lo que AWS recomienda y aqui importa
+- SAM simplifica despliegues de Lambda y APIs.
+- Lambda encaja muy bien cuando la carga es variable o intermitente.
+- DynamoDB `PAY_PER_REQUEST` reduce sobredimensionamiento en laboratorios y demos.
+- TTL ayuda a evitar residuos de datos y costos innecesarios.
 
-- Reutilizar el entorno de ejecucion de Lambda para mejorar rendimiento.
-- Mantener configuracion por variables de entorno.
-- Escribir funciones idempotentes.
-- Entender limites de escalado aguas abajo, porque Lambda escala mas rapido que muchos servicios conectados.
+#### Trade-off real
 
-#### Leccion de diseno
+Serverless simplifica servidores, pero no elimina complejidad. La complejidad se mueve a IAM, eventos, idempotencia, limites de servicio y observabilidad.
 
-Serverless no significa "sin arquitectura". Significa que el foco cambia desde servidores a eventos, limites, IAM, observabilidad y consistencia.
+#### Nota de madurez
+
+Este caso es donde muchos equipos descubren que "serverless" no significa "sin decisiones de arquitectura".
 
 Referencias AWS:
 
@@ -216,40 +268,34 @@ Referencias AWS:
 
 ---
 
-### 4.6 Caso E: DynamoDB single table y patrones de acceso
+## Capitulo IV. Datos y modelado de alto criterio
 
-#### Que se construyo
+### Caso E: DynamoDB single table y patrones de acceso
 
-Una API serverless con:
+#### Lo que demuestra
 
-- tabla unica,
-- claves `pk/sk`,
-- GSI para consultas operativas,
-- `TransactWriteItems`,
-- TTL,
-- y una landing publica para probar la API real.
+Este es uno de los capitulos mas importantes del libro porque aqui aparece criterio senior de backend cloud.
 
-#### Que se aprendio
+#### Aprendizajes tecnicos
 
-Este es uno de los saltos de seniority mas claros del repo.
+- una sola tabla puede representar multiples entidades si el modelo parte por patrones de acceso,
+- `pk/sk` permite organizar jerarquias de lectura,
+- los GSI habilitan consultas especificas sin recurrir a scans globales,
+- `TransactWriteItems` ayuda a mantener consistencia entre orden y auditoria,
+- TTL permite limpieza automatica cuando el caso lo requiere.
 
-En DynamoDB no se modela pensando en joins; se modela pensando en preguntas de negocio:
+#### Cambio de mentalidad
 
-- ordenar datos para leer por cliente,
-- consultar por estado,
-- consultar por producto,
-- y registrar auditoria sin scans completos.
+En DynamoDB no se diseña a partir de tablas normalizadas. Se diseña a partir de preguntas:
 
-#### Conceptos reforzados por AWS
+- que debo leer,
+- con que frecuencia,
+- con que latencia,
+- y a que costo.
 
-- `Composite sort key` para jerarquias logicas.
-- `Sparse indexes` cuando no todos los items deben aparecer en un indice.
-- `TTL` para expiracion automatica.
-- El diseno debe partir por access patterns, no por un diagrama relacional tradicional.
+#### Aporte de autor
 
-#### Leccion fuerte
-
-El valor del Caso E no es "usar DynamoDB", sino demostrar criterio de modelado y consistencia en escritura.
+Si este libro quiere tener caracter, este capitulo debe defender una idea fuerte: modelar datos por access patterns no es un truco de DynamoDB; es una forma mas disciplinada de pensar el producto.
 
 Referencias AWS:
 
@@ -259,27 +305,28 @@ Referencias AWS:
 
 ---
 
-### 4.7 Caso J: Docker + ECR + ECS Fargate
+## Capitulo V. Contenedores y plataformas de ejecucion
 
-#### Que se construyo
+### Caso J: Docker + ECR + ECS Fargate
 
-Una aplicacion containerizada publicada en ECR y ejecutada en ECS Fargate detras de un ALB.
+#### Lo que demuestra
 
-#### Que se aprendio
+`Caso J` muestra el paso desde funciones y sitios estaticos hacia aplicaciones empaquetadas y de vida mas durable.
 
-- Docker resuelve portabilidad; AWS resuelve ejecucion gestionada.
-- `ECR -> ECS Fargate -> ALB` es un patron muy comun para aplicaciones web containerizadas.
-- Fargate elimina la administracion directa de EC2, pero no elimina la necesidad de definir red, roles, puertos, health checks y costos.
+#### Aprendizajes tecnicos
 
-#### Lo que AWS enfatiza y se refleja en este caso
+- Docker estandariza empaquetado y portabilidad.
+- ECR profesionaliza almacenamiento y distribucion de imagenes.
+- ECS Fargate evita administrar instancias EC2 para ejecutar contenedores.
+- ALB agrega una capa clara de exposicion HTTP y health checks.
 
-- ECS integra muy bien con ALB para trafico HTTP/HTTPS.
-- El escaneo de imagenes en ECR debe formar parte del flujo serio de despliegue.
-- Servicios multi-task deben distribuirse en multiples AZ cuando se busca alta disponibilidad.
+#### Trade-off real
 
-#### Leccion de madurez
+Fargate reduce gestion de servidores, pero no vuelve gratis la plataforma. Persisten decisiones de red, capacidad, despliegue, seguridad, balanceo y costo.
 
-Contenerizar no es "modernidad cosmetica". Es estandarizar ejecucion, empaquetado, versionado y promotion path entre entornos.
+#### Anti-patron identificado
+
+Mantener recursos always-on despues de validar una demo sin estrategia de apagado.
 
 Referencias AWS:
 
@@ -289,32 +336,26 @@ Referencias AWS:
 
 ---
 
-### 4.8 Caso K: Kubernetes en AWS con EKS
+### Caso K: Kubernetes en AWS con EKS
 
-#### Que se construyo
+#### Lo que demuestra
 
-Un cluster EKS con despliegue de aplicacion y evidencia de operacion real.
+`Caso K` representa el salto hacia orquestacion industrial y plataforma mas compleja.
 
-#### Que se aprendio
+#### Aprendizajes tecnicos
 
-- EKS no reemplaza a ECS por defecto; responde a otra necesidad.
-- AWS gestiona el control plane, pero el cliente sigue siendo responsable de seguridad en nodos, pods, red, secretos y acceso.
-- Kubernetes agrega poder, pero tambien multiplica decisiones operativas.
+- EKS entrega control plane administrado, pero no elimina las responsabilidades del operador.
+- Kubernetes agrega flexibilidad, pero tambien una superficie operativa mucho mayor.
+- La seguridad en EKS exige pensar en nodos, imagenes, red, acceso, runtime y observabilidad.
+- El costo fijo del cluster obliga a justificar su uso.
 
-#### Lecciones importantes
+#### Decision de arquitectura
 
-- EKS tiene un costo base real, por lo que no conviene usarlo solo "porque si".
-- La seguridad en EKS exige pensar en IAM, runtime, networking, image security y observabilidad.
-- Para laboratorios, destruir a tiempo es parte del diseno.
+EKS no es la evolucion natural de ECS para todos los equipos. Es una eleccion valida cuando se necesita el ecosistema Kubernetes o cuando el contexto organizacional ya lo exige.
 
-#### Criterio arquitectonico
+#### Leccion con caracter
 
-Usar EKS tiene sentido cuando:
-
-- se requiere ecosistema Kubernetes,
-- hay necesidad de portabilidad de manifiestos,
-- se trabaja con patrones avanzados de plataforma,
-- o la organizacion ya opera sobre estandares Kubernetes.
+No todo lo enterprise es mejor; a veces solo es mas caro y mas dificil. El valor del arquitecto esta en distinguir necesidad real de prestigio tecnico.
 
 Referencias AWS:
 
@@ -325,33 +366,28 @@ Referencias AWS:
 
 ---
 
-### 4.9 Caso L: FinOps, OIDC e IAM governance
+## Capitulo VI. Gobernanza, FinOps y seguridad operativa
 
-#### Que se construyo
+### Caso L: FinOps, OIDC e IAM governance
 
-Guardrails de costo y seguridad usando:
+#### Lo que demuestra
 
-- AWS Budgets,
-- GitLab OIDC,
-- IAM con minimo privilegio,
-- restricciones regionales,
-- y despliegue sin access keys permanentes.
+Este caso expresa una idea central del libro: el seniority tecnico no termina cuando el deploy funciona; empieza cuando el sistema deja de ser riesgoso para la organizacion.
 
-#### Que se aprendio
+#### Aprendizajes tecnicos
 
-- El verdadero nivel senior aparece cuando se controla el riesgo operativo, no solo cuando se despliega.
-- Las llaves IAM permanentes en CI/CD son una mala practica cuando se puede usar federacion OIDC.
-- Los presupuestos no son "tema financiero": son un control tecnico de supervivencia para laboratorios y cuentas reales.
+- OIDC elimina la necesidad de distribuir access keys permanentes al pipeline.
+- STS y `AssumeRoleWithWebIdentity` entregan credenciales efimeras y mas seguras.
+- AWS Budgets transforma el costo en una señal operativa temprana.
+- Guardrails regionales y politicas IAM elevan el nivel de gobierno.
 
-#### Lo que AWS documenta y aqui se vuelve practico
+#### Trade-off real
 
-- `AssumeRoleWithWebIdentity` entrega credenciales temporales.
-- AWS Budgets permite alertas reales y forecast.
-- Cost Explorer y Budgets pueden alimentar dashboards y decisiones operativas.
+La gobernanza agrega friccion inicial, pero reduce deuda futura. Ese intercambio casi siempre vale la pena.
 
-#### Leccion fuerte
+#### Idea editorial fuerte
 
-FinOps no es solo pagar menos. Es hacer visible el costo tecnico de cada decision de arquitectura.
+FinOps no es una planilla. Es una disciplina de arquitectura. Cada servicio elegido compromete gasto futuro, complejidad futura y hasta decisiones de equipo.
 
 Referencias AWS:
 
@@ -361,28 +397,28 @@ Referencias AWS:
 
 ---
 
-### 4.10 Caso M: resiliencia, failover y operacion de verdad
+## Capitulo VII. Resiliencia, continuidad y fallos reales
+
+### Caso M: resiliencia, failover y operacion de verdad
 
 #### Estado del caso
 
-Este caso esta planificado y documentado, con scaffold, roadmap y runbooks.
+El caso todavia esta en fase de consolidacion, pero su valor documental ya es alto porque introduce runbooks, roadmap e intencion arquitectonica clara.
 
-#### Que se aprende aunque aun no este completo
+#### Aprendizajes tecnicos
 
-- La resiliencia no se declara, se ensaya.
-- Multi-AZ cubre fallas locales; multi-region cubre desastres regionales.
-- Route 53 failover es una opcion valida para activo-pasivo cuando el RTO tolera el comportamiento DNS.
-- Global Accelerator puede mejorar RTO, pero con costo fijo superior.
+- Multi-AZ mejora disponibilidad local.
+- Multi-region entra en la conversacion cuando se piensa en continuidad real.
+- Route 53 failover funciona muy bien para escenarios activo-pasivo compatibles con el comportamiento DNS.
+- Global Accelerator puede reducir tiempos de conmutacion, aunque con costo base mayor.
 
-#### Lecciones de arquitectura
+#### Lo que este capitulo aporta al libro
 
-- RTO y RPO deben definirse antes del diseno.
-- TTL de DNS, health checks y warm standby importan tanto como el codigo.
-- Tener runbook es tan importante como tener Terraform.
+Aqui el texto deja de hablar solo de despliegue y empieza a hablar de responsabilidad operacional. RTO, RPO, DNS TTL, warm standby y pruebas de GameDay son lenguaje de sistemas reales.
 
-#### Leccion de negocio
+#### Idea de autor
 
-Este caso muestra la diferencia entre una demo funcional y una plataforma preparada para continuidad operacional.
+Una demo muestra que algo funciona. Un runbook demuestra que algo puede fallar sin destruir al equipo.
 
 Referencias AWS:
 
@@ -392,107 +428,128 @@ Referencias AWS:
 
 ---
 
-## 5. Aprendizajes transversales del repositorio
+## Patrones transversales que este repositorio enseña
 
-### 5.1 Seguridad
+### Seguridad
 
-Lo que mas se repite en el repo es que seguridad no se agrega al final:
+- minimo privilegio,
+- menor cantidad de secretos permanentes,
+- reduccion de superficie publica,
+- y preferencia por controles reproducibles.
 
-- IAM minimo privilegio desde el principio.
-- Preferencia por credenciales efimeras con OIDC.
-- Evitar buckets publicos si el caso permite usar CloudFront + OAC.
-- Escanear imagenes y revisar permisos antes de desplegar.
+### Costo
 
-### 5.2 Costo
+- preferir servicios on-demand donde la carga es variable,
+- destruir laboratorios costosos despues de validar,
+- evitar romantizar servicios caros para necesidades pequenas,
+- hacer visible el costo como parte del diseno.
 
-El repositorio es muy claro en algo que muchos laboratorios ocultan: varios servicios de AWS cobran aunque "solo estes probando".
+### Operacion
 
-Lecciones concretas:
+- el despliegue necesita evidencia,
+- la infraestructura necesita versionado,
+- el sistema necesita validacion,
+- y la documentacion necesita reflejar estado real, no aspiracional.
 
-- `Lambda` y `DynamoDB PAY_PER_REQUEST` son excelentes para cargas pequenas y variables.
-- `ALB`, `Fargate`, `NAT Gateway` y `EKS` pueden disparar costos rapido.
-- destruir infraestructura es una practica operacional, no una tarea opcional.
+### Arquitectura
 
-### 5.3 Operacion
-
-Tambien queda claro que desplegar una vez no basta:
-
-- hacen falta pipelines,
-- hace falta invalidar cache cuando corresponde,
-- hace falta evidencia,
-- hace falta documentacion operativa,
-- y hace falta saber cerrar recursos.
-
-### 5.4 Arquitectura
-
-El gran aprendizaje del repo es pasar de "servicios AWS" a "decisiones de arquitectura":
-
-- cuando usar un servicio totalmente administrado,
-- cuando aceptar mas complejidad a cambio de mas control,
-- cuando optimizar por costo,
-- y cuando optimizar por resiliencia.
+- complejidad justificada,
+- no complejidad estetica,
+- evolucion incremental,
+- y decisiones explicadas por trade-offs.
 
 ---
 
-## 6. Como evoluciona la mentalidad tecnica a traves del repo
+## Anti-patrones identificados a lo largo del viaje
 
-La progresion real del aprendizaje es esta:
+Este libro gana profesionalismo cuando no solo celebra aciertos, sino que nombra anti-patrones con claridad:
 
-1. `Caso A-B`: aprender a publicar.
-2. `Caso C`: aprender a definir infraestructura de forma repetible.
-3. `Caso D-E`: aprender a modelar backend y datos con criterio.
-4. `Caso J-K`: aprender a ejecutar aplicaciones de larga vida en contenedores.
-5. `Caso L-M`: aprender a operar con responsabilidad, presupuesto y continuidad.
-
-En otras palabras:
-
-- primero se aprende a desplegar,
-- luego a disenar,
-- despues a operar,
-- y finalmente a gobernar.
+1. Confiar demasiado en ClickOps para infraestructura estable.
+2. Exponer buckets publicos cuando se puede privatizar el origen.
+3. Mantener access keys permanentes en CI/CD.
+4. Adoptar Kubernetes sin necesidad clara.
+5. Ignorar costos de NAT Gateway, ALB, Fargate o EKS en laboratorios.
+6. Confundir alta disponibilidad con disaster recovery.
+7. Documentar arquitecturas futuras como si ya estuvieran operativas.
 
 ---
 
-## 7. Recomendaciones para seguir mejorando este documento y el repo
+## Matriz de seleccion de runtime
 
-Con base en la documentacion del repo y la documentacion oficial de AWS, los siguientes pasos naturales son:
-
-1. Completar los casos `F`, `G`, `H` e `I` para cerrar seguridad, eventos, observabilidad y GenAI.
-2. Agregar una seccion de "trade-offs" por caso: cuando usarlo, cuando no usarlo y costo aproximado.
-3. Incorporar observabilidad real en `D`, `E`, `J` y `K` con CloudWatch y alarmas.
-4. Documentar mejor limites y quotas de cada servicio usado.
-5. Convertir este archivo en una guia de estudio con checklist por nivel.
-
----
-
-## 8. Conclusiones
-
-Este repositorio ensena una leccion muy valiosa: aprender AWS no es memorizar servicios, sino entender patrones.
-
-El recorrido completo va desde:
-
-- hosting simple,
-- pasando por automatizacion e infraestructura declarativa,
-- luego backend serverless y modelado NoSQL,
-- despues contenedores y Kubernetes,
-- y finalmente FinOps, identidad federada y resiliencia.
-
-Si hubiera que resumir "todo lo aprendido" en una sola frase, seria esta:
-
-> La madurez cloud aparece cuando cada despliegue ya considera seguridad, costo, operacion y continuidad desde el diseno, no como un parche posterior.
+| Criterio | Lambda | ECS Fargate | EKS |
+|---|---|---|---|
+| Carga ideal | Intermitente o event-driven | Servicios web o workers durables | Plataformas complejas o ecosistema K8s |
+| Operacion | Baja | Media | Alta |
+| Costo base | Muy bajo en reposo | Medio | Alto |
+| Tiempo de entrada | Rapido | Medio | Alto |
+| Control | Bajo a medio | Medio | Alto |
+| Cuadro recomendado | APIs, eventos, automatizacion | Apps containerizadas sin gestionar nodos | Necesidad real de Kubernetes |
 
 ---
 
-## 9. Bibliografia oficial de AWS usada para enriquecer este documento
+## Evolucion de mentalidad tecnica
 
+La madurez que propone este libro es esta:
+
+1. aprender a publicar,
+2. aprender a repetir,
+3. aprender a modelar,
+4. aprender a operar,
+5. aprender a gobernar,
+6. aprender a resistir fallos.
+
+Dicho de otra forma:
+
+- primero se despliega,
+- luego se diseña,
+- despues se sostiene,
+- y finalmente se protege el negocio.
+
+---
+
+## Hoja editorial para futuras versiones del libro
+
+Si quieres que este libro tenga aun mas nivel profesional, estas son las mejoras con mayor impacto:
+
+1. Agregar una apertura por capitulo con problema, contexto y decision.
+2. Incluir una seccion fija por caso: objetivo, arquitectura, trade-offs, costo, riesgos y recomendacion de uso.
+3. Añadir diagramas mas limpios y consistentes visualmente.
+4. Crear estudios comparativos: Amplify vs S3, Lambda vs ECS, ECS vs EKS, OIDC vs access keys.
+5. Incorporar un glosario autoral, no solo definiciones tecnicas.
+6. Agregar sidebars con "errores que este caso evita".
+7. Cerrar cada capitulo con una leccion de seniority.
+8. Añadir un apendice de costos orientativos por laboratorio.
+9. Sumar una bibliografia comentada, no solo listada.
+10. Convertir el documento en una primera edicion con tono, portada, prefacio y roadmap de siguientes capitulos.
+
+---
+
+## Conclusiones
+
+Este libro ya no debe verse solo como resumen del repositorio. Debe verse como una posicion tecnica propia.
+
+La idea que sostiene toda la obra es esta:
+
+> La madurez cloud aparece cuando seguridad, costo, operacion y resiliencia se consideran desde el diseño, no cuando el sistema ya esta en problemas.
+
+Si esa frase se mantiene viva en cada capitulo, el libro tendra identidad propia.
+
+---
+
+## Bibliografia oficial de AWS usada para enriquecer este documento
+
+- [AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html)
+- [Shared Responsibility Model](https://docs.aws.amazon.com/whitepapers/latest/aws-risk-and-compliance/shared-responsibility-model.html)
 - [AWS Amplify Hosting - PR previews](https://docs.aws.amazon.com/amplify/latest/userguide/pr-previews.html)
-- [Amazon S3 static website hosting overview](https://docs.aws.amazon.com/console/s3/hostingstaticwebsite)
+- [Deploying a static website to AWS Amplify Hosting from an S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/website-hosting-amplify.html)
 - [Amazon S3 static website tutorial](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html)
+- [Enabling website hosting](https://docs.aws.amazon.com/AmazonS3/latest/userguide/EnableWebsiteHosting.html)
 - [CloudFront - Restrict access to an S3 origin](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html)
 - [Lambda best practices](https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html)
 - [AWS SAM developer guide](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html)
 - [DynamoDB data modeling building blocks](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/data-modeling-blocks.html)
 - [DynamoDB TTL](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html)
+- [Best practices for DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/best-practices.html)
 - [Amazon ECS service load balancing](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html)
 - [Amazon ECS Availability Zone rebalancing](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-rebalancing.html)
 - [Amazon ECR image scanning](https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html)
@@ -503,6 +560,7 @@ Si hubiera que resumir "todo lo aprendido" en una sola frase, seria esta:
 - [AWS Budgets - creating budgets](https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-create.html)
 - [AWS Budgets - creating a cost budget](https://docs.aws.amazon.com/cost-management/latest/userguide/create-cost-budget.html)
 - [Route 53 failover routing](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html)
+- [Active-active and active-passive failover - Amazon Route 53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-types.html)
 
 ---
 
