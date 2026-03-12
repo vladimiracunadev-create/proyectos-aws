@@ -47,15 +47,17 @@ sequenceDiagram
 ## 📐 Diagrama 2: Single Table Design
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#E74C3C', 'secondaryColor': '#27AE60', 'tertiaryColor': '#f9f9f9' }}}%%
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#E74C3C', 'secondaryColor': '#27AE60', 'tertiaryColor': '#f9f9f9', 'fontsize': '16px' }}}%%
 graph TB
     subgraph Table["🗄️ DynamoDB table: persistence_pro_orders"]
+        direction TB
         PKSK["🔑 PK / SK"]
         GSI1["⚡ GSI1: gsi1pk / gsi1sk"]
         GSI2["⚡ GSI2: gsi2pk / gsi2sk"]
     end
 
     subgraph EntityOrder["📦 Item ORDER"]
+        direction TB
         OrderPK["PK = CUSTOMER#cust-001"]
         OrderSK["SK = ORDER#2026-03-11T12:00:00Z#ord-123"]
         OrderGSI1["GSI1PK = STATUS#PENDING"]
@@ -65,6 +67,7 @@ graph TB
     end
 
     subgraph EntityAudit["📜 Item AUDIT"]
+        direction TB
         AuditPK["PK = ORDER#ord-123"]
         AuditSK["SK = EVENT#2026-03-11T12:00:00Z"]
     end
@@ -79,8 +82,8 @@ graph TB
     GSI2 --> OrderGSI2SK
 
     style Table fill:#f4f4f4,stroke:#333,stroke-width:2px
-    style EntityOrder fill:#e1f5fe,stroke:#01579b
-    style EntityAudit fill:#fff3e0,stroke:#e65100
+    style EntityOrder fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style EntityAudit fill:#fff3e0,stroke:#e65100,stroke-width:2px
 ```
 
 ---
@@ -88,7 +91,8 @@ graph TB
 ## 📐 Diagrama 3: Patrones de acceso soportados
 
 ```mermaid
-graph LR
+%%{init: {'theme': 'base', 'themeVariables': { 'fontsize': '16px' }}}%%
+graph TB
     A["🔍 GET /customers/{customerId}/orders"] --> B["Query PK = CUSTOMER#id"]
     C["📊 GET /orders/status/{status}"] --> D["Query GSI1PK = STATUS#value"]
     E["📦 GET /products/{productId}/orders"] --> F["Query GSI2PK = PRODUCT#id"]
@@ -105,12 +109,14 @@ graph LR
 ## 📐 Diagrama 4: Arquitectura completa AWS
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'fontsize': '16px' }}}%%
 graph TB
     subgraph Client["💻 Frontend"]
         User["🌍 Usuario / Navegador"]
     end
 
     subgraph AWS["☁️ Infraestructura AWS"]
+        direction TB
         APIGW["🌐 API Gateway\nHTTP API"]
         Lambda["⚡ Lambda\nPython 3.12"]
         Table["🗄️ DynamoDB\nSingle Table"]
@@ -120,6 +126,7 @@ graph TB
     end
 
     subgraph Automation["⚙️ Tooling"]
+        direction TB
         Dev["👨‍💻 Desarrollador"] --> SAM["🛠️ AWS SAM"]
         SAM --> CFN["📜 CloudFormation"]
         CFN --> APIGW
