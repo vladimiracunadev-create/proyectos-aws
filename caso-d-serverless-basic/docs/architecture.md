@@ -19,27 +19,32 @@ APIs y tablas DynamoDB — equivalente a Terraform pero optimizado para serverle
 ## 📐 Diagrama 1: Arquitectura Completa Serverless
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#FF9900', 'secondaryColor': '#3498DB', 'tertiaryColor': '#f4f4f4', 'fontsize': '16px' }}}%%
 graph TB
     subgraph Frontend["🌐 Frontend (Amplify / S3)"]
-        UI["Interfaz Web\nReact / JS Vanilla\n(Caso A o B)"]
+        UI["📱 Interfaz Web\nReact / JS Vanilla\n(Caso A o B)"]
     end
 
     subgraph APILayer["☁️ AWS API Gateway (REST API)"]
-        APIGW["API Gateway\nHTTPS Endpoint\nAutorización + Throttling\nCORS configurado"]
+        direction TB
+        APIGW["🌐 API Gateway\nHTTPS Endpoint\nAutorización + Throttling\nCORS configurado"]
         Routes["/api/items GET\n/api/items POST\n/api/items/{id} PUT\n/api/items/{id} DELETE"]
     end
 
     subgraph Compute["⚡ AWS Lambda"]
-        Lambda["Función Lambda\nRuntime: Node.js / Python\nMemoria: 128-512 MB\nTimeout: 30s\nCold start: ~200ms"]
-        Layer["Lambda Layer\n(dependencias compartidas)"]
+        direction TB
+        Lambda["⚡ Función Lambda\nRuntime: Node.js / Python\nMemoria: 128-512 MB\nTimeout: 30s\nCold start: ~200ms"]
+        Layer["📦 Lambda Layer\n(dependencias compartidas)"]
     end
 
     subgraph Data["🗄️ AWS DynamoDB"]
-        Table["Tabla DynamoDB\nPK: id (String)\nTTL: opcional\nBilling: On-Demand\n(pago por request)"]
+        direction TB
+        Table["🗄️ Tabla DynamoDB\n🔑 PK: id (String)\n⌛ TTL: opcional\n💰 Billing: On-Demand"]
     end
 
-    subgraph IAM["🔐 IAM"]
-        Role["Execution Role\nLambda → DynamoDB\n(PutItem, GetItem, Query, Delete)"]
+    subgraph IAM["🔐 IAM Security"]
+        direction TB
+        Role["👤 Execution Role\nLambda → DynamoDB\n(CRUD permissions)"]
     end
 
     UI -->|"fetch/axios\nHTTPS + CORS"| APIGW
@@ -49,9 +54,9 @@ graph TB
     Lambda <-->|"SDK: DynamoDB.put/get/query"| Table
     Lambda --- Role
 
-    style APIGW fill:#FF9900,color:#fff
+    style APIGW fill:#FF9900,color:#fff,stroke:#e68a00,stroke-width:2px
     style Lambda fill:#F0AD4E,color:#333
-    style Table fill:#3498DB,color:#fff
+    style Table fill:#3498DB,color:#fff,stroke:#2471a3,stroke-width:2px
     style Role fill:#E74C3C,color:#fff
 ```
 
@@ -60,8 +65,9 @@ graph TB
 ## 📐 Diagrama 2: Ciclo de Vida de una Request (con Cold Start)
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'fontsize': '16px' }}}%%
 sequenceDiagram
-    participant C as 🌐 Cliente
+    participant C as 🌍 Cliente
     participant APIGW as 📡 API Gateway
     participant Lambda as ⚡ Lambda
     participant DDB as 🗄️ DynamoDB
@@ -91,15 +97,18 @@ sequenceDiagram
 ## 📐 Diagrama 3: Escalamiento Automático Lambda
 
 ```mermaid
-graph LR
-    subgraph Trafico["📈 Tráfico"]
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#27AE60', 'fontsize': '16px' }}}%%
+graph TB
+    subgraph Trafico["📈 Tráfico (Requests)"]
+        direction TB
         T0["0 requests\n(inactivo)"]
         T1["1 request"]
         T100["100 requests\nsimultáneas"]
         T1000["1,000 requests\nsimultáneas"]
     end
 
-    subgraph Lambda["⚡ Lambda Concurrencia"]
+    subgraph LambdaScale["⚡ Lambda Concurrencia"]
+        direction TB
         L0["0 instancias\n(destruidas por AWS)\n💰 Costo = $0"]
         L1["1 instancia\n(warm)"]
         L100["100 instancias\n(auto-scale)"]
@@ -111,13 +120,13 @@ graph LR
     T100 --> L100
     T1000 --> L1000
 
-    Note["💡 DynamoDB también escala automáticamente.\nBilling On-Demand: pagas por WCU/RCU usados,\nno por capacidad reservada."]
+    Note1["💡 DynamoDB también escala automáticamente.\nBilling On-Demand: pagas por WCU/RCU usados,\nno por capacidad reservada."]
 
     style L0 fill:#95A5A6,color:#fff
     style L1 fill:#27AE60,color:#fff
     style L100 fill:#F39C12,color:#fff
     style L1000 fill:#E74C3C,color:#fff
-    style Note fill:#EBF5FB,color:#333,stroke:#85C1E9
+    style Note1 fill:#EBF5FB,color:#333,stroke:#85C1E9,stroke-width:2px
 ```
 
 ---
@@ -125,21 +134,24 @@ graph LR
 ## 📐 Diagrama 4: AWS SAM — Definición de Infraestructura
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#E74C3C', 'fontsize': '16px' }}}%%
 graph TB
     subgraph SAM["📄 template.yaml (SAM)"]
-        API["AWS::Serverless::Api\nStageName: prod\nCors: true"]
-        Func["AWS::Serverless::Function\nHandler: index.handler\nRuntime: nodejs18.x\nEvents: ApiEvent"]
-        DB["AWS::Serverless::SimpleTable\nor AWS::DynamoDB::Table\nBillingMode: PAY_PER_REQUEST"]
+        direction TB
+        API["🌐 AWS::Serverless::Api\nStageName: prod\nCors: true"]
+        Func["⚡ AWS::Serverless::Function\nHandler: index.handler\nRuntime: nodejs18.x\nEvents: ApiEvent"]
+        DB["🗄️ AWS::Serverless::SimpleTable\nBillingMode: PAY_PER_REQUEST"]
     end
 
     subgraph CLI["🔧 SAM CLI"]
-        Build["sam build\n(empaqueta dependencias)"]
-        Deploy["sam deploy\n--guided\n(sube a CloudFormation)"]
-        Local["sam local start-api\n(test local sin AWS)"]
+        direction TB
+        Build["🏗️ sam build\n(empaqueta dependencias)"]
+        Deploy["🚀 sam deploy\n--guided\n(sube a CloudFormation)"]
+        Local["🏠 sam local start-api\n(test local sin AWS)"]
     end
 
     subgraph CF["☁️ CloudFormation Stack"]
-        Stack["Stack: caso-d-serverless\nLambda + API GW + DynamoDB\nIAM Roles auto-generados"]
+        Stack["🏗️ Stack: caso-d-serverless\nLambda + API GW + DynamoDB\nIAM Roles auto-generados"]
     end
 
     SAM --> Build
@@ -149,7 +161,7 @@ graph TB
 
     style Build fill:#F39C12,color:#fff
     style Deploy fill:#E74C3C,color:#fff
-    style Stack fill:#FF9900,color:#fff
+    style Stack fill:#FF9900,color:#fff,stroke:#e68a00,stroke-width:2px
 ```
 
 ---

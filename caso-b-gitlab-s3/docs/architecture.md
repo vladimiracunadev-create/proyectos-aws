@@ -18,20 +18,22 @@ El patrón GitLab CI → AWS CLI → S3 es el fundamento de decenas de pipelines
 ## 📐 Diagrama 1: Pipeline GitLab → S3
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#6C4DE6', 'secondaryColor': '#569A31', 'tertiaryColor': '#f4f4f4', 'fontsize': '16px' }}}%%
 graph TB
     subgraph Dev["💻 Desarrollador"]
-        Commit["git commit + push\na rama main"]
+        Commit["📝 git commit + push\na rama main"]
     end
 
     subgraph Pipeline["🦊 GitLab CI Pipeline (.gitlab-ci.yml)"]
         direction TB
-        Stage_Test["Stage: test\nlint + validaciones"]
-        Stage_Deploy["Stage: deploy\n(solo en main)"]
+        Stage_Test["🧪 Stage: test\nlint + validaciones"]
+        Stage_Deploy["🚀 Stage: deploy\n(solo en main)"]
 
-        subgraph Job_Deploy["Job: deploy_case_b"]
-            AWSCLI["Image: aws-cli:latest"]
-            GetCreds["Leer variables CI/CD:\nAWS_ACCESS_KEY_ID\nAWS_SECRET_ACCESS_KEY\nS3_BUCKET"]
-            Sync["aws s3 sync caso-b-gitlab-s3/\ns3://BUCKET/ --delete\n--exclude '*.md'"]
+        subgraph Job_Deploy["🛠️ Job: deploy_case_b"]
+            direction TB
+            AWSCLI["🐳 Image: aws-cli:latest"]
+            GetCreds["🔑 Leer variables CI/CD:\nAWS_ACCESS_KEY_ID\nAWS_SECRET_ACCESS_KEY\nS3_BUCKET"]
+            Sync["📤 aws s3 sync caso-b-gitlab-s3/\ns3://BUCKET/ --delete\n--exclude '*.md'"]
         end
 
         Stage_Test --> Stage_Deploy
@@ -39,7 +41,8 @@ graph TB
         AWSCLI --> GetCreds --> Sync
     end
 
-    subgraph AWS["☁️ AWS"]
+    subgraph AWS["☁️ AWS Infraestructura"]
+        direction TB
         S3["🪣 S3 Bucket\nWebsite Hosting habilitado\nÍndice: index.html\nError: index.html"]
         Policy["📋 Bucket Policy\nGetObject público\npara s3-website"]
         URL["🌐 Endpoint HTTP\nhttp://bucket.s3-website.us-east-2.amazonaws.com"]
@@ -52,7 +55,7 @@ graph TB
 
     style Commit fill:#6C4DE6,color:#fff
     style AWSCLI fill:#FF9900,color:#fff
-    style S3 fill:#569A31,color:#fff
+    style S3 fill:#569A31,color:#fff,stroke:#3d6e22,stroke-width:2px
     style URL fill:#2496ED,color:#fff
 ```
 
@@ -61,6 +64,7 @@ graph TB
 ## 📐 Diagrama 2: Flujo de Request del Usuario Final
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'fontsize': '16px' }}}%%
 sequenceDiagram
     participant U as 🌍 Usuario
     participant DNS as 🔍 DNS
@@ -88,20 +92,23 @@ sequenceDiagram
 ## 📐 Diagrama 3: Gestión de Secretos en GitLab CI
 
 ```mermaid
-graph LR
-    subgraph GitLab_Settings["⚙️ GitLab → Settings → CI/CD → Variables"]
-        V1["AWS_ACCESS_KEY_ID\n(Masked, Protected)"]
-        V2["AWS_SECRET_ACCESS_KEY\n(Masked, Protected)"]
-        V3["S3_BUCKET\n(Plain text)"]
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#E74C3C', 'fontsize': '16px' }}}%%
+graph TB
+    subgraph GitLab_Settings["⚙️ GitLab Settings"]
+        direction TB
+        V1["🔑 AWS_ACCESS_KEY_ID\n(Masked, Protected)"]
+        V2["🔑 AWS_SECRET_ACCESS_KEY\n(Masked, Protected)"]
+        V3["🪣 S3_BUCKET\n(Plain text)"]
     end
 
     subgraph Runner["🏃 GitLab Runner (Job)"]
+        direction TB
         Env["Variables disponibles\ncomo ENV vars en el job"]
-        CLI["aws s3 sync ...\nusa $AWS_ACCESS_KEY_ID\nautomáticamente"]
+        CLI["📤 aws s3 sync ...\nusa $AWS_ACCESS_KEY_ID\nautomáticamente"]
     end
 
     subgraph IAM["🔐 AWS IAM"]
-        User["IAM User\ncon permisos S3\ns3:PutObject\ns3:DeleteObject\ns3:ListBucket"]
+        User["👤 IAM User\ncon permisos S3\ns3:PutObject\ns3:DeleteObject\ns3:ListBucket"]
     end
 
     V1 --> Env
@@ -113,7 +120,7 @@ graph LR
     Note1["⚠️ Caso B usa IAM keys permanentes.\nCaso L mejora esto con OIDC (sin keys)."]
 
     style V2 fill:#E74C3C,color:#fff
-    style IAM fill:#FF9900,color:#fff
+    style IAM fill:#FF9900,color:#fff,stroke:#e68a00,stroke-width:2px
     style Note1 fill:#FFF3CD,color:#333,stroke:#F0AD4E
 ```
 

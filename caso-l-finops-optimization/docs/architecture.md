@@ -19,6 +19,7 @@ Es la capa de madurez que toda organización necesita antes de escalar:
 ## 📐 Diagrama 1: Autenticación OIDC — GitLab CI → AWS (Zero-Trust)
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'fontsize': '16px' }}}%%
 sequenceDiagram
     participant GitLab as 🦊 GitLab CI Runner
     participant OIDC as 🔐 GitLab OIDC Provider
@@ -28,19 +29,19 @@ sequenceDiagram
 
     Note over GitLab: Pipeline inicia (push a main)
     GitLab->>OIDC: Solicita JWT Token\n(GITLAB_OIDC_TOKEN)
-    OIDC-->>GitLab: JWT firmado\n{sub: project_path/..., aud: gitlab.com}
+    OIDC-->>GitLab: JWT firmado\n{sub: project_path, aud: gitlab.com}
 
-    GitLab->>STS: AssumeRoleWithWebIdentity\n--role-arn arn:aws:iam::ACCOUNT:role/GitLabDeployRole\n--web-identity-token JWT
+    GitLab->>STS: AssumeRoleWithWebIdentity\n(JWT)
 
-    STS->>IAM: Verificar Trust Policy\n¿gitlab.com:sub coincide con el path del proyecto?
+    STS->>IAM: Verificar Trust Policy\n¿Coincide project path?
     IAM-->>STS: Autorizado ✅
 
-    STS-->>GitLab: Credenciales temporales\n(AccessKeyId + SecretKey + SessionToken)\nDuración: 3600s (1 hora)
+    STS-->>GitLab: Credenciales temporales\n(1 hora de duración)
 
-    GitLab->>S3: aws s3 sync ...\n(usando credenciales temporales)
+    GitLab->>S3: aws s3 sync ...
     S3-->>GitLab: 200 OK
 
-    Note over GitLab,S3: Las credenciales expiran solas.\nNo hay ACCESS KEY permanente en ningún lado.
+    Note over GitLab,S3: Las credenciales expiran solas.\nSin ACCESS KEY permanente.
 ```
 
 ---
@@ -48,40 +49,46 @@ sequenceDiagram
 ## 📐 Diagrama 2: Arquitectura Completa FinOps & Governance
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#E74C3C', 'secondaryColor': '#2496ED', 'tertiaryColor': '#f4f4f4', 'fontsize': '16px' }}}%%
 graph TB
     subgraph CI["🦊 GitLab CI Pipeline"]
-        OIDC_Token["GITLAB_OIDC_TOKEN\n(JWT efímero, 1h)"]
-        Deploy_Job["Job: deploy_case_l_final\nimage: aws-cli\nscript: aws s3 sync"]
+        direction TB
+        OIDC_Token["🔐 GITLAB_OIDC_TOKEN\n(JWT efímero)"]
+        Deploy_Job["🚀 Job: deploy_case_l\naws s3 sync"]
     end
 
-    subgraph AWS_Auth["🔐 AWS IAM (Zero-Trust)"]
-        IdP["Identity Provider\n(OIDC: gitlab.com)\n+ Thumbprint SSL"]
-        Role["IAM Role: GitLabDeployRole\nTrust: gitlab.com:sub = project_path\nPermissions: S3FullAccess\nDuration: 1h max"]
-        STS["AWS STS\nAssumeRoleWithWebIdentity"]
+    subgraph AWS_Auth["🔑 AWS IAM (Zero-Trust)"]
+        direction TB
+        IdP["🆔 Identity Provider\n(OIDC: gitlab.com)"]
+        Role["👤 IAM Role: DeployRole\nTrust: GitLab OIDC"]
+        STS["☁️ AWS STS\nAssumeRole"]
     end
 
     subgraph AWS_FinOps["💰 AWS Billing & Budgets"]
-        Budget["Budget: Vladimir-Monthly-Alert\nMonto: $5.00 USD\nAlertas: 85% real + 100% proyectado"]
-        SNS["SNS Notification\n→ Email personal"]
-        CostExplorer["Cost Explorer\n(datos reales de gasto)"]
+        direction TB
+        Budget["💰 Monthly Budget\nAlertas: 85% / 100%"]
+        SNS["🔔 SNS Notification\n→ Email alert"]
+        CostExplorer["📊 Cost Explorer API"]
     end
 
     subgraph AWS_IAM_Gov["🛡️ IAM Governance"]
-        RegionPolicy["Policy: DenyNonUSRegions\nBloquea regiones fuera de us-east-1/2\n(excepto IAM, CloudFront, Route53)"]
-        TagPolicy["Policy: EnforceTaggingPolicy\nExige tags Project + FinOps\nal crear recursos EC2/S3"]
+        direction TB
+        RegionPolicy["🚫 DenyNonUSRegions\nWhitelist: us-east-1/2"]
+        TagPolicy["🏷️ EnforceTagging\nExige Project + FinOps tags"]
     end
 
-    subgraph S3_Hosting["🌐 S3 + Dashboard FinOps"]
-        Bucket["S3 Bucket (Website Hosting)\nfinops-vladimir-portfolio-case-l"]
-        Dashboard["Dashboard HTML/JS\n(lee costs.json desde S3)\nGráficos: Chart.js\nSemáforo de riesgo financiero"]
-        CostsJSON["costs.json\n(generado por Python boto3\ndesde Cost Explorer + Budgets API)"]
+    subgraph S3_Hosting["🌐 Dashboard FinOps"]
+        direction TB
+        Bucket["🪣 S3 Static Website"]
+        Dashboard["📊 Dashboard HTML/JS\nChart.js + Boto3 Data"]
+        CostsJSON["📄 costs.json"]
     end
 
     OIDC_Token --> STS
     STS --> IdP
     STS --> Role
-    Role -->|"Temp credentials"| Deploy_Job
-    Deploy_Job -->|"aws s3 sync"| Bucket
+    Role -->|"Temp keys"| Deploy_Job
+    Deploy_Job --> Bucket
     CostExplorer --> CostsJSON
     CostsJSON --> Bucket
     Budget --> SNS
@@ -100,25 +107,30 @@ graph TB
 ## 📐 Diagrama 3: Flujo de Alertas de Presupuesto
 
 ```mermaid
-graph LR
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#F39C12', 'fontsize': '16px' }}}%%
+graph TB
     subgraph AWS_Billing["💳 AWS Billing"]
-        Usage["Consumo real\nde servicios AWS\n(acumulado mensual)"]
+        direction TB
+        Usage["📈 Consumo real\nde servicios AWS"]
     end
 
-    subgraph Budgets["💰 AWS Budgets (automático)"]
-        Check["Evaluación cada 24h:\n¿Gasto actual / proyectado\nsupera umbrales?"]
-        T85["Umbral 85%\nActual ≥ $4.25"]
-        T100["Umbral 100%\nProyectado ≥ $5.00"]
+    subgraph Budgets["💰 AWS Budgets"]
+        direction TB
+        Check["🔍 Evaluación 24h\nActual vs Umbrales"]
+        T85["🟡 Umbral 85%\nActual ≥ $4.25"]
+        T100["🔴 Umbral 100%\nProyectado ≥ $5.00"]
     end
 
     subgraph Alert["🚨 Notificación"]
-        SNS2["SNS Topic"]
-        Email["📧 Email inmediato\n'Tu gasto alcanzó $4.25'"]
+        direction TB
+        SNS2["🔔 SNS Topic"]
+        Email["📧 Email inmediato\nAlerta de umbral"]
     end
 
     subgraph Action["✋ Acción Manual"]
-        Review["Revisar Cost Explorer\n¿Qué servicio generó el costo?"]
-        Stop["Detener recursos:\nterraform destroy\naws ecs update-service --desired 0"]
+        direction TB
+        Review["🔍 Revisar Cost Explorer"]
+        Stop["🛑 Detener recursos\n(Scale to zero / Destroy)"]
     end
 
     Usage --> Check
@@ -138,25 +150,27 @@ graph LR
 ## 📐 Diagrama 4: IAM Governance (Restricción de Región)
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#E74C3C', 'fontsize': '16px' }}}%%
 graph TB
     subgraph Request["📝 Request IAM"]
-        Action["aws ec2 run-instances\n--region eu-west-1 (Irlanda)"]
+        Action["🏃 ec2 run-instances\neu-west-1 (Irlanda)"]
     end
 
-    subgraph Policy["🛡️ SCP / IAM Policy: DenyNonUSRegions"]
-        Eval["Evalúa condición:\naws:RequestedRegion == eu-west-1\n¿Está en whitelist [us-east-1, us-east-2]?"]
-        Deny["DENY ❌\n(Explicit Deny siempre gana)"]
-        Allow["ALLOW ✅"]
+    subgraph Policy["🛡️ Policy: DenyNonUSRegions"]
+        direction TB
+        Eval["🔍 Evalúa condición:\nRequestedRegion\nin [us-east-1, us-east-2]?"]
+        Deny["🔴 DENY ❌\nExplicit Deny"]
+        Allow["🟢 ALLOW ✅"]
     end
 
-    subgraph Excepciones["🌐 Excepciones (Globales)"]
-        GlobalSvcs["IAM, CloudFront, Route 53\nSupport, Budgets\n(servicios globales, no tienen región)"]
+    subgraph Excepciones["🌐 Global Services"]
+        GlobalSvcs["IAM, CloudFront,\nRoute 53, Budgets"]
     end
 
     Action --> Eval
-    Eval -->|"Región no en whitelist"| Deny
-    Eval -->|"Región en whitelist"| Allow
-    GlobalSvcs -.->|"NotAction: exentos"| Allow
+    Eval -->|"Not in whitelist"| Deny
+    Eval -->|"In whitelist"| Allow
+    GlobalSvcs -.->|"Exempt"| Allow
 
     style Deny fill:#E74C3C,color:#fff
     style Allow fill:#27AE60,color:#fff

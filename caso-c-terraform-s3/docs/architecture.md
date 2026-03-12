@@ -21,25 +21,29 @@ El Caso C eleva el Caso B al estándar profesional en tres dimensiones:
 ## 📐 Diagrama 1: Arquitectura Completa (Terraform Managed)
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#844FBA', 'secondaryColor': '#FF9900', 'tertiaryColor': '#f4f4f4', 'fontsize': '16px' }}}%%
 graph TB
-    subgraph Internet
-        User["🌍 Usuario\n(cualquier región)"]
+    subgraph Internet["🌍 Internet"]
+        User["👤 Usuario\n(cualquier región)"]
     end
 
     subgraph CloudFront_Layer["☁️ AWS CloudFront (CDN Global)"]
+        direction TB
         CF["📡 CloudFront Distribution\nHTTPS + TLS 1.2+\nCache TTL: 1 año (assets)\nOrigen: S3 via OAC\nHTTP → HTTPS redirect"]
         EdgeCache["💾 Edge Cache\n400+ ubicaciones globales"]
     end
 
     subgraph S3_Layer["🪣 AWS S3 (Privado)"]
-        Bucket["S3 Bucket\nAcceso público: BLOQUEADO ✅\nSolo CloudFront puede leer\n(via OAC — Origin Access Control)"]
+        direction TB
+        Bucket["🗄️ S3 Bucket\nAcceso público: BLOQUEADO ✅\nSolo CloudFront puede leer\n(via OAC — Origin Access Control)"]
         OAC["🔐 Origin Access Control\nRemplaza OAI (legado)\nFirma requests con SigV4"]
     end
 
-    subgraph IaC["🔧 Terraform (IaC)"]
+    subgraph IaC["🏗️ Terraform (IaC)"]
+        direction TB
         TF_State["📦 Remote State\nS3 + DynamoDB Lock\nus-east-2"]
-        TF_Plan["terraform plan\n→ tfplan"]
-        TF_Apply["terraform apply\n(GitLab CI)"]
+        TF_Plan["📋 terraform plan\n→ tfplan"]
+        TF_Apply["🔴 terraform apply\n(GitLab CI)"]
     end
 
     User -->|"HTTPS"| CF
@@ -51,8 +55,8 @@ graph TB
     TF_Apply --> OAC
     TF_State -.->|"Bloquea\napply concurrentes"| TF_Apply
 
-    style CF fill:#FF9900,color:#fff
-    style Bucket fill:#569A31,color:#fff
+    style CF fill:#FF9900,color:#fff,stroke:#e68a00,stroke-width:2px
+    style Bucket fill:#569A31,color:#fff,stroke:#3d6e22,stroke-width:2px
     style OAC fill:#E74C3C,color:#fff
     style TF_Apply fill:#844FBA,color:#fff
 ```
@@ -62,6 +66,7 @@ graph TB
 ## 📐 Diagrama 2: Flujo de Request con CloudFront Cache
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'fontsize': '16px' }}}%%
 sequenceDiagram
     participant U as 🌍 Usuario (Madrid)
     participant EdgeMAD as 📡 Edge Madrid
@@ -94,9 +99,10 @@ sequenceDiagram
 ## 📐 Diagrama 3: Flujo de Terraform en GitLab CI
 
 ```mermaid
-graph TD
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#8E44AD', 'fontsize': '16px' }}}%%
+graph TB
     subgraph Dev["💻 Dev"]
-        PR["Merge Request\ncon cambios en\ncaso-c-terraform-s3/"]
+        PR["📝 Merge Request\ncon cambios en\ncaso-c-terraform-s3/"]
     end
 
     subgraph CI["🦊 GitLab CI Pipeline"]
@@ -104,15 +110,17 @@ graph TD
         Security["🔐 scan_infrastructure\n(stage: security)\ntfsec + ignores documentados\nValida HCL estándar"]
         
         subgraph BuildDeploy["🚀 Despliegue"]
+            direction TB
             Plan["🟡 plan_case_c\n(stage: plan-infrastructure)\nterraform plan -out=tfplan"]
             Apply["🔴 deploy_case_c\n(stage: deploy)\nterraform apply tfplan"]
             Invalidate["🧹 invalidate_cloudfront_c\n(stage: deploy)\naws-cli: invalidation /*"]
         end
     end
 
-    subgraph AWS["☁️ AWS"]
-        RemoteState["S3 Remote State\nDynamoDB Lock"]
-        Resources["CloudFront + S3 + OAC"]
+    subgraph AWS["☁️ AWS Managed Resources"]
+        direction TB
+        RemoteState["📦 S3 Remote State\n🔑 DynamoDB Lock"]
+        Resources["🏗️ CloudFront + S3 + OAC"]
     end
 
     PR --> Security
@@ -126,7 +134,7 @@ graph TD
 
     style Plan fill:#F39C12,color:#fff
     style Apply fill:#E74C3C,color:#fff
-    style Security fill:#8E44AD,color:#fff
+    style Security fill:#8E44AD,color:#fff,stroke:#71368a,stroke-width:2px
     style Invalidate fill:#3498DB,color:#fff
 ```
 
