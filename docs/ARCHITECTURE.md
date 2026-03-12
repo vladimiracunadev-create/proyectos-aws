@@ -1,4 +1,4 @@
-﻿# Arquitectura Integral del Sistema: AWS-GitLab Monorepo
+# Arquitectura Integral del Sistema: AWS-GitLab Monorepo
 
 Este documento es la **fuente de verdad tecnica** del repositorio. Describe la evolucion desde hosting estatico hasta arquitecturas empresariales de alta disponibilidad, unificando los casos ya implementados y los siguientes niveles planificados.
 
@@ -19,21 +19,25 @@ El proyecto sigue una arquitectura de **Monorepo Evolutivo**, disenado para demo
 
 ## Mapa de evolucion arquitectonica
 
-### Tier 1: Fundamentos y hosting estatico (Casos A, B)
+### Tier 1: Fundamentos y hosting estático (Casos A, B)
 
-*Enfoque: velocidad de entrega y automatizacion basica.*
+*Enfoque: velocidad de entrega y automatización básica.*
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#6C4DE6', 'secondaryColor': '#FF9900', 'tertiaryColor': '#f4f4f4' }}}%%
 graph LR
-    subgraph "Nivel 0: ClickOps (Amplify)"
-        A1[GitLab] -->|Mirror| A2[AWS Amplify]
-        A2 -->|Auto-Deploy| A3[S3 + CloudFront]
+    subgraph Tier1_A["🟢 Nivel 0: ClickOps"]
+        A1[🦊 GitLab] -->|Mirror| A2[☁️ AWS Amplify]
+        A2 -->|Auto-Deploy| A3[📦 S3 + CloudFront]
     end
 
-    subgraph "Nivel 1: Pipeline Manual (S3 Sync)"
-        B1[GitLab Runner] -->|AWS CLI| B2[S3 Bucket]
-        B2 -->|Hosting| B3[Website Endpoint]
+    subgraph Tier1_B["🟢 Nivel 1: Pipeline Manual"]
+        B1[🏃 GitLab Runner] -->|AWS CLI| B2[🪣 S3 Bucket]
+        B2 -->|Hosting| B3[🌐 Website Endpoint]
     end
+
+    style Tier1_A fill:#e8f5e9,stroke:#2e7d32
+    style Tier1_B fill:#f1f8e9,stroke:#558b2f
 ```
 
 ### Tier 2: IaC, serverless y persistencia NoSQL (Casos C, D, E)
@@ -41,41 +45,51 @@ graph LR
 *Enfoque: reproducibilidad, backend reactivo y modelado de datos por patrones de acceso.*
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#844FBA', 'edgeColor': '#2496ED' }}}%%
 graph TB
-    subgraph "Caso C: IaC & CDN"
-        C1[Terraform] -->|OAC| C2[CloudFront]
-        C2 -->|Private Fetch| C3[S3 Bucket]
+    subgraph Tier2_C["🔵 Caso C: IaC & CDN"]
+        C1[🏗️ Terraform] -->|OAC| C2[☁️ CloudFront]
+        C2 -->|Private Fetch| C3[🪣 S3 Bucket]
     end
 
-    subgraph "Caso D: Serverless API"
-        D1[API Gateway] -->|Invoca| D2[Lambda]
-        D2 -->|CRUD basico| D3[DynamoDB]
+    subgraph Tier2_D["🔵 Caso D: Serverless API"]
+        D1[🌐 API Gateway] -->|Invoca| D2[⚡ Lambda]
+        D2 -->|CRUD básico| D3[🗄️ DynamoDB]
     end
 
-    subgraph "Caso E: Persistence Pro"
-        E1[Landing / Frontend] --> E2[API Gateway HTTP API]
-        E2 --> E3[Lambda Orders API]
-        E3 --> E4[DynamoDB Single Table]
-        E4 --> E5[GSI por estado]
-        E4 --> E6[GSI por producto]
+    subgraph Tier2_E["🟠 Caso E: Persistence Pro"]
+        E1[📱 Landing / Frontend] --> E2[🌐 API Gateway HTTP]
+        E2 --> E3[⚡ Lambda Orders]
+        E3 --> E4[🗄️ DynamoDB Single Table]
+        E4 -.-> E5[📊 GSI Estado]
+        E4 -.-> E6[📊 GSI Producto]
     end
+
+    style Tier2_C fill:#e3f2fd,stroke:#1565c0
+    style Tier2_D fill:#e1f5fe,stroke:#0277bd
+    style Tier2_E fill:#fff3e0,stroke:#ef6c00
 ```
 
-### Tier 3: Contenedores y orquestacion (Casos J, K)
+### Tier 3: Contenedores y orquestación (Casos J, K)
 
-*Enfoque: portabilidad industrial y gestion de flotas.*
+*Enfoque: portabilidad industrial y gestión de flotas.*
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#2496ED', 'tertiaryColor': '#326CE5' }}}%%
 graph LR
-    subgraph "Container Supply Chain"
-        J1[Docker] -->|Build/Push| J2[AWS ECR]
-        J2 -->|Pull| J3[ECS Fargate]
-        J2 -->|Pull| J4[EKS Cluster]
+    subgraph SupplyChain["📦 Container Supply Chain"]
+        J1[🐳 Docker] -->|Build/Push| J2[📦 AWS ECR]
+        J2 -->|Pull| J3[🚀 ECS Fargate]
+        J2 -->|Pull| J4[☸️ EKS Cluster]
     end
 
-    J3 --- ALB[ALB / Ingress]
+    J3 --- ALB[⚖️ ALB / Ingress]
     J4 --- ALB
-    ALB --- User[Usuario]
+    ALB --- User[🌍 Usuario]
+
+    style SupplyChain fill:#f5f5f5,stroke:#333
+    style J3 fill:#FF9900,color:#fff
+    style J4 fill:#326CE5,color:#fff
 ```
 
 ### Tier 4: Gobernanza, FinOps y resiliencia (Casos L, M)
@@ -83,16 +97,20 @@ graph LR
 *Enfoque: excelencia operativa y continuidad de negocio.*
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#F39C12', 'edgeColor': '#E74C3C' }}}%%
 graph TB
-    subgraph "Governance (Caso L)"
-        L1[GitLab OIDC] -->|Token temporal| L2[IAM Role]
-        L2 -->|Budgets| L3[Cost Control]
+    subgraph Tier4_L["🟣 Governance & FinOps"]
+        L1[🔑 GitLab OIDC] -->|Token temporal| L2[🔐 IAM Role]
+        L2 -->|Budgets| L3[💰 Cost Control]
     end
 
-    subgraph "Resilience (Caso M)"
-        M1[Route 53] -->|Failover| M2[Region Primary]
-        M1 -.->|Secondary| M3[Region Standby]
+    subgraph Tier4_M["🔴 Resilience & Failover"]
+        M1[🌐 Route 53] -->|Failover| M2[🟢 Region Primary]
+        M1 -.->|Secondary| M3[🟡 Region Standby]
     end
+
+    style Tier4_L fill:#f3e5f5,stroke:#7b1fa2
+    style Tier4_M fill:#ffebee,stroke:#c62828
 ```
 
 ---
