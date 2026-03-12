@@ -1,6 +1,6 @@
 ﻿# Especificaciones Tecnicas y Requerimientos
 
-Este documento resume que necesitas para ejecutar, validar y extender el monorepo en otra maquina, incluyendo el `Caso E` ya resuelto.
+Este documento resume que necesitas para ejecutar, validar y extender el monorepo en otra maquina, incluyendo los `Casos E y G` ya resueltos.
 
 ---
 
@@ -33,7 +33,7 @@ Para operar el repositorio completo:
 6. **kubectl** para el Caso K
 7. **Make**
 
-Para trabajar especificamente con `Caso E`:
+Para trabajar especificamente con `Caso E` o `Caso G`:
 
 1. **Python 3.12** o compatible
 2. **AWS SAM CLI**
@@ -71,6 +71,17 @@ El usuario o rol que despliegue debe tener permisos suficientes segun el caso.
 - `dynamodb:*` o permisos sobre tabla, indices y escritura/lectura
 - `logs:*` para CloudWatch Logs de Lambda
 - `cloudformation:*` para crear y actualizar el stack `caso-e-dynamodb-persistence`
+- `s3:*` sobre el bucket temporal que usa SAM para empaquetado
+
+### Caso G: permisos minimos esperables
+
+- `apigateway:*` o permisos equivalentes sobre HTTP API
+- `lambda:*` o permisos de creacion/actualizacion/invocacion de funciones
+- `events:*` o permisos sobre custom bus, reglas y `PutEvents`
+- `sqs:*` o permisos sobre cola principal y DLQ
+- `sns:*` o permisos sobre el topic de notificaciones
+- `logs:*` para CloudWatch Logs de Lambda
+- `cloudformation:*` para crear y actualizar el stack `caso-g-event-driven`
 - `s3:*` sobre el bucket temporal que usa SAM para empaquetado
 
 ### FinOps y auditoria
@@ -121,6 +132,26 @@ Y tambien puedes abrir:
 
 - [caso-e-dynamodb-persistence/README.md](../caso-e-dynamodb-persistence/README.md)
 - [caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md](../caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md)
+
+### Flujo minimo para Caso G
+
+```bash
+cd caso-g-event-driven/backend
+sam build
+sam deploy --guided
+```
+
+Luego:
+
+```bash
+curl "$API_BASE_URL/"
+curl "$API_BASE_URL/health"
+```
+
+Y tambien puedes abrir:
+
+- [caso-g-event-driven/README.md](../caso-g-event-driven/README.md)
+- [caso-g-event-driven/AWS_PASO_A_PASO.md](../caso-g-event-driven/AWS_PASO_A_PASO.md)
 
 ---
 

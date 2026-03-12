@@ -27,6 +27,7 @@ Lo importante no es solo la variedad de tecnologias, sino que varios casos ya es
 | **Costo** | Uso eficiente de recursos administrados | Amplify, Lambda, DynamoDB On-Demand, hibernacion FinOps |
 | **Escalabilidad** | Respuesta elastica segun el tipo de carga | CloudFront, Lambda, ECS y EKS |
 | **Persistencia** | Diseños de datos pensados para consultas reales | Caso E con Single Table Design y GSIs |
+| **Integracion asincrona** | Sistemas menos acoplados y mas tolerantes a picos y errores | Caso G con EventBridge, SQS, DLQ y SNS |
 
 ---
 
@@ -86,6 +87,14 @@ El repositorio apunta a operar con credenciales temporales y controles cada vez 
 **Estado**: desplegado y validado en AWS.
 **Demo**: [API + landing publica](https://gqqm27j47c.execute-api.us-east-2.amazonaws.com/)
 
+### Caso G: Event Driven
+
+**Problema**: una API sincrona puede quedar lenta o fragil cuando intenta hacer too much trabajo en la misma llamada.
+**Solucion**: aceptar el evento, publicarlo en EventBridge, amortiguarlo con SQS, procesarlo fuera de banda y aislar errores con DLQ.
+**Habilidad demostrada**: event-driven design, desacoplamiento, reintentos, DLQ y lectura operativa del flujo.
+**Estado**: desplegado y validado en AWS.
+**Demo**: [Landing + API publica](https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com/)
+
 ### Caso K: Kubernetes en AWS
 
 **Problema**: gestionar contenedores a escala con estandares abiertos.
@@ -105,6 +114,7 @@ El repositorio apunta a operar con credenciales temporales y controles cada vez 
 - No se queda en infraestructura basica; incluye datos, costos y operacion.
 - No documenta solo aspiraciones; varios casos estan ya publicados y verificables.
 - El `Caso E` agrega una capa de madurez poco comun: persistencia NoSQL orientada a negocio.
+- El `Caso G` suma una segunda capa de criterio senior: procesamiento asincrono y tolerancia a fallos sin romper la API de entrada.
 
 ---
 
@@ -113,8 +123,9 @@ El repositorio apunta a operar con credenciales temporales y controles cada vez 
 1. [README.md](../README.md)
 2. [docs/ARCHITECTURE.md](./ARCHITECTURE.md)
 3. [caso-e-dynamodb-persistence/README.md](../caso-e-dynamodb-persistence/README.md)
-4. [caso-e-dynamodb-persistence/docs/architecture.md](../caso-e-dynamodb-persistence/docs/architecture.md)
-5. [caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md](../caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md)
+4. [caso-g-event-driven/README.md](../caso-g-event-driven/README.md)
+5. [caso-g-event-driven/docs/architecture.md](../caso-g-event-driven/docs/architecture.md)
+6. [caso-g-event-driven/AWS_PASO_A_PASO.md](../caso-g-event-driven/AWS_PASO_A_PASO.md)
 
 ---
 
@@ -129,5 +140,5 @@ El repositorio apunta a operar con credenciales temporales y controles cada vez 
 
 ---
 
-_Ultima actualizacion: 2026-03-11_
+_Ultima actualizacion: 2026-03-12_
 

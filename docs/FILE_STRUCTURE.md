@@ -19,7 +19,7 @@ proyectos-aws-gitlab/
 ├── caso-d-serverless-basic/# Caso D: Lambda + API Gateway
 ├── caso-e-dynamodb-*/      # Caso E: DynamoDB Persistence
 ├── caso-f-security-*/      # Caso F: Cognito (Proyectado)
-├── caso-g-event-driven/    # Caso G: EventBridge (Proyectado)
+├── caso-g-event-driven/    # Caso G: EventBridge (Validado en AWS)
 ├── caso-h-observability/   # Caso H: CloudWatch (Proyectado)
 ├── caso-i-genai-bedrock/   # Caso I: Bedrock (Proyectado)
 ├── caso-j-containers-ecs/  # Caso J: Docker + ECS Fargate
@@ -202,6 +202,16 @@ Cada directorio `caso-X-*` es un **proyecto autocontenido**. Aquí la anatomía 
 | `frontend/` | Cliente HTML/JS local para crear órdenes y probar los patrones de acceso. |
 | `docs/architecture.md` | Diagramas Mermaid del Single Table Design, la landing y los flujos de consulta. |
 | `AWS_PASO_A_PASO.md` | Guía detallada para desplegar, probar y destruir el caso. |
+
+### Caso G: `caso-g-event-driven/` — Event Driven `Nivel 6` `COMPLETADO (VALIDADO)`
+| Archivo/Dir | Descripción |
+|-------------|-------------|
+| `backend/template.yaml` | Infraestructura SAM para HTTP API, EventBridge custom bus, SQS, DLQ, SNS y Lambdas. |
+| `backend/src/app.py` | Lambda publicadora para `GET /`, `GET /health`, `POST /events/orders` y Lambda consumidora para mensajes SQS. |
+| `backend/events/publish-order.json` | Evento de prueba para `sam local invoke`. |
+| `index.html` | Landing local complementaria para publicar eventos y probar el endpoint del caso. |
+| `docs/architecture.md` | Diagramas Mermaid del flujo asincrono, DLQ y contrato del evento. |
+| `AWS_PASO_A_PASO.md` | Guia detallada para desplegar, validar, inspeccionar y destruir el caso. |
 
 ### Caso J: `caso-j-containers-ecs/` — Docker + ECS `Nivel 9`
 | Archivo | Descripción |

@@ -42,7 +42,7 @@ graph TB
     style Tier1_B fill:#f1f8e9,stroke:#558b2f,stroke-width:2px
 ```
 
-### Tier 2: IaC, serverless y persistencia NoSQL (Casos C, D, E)
+### Tier 2: IaC, serverless, persistencia y eventos (Casos C, D, E, G)
 
 *Enfoque: reproducibilidad, backend reactivo y modelado de datos por patrones de acceso.*
 
@@ -70,9 +70,20 @@ graph TB
         E4 -.-> E6[📊 GSI Producto]
     end
 
+    subgraph Tier2_G["🟡 Caso G: Event Driven"]
+        direction TB
+        G1[🌐 API Gateway HTTP] --> G2[⚡ Lambda Publisher]
+        G2 --> G3[📨 EventBridge]
+        G3 --> G4[📬 SQS Queue]
+        G4 --> G5[⚡ Lambda Consumer]
+        G4 -. redrive .-> G6[🧯 DLQ]
+        G5 --> G7[📣 SNS]
+    end
+
     style Tier2_C fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
     style Tier2_D fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
     style Tier2_E fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+    style Tier2_G fill:#fff8e1,stroke:#ff8f00,stroke-width:2px
 ```
 
 ### Tier 3: Contenedores y orquestación (Casos J, K)
@@ -123,7 +134,7 @@ graph TB
 
 ---
 
-## Donde encaja el Caso E
+## Donde encajan los Casos E y G
 
 El `Caso E` ya no es una idea futura: es el modulo de persistencia avanzada que demuestra como pasar de una API serverless simple a un backend con modelado NoSQL real.
 
@@ -135,7 +146,16 @@ Capacidades ya resueltas:
 - landing publica en `/` para explicar y probar el caso
 - despliegue validado en AWS en `us-east-2`
 
-Esto lo convierte en el puente natural entre el `Caso D` y el futuro `Caso G`.
+Esto lo convierte en el puente natural entre el `Caso D` y el `Caso G`.
+
+El `Caso G` ya valida el siguiente salto de madurez:
+
+- landing publica en `/` para explicar el despliegue y probarlo en vivo
+- publicacion de eventos en EventBridge
+- desacoplamiento productor/consumidor con SQS
+- aislamiento de fallos con DLQ
+- notificacion posterior por SNS
+- validacion real en AWS con endpoint publico en `us-east-2`
 
 ---
 
@@ -161,7 +181,19 @@ Patrones resueltos:
 - producto -> ordenes
 - orden -> eventos de auditoria
 
-### 3. Zero-Trust Identity
+### 3. Integracion asincrona y contratos de eventos
+
+El `Caso G` agrega un patron igual de importante: no todo debe resolverse en la misma llamada HTTP.
+
+Patrones resueltos:
+
+- aceptar un evento con `202 Accepted`
+- separar productor y consumidor
+- amortiguar carga con SQS
+- reintentar y aislar errores con DLQ
+- extender procesamiento con SNS sin tocar la API de entrada
+
+### 4. Zero-Trust Identity
 
 La direccion objetivo del repositorio es operar con credenciales efimeras via `OIDC`, reduciendo el uso de llaves IAM permanentes en pipelines y automatizaciones.
 
@@ -203,6 +235,7 @@ La arquitectura prioriza costo bajo o controlado:
 | Escenario | Mecanismo | RTO esperado | RPO esperado |
 |---|---|---|---|
 | Fallo de funcion | Reintento serverless / nueva invocacion | Segundos | 0 o minimo |
+| Error de consumidor asincrono | Reintentos SQS + DLQ | Segundos a minutos | 0 o minimo |
 | Caida de AZ | Multi-AZ en servicios administrados | < 60 segundos | 0 o minimo |
 | Caida de region | Route 53 Failover (futuro Caso M) | < 120 segundos | < 5 minutos |
 

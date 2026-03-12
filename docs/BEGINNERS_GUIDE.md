@@ -48,12 +48,15 @@ Que demuestra este caso:
 
 Este caso ya esta **resuelto, desplegado y validado** en AWS.
 
-### Casos F-I: expansion natural de la plataforma
+### Casos F-I: expansion de seguridad, eventos y operacion
 
 - **F - Seguridad**: Cognito, WAF y endurecimiento de acceso.
-- **G - Eventos**: Arquitecturas asincronas con EventBridge, SQS y orquestacion.
+- **G - Eventos**: Arquitectura asincrona validada con EventBridge, SQS, DLQ y una landing publica para explicar por que se desacopla el procesamiento.
 - **H - Observabilidad**: CloudWatch, trazas y salud operativa.
 - **I - GenAI**: Integracion de modelos de lenguaje con Bedrock.
+
+`Caso G` ya esta **desplegado y validado** en AWS. Es importante porque muestra el paso desde
+"guardar datos" a "reaccionar a hechos de negocio" sin bloquear la API de entrada.
 
 ### Caso J: Dockerizacion (Combo industrial)
 

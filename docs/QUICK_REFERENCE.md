@@ -52,6 +52,30 @@ URL desplegada actualmente:
 
 ---
 
+## Caso G rapido
+
+```bash
+cd caso-g-event-driven/backend
+sam build
+sam deploy --guided
+```
+
+Validaciones utiles:
+
+```bash
+curl "$API_BASE_URL/"
+curl "$API_BASE_URL/health"
+curl -X POST "$API_BASE_URL/events/orders" \
+  -H "Content-Type: application/json" \
+  -d '{"customerId":"cust-001","status":"CREATED"}'
+```
+
+URL desplegada actualmente:
+
+- [Caso G - Landing + API](https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com/)
+
+---
+
 ## Hub CLI
 
 ### Linux/macOS
@@ -118,6 +142,8 @@ docker run --rm -it -v "$(pwd):/workspace" proyectos-aws/tooling:1.0.0 /bin/bash
 | [docs/FILE_STRUCTURE.md](FILE_STRUCTURE.md) | Mapa de carpetas |
 | [caso-e-dynamodb-persistence/README.md](../caso-e-dynamodb-persistence/README.md) | Resumen del Caso E |
 | [caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md](../caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso E |
+| [caso-g-event-driven/README.md](../caso-g-event-driven/README.md) | Resumen del Caso G |
+| [caso-g-event-driven/AWS_PASO_A_PASO.md](../caso-g-event-driven/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso G |
 
 ---
 
@@ -132,4 +158,4 @@ git push origin main
 
 ---
 
-_Ultima actualizacion: 2026-03-11_
+_Ultima actualizacion: 2026-03-12_

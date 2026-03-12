@@ -1,0 +1,158 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: caso-g-event-driven - API Gateway + Lambda + EventBridge + SQS + SNS
+
+Globals:
+  Function:
+    Timeout: 15
+    MemorySize: 256
+    Runtime: python3.12
+
+Resources:
+  Api:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - "*"
+        AllowMethods:
+          - GET
+          - POST
+          - OPTIONS
+        AllowHeaders:
+          - content-type
+
+  OrdersEventBus:
+    Type: AWS::Events::EventBus
+    Properties:
+      Name: caso-g-orders-bus
+
+  OrdersDlq:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: orders-processing-dlq
+      MessageRetentionPeriod: 1209600
+
+  OrdersQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: orders-processing-queue
+      VisibilityTimeout: 60
+      RedrivePolicy:
+        deadLetterTargetArn: !GetAtt OrdersDlq.Arn
+        maxReceiveCount: 3
+
+  ProcessingNotificationsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: processing-notifications
+
+  OrderCreatedRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: OrderCreatedRule
+      EventBusName: !Ref OrdersEventBus
+      EventPattern:
+        source:
+          - caso.g.orders
+        detail-type:
+          - OrderCreated
+      Targets:
+        - Arn: !GetAtt OrdersQueue.Arn
+          Id: OrdersQueueTarget
+
+  OrdersQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+        - !Ref OrdersQueue
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowEventBridgeSendMessage
+            Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: sqs:SendMessage
+            Resource: !GetAtt OrdersQueue.Arn
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !GetAtt OrderCreatedRule.Arn
+
+  OrderPublisherFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: app.publisher_handler
+      Environment:
+        Variables:
+          EVENT_BUS_NAME: !Ref OrdersEventBus
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - events:PutEvents
+              Resource: !GetAtt OrdersEventBus.Arn
+      Events:
+        RootLanding:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /
+            Method: GET
+        HealthCheck:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /health
+            Method: GET
+        PublishOrder:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /events/orders
+            Method: POST
+
+  OrderConsumerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: app.consumer_handler
+      Environment:
+        Variables:
+          NOTIFICATIONS_TOPIC_ARN: !Ref ProcessingNotificationsTopic
+      Policies:
+        - SQSPollerPolicy:
+            QueueName: !GetAtt OrdersQueue.QueueName
+        - Statement:
+            - Effect: Allow
+              Action:
+                - sns:Publish
+              Resource: !Ref ProcessingNotificationsTopic
+      Events:
+        OrdersQueueEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt OrdersQueue.Arn
+            BatchSize: 10
+
+Outputs:
+  ApiBaseUrl:
+    Description: Base URL del HTTP API
+    Value: !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com"
+
+  EventBusName:
+    Description: Nombre del bus de eventos custom
+    Value: !Ref OrdersEventBus
+
+  OrdersQueueName:
+    Description: Nombre de la cola principal
+    Value: !GetAtt OrdersQueue.QueueName
+
+  OrdersDlqName:
+    Description: Nombre de la cola de dead letter
+    Value: !GetAtt OrdersDlq.QueueName
+
+  NotificationsTopicArn:
+    Description: ARN del topic SNS
+    Value: !Ref ProcessingNotificationsTopic

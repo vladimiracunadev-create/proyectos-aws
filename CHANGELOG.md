@@ -39,6 +39,28 @@ El formato seguirá [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) y e
 
 ---
 
+## [3.4.0] - 2026-03-12
+
+### Added
+
+- **Caso G (Event Driven)**: Finalizacion del modulo de arquitectura asincrona.
+    - Despliegue real en AWS de `API Gateway + Lambda + EventBridge + SQS + DLQ + SNS`.
+    - Landing publica en la raiz `/` para explicar el caso y probar el flujo desde la propia API.
+    - Guia `AWS_PASO_A_PASO.md` con outputs reales, validacion y troubleshooting del consumidor.
+    - Documentacion de arquitectura Mermaid para contrato de eventos, flujo principal y ruta de error.
+
+### Fixed
+
+- **Caso G - Lambda consumidora**: Corregido parseo del campo `detail` cuando EventBridge entrega el mensaje a SQS ya materializado como objeto.
+    - **Causa raiz**: el consumidor asumia que `detail` llegaba siempre como string JSON.
+    - **Solucion**: compatibilidad con `detail` como string u objeto antes de procesar el mensaje.
+
+### Changed
+
+- **Documentacion global**: Sincronizados `README.md`, `ROADMAP.md`, `docs/ARCHITECTURE.md`, `docs/BEGINNERS_GUIDE.md`, `docs/QUICK_REFERENCE.md`, `docs/RECRUITER.md`, `docs/TECHNICAL_SPECS.md`, `docs/FILE_STRUCTURE.md`, `wiki/home.md` y referencias del Caso E para reflejar que `Caso G` ya esta `COMPLETADO (VALIDADO)`.
+
+---
+
 ## [3.2.5] - 2026-02-23
 ### Added
 - **Arquitecturas (Deep Expansion)**: Mejora radical de la documentación técnica.

@@ -155,9 +155,12 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   **Stack**: AWS Cognito + WAF + IAM Roles.
 *   **Enfoque**: **Seguridad Perimetral.** Implementa autenticación de usuarios y protección contra ataques web (DDoS/SQLi).
 
-#### [📂 Caso G: Event Driven](./caso-g-event-driven/index.html) `Nivel 6` `PROYECTADO`
-*   **Stack**: EventBridge + Step Functions.
-*   **Enfoque**: **Arquitecturas Reactivas.** Desacoplamiento total de servicios mediante el paso de mensajes y orquestación de flujos.
+#### [📂 Caso G: Event Driven](./caso-g-event-driven/README.md) `Nivel 6` `COMPLETADO (VALIDADO)`
+*   **Stack**: API Gateway + Lambda + EventBridge + SQS + SNS + AWS SAM.
+*   **Enfoque**: **Arquitecturas Reactivas.** Desacopla productor y consumidor con eventos, reintentos y DLQ para absorber fallos sin bloquear la entrada.
+*   🏗️ [Arquitectura (Mermaid)](caso-g-event-driven/docs/architecture.md)
+*   ☁️ [Guía Paso a Paso AWS](caso-g-event-driven/AWS_PASO_A_PASO.md)
+*   👉 [Landing y API pública](https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com/)
 
 #### [📂 Caso H: Observability & Health](./caso-h-observability/index.html) `Nivel 7` `PROYECTADO`
 *   **Stack**: CloudWatch + X-Ray + GitLab Observability.
@@ -215,7 +218,7 @@ El repositorio sigue un plan de crecimiento incremental. El estado detallado de 
 |---|---|---|
 | E — Persistence Pro (DynamoDB) | COMPLETADO (VALIDADO) | Operativo: API + landing + DynamoDB |
 | F — Security First (Cognito) | PROYECTADO | Fase 1: User Pools + WAF |
-| G — Event Driven (EventBridge) | PROYECTADO | Fase 1: Bus de eventos |
+| G — Event Driven (EventBridge) | COMPLETADO (VALIDADO) | Operativo: API + EventBridge + SQS + DLQ + SNS |
 | H — Observability (CloudWatch) | PROYECTADO | Fase 1: Dashboards + X-Ray |
 | I — GenAI (Bedrock) | PROYECTADO | Fase 1: LLM Integration |
 | **M — Resiliencia & Failover** | **FUTURO (Fase 0 ✅)** | **Fase 1: Multi-AZ + ALB** |

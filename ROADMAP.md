@@ -54,7 +54,7 @@ Este roadmap refleja el estado actual del proyecto y las proximas prioridades pa
 - [x] **DynamoDB Persistence Pro**: Single Table Design con GSIs y API serverless
 - [x] **Landing publica**: UI basica para crear y consultar ordenes en vivo
 - [x] **Validacion en AWS**: Stack desplegado y endpoints comprobados en `us-east-2`
-- [ ] **Streams y eventos**: Integracion futura con SQS o EventBridge
+- [x] **Streams y eventos**: Integracion aterrizada en el Caso G con EventBridge + SQS + DLQ
 - [ ] **Backup y restore**: Politicas de retencion y restauracion puntual
 
 ### 4. Seguridad y autenticacion (Caso F)
@@ -66,10 +66,11 @@ Este roadmap refleja el estado actual del proyecto y las proximas prioridades pa
 
 ### 5. Arquitectura event-driven (Caso G)
 
-- [ ] **EventBridge**: Bus de eventos entre servicios
+- [x] **Scaffold del caso**: Estructura del modulo, SAM template, Lambdas base y documentacion completa
+- [x] **EventBridge**: Bus de eventos entre servicios
 - [ ] **Step Functions**: Orquestacion de workflows
-- [ ] **SNS/SQS**: Patrones pub/sub y cola de mensajes
-- [ ] **Dead Letter Queues**: Manejo de errores
+- [x] **SNS/SQS**: Patrones pub/sub y cola de mensajes
+- [x] **Dead Letter Queues**: Manejo de errores
 
 ---
 

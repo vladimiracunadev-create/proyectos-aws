@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caso G | Event Driven</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="shell">
+        <section class="hero">
+            <p class="eyebrow">Caso G · Nivel 6</p>
+            <h1>Event Driven sobre AWS</h1>
+            <p class="lede">
+                Publica eventos de negocio en un bus desacoplado y deja que la nube procese,
+                amortigue y recupere errores sin bloquear al productor.
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>Arquitectura incluida</h2>
+            <div class="chips">
+                <span>API Gateway</span>
+                <span>Lambda Publisher</span>
+                <span>EventBridge</span>
+                <span>SQS</span>
+                <span>DLQ</span>
+                <span>Lambda Consumer</span>
+                <span>SNS</span>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Publicar un evento</h2>
+            <label for="apiBaseUrl">API Base URL</label>
+            <input id="apiBaseUrl" type="text" placeholder="https://xxxx.execute-api.us-east-2.amazonaws.com">
+
+            <label for="payload">Payload JSON</label>
+            <textarea id="payload" rows="14">{
+  "orderId": "ord-demo-001",
+  "customerId": "cust-001",
+  "customerName": "Acme SPA",
+  "status": "CREATED",
+  "total": 249.90,
+  "items": [
+    { "sku": "sku-erp", "quantity": 1 }
+  ]
+}</textarea>
+
+            <div class="actions">
+                <button id="btnHealth" type="button">Probar health</button>
+                <button id="btnPublish" type="button">Publicar evento</button>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Respuesta</h2>
+            <pre id="output">Esperando acciones...</pre>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

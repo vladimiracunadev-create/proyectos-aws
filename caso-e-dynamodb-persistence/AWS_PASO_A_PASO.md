@@ -247,4 +247,4 @@ La evolución natural de este caso es:
 - crear dashboards operativos para pedidos `PENDING` y `PAID`
 - publicar métricas de negocio y observabilidad en el futuro Caso H
 
-Eso conecta directamente con el futuro **Caso G - Event Driven**.
+Eso conecta directamente con el ya validado **Caso G - Event Driven**.

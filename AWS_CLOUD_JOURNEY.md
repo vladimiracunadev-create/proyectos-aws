@@ -99,7 +99,8 @@ graph TB
     B --> C["Caso C\nTerraform + CloudFront"]
     C --> D["Caso D\nAPI Gateway + Lambda + DynamoDB"]
     D --> E["Caso E\nDynamoDB Single Table + GSI"]
-    E --> J["Caso J\nDocker + ECS Fargate + ECR"]
+    E --> G["Caso G\nEventBridge + SQS + DLQ"]
+    G --> J["Caso J\nDocker + ECS Fargate + ECR"]
     J --> K["Caso K\nKubernetes en EKS"]
     K --> L["Caso L\nFinOps + OIDC + IAM"]
     L --> M["Caso M\nResiliencia y Failover"]
@@ -307,6 +308,41 @@ Referencias AWS:
 
 ## Capitulo V. Contenedores y plataformas de ejecucion
 
+### Caso G: EventBridge + SQS + DLQ
+
+#### Lo que demuestra
+
+`Caso G` convierte la arquitectura serverless en una plataforma mas madura: la API deja de
+hacer todo en linea y pasa a aceptar eventos de negocio para procesarlos fuera de banda.
+
+#### Aprendizajes tecnicos
+
+- EventBridge permite publicar hechos de negocio sin acoplar productor y consumidor.
+- SQS absorbe picos de carga y desacopla el ritmo entre ingreso y procesamiento.
+- La DLQ evita perder mensajes cuando una Lambda falla repetidamente.
+- SNS agrega una salida simple para notificaciones o extensiones futuras.
+- Una landing en `/` ayuda a explicar el caso y a demostrarlo en vivo.
+
+#### Trade-off real
+
+La asincronia mejora resiliencia y escalabilidad, pero obliga a pensar en contratos de eventos,
+idempotencia, debugging distribuido y consistencia eventual.
+
+#### Valor editorial del libro
+
+Este capitulo importa porque marca una idea central: la nube madura no se mide solo por cuantos
+servicios usas, sino por como separas responsabilidades sin romper la experiencia del cliente.
+
+Referencias AWS:
+
+- [What is Amazon EventBridge?](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html)
+- [Amazon SQS dead-letter queues](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html)
+- [Invoking Lambda with Amazon SQS](https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html)
+
+---
+
+## Capitulo VI. Contenedores y plataformas de ejecucion
+
 ### Caso J: Docker + ECR + ECS Fargate
 
 #### Lo que demuestra
@@ -366,7 +402,7 @@ Referencias AWS:
 
 ---
 
-## Capitulo VI. Gobernanza, FinOps y seguridad operativa
+## Capitulo VII. Gobernanza, FinOps y seguridad operativa
 
 ### Caso L: FinOps, OIDC e IAM governance
 
@@ -397,7 +433,7 @@ Referencias AWS:
 
 ---
 
-## Capitulo VII. Resiliencia, continuidad y fallos reales
+## Capitulo VIII. Resiliencia, continuidad y fallos reales
 
 ### Caso M: resiliencia, failover y operacion de verdad
 
