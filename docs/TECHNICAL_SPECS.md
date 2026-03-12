@@ -1,103 +1,129 @@
-# 📋 Especificaciones Técnicas y Requerimientos
+﻿# Especificaciones Tecnicas y Requerimientos
 
-Este documento detalla qué necesitas para que este proyecto funcione en cualquier máquina y cómo está configurada la seguridad.
-
----
-
-## 💻 Requerimientos de Hardware
-
-### Mínimos
-- **Sistema Operativo**: Windows 10/11, macOS 11+ o Linux (Ubuntu 20.04+).
-- **Procesador**: 2 núcleos (Dual Core).
-- **Memoria RAM**: 4 GB.
-- **Conectividad**: Acceso a Internet (para descarga de proveedores de AWS y subida de archivos).
-
-### Recomendados (Máximos para este laboratorio)
-- **Sistema Operativo**: Linux (Debian/Ubuntu) o macOS.
-- **Procesador**: 4 núcleos o más.
-- **Memoria RAM**: 8 GB o superior.
-- **Espacio en Disco**: 1 GB libre (para `node_modules` y archivos temporales de Terraform).
+Este documento resume que necesitas para ejecutar, validar y extender el monorepo en otra maquina, incluyendo el `Caso E` ya resuelto.
 
 ---
 
-## 📈 Límites de Almacenamiento (GitLab SaaS)
+## Requerimientos de hardware
 
-Para mantener la salud del monorepo y evitar cargos o bloqueos, este proyecto sigue los límites de la capa gratuita de GitLab.com:
+### Minimos
 
-- **Repositorio (Git/LFS)**: **10 GB** (Límite por proyecto).
-- **Almacenamiento Total (Namespace)**: **5 GB** (Incluye artefactos, registros de contenedores y caché).
-- **Acción Preventiva**: El proyecto implementa políticas de expiración de artefactos para mantenerse por debajo de los **500 MB**.
+- **Sistema operativo**: Windows 10/11, macOS 11+ o Linux moderno
+- **Procesador**: 2 nucleos
+- **Memoria RAM**: 4 GB
+- **Conectividad**: acceso a Internet para proveedores, imagenes y despliegues
 
----
+### Recomendados
 
-## 🛠️ Requerimientos de Software
-
-Para ejecutar este proyecto, debes tener instalado:
-
-1.  **Git**: Para clonar el repositorio y gestionar versiones.
-2.  **Node.js (LTS)**: Versión 18.x o superior.
-3.  **AWS CLI**: Configurado con credenciales válidas.
-4.  **Terraform**: Versión 1.14.0 o superior.
-5.  **Docker Desktop**: Necesario para construir imágenes (Caso J) y el entorno de desarrollo.
-6.  **Express.js**: Utilizado como servidor de aplicaciones en el Caso J para servir contenido estático y APIs.
-7.  **Kubectl**: Para gestionar el orquestador (Caso K).
-7.  **Make**:
-    *   **Linux/macOS**: Suele venir preinstalado.
-    *   **Windows**: Instalar vía [Chocolatey](https://community.chocolatey.org/packages/make) (`choco install make`) o usar mediante Git Bash/WSL.
+- **Procesador**: 4 nucleos o mas
+- **Memoria RAM**: 8 GB o superior
+- **Espacio libre**: al menos 2 GB para dependencias, builds, Docker y artefactos SAM
 
 ---
 
-## 🔑 Características de los Accesos (IAM)
+## Requerimientos de software
 
-El usuario que ejecute este proyecto (ya sea tú en tu PC o GitLab en el pipeline) debe tener **al menos** estos permisos en AWS:
+Para operar el repositorio completo:
 
-### 1. S3 Management
-- `s3:CreateBucket`
-- `s3:ListBucket`
-- `s3:PutObject`
-- `s3:GetObject`
-- `s3:DeleteObject`
-- `s3:PutBucketPolicy`
+1. **Git**
+2. **Node.js LTS**
+3. **AWS CLI** configurado con credenciales validas
+4. **Terraform** 1.14 o superior
+5. **Docker Desktop** o Docker Engine
+6. **kubectl** para el Caso K
+7. **Make**
 
-### 2. CloudFront Management (Caso C)
-- `cloudfront:CreateDistribution`
-- `cloudfront:UpdateDistribution`
-- `cloudfront:CreateOriginAccessControl`
-- `cloudfront:CreateInvalidation`
+Para trabajar especificamente con `Caso E`:
 
-### 3. Terraform State
-- Acceso de lectura/escritura al bucket de estado global: `vladimir-terraform-state-2026`.
+1. **Python 3.12** o compatible
+2. **AWS SAM CLI**
+3. **Docker** si usaras `sam local`
 
-### 4. FinOps & Governance (Caso L)
+Comandos de verificacion recomendados:
+
+```bash
+git --version
+aws --version
+sam --version
+python --version
+terraform version
+docker --version
+kubectl version --client
+```
+
+---
+
+## Permisos AWS requeridos
+
+El usuario o rol que despliegue debe tener permisos suficientes segun el caso.
+
+### Base general
+
+- `s3:*` acotado a buckets del proyecto o al bucket de artefactos/estado
+- `cloudfront:*` donde aplique el Caso C
+- `iam:CreateRole`, `iam:AttachRolePolicy`, `iam:PassRole` para despliegues controlados
+- `cloudformation:*` para stacks administrados por Terraform o SAM
+
+### Caso E: permisos minimos esperables
+
+- `apigateway:*` o permisos equivalentes sobre HTTP API
+- `lambda:*` o permisos de creacion/actualizacion/invocacion de funciones
+- `dynamodb:*` o permisos sobre tabla, indices y escritura/lectura
+- `logs:*` para CloudWatch Logs de Lambda
+- `cloudformation:*` para crear y actualizar el stack `caso-e-dynamodb-persistence`
+- `s3:*` sobre el bucket temporal que usa SAM para empaquetado
+
+### FinOps y auditoria
+
 - `budgets:ViewBudget`
 - `ce:GetCostAndUsage`
 - `ce:GetCostForecast`
-- `iam:CreateRole` (para OIDC)
-- `iam:AttachRolePolicy`
-- **Auditoría de Costos (CLI)**: Capacidad de listar recursos cross-region (`ec2:Describe*`, `eks:ListClusters`, `rds:DescribeDBInstances`) mediante el script `make finops-check`.
+- `ec2:Describe*`
+- `eks:ListClusters`
+- `rds:DescribeDBInstances`
 
 ---
 
-## 🚀 Portabilidad (Instalación en otra máquina)
-
-Para levantar este proyecto en una máquina nueva, sigue estos pasos desde la terminal:
+## Instalacion en otra maquina
 
 ```bash
-# 1. Clonar el repositorio
+# 1. Clonar repositorio
 git clone <url-del-repo>
 cd proyectos-aws-gitlab
 
-# 2. Instalar herramientas de calidad y dependencias
+# 2. Instalar tooling general
 make install
 
-# 3. Configurar tus credenciales de AWS
+# 3. Configurar AWS
 aws configure
 
-# 4. Inicializar infraestructura
-make tf-init
-
-# 5. Ejecutar análisis de calidad
+# 4. Validar herramientas
 make lint
+aws sts get-caller-identity
+sam --version
 ```
 
-Con una sola herramienta (`make`), puedes gestionar todo el ciclo de vida sin recordar comandos largos.
+### Flujo minimo para Caso E
+
+```bash
+cd caso-e-dynamodb-persistence/backend
+sam build
+sam deploy --guided
+```
+
+Luego:
+
+```bash
+curl "$API_BASE_URL/orders/status/PENDING"
+```
+
+Y tambien puedes abrir:
+
+- [caso-e-dynamodb-persistence/README.md](../caso-e-dynamodb-persistence/README.md)
+- [caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md](../caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md)
+
+---
+
+## Nota operativa
+
+El repositorio debe reflejar siempre el estado real del despliegue. Si un caso ya esta desplegado y validado, su documentacion global, roadmap y resumen tecnico deben indicarlo explicitamente.

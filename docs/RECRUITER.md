@@ -1,171 +1,133 @@
-# 👔 Guía para Reclutadores y Evaluadores Técnicos
+﻿# Guia para Reclutadores y Evaluadores Tecnicos
 
-> **Propósito**: Este documento está diseñado para ayudar a reclutadores técnicos y evaluadores de talento a comprender rápidamente el valor de negocio, la complejidad técnica y las decisiones arquitectónicas clave de este proyecto.
-
----
-
-## 📊 Resumen Ejecutivo
-
-**Proyectos AWS GitLab** es una monorepo profesional que sirve como una suite de ingeniería cloud avanzada. Demuestra la evolución de una arquitectura desde hosting estático simple hasta orquestación industrial de microservicios, con un enfoque implacable en la automatización (CI/CD), la seguridad y la experiencia del desarrollador (DX).
-
-- **Arquitectura**: Evolución de Monolito a Microservicios (Containers + Serverless).
-- **IaC**: Infraestructura 100% declarativa con Terraform.
-- **CI/CD**: Pipelines de GitLab integrados con AWS (OIDC, S3, ECS, Lambda).
-- **Seguridad**: Security-by-Design con escaneo de secretos y privilegios mínimos.
+> **Proposito**: ayudar a entender rapidamente el valor tecnico y de negocio de este monorepo, con foco en decisiones arquitectonicas reales y capacidades ya demostradas.
 
 ---
 
-## 💼 Valor de Negocio
+## Resumen ejecutivo
 
-El proyecto resuelve problemas críticos que enfrentan las empresas modernas al migrar a la nube:
+**Proyectos AWS GitLab** es un monorepo profesional que muestra la evolucion de un perfil cloud desde hosting estatico hasta contenedores, Kubernetes, FinOps y persistencia NoSQL avanzada.
 
-| Pilar | Beneficio para el Negocio | Solución Implementada |
+Lo importante no es solo la variedad de tecnologias, sino que varios casos ya estan **desplegados, validados y documentados con evidencia operativa**.
+
+- **Arquitectura**: progresion desde hosting simple hasta plataformas multi-servicio.
+- **IaC**: uso de Terraform y AWS SAM.
+- **CI/CD**: GitLab integrado con AWS.
+- **Seguridad**: escaneo de secretos, minimo privilegio y direccion hacia OIDC.
+- **Datos**: DynamoDB modelado por patrones de acceso, no como traduccion directa de SQL.
+
+---
+
+## Valor de negocio
+
+| Pilar | Beneficio para el negocio | Implementacion visible |
 | :--- | :--- | :--- |
-| **Agilidad (TTM)** | Reducción del tiempo de despliegue de semanas a minutos. | Pipelines automáticos en GitLab CI/CD con despliegues inmutables. |
-| **Seguridad** | Prevención de fugas de datos y ataques comunes (OWASP). | Escaneo de secretos (TruffleHog), políticas IAM restrictivas y OIDC. |
-| **Optimización de Costos** | Reducción de costos de infraestructura ~40-60%. | Uso intensivo de Serverless (Lambda, Amplify) y ECS Fargate (Pay-per-use). |
-| **Escalabilidad** | Capacidad de manejar picos de tráfico sin intervención manual. | Uso de AWS Amplify y CloudFront para entrega global (Edge). |
+| **Agilidad** | Despliegues rapidos y repetibles | Pipelines y guias operativas por caso |
+| **Seguridad** | Menor riesgo de errores manuales y fugas | Validaciones, IAM y documentacion de hardening |
+| **Costo** | Uso eficiente de recursos administrados | Amplify, Lambda, DynamoDB On-Demand, hibernacion FinOps |
+| **Escalabilidad** | Respuesta elastica segun el tipo de carga | CloudFront, Lambda, ECS y EKS |
+| **Persistencia** | Diseños de datos pensados para consultas reales | Caso E con Single Table Design y GSIs |
 
 ---
 
-## 🏗️ Arquitectura y Decisiones Técnicas
+## Decisiones tecnicas clave
 
-### Stack Tecnológico
-| Capa | Tecnología | Justificación |
-| :--- | :--- | :--- |
-| **Infraestructura** | AWS (S3, CloudFront, Lambda, ECS) | Estándar de la industria, alta disponibilidad y servicios gestionados. |
-| **IaC** | Terraform | Portabilidad entre nubes, control de versiones y estado remoto seguro. |
-| **Pipeline** | GitLab CI + AWS OIDC | Integración nativa sin necesidad de llaves de acceso permanentes (Zero Trust). |
-| **Contenedores** | Docker + ECS Fargate | Aislamiento total, inmutabilidad y escalabilidad horizontal sin gestionar servidores. |
-| **Estandarización** | Makefile + Husky | Mejora de DX, consistencia en comandos y validación pre-commit. |
+### 1. Monorepo evolutivo
 
-### Decisiones Arquitectónicas Clave
-1. **OIDC sobre IAM Keys**: Eliminamos credenciales persistentes en GitLab, usando roles temporales de AWS para mayor seguridad.
-2. **CloudFront + OAC**: Protegemos los buckets de S3 para que no sean públicos, forzando el tráfico a través del CDN.
-3. **Monorepo Strategy**: Centralización de la lógica para facilitar el versionado y la consistencia entre múltiples casos de estudio.
+Cada carpeta representa una capacidad concreta y acumulativa. No son demos desconectadas, sino una progresion:
 
----
+- hosting y deploy
+- IaC y backend
+- persistencia avanzada
+- contenedores y orquestacion
+- FinOps y resiliencia
 
-## 🚀 Casos de Uso Destacados
+### 2. Infraestructura declarativa
 
-### 1. **[Caso C] Infraestructura como Código (Terraform)**
-**Problema**: El despliegue manual en la consola de AWS es propenso a errores y difícil de auditar.
-**Solución**: Automatización total con Terraform, incluyendo estado remoto y protección con CloudFront (OAC).
-**Habilidad**: IaC, Terraform, AWS Global Infrastructure.
+- **Terraform** para infraestructura tradicional e industrial
+- **AWS SAM** para serverless y APIs
 
-### 2. **[Caso D] Arquitectura Serverless (Lambda + DynamoDB)**
-**Problema**: Sistemas que consumen recursos (y dinero) incluso cuando no se usan.
-**Solución**: Backend reactivo que escala a cero. Integración de API Gateway con persistencia NoSQL.
-**Habilidad**: Backend, Serverless, NoSQL Design.
+### 3. Persistencia modelada por acceso
 
-### 4. **[Caso K] Orquestación Industrial (Amazon EKS)** ☸️
-**¿Por qué este enfoque?**: Mientras que ECS es excelente para aplicaciones sencillas, **Kubernetes (EKS)** es el estándar de facto para arquitecturas complejas y agnósticas a la nube. Este caso demuestra la capacidad de gestionar infraestructuras de gran escala.
+El `Caso E` es especialmente relevante para evaluacion senior porque demuestra algo que suele faltar en portafolios: **diseño NoSQL real**.
 
-- **Problema**: Gestión de flotas de contenedores con alta disponibilidad y necesidad de estándares abiertos.
-- **Alcance**: Orquestación real con balanceo L7 avanzado y gestión de estado.
-- **Poder**: **Self-Healing Activo**. El clúster se auto-repara ante fallos sin intervención humana.
-- **Alternativas**: 
-  - *ECS*: Más simple, pero conlleva un "Vendor Lock-in" más fuerte. 
-  - *Serverless (Lambda)*: Más económico, pero con límites de tiempo (timeout) y estado.
-- **Habilidad**: Kubernetes Expert, Helm, EKS Auto Mode & Cloud Networking.
-- **Demo**: [Dashboard EKS (Estado: Hibernado por ahorro FinOps)](http://k8s-default-vladimir-fd9bd8dc79-d4392d3db0728cc7.elb.us-east-1.amazonaws.com)
+Incluye:
 
-### 5. **[Caso L] FinOps & Governance** 🛡️
-**¿Por qué este enfoque?**: La nube permite ir muy rápido, pero sin control, los costos y la seguridad se disparan. Este caso demuestra la madurez operativa necesaria para entornos empresariales.
+- DynamoDB con tabla unica
+- GSIs para lectura por estado y producto
+- escritura transaccional de orden y auditoria
+- validacion operativa con API publica y landing de demostracion
 
-- **Problema**: Fugas de credenciales y facturas sorpresa por recursos olvidados.
-- **Solución**: Implementación de **Zero Trust** (OIDC) y **Presupuestos Activos** (AWS Budgets).
-- **Habilidad**: FinOps, Identity Federation, Compliance & Governance.
-- **Demo**: [Sitio Web Seguro](http://finops-vladimir-portfolio-case-l.s3-website.us-east-2.amazonaws.com)
+### 4. Direccion de seguridad correcta
 
-### 6. **[Scripting] Tooling Propio & Automatización** 🛠️
-**¿Por qué es relevante?**: Un ingeniero senior no solo utiliza las herramientas existentes; crea las propias para cubrir brechas de observabilidad eficiente.
-
-- **Problema**: La consola de AWS es lenta para revisar múltiples regiones en busca de "recursos olvidados" (costos vampiro).
-- **Solución**: Desarrollo de un motor de auditoría multiplataforma (PowerShell + Bash) integrado en el `Makefile`.
-- **Habilidad**: Scripting avanzado, AWS CLI Automation y Cultura FinOps.
-- **Herramienta**: `make finops-check` (Escanea EC2, EKS, RDS y Redes en < 5 segundos).
+El repositorio apunta a operar con credenciales temporales y controles cada vez mas fuertes, reduciendo dependencia de llaves permanentes.
 
 ---
 
-## 🛡️ Seguridad y Mejores Prácticas
+## Casos destacados
 
-- ✅ **Secret Scanning**: Integración de Husky y validaciones en pipeline para prevenir fugas de credenciales.
-- ✅ **Least Privilege**: Políticas de IAM diseñadas para dar solo el acceso necesario.
-- ✅ **Código Limpio**: Uso de ESLint y Prettier para asegurar una base de código mantenible y libre de errores sintácticos.
-- ✅ **Auditabilidad**: Uso de `CHANGELOG.md` y `ROADMAP.md` para trazabilidad del progreso.
+### Caso C: Infraestructura como codigo (Terraform)
 
----
+**Problema**: despliegues manuales poco auditables.
+**Solucion**: Terraform con estado remoto y distribucion global con CloudFront.
+**Habilidad demostrada**: IaC, AWS networking, control declarativo.
 
-## 💰 Estrategia de Costos y Persistencia
+### Caso D: Serverless API
 
-Un Ingeniero Cloud Senior no solo construye; optimiza. Esta arquitectura implementa un modelo de **Responsabilidad Compartida y Eficiencia Financiera**:
+**Problema**: backend que consume recursos aunque no haya trafico.
+**Solucion**: API Gateway + Lambda + DynamoDB.
+**Habilidad demostrada**: arquitectura serverless y backend en AWS.
 
-- **Persistencia Desacoplada**: Los contenedores (ECS) y funciones (Lambda) son efímeros. Los datos residen en servicios gestionados (`RDS` para SQL, `DynamoDB` para NoSQL), garantizando que la caída de un servicio no afecte la integridad de la información.
-- **Optimización de Costos (FinOps)**: 
-  - **Tráfico Bajo/Nulo**: Uso de *Amplify* y *Lambda* para mantener costos cercanos a **$0 USD**.
-  - **Tráfico Industrial**: Uso de *ECS Fargate* con políticas de *Auto Scaling* para pagar solo por la capacidad necesaria en cada momento, eliminando el desperdicio de servidores ociosos.
+### Caso E: Persistence Pro
 
----
+**Problema**: muchos proyectos usan DynamoDB como si fuera una base relacional sin estrategia de acceso.
+**Solucion**: modelado por patrones de consulta, indices globales y auditoria transaccional.
+**Habilidad demostrada**: NoSQL design, serverless data modeling y criterio arquitectonico.
+**Estado**: desplegado y validado en AWS.
+**Demo**: [API + landing publica](https://gqqm27j47c.execute-api.us-east-2.amazonaws.com/)
 
-## 🎯 Alcance y Versatilidad (Scope)
+### Caso K: Kubernetes en AWS
 
-La arquitectura de este monorepo no es una solución única, sino un **Blueprint (plantilla)** capaz de resolver múltiples desafíos de negocio similares:
+**Problema**: gestionar contenedores a escala con estandares abiertos.
+**Solucion**: despliegue real en EKS con balanceo y self-healing.
+**Habilidad demostrada**: Kubernetes, EKS y operacion cloud nativa.
 
-1. **Migración de Legacy**: El entorno Docker permite "envolver" aplicaciones antiguas sin modificar su código para llevarlas a la nube.
-2. **Microservicios Escalables**: Preparado para orquestar decenas de servicios independientes que se comunican entre sí.
-3. **Procesamiento en Lote (Batch)**: Ideal para tareas pesadas (como generación de reportes o procesamiento de imágenes) que se ejecutan, cumplen su función y se apagan automáticamente.
-4. **Entornos de QA Dinámicos**: Capacidad de levantar una réplica exacta del entorno de producción para pruebas en segundos usando Terraform.
+### Caso L: FinOps y governance
 
----
-
-## 🔍 Tour Guiado de Código
-
-Para ver la calidad técnica de este proyecto, te invito a explorar:
-
-1. **[Makefile](../Makefile)**: La capa de abstracción que simplifica operaciones complejas para cualquier desarrollador.
-2. **[.gitlab-ci.yml](../.gitlab-ci.yml)**: La definición de los pipelines que garantizan la calidad en cada commit.
-3. **[caso-j-containers-ecs/Dockerfile](../caso-j-containers-ecs/Dockerfile)**: Optimización de imágenes y mejores prácticas de containerización.
-4. **[caso-c-terraform-s3/main.tf](../caso-c-terraform-s3/main.tf)**: La definición clara y modular de recursos en la nube.
+**Problema**: credenciales permanentes y costos sin control.
+**Solucion**: presupuestos, gobernanza y direccion hacia OIDC.
+**Habilidad demostrada**: costo, seguridad y operacion responsable.
 
 ---
 
-## 🎯 Habilidades Demostradas
+## Que diferencia este portafolio
 
-### Técnicas
-- [x] **Cloud Computing**: AWS Solution Architecting.
-- [x] **IaC**: Terraform & CloudFormation/SAM.
-- [x] **DevOps**: CI/CD (GitLab, GitHub Actions), Docker, Kubernetes.
-- [x] **Full-Stack Development**: JS/Node.js, HTML/CSS (Modern Design).
-- [x] **Seguridad**: IAM, OIDC, AppSec.
-
-### Blandas
-- [x] **Comunicación Técnica**: Documentación exhaustiva (10+ guías).
-- [x] **Gestión de Proyectos**: Roadmap, Changelog, Milestones.
-- [x] **Product Focus**: Entender que la técnica debe servir al negocio.
+- No se queda en infraestructura basica; incluye datos, costos y operacion.
+- No documenta solo aspiraciones; varios casos estan ya publicados y verificables.
+- El `Caso E` agrega una capa de madurez poco comun: persistencia NoSQL orientada a negocio.
 
 ---
 
-## 📞 FAQ & Contacto
+## Tour guiado sugerido
 
-**¿Cuánto tiempo tomó este proyecto?**
-Es un laboratorio en constante evolución. La estructura base tomó 3 semanas, con iteraciones semanales añadiendo nuevos casos de uso.
+1. [README.md](../README.md)
+2. [docs/ARCHITECTURE.md](./ARCHITECTURE.md)
+3. [caso-e-dynamodb-persistence/README.md](../caso-e-dynamodb-persistence/README.md)
+4. [caso-e-dynamodb-persistence/docs/architecture.md](../caso-e-dynamodb-persistence/docs/architecture.md)
+5. [caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md](../caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md)
 
-**¿Es un proyecto individual?**
-Sí, es un portafolio de ingeniería que demuestra autonomía técnica total.
+---
+
+## Habilidades demostradas
+
+- **Cloud Computing**: AWS aplicado a multiples patrones
+- **IaC**: Terraform y CloudFormation/SAM
+- **Backend**: APIs serverless y persistencia NoSQL
+- **Containers**: Docker, ECS y EKS
+- **FinOps y seguridad**: presupuestos, IAM, escaneo y controles operativos
+- **Comunicacion tecnica**: documentacion amplia, trazable y orientada a distintos lectores
 
 ---
 
-## 🚀 Próximos Pasos
+_Ultima actualizacion: 2026-03-11_
 
-1. **Revisar [README.md](../README.md)** para una visión general.
-2. **Explorar [ARCHITECTURE.md](ARCHITECTURE.md)** para diagramas detallados.
-3. **Probar localmente**: `make install` y `make help`.
-
-## 📧 Contacto
-**Vladimir Acuña**
-- [LinkedIn](https://www.linkedin.com/in/vladimir-acu%C3%B1a-valdebenito-11924a29/)
-- [GitHub Profile](https://github.com/vladimiracunadev-create)
-
----
-*Última actualización: Febrero 2026*
