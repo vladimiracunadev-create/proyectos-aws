@@ -81,6 +81,7 @@ La inteligencia documentada del proyecto. Cada archivo tiene un rol específico:
 | **`FINOPS_MANUAL.md`** | 💰 **Manual de FinOps**. Semáforo de riesgo financiero (🔴🟡🟢), workflow de toma de decisiones para eliminar recursos costosos, guía de interpretación de auditoría. | Todos |
 | **`FILE_STRUCTURE.md`** | 📂 **(Este archivo)**. Mapa completo del repositorio con importancia y descripción de cada archivo. | Todos |
 | **`BEGINNERS_GUIDE.md`** | Glosario de términos Cloud/DevOps, conceptos fundamentales, flujo de aprendizaje recomendado. | Principiantes |
+| **`COMPLETED_CASES_GUIDE.md`** | Explicación simple de todos los casos ya completados, qué resuelve cada uno y cómo empezar a leerlos. | Todos |
 | **`INSTALL.md`** | Guía de instalación: Docker (DevContainers) vs instalación manual nativa. Requisitos previos. | Nuevos usuarios |
 | **`QUICK_REFERENCE.md`** | Cheatsheet. Comandos esenciales de `make`, `terraform`, `docker`, `kubectl` y `aws cli`. | Todos |
 | **`RECRUITER.md`** | Tour ejecutivo. Resumen del valor de negocio, habilidades demostradas, métricas del proyecto. | Reclutadores |

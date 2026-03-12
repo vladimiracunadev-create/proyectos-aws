@@ -65,6 +65,7 @@ Validaciones utiles:
 ```bash
 curl "$API_BASE_URL/"
 curl "$API_BASE_URL/health"
+curl "$API_BASE_URL/health?format=json"
 curl -X POST "$API_BASE_URL/events/orders" \
   -H "Content-Type: application/json" \
   -d '{"customerId":"cust-001","status":"CREATED"}'
@@ -73,6 +74,8 @@ curl -X POST "$API_BASE_URL/events/orders" \
 URL desplegada actualmente:
 
 - [Caso G - Landing + API](https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com/)
+- [Caso G - Health HTML](https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com/health)
+- [Caso G - Health JSON](https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com/health?format=json)
 
 ---
 
@@ -139,6 +142,7 @@ docker run --rm -it -v "$(pwd):/workspace" proyectos-aws/tooling:1.0.0 /bin/bash
 | :--- | :--- |
 | [README.md](../README.md) | Vista general del monorepo |
 | [docs/ARCHITECTURE.md](ARCHITECTURE.md) | Arquitectura integral |
+| [docs/COMPLETED_CASES_GUIDE.md](COMPLETED_CASES_GUIDE.md) | Lectura simple de casos completados |
 | [docs/FILE_STRUCTURE.md](FILE_STRUCTURE.md) | Mapa de carpetas |
 | [caso-e-dynamodb-persistence/README.md](../caso-e-dynamodb-persistence/README.md) | Resumen del Caso E |
 | [caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md](../caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso E |

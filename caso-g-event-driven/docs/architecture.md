@@ -14,6 +14,7 @@ negocio. A partir de ahi, el bus de eventos y la cola desacoplan tiempos, reinte
 El escenario representado es simple pero muy util para entrevistas y aprendizaje:
 
 - una orden es creada
+- el health check puede leerse como HTML o como JSON segun quien lo consuma
 - el evento se publica en EventBridge
 - una regla lo enruta a SQS
 - una Lambda lo consume y emite una notificacion
@@ -138,6 +139,7 @@ graph LR
 | Lambda publisher separada de consumer | Hace visible la diferencia entre ingesta y procesamiento. |
 | SNS al final del flujo | Permite extender notificaciones o fan-out sin tocar el productor. |
 | `202 Accepted` en la API | Refuerza el modelo asincrono: aceptar no significa procesar de inmediato. |
+| `/health` con HTML y JSON | Permite explicar el chequeo a humanos sin romper scripts y monitoreo. |
 
 ---
 

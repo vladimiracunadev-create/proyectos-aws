@@ -13,7 +13,7 @@ Se ha implementado exitosamente una **capa de tooling profesional** con Docker, 
 | **Archivos creados** | 25 |
 | **Archivos modificados** | 8 |
 | **Líneas de código** | ~3,000 |
-| **Documentación** | 16 documentos en docs/ |
+| **Documentación** | 17 documentos en docs/ |
 | **Security checks** | 40/40 (100%) con tfsec |
 | **Smoke tests** | 12 |
 | **Casos AWS** | 9 Completados (A, B, C, D, E, G, J, K, L) |

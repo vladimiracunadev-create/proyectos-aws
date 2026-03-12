@@ -146,6 +146,7 @@ Luego:
 ```bash
 curl "$API_BASE_URL/"
 curl "$API_BASE_URL/health"
+curl "$API_BASE_URL/health?format=json"
 ```
 
 Y tambien puedes abrir:

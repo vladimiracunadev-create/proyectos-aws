@@ -48,6 +48,7 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 ### 🎯 Inicio Rápido
 - 🚀 **[Guía de Instalación](docs/INSTALL.md)**: Docker (DevContainers) vs Manual.
 - 📘 **[Guía para Principiantes](docs/BEGINNERS_GUIDE.md)**: Glosario y conceptos básicos.
+- 🧭 **[Guía de Casos Completados](docs/COMPLETED_CASES_GUIDE.md)**: Qué demuestra cada caso ya validado y cómo leerlo.
 - ⚡ **[Referencia Rápida](docs/QUICK_REFERENCE.md)**: Comandos esenciales y atajos.
 
 ### 🏗️ Arquitectura y Stack

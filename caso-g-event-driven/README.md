@@ -29,7 +29,7 @@ Validacion completada:
 1. `sam build` ejecutado con exito.
 2. Stack `caso-g-event-driven` desplegado en `us-east-2`.
 3. Validada la landing publica en `GET /`.
-4. Validado `GET /health`.
+4. Validado `GET /health` en modo HTML para navegador y JSON para tooling.
 5. Validado `POST /events/orders` con respuesta `202 Accepted`.
 6. Confirmado el procesamiento del consumidor Lambda.
 7. Confirmada la ruta de error historica hacia DLQ durante la primera iteracion de prueba.
@@ -58,6 +58,8 @@ Demostrar los fundamentos de una arquitectura event-driven moderna:
 
 - **API Base URL**: `https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com`
 - **Landing publica**: `https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com/`
+- **Health HTML**: `https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com/health`
+- **Health JSON**: `https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com/health?format=json`
 - **Stack**: `caso-g-event-driven`
 - **Region**: `us-east-2`
 - **Event Bus**: `caso-g-orders-bus`
@@ -102,7 +104,7 @@ caso-g-event-driven/
 - `backend/src/app.py`
   Implementa:
   - landing HTML explicativa en `GET /`
-  - endpoint `GET /health`
+  - endpoint `GET /health` con vista HTML para navegador y JSON para monitoreo
   - endpoint `POST /events/orders`
   - publicacion en EventBridge
   - consumo de mensajes SQS
@@ -137,6 +139,7 @@ Luego abre `caso-g-event-driven/index.html` en un servidor local y apunta a
 - manejo de errores con reintentos y DLQ
 - eventos de negocio como contrato entre componentes
 - una base clara para observabilidad, tracing y metricas futuras
+- una lectura mas humana del estado operativo basico via `/health`
 
 ---
 

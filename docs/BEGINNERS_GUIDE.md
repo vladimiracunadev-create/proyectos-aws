@@ -72,6 +72,26 @@ Este caso ya esta **resuelto, desplegado y validado** en AWS.
 
 ---
 
+## Que significan los casos completados
+
+Los casos ya completados no son "carpetas sueltas". Cada uno demuestra una habilidad distinta:
+
+- **A**: publicar rapido
+- **B**: automatizar un deploy basico
+- **C**: definir infraestructura como codigo
+- **D**: crear backend serverless
+- **E**: modelar datos con criterio
+- **G**: desacoplar procesamiento con eventos
+- **J**: empaquetar y ejecutar contenedores
+- **K**: orquestar contenedores a nivel plataforma
+- **L**: gobernar costo, identidad y operacion
+
+Si quieres una explicacion mas aterrizada de todos los casos ya terminados, revisa:
+
+- [Guia de Casos Completados](./COMPLETED_CASES_GUIDE.md)
+
+---
+
 ## Como se conecta todo
 
 1. Haces un cambio en tu PC o entorno de desarrollo.
@@ -90,6 +110,33 @@ En SQL solemos pensar en tablas relacionadas. En DynamoDB, y especialmente en es
 - se parte de "que consultas debe responder la aplicacion"
 
 Por eso `Caso E` es importante: muestra un cambio de mentalidad que se espera en roles senior de backend cloud.
+
+---
+
+## Idea clave para entender el Caso G
+
+En un sistema simple, una API recibe una peticion y trata de hacer todo al mismo tiempo.
+Eso puede volver lenta o fragil la entrada.
+
+En `Caso G` cambia la idea:
+
+- la API acepta un hecho de negocio
+- publica un evento
+- otros componentes lo procesan despues
+
+Eso permite:
+
+- responder rapido
+- tolerar mejor picos
+- separar responsabilidades
+- manejar errores sin romper al cliente
+
+`/health` en este caso tambien tiene dos lecturas:
+
+- para maquinas: JSON tecnico
+- para personas en navegador: pagina HTML explicativa
+
+Eso ayuda a no confundir "la API esta viva" con "todo el flujo ya se proceso".
 
 ---
 

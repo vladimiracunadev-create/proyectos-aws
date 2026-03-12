@@ -19,6 +19,8 @@ Estado actual validado el **12 de marzo de 2026**:
 - Region: `us-east-2`.
 - API Base URL: `https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com`.
 - Landing publica: `https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com/`.
+- Health HTML: `https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com/health`.
+- Health JSON: `https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com/health?format=json`.
 - Event Bus: `caso-g-orders-bus`.
 - Cola principal: `orders-processing-queue`.
 - DLQ: `orders-processing-dlq`.
@@ -164,7 +166,7 @@ Respuesta esperada:
 Resultado validado:
 
 - `GET /` expone una landing explicativa para demostrar el caso.
-- `GET /health` respondio correctamente.
+- `GET /health` respondio correctamente en navegador y en formato JSON.
 - `POST /events/orders` respondio `202 Accepted`.
 - El consumidor proceso correctamente un evento de prueba.
 - La DLQ conserva 1 mensaje historico de la primera prueba fallida antes del fix del consumidor.
@@ -173,6 +175,12 @@ Resultado validado:
 
 ```bash
 curl "$API_BASE_URL/health"
+```
+
+Si quieres forzar salida JSON tecnica:
+
+```bash
+curl "$API_BASE_URL/health?format=json"
 ```
 
 ### Landing publica
@@ -188,6 +196,18 @@ La raiz entrega una pagina HTML que explica:
 - que problema operativo resuelve
 - que consideraciones se agregaron al despliegue
 - como probar el flujo en vivo desde la propia API
+
+### Health amigable para navegador
+
+La ruta `/health` ahora tiene doble uso:
+
+- en navegador muestra una pagina HTML que explica para que sirve el chequeo
+- en scripts puede entregar JSON con `?format=json`
+
+Esto evita una confusion comun:
+
+- `health` confirma que la puerta de entrada esta viva
+- no confirma por si solo que todo el flujo asincrono ya proceso mensajes
 
 ---
 

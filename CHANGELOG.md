@@ -58,6 +58,7 @@ El formato seguirá [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) y e
 ### Changed
 
 - **Documentacion global**: Sincronizados `README.md`, `ROADMAP.md`, `docs/ARCHITECTURE.md`, `docs/BEGINNERS_GUIDE.md`, `docs/QUICK_REFERENCE.md`, `docs/RECRUITER.md`, `docs/TECHNICAL_SPECS.md`, `docs/FILE_STRUCTURE.md`, `wiki/home.md` y referencias del Caso E para reflejar que `Caso G` ya esta `COMPLETADO (VALIDADO)`.
+- **Caso G - Health endpoint**: `/health` ahora es legible para humanos en navegador y sigue disponible como JSON para herramientas con `?format=json`.
 
 ---
 

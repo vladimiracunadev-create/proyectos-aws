@@ -494,6 +494,226 @@ LANDING_PAGE = """<!DOCTYPE html>
 """
 
 
+HEALTH_PAGE = """<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caso G | Health Check</title>
+  <style>
+    :root {
+      --bg: #08111a;
+      --panel: rgba(10, 22, 38, 0.88);
+      --line: rgba(115, 190, 255, 0.18);
+      --text: #eef7ff;
+      --muted: #9db9cb;
+      --accent: #7ef0b8;
+      --accent-2: #4cc9f0;
+      --shadow: 0 28px 70px rgba(0, 0, 0, 0.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(76, 201, 240, 0.18), transparent 24%),
+        radial-gradient(circle at right, rgba(126, 240, 184, 0.18), transparent 22%),
+        linear-gradient(180deg, #07101a 0%, #0d1b2a 100%);
+    }
+    .shell { width: min(1120px, calc(100% - 28px)); margin: 0 auto; padding: 28px 0 56px; }
+    .hero, .panel {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+    .hero { padding: 28px; margin-bottom: 18px; }
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.78rem;
+    }
+    h1 { margin: 0; font-size: clamp(2.1rem, 5vw, 4rem); line-height: 0.98; }
+    h2 { margin: 0 0 12px; font-size: 1.18rem; }
+    .lead, .copy, li, .muted { color: var(--muted); line-height: 1.55; }
+    .hero-grid, .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      margin-top: 22px;
+    }
+    .panel { padding: 22px; margin-bottom: 18px; }
+    .card {
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+    .stat {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+    }
+    .stat strong { display: block; font-size: 1.35rem; margin-bottom: 4px; }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .chip {
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(76, 201, 240, 0.12);
+      border: 1px solid rgba(76, 201, 240, 0.22);
+      font-size: 0.92rem;
+    }
+    ul { margin: 0; padding-left: 18px; }
+    li { margin-bottom: 8px; }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    a.button {
+      display: inline-block;
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-weight: 800;
+      color: #08111a;
+      background: linear-gradient(135deg, var(--accent), #b4ffd8);
+    }
+    a.button.secondary {
+      background: linear-gradient(135deg, var(--accent-2), #8ae0ff);
+    }
+    pre {
+      margin: 0;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(2, 7, 17, 0.92);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #c7f9cc;
+      overflow: auto;
+    }
+    code.inline {
+      color: #fff1b8;
+      background: rgba(255,255,255,0.06);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+    @media (max-width: 900px) {
+      .hero-grid, .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <p class="eyebrow">Caso G · Health Check</p>
+      <h1>Este endpoint existe para confirmar que la puerta de entrada esta viva</h1>
+      <p class="lead">
+        <code class="inline">/health</code> no es la demo principal. Su trabajo es mucho mas simple:
+        decir si la API de entrada esta respondiendo correctamente antes de publicar eventos.
+        Sirve para validaciones tecnicas, smoke tests, monitoreo y troubleshooting.
+      </p>
+
+      <div class="hero-grid">
+        <div class="card">
+          <h2>Que te esta diciendo este resultado</h2>
+          <ul>
+            <li>La API Gateway esta recibiendo trafico.</li>
+            <li>La Lambda publicadora esta viva y puede responder.</li>
+            <li>El servicio conoce el bus configurado: <code class="inline">__EVENT_BUS_NAME__</code>.</li>
+            <li>Si esto falla, no tiene sentido probar <code class="inline">POST /events/orders</code> todavia.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2>Lectura rapida</h2>
+          <div class="stats">
+            <div class="stat">
+              <strong>OK</strong>
+              <span>Estado operativo de la entrada</span>
+            </div>
+            <div class="stat">
+              <strong>GET</strong>
+              <span>Chequeo liviano y repetible</span>
+            </div>
+            <div class="stat">
+              <strong>JSON</strong>
+              <span>Disponible para scripts y monitoreo</span>
+            </div>
+            <div class="stat">
+              <strong>HTML</strong>
+              <span>Visible para humanos en navegador</span>
+            </div>
+          </div>
+          <div class="chips">
+            <span class="chip">Uso: smoke test</span>
+            <span class="chip">Uso: monitoreo</span>
+            <span class="chip">Uso: troubleshooting</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="grid">
+        <div class="card">
+          <h2>Para que se usa realmente</h2>
+          <ul>
+            <li>Comprobar rapido si el servicio esta arriba.</li>
+            <li>Validar despliegues despues de un <code class="inline">sam deploy</code>.</li>
+            <li>Ser base de futuros checks automatizados y observabilidad.</li>
+            <li>Distinguir entre “la entrada esta viva” y “todo el flujo asincrono ya proceso eventos”.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2>Importante: que NO garantiza</h2>
+          <ul>
+            <li>No prueba por si solo que EventBridge ya acepto un evento.</li>
+            <li>No prueba por si solo que SQS este vacia o sana.</li>
+            <li>No prueba por si solo que la Lambda consumidora ya proceso mensajes.</li>
+            <li>Para eso existe la landing principal y las validaciones de <code class="inline">POST /events/orders</code>.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Respuesta tecnica actual</h2>
+      <p class="muted">
+        Si llamas este endpoint con herramientas como <code class="inline">curl</code> o monitoreo,
+        puedes seguir obteniendo JSON. En navegador mostramos esta vista para que se entienda mejor.
+      </p>
+      <pre>{
+  "status": "__HEALTH_STATUS__",
+  "service": "caso-g-event-driven",
+  "timestamp": "__HEALTH_TIMESTAMP__",
+  "eventBus": "__EVENT_BUS_NAME__"
+}</pre>
+      <div class="actions">
+        <a class="button" href="/">Ir a la landing principal</a>
+        <a class="button secondary" href="/health?format=json">Ver respuesta JSON</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+"""
+
+
 def _json_response(status_code, body):
     return {
         "statusCode": status_code,
@@ -516,8 +736,40 @@ def _html_response(html):
     }
 
 
+def _health_payload():
+    return {
+        "status": "ok",
+        "service": "caso-g-event-driven",
+        "timestamp": _utc_now(),
+        "eventBus": EVENT_BUS_NAME,
+    }
+
+
 def _utc_now():
     return datetime.now(timezone.utc).isoformat()
+
+
+def _query_params(event):
+    return event.get("queryStringParameters") or {}
+
+
+def _wants_html(event):
+    headers = event.get("headers") or {}
+    accept = headers.get("accept") or headers.get("Accept") or ""
+    user_agent = headers.get("user-agent") or headers.get("User-Agent") or ""
+    force_json = (_query_params(event).get("format") or "").lower() == "json"
+
+    if force_json:
+        return False
+
+    return "text/html" in accept.lower() or "mozilla" in user_agent.lower()
+
+
+def _render_health_page(payload):
+    html = HEALTH_PAGE.replace("__EVENT_BUS_NAME__", payload["eventBus"])
+    html = html.replace("__HEALTH_STATUS__", payload["status"])
+    html = html.replace("__HEALTH_TIMESTAMP__", payload["timestamp"])
+    return html
 
 
 def publisher_handler(event, _context):
@@ -528,15 +780,10 @@ def publisher_handler(event, _context):
         return _html_response(LANDING_PAGE.replace("__EVENT_BUS_NAME__", EVENT_BUS_NAME))
 
     if route_method == "GET" and raw_path == "/health":
-        return _json_response(
-            200,
-            {
-                "status": "ok",
-                "service": "caso-g-event-driven",
-                "timestamp": _utc_now(),
-                "eventBus": EVENT_BUS_NAME,
-            },
-        )
+        payload = _health_payload()
+        if _wants_html(event):
+            return _html_response(_render_health_page(payload))
+        return _json_response(200, payload)
 
     try:
         body = json.loads(event.get("body") or "{}")
