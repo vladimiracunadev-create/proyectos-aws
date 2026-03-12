@@ -46,6 +46,11 @@ Este repositorio nació para resolver una pregunta común: *¿Cómo paso de un p
 ### La Simplicidad de AWS Amplify (Caso A)
 La jornada comienza con **Amplify**. Es la entrada más rápida a la nube. Ideal para desarrolladores que quieren delegar la infraestructura y enfocarse en el código.
 
+**Detalles Técnicos:**
+- **CI/CD Nativo**: Amplify escucha cambios en la rama `main` y autodetecta el stack.
+- **Configuración (`amplify.yml`)**: Define las fases de `preBuild`, `build` y `artifacts`.
+- **Hosting Global**: Gestiona automáticamente CloudFront y certificados SSL sin intervención del usuario.
+
 **Arquitectura:**
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#FF9900', 'fontsize': '16px' }}}%%
@@ -60,22 +65,35 @@ graph TB
 ### Hosting en S3 con Pipelines (Caso B)
 Aquí quitamos las "ruedas de entrenamiento". Aprendemos que Amplify usa **S3** por debajo. En este nivel, gestionamos nuestro propio bucket y el flujo de `aws s3 sync`.
 
+**Conceptos Clave:**
+- **GitLab Runners**: Usamos imágenes de Docker con `aws-cli` para automatizar el comando `sync`.
+- **Políticas de Bucket**: Primera aproximación a los permisos. El bucket se configura como "Static Website Hosting".
+- **Access Keys**: Uso de variables de entorno protegidas en GitLab para la autenticación (AWS_ACCESS_KEY_ID).
+
 ---
 
 ## Capítulo 2: El Poder de Terraform y CloudFront (Caso C)
 
-### De ClickOps a IaC
-El problema del Capítulo 1 es que si borras el bucket, tienes que recrearlo a mano. Con **Terraform**, la infraestructura es código. Es representable, auditable y destruible.
+### De ClickOps a IaC (Infraestructura como Código)
+El problema de los capítulos anteriores es la falta de repetibilidad. Con **Terraform**, la infraestructura se define en archivos `.tf`.
+- **Estado Remoto**: Guardamos el `terraform.tfstate` en S3 con bloqueo en **DynamoDB** para evitar condiciones de carrera entre desarrolladores.
+- **Modularidad**: Parametrizamos variables como la región y el nombre del bucket para mayor flexibilidad.
 
-**El Salto de Seguridad (OAC):**
-A diferencia del Caso B, aquí el bucket es **privado**. Usamos **CloudFront** (CDN) para entregar el contenido.
+### El Salto de Seguridad: OAC vs OAI
+A diferencia del Caso B, aquí el bucket es **estrictamente privado**. Usamos **CloudFront** (CDN) para entregar el contenido utilizando **Origin Access Control (OAC)**.
+
+**¿Por qué OAC?**
+- Soporta **SigV4**, lo que permite cifrar el tráfico entre CloudFront y S3.
+- Es más moderno y seguro que el antiguo OAI (Origin Access Identity).
+- Permite que CloudFront acceda a buckets en cualquier región de AWS cómodamente.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#844FBA', 'fontsize': '16px' }}}%%
 graph TB
-    CF["📡 CloudFront (CDN)"] -->|"OAC (Seguro)"| S3["🗄️ S3 (Privado)"]
-    TF["🏗️ Terraform"] -->|"Gestiona"| CF
-    TF -->|"Gestiona"| S3
+    User["🌍 Usuario"] --> CF["📡 CloudFront (CDN)"]
+    CF -->|"SigV4 Auth (OAC)"| S3["🗄️ S3 (Privado)"]
+    TF["🏗️ Terraform"] -->|"Orquesta"| CF
+    TF -->|"Orquesta"| S3
     
     style CF fill:#FF9900,color:#fff
     style TF fill:#844FBA,color:#fff
@@ -87,16 +105,24 @@ graph TB
 
 ### La Magia de Lambda y SAM (Caso D)
 Ya no solo servimos archivos estáticos. Ahora tenemos lógica. **AWS Lambda** nos permite ejecutar backend solo cuando alguien lo pide. Costo: $0 si nadie entra.
+- **Micro-servicios Event-Driven**: API Gateway actúa como el disparador (trigger) que despierta a la Lambda.
+- **AWS SAM (Serverless Application Model)**: Usamos una extensión de CloudFormation optimizada para serverless para desplegar rápidamente.
 
 ### Persistencia Single-Table (Caso E)
-El modelado de datos evoluciona. Ya no usamos tablas relacionales pesadas; usamos **DynamoDB** con una sola tabla para maximizar la velocidad.
+El modelado de datos evoluciona drásticamente. En NoSQL, no buscamos normalizar, buscamos **rendimiento**.
+
+**Técnicas de Single Table Design:**
+- **PK y SK**: Uso de Partition Keys y Sort Keys para agrupar datos relacionados (Customer + Orders).
+- **GSI (Global Secondary Index)**: Permite pivotar la tabla para responder nuevas preguntas (ej: "buscar órdenes por estado") sin escaneos costosos.
+- **Escritura Transaccional**: Uso de `TransactWriteItems` para asegurar que al crear una orden, se cree también un registro de auditoría de forma atómica.
 
 **Flujo de Datos:**
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#FF9900', 'fontsize': '16px' }}}%%
 graph TB
-    APIGW["🌐 API Gateway"] --> Lambda["⚡ Lambda"]
-    Lambda --> DDB["🗄️ DynamoDB Table"]
+    APIGW["🌐 API Gateway"] --> Lambda["⚡ Lambda Python"]
+    Lambda -->|"TransactWrite"| DDB["🗄️ DynamoDB (Single Table)"]
+    DDB -.-> GSI["⚡ GSI (Indices op.)"]
     
     style Lambda fill:#F0AD4E
     style DDB fill:#3498DB,color:#fff
@@ -107,26 +133,53 @@ graph TB
 ## Capítulo 4: Orquestación a Gran Escala (ECS y EKS)
 
 ### ECS Fargate (Caso J)
-Cuando el backend es complejo o requiere dependencias de sistema específicas, pasamos a **Contenedores**. Fargate es "Serverless containers".
+Cuando el servidor necesita persistencia en memoria, sockets de larga duración o dependencias binarias complejas, usamos contenedores.
+- **Serverless Containers**: Fargate elimina la necesidad de gestionar parches de SO en las instancias EC2.
+- **Elastic Container Registry (ECR)**: Almacenamos nuestras imágenes Docker versionadas por SHA para despliegues inmutables.
 
 ### Kubernetes EKS (Caso K)
-El nivel máximo. Si tu flota de microservicios es inmensa, EKS te da el control total con el estándar de la industria.
+El estándar de facto para la "Cloud Native Computing Foundation". EKS gestiona el plano de control (Master nodes) por nosotros.
+- **Self-Healing**: Kubernetes vigila los Pods. Si uno muere (Crash), lo reinicia en 15 segundos.
+- **Rolling Updates**: Despliegues con cero tiempo de inactividad. K8s levanta la versión v2, espera a que esté lista (`Readiness Probe`) y recién ahí apaga la v1.
+
+**Escalabilidad:**
+Usamos el **Horizontal Pod Autoscaler (HPA)** para clonar pods automáticamente cuando la CPU sube del 70%.
 
 ---
 
 ## Capítulo 5: Excelencia Operativa (FinOps)
 
 ### Gobernanza y Zero-Trust (Caso L)
-Finalmente, aprendemos que la tecnología sin control es un riesgo.
-- **OIDC**: Eliminamos las llaves permanentes (IAM Keys).
-- **FinOps**: Ponemos límites de costo para no llevarnos sorpresas al final del mes.
+Finalmente, aprendemos que la tecnología sin control es un riesgo. La madurez de un arquitecto se mide por su capacidad de asegurar la cuenta y predecir los costos.
+
+**Innovaciones en Seguridad:**
+- **OIDC (OpenID Connect)**: Eliminamos el uso de `AWS_ACCESS_KEY_ID` permanentes. GitLab CI se autentica con AWS mediante tokens temporales y efímeros (Zero-Trust).
+- **IAM Governance**: Implementamos políticas que restringen el despliegue a regiones específicas (ej: `us-east-1`) para evitar cargos en regiones costosas o no autorizadas.
+
+**Estrategia FinOps:**
+- **AWS Budgets**: Configuramos alertas proactivas que disparan correos cuando el gasto acumulado llega al 85% del presupuesto.
+- **Auditoría de Recursos**: Usamos scripts personalizados (`make finops-check`) para detectar recursos "fantasma" como NAT Gateways o clusters EKS que quedaron encendidos por error.
+
+**Visualización de Costos:**
+Consultamos la API de **Cost Explorer** mediante Python y Boto3 para generar un dashboard dinámico alojado en S3.
 
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#E74C3C', 'fontsize': '16px' }}}%%
 graph TB
-    Budget["💰 Budget Alert"] --> Email["📧 Email"]
-    OIDC["🔐 GitLab OIDC"] --> STS["🔑 Temp Keys"]
+    subgraph Governance["🛡️ Gobernanza"]
+        OIDC["🔐 GitLab OIDC\n(Sin Keys)"]
+        RegionPolicy["🚫 Deny Regions\n(Compliance)"]
+    end
     
+    subgraph FinOps["💰 FinOps"]
+        Budget["💰 AWS Budgets\nAlert 85%"]
+        Check["🔍 Resource Audit\n(make finops-check)"]
+    end
+
+    OIDC --> STS["🔑 Temp Keys"]
+    Budget --> Email["📧 Alerta Email"]
+    
+    style OIDC fill:#8E44AD,color:#fff
     style Budget fill:#F39C12
 ```
 
