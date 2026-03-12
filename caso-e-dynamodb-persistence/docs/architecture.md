@@ -20,38 +20,42 @@ pruebas reales contra la misma infraestructura desplegada.
 
 ---
 
-## Diagrama 1: Flujo principal de escritura
+## 📐 Diagrama 1: Flujo principal de escritura
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#FF9900', 'edgeColor': '#2496ED', 'tertiaryColor': '#f4f4f4' }}}%%
 sequenceDiagram
-    participant UI as Landing / Frontend Demo
-    participant API as API Gateway
-    participant L as Lambda Orders API
-    participant DDB as DynamoDB
+    participant UI as 📱 Landing / Frontend Demo
+    participant API as 🌐 API Gateway
+    participant L as ⚡ Lambda Orders API
+    participant DDB as 🗄️ DynamoDB
 
     UI->>API: POST /orders
     API->>L: Invoca función
+    activate L
     L->>L: Valida payload
     L->>DDB: TransactWriteItems
     Note over DDB: 1 item ORDER<br/>1 item AUDIT
     DDB-->>L: OK
     L-->>API: 201 + orden creada
+    deactivate L
     API-->>UI: JSON
 ```
 
 ---
 
-## Diagrama 2: Single Table Design
+## 📐 Diagrama 2: Single Table Design
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#E74C3C', 'secondaryColor': '#27AE60', 'tertiaryColor': '#f9f9f9' }}}%%
 graph TB
-    subgraph Table["DynamoDB table: persistence_pro_orders"]
-        PKSK["PK / SK"]
-        GSI1["GSI1: gsi1pk / gsi1sk"]
-        GSI2["GSI2: gsi2pk / gsi2sk"]
+    subgraph Table["🗄️ DynamoDB table: persistence_pro_orders"]
+        PKSK["🔑 PK / SK"]
+        GSI1["⚡ GSI1: gsi1pk / gsi1sk"]
+        GSI2["⚡ GSI2: gsi2pk / gsi2sk"]
     end
 
-    subgraph EntityOrder["Item ORDER"]
+    subgraph EntityOrder["📦 Item ORDER"]
         OrderPK["PK = CUSTOMER#cust-001"]
         OrderSK["SK = ORDER#2026-03-11T12:00:00Z#ord-123"]
         OrderGSI1["GSI1PK = STATUS#PENDING"]
@@ -60,7 +64,7 @@ graph TB
         OrderGSI2SK["GSI2SK = 2026-03-11T12:00:00Z#ord-123"]
     end
 
-    subgraph EntityAudit["Item AUDIT"]
+    subgraph EntityAudit["📜 Item AUDIT"]
         AuditPK["PK = ORDER#ord-123"]
         AuditSK["SK = EVENT#2026-03-11T12:00:00Z"]
     end
@@ -73,39 +77,61 @@ graph TB
     GSI1 --> OrderGSI1SK
     GSI2 --> OrderGSI2
     GSI2 --> OrderGSI2SK
+
+    style Table fill:#f4f4f4,stroke:#333,stroke-width:2px
+    style EntityOrder fill:#e1f5fe,stroke:#01579b
+    style EntityAudit fill:#fff3e0,stroke:#e65100
 ```
 
 ---
 
-## Diagrama 3: Patrones de acceso soportados
+## 📐 Diagrama 3: Patrones de acceso soportados
 
 ```mermaid
 graph LR
-    A["GET /customers/{customerId}/orders"] --> B["Query PK = CUSTOMER#id"]
-    C["GET /orders/status/{status}"] --> D["Query GSI1PK = STATUS#value"]
-    E["GET /products/{productId}/orders"] --> F["Query GSI2PK = PRODUCT#id"]
-    G["POST /orders"] --> H["TransactWrite: ORDER + AUDIT"]
-    I["GET /"] --> J["Landing explicativa + demo interactiva"]
+    A["🔍 GET /customers/{customerId}/orders"] --> B["Query PK = CUSTOMER#id"]
+    C["📊 GET /orders/status/{status}"] --> D["Query GSI1PK = STATUS#value"]
+    E["📦 GET /products/{productId}/orders"] --> F["Query GSI2PK = PRODUCT#id"]
+    G["➕ POST /orders"] --> H["TransactWrite: ORDER + AUDIT"]
+    I["🏠 GET /"] --> J["Landing explicativa + demo interactiva"]
+
+    classDef default fill:#f9f9f9,stroke:#333,stroke-width:1px;
+    classDef highlight fill:#6C4DE6,color:#fff,stroke:#4B32C3;
+    class I,J highlight;
 ```
 
 ---
 
-## Diagrama 4: Arquitectura completa AWS
+## 📐 Diagrama 4: Arquitectura completa AWS
 
 ```mermaid
 graph TB
-    User["Usuario / Navegador"] --> APIGW["API Gateway HTTP API"]
-    APIGW --> Lambda["Lambda Python 3.12"]
+    subgraph Client["💻 Frontend"]
+        User["🌍 Usuario / Navegador"]
+    end
 
-    Lambda --> Table["DynamoDB\nSingle Table"]
-    Lambda --> GSI1["GSI1 por estado"]
-    Lambda --> GSI2["GSI2 por producto"]
+    subgraph AWS["☁️ Infraestructura AWS"]
+        APIGW["🌐 API Gateway\nHTTP API"]
+        Lambda["⚡ Lambda\nPython 3.12"]
+        Table["🗄️ DynamoDB\nSingle Table"]
+        
+        APIGW --> Lambda
+        Lambda --> Table
+    end
 
-    Dev["Desarrollador"] --> SAM["AWS SAM"]
-    SAM --> CFN["CloudFormation Stack"]
-    CFN --> APIGW
-    CFN --> Lambda
-    CFN --> Table
+    subgraph Automation["⚙️ Tooling"]
+        Dev["👨‍💻 Desarrollador"] --> SAM["🛠️ AWS SAM"]
+        SAM --> CFN["📜 CloudFormation"]
+        CFN --> APIGW
+        CFN --> Lambda
+        CFN --> Table
+    end
+
+    User --> APIGW
+
+    style AWS fill:#FFF3E0,stroke:#FF9900,stroke-width:2px
+    style Automation fill:#F3E5F5,stroke:#6C4DE6,stroke-width:2px
+    style Client fill:#E3F2FD,stroke:#2196F3,stroke-width:2px
 ```
 
 ---
