@@ -11,7 +11,7 @@ Este monorepo es una suite educativa avanzada diseñada para modernizar y automa
 ---
 
 ### 📖 Recurso Destacado
-👉 [**Libro: AWS Cloud Journey**](file:///c:/proyectos-aws-gitlab/AWS_CLOUD_JOURNEY.md) — **¡NUEVO!** El compendio técnico definitivo de este repositorio. Una narración paso a paso desde el nivel 0 hasta arquitectura enterprise.
+👉 [**Libro: AWS Cloud Journey**](./AWS_CLOUD_JOURNEY.md) — **¡NUEVO!** El compendio técnico definitivo de este repositorio. Una narración paso a paso desde el nivel 0 hasta arquitectura enterprise.
 
 ---
 
@@ -178,9 +178,9 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 
 ## 📚 Documentación Técnica Básica
 
-- [Guía AWS Paso a Paso (Console)](file:///c:/proyectos-aws-gitlab/docs/AWS_PASO_A_PASO.md) — Para principiantes.
-- [Evolución de Arquitecturas](file:///c:/proyectos-aws-gitlab/docs/ARCHITECTURE.md) — Vista por niveles.
-- [**Libro: AWS Cloud Journey**](file:///c:/proyectos-aws-gitlab/AWS_CLOUD_JOURNEY.md) 📖 — **¡NUEVO!** El compendio técnico completo del repositorio.
+- [Guía AWS Paso a Paso (Console)](./docs/AWS_PASO_A_PASO.md) — Para principiantes.
+- [Evolución de Arquitecturas](./docs/ARCHITECTURE.md) — Vista por niveles.
+- [**Libro: AWS Cloud Journey**](./AWS_CLOUD_JOURNEY.md) 📖 — **¡NUEVO!** El compendio técnico completo del repositorio.
 
 #### [📂 Caso K: Kubernetes en AWS (EKS)](./caso-k-kubernetes-eks/README.md) `Nivel 10` `COMPLETADO (VALIDADO)`
 *   **Stack**: AWS EKS + YAML + GitLab Kubernetes Agent.
