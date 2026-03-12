@@ -10,6 +10,16 @@ Este monorepo es una suite educativa avanzada diseñada para modernizar y automa
 
 ---
 
+### 📖 Recurso Destacado
+👉 [**Libro: AWS Cloud Journey**](file:///c:/proyectos-aws-gitlab/AWS_CLOUD_JOURNEY.md) — **¡NUEVO!** El compendio técnico definitivo de este repositorio. Una narración paso a paso desde el nivel 0 hasta arquitectura enterprise.
+
+---
+
+### 📖 Recurso Destacado
+👉 [**Libro: AWS Cloud Journey**](file:///c:/proyectos-aws-gitlab/AWS_CLOUD_JOURNEY.md) — **¡NUEVO!** El compendio técnico definitivo de este repositorio. Una narración paso a paso desde el nivel 0 hasta arquitectura enterprise.
+
+---
+
 ## 🌐 Portal de Documentación (PWA)
 ¡Nuevo! Hemos lanzado un portal web interactivo para explorar este repositorio con un diseño moderno y premium (**Glassmorphism**).
 
