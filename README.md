@@ -171,6 +171,12 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   ☁️ [Guía Paso a Paso AWS](caso-j-containers-ecs/AWS_PASO_A_PASO.md)
 *   🖼️ [Reporte de Visualización y Resultados](caso-j-containers-ecs/VISUALIZATION.md)
 
+## 📚 Documentación Técnica Básica
+
+- [Guía AWS Paso a Paso (Console)](file:///c:/proyectos-aws-gitlab/docs/AWS_PASO_A_PASO.md) — Para principiantes.
+- [Evolución de Arquitecturas](file:///c:/proyectos-aws-gitlab/docs/ARCHITECTURE.md) — Vista por niveles.
+- [**Libro: AWS Cloud Journey**](file:///c:/proyectos-aws-gitlab/AWS_CLOUD_JOURNEY.md) 📖 — **¡NUEVO!** El compendio técnico completo del repositorio.
+
 #### [📂 Caso K: Kubernetes en AWS (EKS)](./caso-k-kubernetes-eks/README.md) `Nivel 10` `COMPLETADO (VALIDADO)`
 *   **Stack**: AWS EKS + YAML + GitLab Kubernetes Agent.
 *   **Enfoque**: **Orquestación Real en AWS.** Kubernetes directo en la nube. Gestiona flotas de contenedores, auto-sanación y balanceo masivo.
