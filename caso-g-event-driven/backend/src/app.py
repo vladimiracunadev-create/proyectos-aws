@@ -143,6 +143,21 @@ LANDING_PAGE = """<!DOCTYPE html>
       gap: 10px;
       margin-top: 14px;
     }
+    .link-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    a.link-button {
+      display: inline-block;
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-weight: 800;
+      color: #08111a;
+      background: linear-gradient(135deg, var(--accent-2), #8ae0ff);
+    }
     button {
       cursor: pointer;
       font-weight: 800;
@@ -357,6 +372,10 @@ LANDING_PAGE = """<!DOCTYPE html>
       <div class="actions">
         <button id="healthBtn" class="secondary" type="button">Probar health</button>
         <button id="publishBtn" class="primary" type="button">Publicar evento</button>
+      </div>
+      <div class="link-actions">
+        <a class="link-button" href="/health">Abrir health para navegador</a>
+        <a class="link-button" href="/health?format=json">Abrir health JSON</a>
       </div>
     </section>
 
