@@ -66,6 +66,7 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 
 ### 💰 FinOps & Auditoría
 - 💰 **[Manual de FinOps](docs/FINOPS_MANUAL.md)**: Auditoría de costos y semáforo de riesgo financiero.
+- 📊 **[Análisis de Casos PROYECTADO](docs/PROYECTADOS_ANALISIS.md)**: Complejidad, costos reales AWS 2025 y orden de implementación recomendado para los casos F, H, I y M.
 
 ### 👔 Para Reclutadores
 - 👨‍💼 **[Guía para Reclutadores](docs/RECRUITER.md)**: Tour ejecutivo y valor de negocio.
