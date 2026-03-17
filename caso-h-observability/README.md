@@ -18,6 +18,7 @@
 - **CloudWatch Alarms**: error rate y latencia p99 configuradas.
 - **Métricas custom** en namespace `CasoH` publicadas desde Lambda.
 - Stack name: `caso-h-observability` | Región: `us-east-2`
+- 👉 **[Ver Demo en Vivo](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/)**
 
 ---
 

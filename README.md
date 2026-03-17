@@ -169,6 +169,7 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   **Enfoque**: **Monitoreo Proactivo como Código.** Métricas custom, trazas X-Ray y dashboards definidos en CloudFormation. Detecta fallos antes que el usuario.
 *   🏗️ [Arquitectura (Mermaid)](caso-h-observability/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-h-observability/AWS_PASO_A_PASO.md)
+*   👉 [Landing y API pública](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/)
 
 #### [📂 Caso I: GenAI Bedrock](./caso-i-genai-bedrock/index.html) `Nivel 8` `PROYECTADO`
 *   **Stack**: Amazon Bedrock + LangChain + Lambda.
