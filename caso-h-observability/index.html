@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Caso H: Observability & Health — CloudWatch + X-Ray en AWS" />
+  <title>Caso H | Observability & Health</title>
+  <style>
+    :root {
+      --bg: #07111b;
+      --panel: rgba(10, 22, 38, 0.86);
+      --line: rgba(76, 201, 240, 0.18);
+      --text: #eef7ff;
+      --muted: #9ab8cb;
+      --accent: #4cc9f0;
+      --accent2: #7ef0b8;
+      --shadow: 0 24px 60px rgba(0,0,0,0.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 30%, rgba(76,201,240,0.14), transparent 26%),
+        radial-gradient(circle at 85% 70%, rgba(126,240,184,0.14), transparent 26%),
+        linear-gradient(180deg,#07101a 0%,#0c1b2a 100%);
+      min-height: 100vh;
+    }
+    .shell {
+      width: min(1100px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 36px 0 64px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      margin-bottom: 18px;
+    }
+    .eyebrow {
+      margin: 0 0 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.76rem;
+      color: var(--accent);
+    }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.8rem); line-height: 1; }
+    h2 { margin: 0 0 14px; font-size: 1.15rem; }
+    .lead { color: var(--muted); max-width: 70ch; margin: 12px 0 0; line-height: 1.6; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .pillar {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 18px;
+    }
+    .pillar-icon { font-size: 2rem; display: block; margin-bottom: 8px; }
+    .pillar strong { display: block; margin-bottom: 4px; }
+    .pillar p { color: var(--muted); font-size: 0.9rem; line-height: 1.5; margin: 0; }
+    .stack-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    .stack-table td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.95rem; }
+    .stack-table td:first-child { color: var(--accent); font-weight: 700; width: 40%; }
+    .stack-table td:last-child { color: var(--muted); }
+    .badge-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .badge {
+      padding: 8px 14px; border-radius: 999px; font-size: 0.88rem;
+      border: 1px solid rgba(76,201,240,0.3); background: rgba(76,201,240,0.1);
+      color: var(--accent);
+    }
+    .badge.green { border-color: rgba(126,240,184,0.3); background: rgba(126,240,184,0.1); color: var(--accent2); }
+    .btn-group { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+    a.btn {
+      text-decoration: none; padding: 12px 18px; border-radius: 14px;
+      font-weight: 800; color: #08111a;
+      background: linear-gradient(135deg, var(--accent), #8ae0ff);
+      transition: filter 120ms;
+    }
+    a.btn:hover { filter: brightness(1.08); }
+    a.btn.green { background: linear-gradient(135deg, var(--accent2), #b4ffd8); }
+    @media (max-width:640px) { .shell { padding-top: 18px; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="card">
+      <p class="eyebrow">Caso H &middot; Nivel 7 &middot; Observability & Health</p>
+      <h1>Infraestructura visible.<br>Problemas detectados antes.</h1>
+      <p class="lead">
+        Este caso implementa los tres pilares de la observabilidad en AWS como código:
+        métricas custom en CloudWatch, trazas distribuidas con X-Ray y un dashboard + alarmas
+        definidos directamente en la plantilla SAM/CloudFormation.
+      </p>
+      <div class="badge-row">
+        <span class="badge">SAM / CloudFormation</span>
+        <span class="badge">Python 3.12</span>
+        <span class="badge green">X-Ray Activo</span>
+        <span class="badge green">Dashboard IaC</span>
+        <span class="badge green">2 Alarmas</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Los tres pilares</h2>
+      <div class="grid">
+        <div class="pillar">
+          <span class="pillar-icon">📊</span>
+          <strong>Métricas</strong>
+          <p>CloudWatch: invocaciones, errores, latencia p99 y métricas custom de negocio en namespace <code>CasoH</code>.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-icon">📋</span>
+          <strong>Logs</strong>
+          <p>CloudWatch Logs con salida JSON estructurada. Queries con Logs Insights para analisis rapido de incidentes.</p>
+        </div>
+        <div class="pillar">
+          <span class="pillar-icon">🔗</span>
+          <strong>Trazas</strong>
+          <p>AWS X-Ray activado por SAM Globals. Service map, timeline y subsegmentos por invocacion sin codigo extra.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Stack técnico</h2>
+      <table class="stack-table">
+        <tr><td>API</td><td>API Gateway HTTP API con CORS</td></tr>
+        <tr><td>Lambda</td><td>Python 3.12 — HealthDashboardFunction</td></tr>
+        <tr><td>Tracing</td><td>AWS X-Ray (Tracing: Active via SAM Globals)</td></tr>
+        <tr><td>Métricas custom</td><td>CloudWatch namespace CasoH / HealthChecks</td></tr>
+        <tr><td>Dashboard</td><td>AWS::CloudWatch::Dashboard inline en CloudFormation</td></tr>
+        <tr><td>Alarma 1</td><td>caso-h-lambda-errors — Errors ≥ 1 en 60s</td></tr>
+        <tr><td>Alarma 2</td><td>caso-h-lambda-duration-p99 — p99 > 3000ms</td></tr>
+        <tr><td>IaC</td><td>AWS SAM / CloudFormation</td></tr>
+      </table>
+
+      <div class="btn-group">
+        <a class="btn" href="./backend/template.yaml">Ver template.yaml</a>
+        <a class="btn green" href="./docs/architecture.md">Arquitectura Mermaid</a>
+        <a class="btn" href="./AWS_PASO_A_PASO.md">Guía de Despliegue</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

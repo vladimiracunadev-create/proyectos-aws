@@ -1,0 +1,16 @@
+{
+  "httpMethod": "GET",
+  "rawPath": "/health",
+  "requestContext": {
+    "http": {
+      "method": "GET",
+      "path": "/health"
+    }
+  },
+  "headers": {
+    "accept": "application/json"
+  },
+  "queryStringParameters": {
+    "format": "json"
+  }
+}

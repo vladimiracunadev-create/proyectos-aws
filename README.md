@@ -164,9 +164,11 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   ☁️ [Guía Paso a Paso AWS](caso-g-event-driven/AWS_PASO_A_PASO.md)
 *   👉 [Landing y API pública](https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com/)
 
-#### [📂 Caso H: Observability & Health](./caso-h-observability/index.html) `Nivel 7` `PROYECTADO`
-*   **Stack**: CloudWatch + X-Ray + GitLab Observability.
-*   **Enfoque**: **Monitoreo Proactivo.** Trazabilidad distribuida para encontrar fallos antes que el usuario y tableros de salud integrados en GitLab.
+#### [📂 Caso H: Observability & Health](./caso-h-observability/index.html) `Nivel 7` `COMPLETADO`
+*   **Stack**: CloudWatch + X-Ray + CloudWatch Dashboard (IaC) + Lambda.
+*   **Enfoque**: **Monitoreo Proactivo como Código.** Métricas custom, trazas X-Ray y dashboards definidos en CloudFormation. Detecta fallos antes que el usuario.
+*   🏗️ [Arquitectura (Mermaid)](caso-h-observability/docs/architecture.md)
+*   ☁️ [Guía Paso a Paso AWS](caso-h-observability/AWS_PASO_A_PASO.md)
 
 #### [📂 Caso I: GenAI Bedrock](./caso-i-genai-bedrock/index.html) `Nivel 8` `PROYECTADO`
 *   **Stack**: Amazon Bedrock + LangChain + Lambda.
@@ -221,7 +223,7 @@ El repositorio sigue un plan de crecimiento incremental. El estado detallado de 
 | E — Persistence Pro (DynamoDB) | COMPLETADO (VALIDADO) | Operativo: API + landing + DynamoDB |
 | F — Security First (Cognito) | PROYECTADO | Fase 1: User Pools + WAF |
 | G — Event Driven (EventBridge) | COMPLETADO (VALIDADO) | Operativo: API + EventBridge + SQS + DLQ + SNS |
-| H — Observability (CloudWatch) | PROYECTADO | Fase 1: Dashboards + X-Ray |
+| H — Observability (CloudWatch) | COMPLETADO | Dashboard IaC + X-Ray + Alarmas |
 | I — GenAI (Bedrock) | PROYECTADO | Fase 1: LLM Integration |
 | **M — Resiliencia & Failover** | **FUTURO (Fase 0 ✅)** | **Fase 1: Multi-AZ + ALB** |
 

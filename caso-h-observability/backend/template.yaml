@@ -1,0 +1,186 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: caso-h-observability - API Gateway + Lambda + CloudWatch Dashboard + X-Ray
+
+Globals:
+  Function:
+    Timeout: 15
+    MemorySize: 256
+    Runtime: python3.12
+    Tracing: Active
+
+Resources:
+  Api:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - "*"
+        AllowMethods:
+          - GET
+          - POST
+          - OPTIONS
+        AllowHeaders:
+          - content-type
+
+  HealthDashboardFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: app.handler
+      Environment:
+        Variables:
+          STACK_NAME: caso-h-observability
+          METRIC_NAMESPACE: CasoH
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - cloudwatch:PutMetricData
+                - xray:PutTelemetryRecords
+                - xray:PutTraceSegments
+              Resource: "*"
+      Events:
+        RootLanding:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /
+            Method: GET
+        HealthHtml:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /health
+            Method: GET
+        MetricsPost:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /metrics
+            Method: POST
+
+  ErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: caso-h-lambda-errors
+      AlarmDescription: Alarma cuando la Lambda reporta errores
+      Namespace: AWS/Lambda
+      MetricName: Errors
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref HealthDashboardFunction
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+
+  LatencyAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: caso-h-lambda-duration-p99
+      AlarmDescription: Alarma cuando la duracion supera 3000ms
+      Namespace: AWS/Lambda
+      MetricName: Duration
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref HealthDashboardFunction
+      ExtendedStatistic: p99
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 3000
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+
+  ObservabilityDashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: caso-h-observability
+      DashboardBody: !Sub |
+        {
+          "widgets": [
+            {
+              "type": "metric",
+              "x": 0, "y": 0, "width": 8, "height": 6,
+              "properties": {
+                "title": "Lambda Invocaciones y Errores",
+                "metrics": [
+                  ["AWS/Lambda", "Invocations", "FunctionName", "${HealthDashboardFunction}", {"label": "Invocaciones", "color": "#4cc9f0"}],
+                  ["AWS/Lambda", "Errors",      "FunctionName", "${HealthDashboardFunction}", {"label": "Errores",       "color": "#ff6b6b"}]
+                ],
+                "view": "timeSeries",
+                "stat": "Sum",
+                "period": 60,
+                "region": "${AWS::Region}"
+              }
+            },
+            {
+              "type": "metric",
+              "x": 8, "y": 0, "width": 8, "height": 6,
+              "properties": {
+                "title": "Lambda Duracion (ms)",
+                "metrics": [
+                  ["AWS/Lambda", "Duration", "FunctionName", "${HealthDashboardFunction}", {"stat": "Average", "label": "Promedio", "color": "#ff9900"}],
+                  ["AWS/Lambda", "Duration", "FunctionName", "${HealthDashboardFunction}", {"stat": "p99",     "label": "p99",      "color": "#f72585"}]
+                ],
+                "view": "timeSeries",
+                "period": 60,
+                "region": "${AWS::Region}"
+              }
+            },
+            {
+              "type": "metric",
+              "x": 16, "y": 0, "width": 8, "height": 6,
+              "properties": {
+                "title": "Metricas Custom — HealthChecks",
+                "metrics": [
+                  ["CasoH", "HealthChecks", "Service", "caso-h-observability", {"label": "Health Checks realizados", "color": "#7ef0b8"}]
+                ],
+                "view": "timeSeries",
+                "stat": "Sum",
+                "period": 60,
+                "region": "${AWS::Region}"
+              }
+            },
+            {
+              "type": "alarm",
+              "x": 0, "y": 6, "width": 12, "height": 3,
+              "properties": {
+                "title": "Estado de Alarmas",
+                "alarms": [
+                  "arn:aws:cloudwatch:${AWS::Region}:${AWS::AccountId}:alarm:caso-h-lambda-errors",
+                  "arn:aws:cloudwatch:${AWS::Region}:${AWS::AccountId}:alarm:caso-h-lambda-duration-p99"
+                ]
+              }
+            },
+            {
+              "type": "log",
+              "x": 12, "y": 6, "width": 12, "height": 3,
+              "properties": {
+                "title": "Ultimos logs Lambda",
+                "query": "SOURCE '/aws/lambda/${HealthDashboardFunction}' | fields @timestamp, @message | sort @timestamp desc | limit 20",
+                "region": "${AWS::Region}",
+                "view": "table"
+              }
+            }
+          ]
+        }
+
+Outputs:
+  ApiBaseUrl:
+    Description: URL base del HTTP API
+    Value: !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com"
+
+  DashboardName:
+    Description: Nombre del dashboard CloudWatch
+    Value: caso-h-observability
+
+  DashboardUrl:
+    Description: URL directa al dashboard en la consola AWS
+    Value: !Sub "https://${AWS::Region}.console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#dashboards:name=caso-h-observability"
+
+  FunctionName:
+    Description: Nombre de la Lambda
+    Value: !Ref HealthDashboardFunction
