@@ -1,17 +1,14 @@
 # Guía Paso a Paso AWS — Caso H: Observability & Health
 
-## 0. Definición de operativo
+Estado actual validado el **17 de marzo de 2026**:
 
-El Caso H se considera operativo cuando se cumplen estos puntos:
-
-- `sam build` termina sin errores.
-- `sam deploy` crea el stack `caso-h-observability` en AWS.
-- `GET /` expone la landing interactiva con los tres pilares.
-- `GET /health` responde HTML en navegador y JSON con `?format=json`.
-- `POST /metrics` publica la métrica `CasoH/HealthChecks` en CloudWatch.
-- El Dashboard `caso-h-observability` aparece en la consola de CloudWatch.
-- Las dos alarmas aparecen en estado `OK` en CloudWatch.
-- AWS X-Ray muestra trazas del servicio en el Service Map.
+- `sam build` ejecutado con éxito.
+- Stack desplegado: `caso-h-observability`.
+- Región: `us-east-2`.
+- API Base URL: `https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com`.
+- Dashboard URL: `https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#dashboards:name=caso-h-observability`.
+- Alarma Errores: `caso-h-lambda-errors` (Estado: OK).
+- Alarma Latencia: `caso-h-lambda-duration-p99` (Estado: OK).
 
 ---
 
