@@ -58,7 +58,24 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 - 🛠️ **[Especificaciones Técnicas](docs/TECHNICAL_SPECS.md)**: Requerimientos de hardware y software.
 - 🔧 **[Tooling](docs/TOOLING.md)**: Docker, Kubernetes, Makefile y validaciones.
 - 📊 **[Resumen de Implementación](docs/IMPLEMENTATION_SUMMARY.md)**: Overview del tooling y seguridad.
-- 🧠 **[Skills del Monorepo](docs/SKILLS.md)**: Libreria de skills de Codex para casos AWS, CI en GitLab, docs, Terraform y FinOps.
+### 🧠 Skills de Claude Code
+
+> Invoca cualquier skill escribiendo `/nombre-del-skill` en una sesión de Claude Code.
+
+| Skill | Cuándo usarlo |
+|---|---|
+| [`/aws-case-scaffolder`](skills/aws-case-scaffolder/SKILL.md) | Crear un caso nuevo |
+| [`/sam-serverless-workflow`](skills/sam-serverless-workflow/SKILL.md) | Build / deploy / test con AWS SAM |
+| [`/lambda-test-patterns`](skills/lambda-test-patterns/SKILL.md) | Escribir o corregir tests de Lambda |
+| [`/architecture-doc-standard`](skills/architecture-doc-standard/SKILL.md) | Crear o revisar `docs/architecture.md` |
+| [`/caso-completion-checklist`](skills/caso-completion-checklist/SKILL.md) | Promover un caso de PROYECTADO a COMPLETADO |
+| [`/visualizacion-evidencia`](skills/visualizacion-evidencia/SKILL.md) | Demo en Vivo vs Reporte de Evidencia por costo |
+| [`/docs-portal-sync`](skills/docs-portal-sync/SKILL.md) | Sincronizar docs, portal y wiki tras cambios |
+| [`/gitlab-aws-pipeline-editor`](skills/gitlab-aws-pipeline-editor/SKILL.md) | Editar `.gitlab-ci.yml` y pipelines |
+| [`/terraform-aws-demo-patterns`](skills/terraform-aws-demo-patterns/SKILL.md) | Crear o actualizar infraestructura Terraform |
+| [`/finops-audit-and-budgeting`](skills/finops-audit-and-budgeting/SKILL.md) | Costos, auditoría y dashboards FinOps |
+
+📖 Ver catálogo completo: **[docs/SKILLS.md](docs/SKILLS.md)**
 
 ### 🛡️ Seguridad
 - 🛡️ **[Seguridad IAM](docs/IAM_SECURITY.md)**: Políticas de acceso y privilegios mínimos.
