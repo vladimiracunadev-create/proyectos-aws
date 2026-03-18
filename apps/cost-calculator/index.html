@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWS Cost Calculator — Vladimir Acuna</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --green: #3fb950;
+      --yellow: #d29922;
+      --orange: #f0883e;
+      --red: #f85149;
+      --blue: #58a6ff;
+      --accent: #1f6feb;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; }
+
+    header { text-align: center; margin-bottom: 2.5rem; }
+    header h1 { font-size: 1.8rem; font-weight: 700; color: var(--blue); }
+    header p { color: var(--muted); margin-top: 0.5rem; font-size: 0.9rem; }
+
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 2rem 0 1rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+    }
+
+    /* CASES GRID */
+    .cases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .case-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      transition: border-color 0.2s;
+    }
+    .case-card:hover { border-color: var(--accent); }
+
+    .case-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.75rem;
+    }
+    .case-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background: var(--accent);
+      color: #fff;
+      white-space: nowrap;
+    }
+    .case-name { font-size: 0.85rem; font-weight: 600; }
+
+    .cost-display {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .cost-label { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.75rem; }
+
+    .risk-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+    }
+    .risk-zero  { background: rgba(63,185,80,0.15);  color: var(--green);  }
+    .risk-low   { background: rgba(210,153,34,0.15); color: var(--yellow); }
+    .risk-high  { background: rgba(248,81,73,0.15);  color: var(--red);    }
+
+    .strategy {
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 0.6rem;
+    }
+
+    /* HOURS SLIDER */
+    .slider-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+    .slider-label { font-size: 0.85rem; min-width: 160px; }
+    input[type=range] {
+      flex: 1;
+      accent-color: var(--blue);
+      cursor: pointer;
+    }
+    .slider-value {
+      font-size: 0.85rem;
+      font-weight: 600;
+      min-width: 60px;
+      text-align: right;
+      color: var(--blue);
+    }
+
+    /* TOTALS */
+    .totals-panel {
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .totals-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      text-align: center;
+    }
+    .total-item .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--blue);
+    }
+    .total-item .label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    /* BREAKDOWN TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      margin-top: 1rem;
+    }
+    th {
+      text-align: left;
+      padding: 0.6rem 0.75rem;
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 0.55rem 0.75rem;
+      border-bottom: 1px solid rgba(48,54,61,0.5);
+    }
+    tr:last-child td { border-bottom: none; }
+    .td-cost { font-weight: 600; text-align: right; }
+    .td-zero  { color: var(--green); }
+    .td-low   { color: var(--yellow); }
+    .td-high  { color: var(--red); }
+
+    /* NOTES */
+    .note {
+      font-size: 0.78rem;
+      color: var(--muted);
+      background: rgba(255,255,255,0.03);
+      border-left: 3px solid var(--border);
+      padding: 0.75rem 1rem;
+      border-radius: 0 6px 6px 0;
+      margin-top: 1rem;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--blue); text-decoration: none; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>💰 Calculadora de Costos AWS</h1>
+    <p>Estimación precisa por caso completado · Repositorio de aprendizaje cloud · Vladimir Acuna</p>
+  </header>
+
+  <!-- SLIDERS -->
+  <div class="section-title">Ajusta las horas de uso mensual para J y K</div>
+  <div class="slider-section">
+    <div class="slider-row">
+      <span class="slider-label">Caso J — ECS Fargate (horas/mes)</span>
+      <input type="range" id="hoursJ" min="0" max="720" value="0" step="1" oninput="update()">
+      <span class="slider-value" id="valJ">0 h</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">Caso K — EKS activo (horas/mes)</span>
+      <input type="range" id="hoursK" min="0" max="720" value="0" step="1" oninput="update()">
+      <span class="slider-value" id="valK">0 h</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">Caso H — Dashboard activo (días/mes)</span>
+      <input type="range" id="daysH" min="0" max="30" value="0" step="1" oninput="update()">
+      <span class="slider-value" id="valH">0 días</span>
+    </div>
+    <div class="slider-row">
+      <span class="slider-label">Caso F — WAF activo (días/mes)</span>
+      <input type="range" id="daysF" min="0" max="30" value="0" step="1" oninput="update()">
+      <span class="slider-value" id="valF">0 días</span>
+    </div>
+  </div>
+
+  <!-- CASE CARDS -->
+  <div class="section-title">Costos por caso</div>
+  <div class="cases-grid" id="casesGrid"></div>
+
+  <!-- TOTALS -->
+  <div class="totals-panel">
+    <div class="totals-grid">
+      <div class="total-item">
+        <div class="value" id="totalMonth">$0.00</div>
+        <div class="label">Estimado este mes (USD)</div>
+      </div>
+      <div class="total-item">
+        <div class="value" id="totalYear">$0.00</div>
+        <div class="label">Proyección anual (USD)</div>
+      </div>
+      <div class="total-item">
+        <div class="value" id="freeTierSaving">$0</div>
+        <div class="label">Ahorro por Free Tier</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BREAKDOWN TABLE -->
+  <div class="section-title">Desglose de servicios con costo real</div>
+  <table id="breakdownTable">
+    <thead>
+      <tr>
+        <th>Caso</th>
+        <th>Servicio</th>
+        <th>Modelo</th>
+        <th style="text-align:right">Costo/mes</th>
+      </tr>
+    </thead>
+    <tbody id="breakdownBody"></tbody>
+  </table>
+
+  <div class="note">
+    ⓘ Los precios son en USD y reflejan la región <strong>us-east-2 (Ohio)</strong>.
+    Lambda, DynamoDB, SQS, SNS, EventBridge y Cognito son efectivamente <strong>$0</strong>
+    dentro del free tier para workloads de laboratorio.
+    Los precios de Fargate, EKS, ALB y NAT Gateway no tienen free tier y corren desde la primera hora.
+    Fuente: <a href="https://aws.amazon.com/pricing/" target="_blank" rel="noopener">aws.amazon.com/pricing</a>
+    · Precios actualizados: marzo 2026.
+  </div>
+
+  <footer>
+    <p>Parte del monorepo de aprendizaje AWS · <a href="../../docs/FINOPS_COSTOS.md">docs/FINOPS_COSTOS.md</a></p>
+  </footer>
+
+</div>
+
+<script>
+// ─── PRECIOS BASE (USD) ─────────────────────────────────────────────────────
+const PRICE = {
+  // Fargate por hora para task 0.25 vCPU / 0.5 GB (caso J)
+  FARGATE_CPU_HR: 0.04048 * 0.25,   // $0.01012/hr
+  FARGATE_MEM_HR: 0.004445 * 0.5,   // $0.002223/hr
+  ALB_BASE_HR:    0.008,             // $5.76/mes si activo 720h
+  // EKS
+  EKS_CP_HR:      0.10,              // $72/mes fijo
+  NAT_GW_HR:      0.045,             // $32.40/mes fijo
+  // WAF (por día proporcional al mes)
+  WAF_WEBACL_MO:  5.00,
+  WAF_RULES_MO:   2.00,              // 2 grupos de reglas
+  // CloudWatch Dashboard (por día proporcional)
+  CW_DASH_MO:     3.00,
+};
+
+// ─── CASOS ──────────────────────────────────────────────────────────────────
+function buildCases(hoursJ, hoursK, daysH, daysF) {
+  const costJ = hoursJ > 0
+    ? (PRICE.FARGATE_CPU_HR + PRICE.FARGATE_MEM_HR + PRICE.ALB_BASE_HR) * hoursJ
+    : 0;
+
+  const costK = hoursK > 0
+    ? (PRICE.EKS_CP_HR + PRICE.NAT_GW_HR) * hoursK
+    : 0;
+
+  const costH = daysH > 0
+    ? (PRICE.CW_DASH_MO / 30) * daysH
+    : 0;
+
+  const costF = daysF > 0
+    ? ((PRICE.WAF_WEBACL_MO + PRICE.WAF_RULES_MO) / 30) * daysF
+    : 0;
+
+  return [
+    { id:'A', name:'Amplify',             cost: 0,     risk:'zero', strategy:'Mantener activo permanente' },
+    { id:'B', name:'S3 + GitLab CI',      cost: 0,     risk:'zero', strategy:'Mantener activo permanente' },
+    { id:'C', name:'Terraform + CloudFront', cost: 0,  risk:'zero', strategy:'Mantener activo permanente' },
+    { id:'D', name:'Serverless Basic',    cost: 0,     risk:'zero', strategy:'Mantener activo permanente' },
+    { id:'E', name:'DynamoDB Single Table', cost: 0,   risk:'zero', strategy:'Mantener activo permanente' },
+    { id:'F', name:'Cognito + WAF',       cost: costF, risk: costF > 0 ? 'low' : 'zero',
+      strategy: costF > 0 ? 'Destruir WAF al terminar demo' : 'Activo sin WAF — $0' },
+    { id:'G', name:'Event Driven',        cost: 0,     risk:'zero', strategy:'Mantener activo permanente' },
+    { id:'H', name:'Observability',       cost: costH, risk: costH > 0 ? 'low' : 'zero',
+      strategy: costH > 0 ? 'Destruir stack al terminar lab' : 'Stack destruido — $0' },
+    { id:'J', name:'ECS Fargate + ALB',   cost: costJ, risk: costJ > 50 ? 'high' : costJ > 0 ? 'low' : 'zero',
+      strategy: costJ > 0 ? '⚠️ Destruir al terminar lab' : 'Stack destruido — $0' },
+    { id:'K', name:'Kubernetes EKS',      cost: costK, risk: costK > 50 ? 'high' : costK > 0 ? 'low' : 'zero',
+      strategy: costK > 0 ? '🚨 Destruir INMEDIATAMENTE al terminar' : 'Cluster destruido — $0' },
+    { id:'L', name:'FinOps Governance',   cost: 0,     risk:'zero', strategy:'Mantener activo permanente' },
+  ];
+}
+
+// ─── FREE TIER SAVINGS (lo que AWS NO cobra gracias al free tier) ─────────────
+// Estimación del valor que el free tier aporta para labs de bajo volumen
+const FREE_TIER_SAVINGS = 15.00; // Lambda + DynamoDB + SQS + SNS + Cognito + EventBridge + Amplify
+
+// ─── RENDER ─────────────────────────────────────────────────────────────────
+function riskLabel(risk) {
+  const map = {
+    zero: ['🟢', 'Sin costo', 'risk-zero'],
+    low:  ['🟡', 'Costo bajo', 'risk-low'],
+    high: ['🔴', 'Costo alto', 'risk-high'],
+  };
+  return map[risk] || map.zero;
+}
+
+function fmt(n) {
+  if (n === 0) return '$0.00';
+  return '$' + n.toFixed(2);
+}
+
+function colorClass(cost) {
+  if (cost === 0) return 'td-zero';
+  if (cost < 20) return 'td-low';
+  return 'td-high';
+}
+
+function update() {
+  const hoursJ = +document.getElementById('hoursJ').value;
+  const hoursK = +document.getElementById('hoursK').value;
+  const daysH  = +document.getElementById('daysH').value;
+  const daysF  = +document.getElementById('daysF').value;
+
+  document.getElementById('valJ').textContent = hoursJ + ' h';
+  document.getElementById('valK').textContent = hoursK + ' h';
+  document.getElementById('valH').textContent = daysH + ' días';
+  document.getElementById('valF').textContent = daysF + ' días';
+
+  const cases = buildCases(hoursJ, hoursK, daysH, daysF);
+  const total = cases.reduce((s, c) => s + c.cost, 0);
+
+  // Render cards
+  const grid = document.getElementById('casesGrid');
+  grid.innerHTML = cases.map(c => {
+    const [icon, label, cls] = riskLabel(c.risk);
+    return `
+      <div class="case-card">
+        <div class="case-header">
+          <span class="case-badge">Caso ${c.id}</span>
+          <span class="case-name">${c.name}</span>
+        </div>
+        <div class="cost-display" style="color:${c.cost===0?'var(--green)':c.cost<20?'var(--yellow)':'var(--red)'}">${fmt(c.cost)}</div>
+        <div class="cost-label">estimado este mes</div>
+        <span class="risk-badge ${cls}">${icon} ${label}</span>
+        <div class="strategy">${c.strategy}</div>
+      </div>`;
+  }).join('');
+
+  // Totals
+  document.getElementById('totalMonth').textContent = fmt(total);
+  document.getElementById('totalYear').textContent = '$' + (total * 12).toFixed(0);
+  document.getElementById('freeTierSaving').textContent = '$' + FREE_TIER_SAVINGS.toFixed(0) + '+';
+
+  // Breakdown table (only non-zero items)
+  const rows = [];
+
+  if (hoursJ > 0) {
+    const far = (PRICE.FARGATE_CPU_HR + PRICE.FARGATE_MEM_HR) * hoursJ;
+    const alb = PRICE.ALB_BASE_HR * hoursJ;
+    rows.push({ caso:'J', svc:'ECS Fargate (0.25 vCPU / 0.5 GB)', modelo:'Provisioned', cost: far });
+    rows.push({ caso:'J', svc:'ALB — Application Load Balancer', modelo:'Provisioned', cost: alb });
+  }
+  if (hoursK > 0) {
+    rows.push({ caso:'K', svc:'EKS Control Plane', modelo:'Provisioned', cost: PRICE.EKS_CP_HR * hoursK });
+    rows.push({ caso:'K', svc:'NAT Gateway', modelo:'Provisioned', cost: PRICE.NAT_GW_HR * hoursK });
+  }
+  if (daysH > 0) {
+    rows.push({ caso:'H', svc:'CloudWatch Dashboard', modelo:'Provisioned (proporcional)', cost: (PRICE.CW_DASH_MO/30)*daysH });
+  }
+  if (daysF > 0) {
+    rows.push({ caso:'F', svc:'WAF WebACL + 2 Managed Rule Groups', modelo:'Provisioned (proporcional)', cost: ((PRICE.WAF_WEBACL_MO+PRICE.WAF_RULES_MO)/30)*daysF });
+  }
+
+  const tbody = document.getElementById('breakdownBody');
+  if (rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="4" style="color:var(--green);text-align:center;padding:1.25rem">
+      ✅ Sin costos activos — todos los recursos están en cero o dentro del free tier
+    </td></tr>`;
+  } else {
+    tbody.innerHTML = rows.map(r => `
+      <tr>
+        <td><span class="case-badge">Caso ${r.caso}</span></td>
+        <td>${r.svc}</td>
+        <td>${r.modelo}</td>
+        <td class="td-cost ${colorClass(r.cost)}">${fmt(r.cost)}</td>
+      </tr>`).join('');
+  }
+}
+
+// Init
+update();
+</script>
+</body>
+</html>

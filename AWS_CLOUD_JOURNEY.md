@@ -642,6 +642,65 @@ Si quieres que este libro tenga aun mas nivel profesional, estas son las mejoras
 
 ---
 
+## Capitulo XI. FinOps: el costo como criterio de arquitectura
+
+El costo en AWS no es un detalle administrativo. Es una consecuencia directa de las decisiones de arquitectura. Elegir EKS en lugar de Lambda no es solo una decision tecnica; es asumir $72/mes de costo fijo independientemente del trafico. Elegir DynamoDB on-demand en lugar de RDS es elegir escalar a cero costos. Esas decisiones importan.
+
+Este capitulo no reemplaza el documento `docs/FINOPS_COSTOS.md`, que contiene el analisis preciso por caso. Lo que hace es explicar el principio que atraviesa toda la obra.
+
+### El free tier no es magia: es un limite que se puede superar
+
+AWS ofrece una capa gratuita generosa para servicios serverless: Lambda, DynamoDB, SQS, SNS, EventBridge, Cognito. Para un repositorio de aprendizaje, estos servicios son practicamente gratuitos. Pero cuando se agrega un componente "provisioned" (que cobra por hora aunque no haya trafico), el modelo cambia completamente.
+
+Los recursos provisioned de este repositorio:
+
+| Recurso | Costo fijo | Aparece en |
+|---|---|---|
+| EKS Control Plane | $72/mes | Caso K |
+| NAT Gateway | $32/mes | Caso K, Caso M |
+| ALB (Application Load Balancer) | ~$5.76/mes | Caso J |
+| WAF WebACL | $5/mes | Caso F (opcional) |
+| CloudWatch Dashboard | $3/mes | Caso H |
+
+Estos cinco recursos son los que justifican la estrategia "deploy rapido, destruir inmediatamente" que aparece en los casos J y K.
+
+### La estrategia FinOps de este repositorio
+
+No todos los casos necesitan la misma estrategia. Este libro los divide en tres grupos:
+
+**Grupo 1 — Activos permanentes sin costo:** A, B, C, D, E, F (sin WAF), G, L
+
+Son casos serverless o con almacenamiento estatico. Escalan a cero. No cobran si no hay trafico. Se pueden dejar activos como demos en vivo para reclutadores.
+
+**Grupo 2 — Activos condicionales con costo controlado:** H
+
+El dashboard de CloudWatch cuesta $3/mes. El stack puede vivir o destruirse segun si hay uso activo. Para demos, se redesploya en minutos con SAM.
+
+**Grupo 3 — Deploy y destroy inmediato:** J, K
+
+ALB y EKS tienen costo fijo que corre aunque nadie visita el sitio. La evidencia se captura (screenshots, videos, VISUALIZATION.md) y luego se destruye todo. El aprendizaje queda; el recurso, no.
+
+### FinOps no es tacañeria: es responsabilidad tecnica
+
+Un ingeniero cloud senior no gasta innecesariamente, pero tampoco sacrifica arquitectura por precio. La diferencia esta en saber cuando pagar y por que.
+
+En este repositorio:
+- Se elige Cognito sobre construir autenticacion propia no por precio, sino porque delega la complejidad criptografica. El precio es casi $0 para demos.
+- Se elige EKS cuando el objetivo es aprender Kubernetes, aunque cuesta $72/mes. La solucion correcta es pagar esos $72 exactamente el tiempo necesario para validar el aprendizaje.
+- Se elige Lambda sobre EC2 para backends simples porque el free tier de Lambda es permanente y el de EC2 dura solo 12 meses.
+
+Esas decisiones, documentadas, son parte del criterio que distingue a un ingeniero cloud con madurez de uno que solo sabe desplegar.
+
+### El ciclo de vida de un laboratorio cloud
+
+```
+Planificar → Desplegar → Validar → Documentar → Destruir (si aplica)
+```
+
+El paso "destruir" no es una derrota. Es parte del proceso. La evidencia del trabajo queda en el repositorio: codigo, diagramas, VISUALIZATION.md, tests. El recurso en AWS se destruye para no generar costo ocioso.
+
+---
+
 ## Conclusiones
 
 Este libro ya no debe verse solo como resumen del repositorio. Debe verse como una posicion tecnica propia.

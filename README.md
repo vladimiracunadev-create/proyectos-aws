@@ -66,8 +66,10 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 - 🔐 **[Secretos Comprometidos](docs/killed.md)**: Registro de secretos rotados.
 
 ### 💰 FinOps & Auditoría
-- 💰 **[Manual de FinOps](docs/FINOPS_MANUAL.md)**: Auditoría de costos y semáforo de riesgo financiero.
-- 📊 **[Análisis de Casos PROYECTADO](docs/PROYECTADOS_ANALISIS.md)**: Complejidad, costos reales AWS 2025 y orden de implementación recomendado para los casos F, H, I y M.
+- 💰 **[Costos por Caso Completado](docs/FINOPS_COSTOS.md)**: Análisis detallado para los 11 casos: free tier, provisioned, estrategias y tabla de riesgo financiero.
+- 🧮 **[Calculadora Interactiva de Costos](apps/cost-calculator/index.html)**: Estima el gasto mensual real según horas de uso (disponible en GitLab Pages).
+- 🔧 **[Manual de FinOps](docs/FINOPS_MANUAL.md)**: Auditoría rápida y semáforo de riesgo financiero.
+- 📊 **[Análisis de Casos Proyectados](docs/PROYECTADOS_ANALISIS.md)**: Complejidad, costos y orden de implementación para casos futuros (I, M).
 
 ### 👔 Para Reclutadores
 - 👨‍💼 **[Guía para Reclutadores](docs/RECRUITER.md)**: Tour ejecutivo y valor de negocio.
