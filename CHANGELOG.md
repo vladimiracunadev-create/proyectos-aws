@@ -3,6 +3,59 @@
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato seguirá [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) y este proyecto utiliza [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.6.0] - 2026-03-17
+
+### Added
+
+- **Caso F (Security First — Cognito + JWT + WAF)**: Implementacion completa del modulo de seguridad perimetral.
+    - `AWS::Cognito::UserPool` con Pre-Signup Lambda trigger para auto-confirmacion en demo (sin email verification).
+    - `AWS::Cognito::UserPoolClient` con `USER_PASSWORD_AUTH` y sin secreto de cliente.
+    - `AWS::Serverless::HttpApi` con JWT Authorizer nativo de Cognito (valida firma RS256 sin codigo Lambda).
+    - Endpoints: `POST /auth/register`, `POST /auth/login`, `GET /profile` (protegido), `GET /health`, `GET /`.
+    - WAF opcional con `DeployWAF=false` por defecto (`AWSManagedRulesCommonRuleSet` + `AWSManagedRulesSQLiRuleSet`).
+    - Landing page interactiva con flujo de 3 pasos: registrar → login → perfil protegido.
+    - 35+ tests unitarios con `unittest.mock.patch` (sin moto, sin credenciales AWS).
+    - Smoke test `scripts/smoke/smoke_caso_f.sh` cubriendo registro, login y perfil con JWT real.
+    - `AWS_PASO_A_PASO.md` con comandos verificados, troubleshooting y notas de costo.
+    - `docs/architecture.md` con diagramas Mermaid del flujo de capas (WAF → API GW → Cognito → Lambda).
+
+### Changed
+
+- **`.gitlab-ci.yml`**: Nuevo job `test_caso_f` (`python:3.12-slim`, scoped a `caso-f-security-cognito/**/*`).
+- **`Makefile`**: Nuevos targets `test-f` y `smoke-f`. Target `test` ahora incluye `test-f`.
+- **`package.json`**: Nuevo script `test:f`. Script `test` actualizado para incluir Caso F.
+
+---
+
+## [3.5.0] - 2026-03-17
+
+### Added
+
+- **Caso H (Observability)**: Implementacion completa del modulo de observabilidad como codigo.
+    - CloudWatch Dashboard IaC (`AWS::CloudWatch::Dashboard`) con widgets de invocaciones, errores, duracion y logs.
+    - X-Ray tracing activo en Lambda (`Tracing: Active`).
+    - Alarmas CloudWatch para errores Lambda y duracion p99 (`>3000ms`).
+    - Landing page con metricas custom via `POST /metrics` → `cloudwatch.put_metric_data`.
+    - 14 tests unitarios con `unittest.mock.patch` para `cloudwatch`.
+    - Smoke test `scripts/smoke/smoke_caso_h.sh`.
+
+- **Testing automatizado (Casos D, E, G, H)**: Infraestructura completa de tests unitarios.
+    - `pytest` para los 4 casos Lambda existentes (D, E, G, H): 60+ tests en total.
+    - `conftest.py` en cada caso para resolver el `sys.path` hacia `src/`.
+    - Jobs CI `test_caso_d/e/g/h` en `.gitlab-ci.yml` con `python:3.12-slim` y `pip install pytest boto3`.
+    - Smoke tests bash para los 4 casos (`scripts/smoke/smoke_caso_d/e/g/h.sh`).
+    - Targets `test`, `test-d/e/g/h`, `smoke-d/e/g/h` en `Makefile`.
+    - Scripts `test:d/e/g/h` en `package.json`.
+
+- **README.md**: Nueva seccion "Mapa de Relaciones entre Casos" con diagrama Mermaid de dependencias tecnicas (A→M) y tabla de justificaciones.
+
+### Fixed
+
+- **Caso H (`index.html:141`)**: Error HTMLHint `spec-char-escape` — `p99 > 3000ms` corregido a `p99 &gt; 3000ms`. Bloqueaba el job `lint` del pipeline.
+- **CI jobs test_caso_d/e/g/h**: `pip install pytest` cambiado a `pip install pytest boto3` — las Lambdas importan boto3 a nivel de modulo y fallaban con `ModuleNotFoundError` incluso en tests unitarios.
+
+---
+
 ## [3.3.0] - 2026-03-05
 
 ### Fixed

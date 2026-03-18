@@ -136,6 +136,37 @@ docker run --rm -it -v "$(pwd):/workspace" proyectos-aws/tooling:1.0.0 /bin/bash
 
 ---
 
+## Caso F rapido
+
+```bash
+cd caso-f-security-cognito/backend
+sam build && sam deploy --guided
+# DeployWAF: false (por defecto, sin costo base)
+```
+
+Validaciones utiles:
+
+```bash
+# Registrar usuario
+curl -s -X POST "$API_F_URL/auth/register" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@demo.com","password":"Demo1234"}' | jq .
+
+# Login + guardar token
+TOKEN=$(curl -s -X POST "$API_F_URL/auth/login" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@demo.com","password":"Demo1234"}' | jq -r '.accessToken')
+
+# Perfil protegido (JWT validado por API GW)
+curl -s "$API_F_URL/profile" -H "Authorization: $TOKEN" | jq .
+
+# Verificar que /profile rechaza sin token
+curl -s -o /dev/null -w "%{http_code}" "$API_F_URL/profile"
+# Esperado: 403
+```
+
+---
+
 ## Documentacion clave
 
 | Documento | Uso |
@@ -146,6 +177,8 @@ docker run --rm -it -v "$(pwd):/workspace" proyectos-aws/tooling:1.0.0 /bin/bash
 | [docs/FILE_STRUCTURE.md](FILE_STRUCTURE.md) | Mapa de carpetas |
 | [caso-e-dynamodb-persistence/README.md](../caso-e-dynamodb-persistence/README.md) | Resumen del Caso E |
 | [caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md](../caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso E |
+| [caso-f-security-cognito/README.md](../caso-f-security-cognito/README.md) | Resumen del Caso F |
+| [caso-f-security-cognito/AWS_PASO_A_PASO.md](../caso-f-security-cognito/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso F |
 | [caso-g-event-driven/README.md](../caso-g-event-driven/README.md) | Resumen del Caso G |
 | [caso-g-event-driven/AWS_PASO_A_PASO.md](../caso-g-event-driven/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso G |
 

@@ -140,6 +140,35 @@ Porque DynamoDB no se modela como SQL tradicional; se modela segun las consultas
 
 ---
 
+## Caso F - Security First (Cognito + JWT + WAF)
+
+**Que se hizo**
+
+Se implemento un modelo de seguridad perimetral con AWS Cognito, JWT Authorizer nativo de API Gateway y WAF opcional.
+
+**Por que**
+
+Porque ningun sistema de produccion deberia exponer endpoints sin autenticacion. Y la validacion del token no deberia vivir en el codigo de la Lambda sino en la infraestructura.
+
+**Que resuelve**
+
+- gestion de identidades (registro, login, tokens JWT)
+- autorizacion sin codigo de criptografia en Lambda
+- proteccion contra SQLi y XSS antes del API (WAF)
+- prerequisito directo para el Caso I (GenAI expuesto publicamente)
+
+**Que mirar primero**
+
+- [Caso F](../caso-f-security-cognito/README.md)
+- [Arquitectura Caso F](../caso-f-security-cognito/docs/architecture.md)
+- [Paso a paso Caso F](../caso-f-security-cognito/AWS_PASO_A_PASO.md)
+
+**Como funciona el JWT sin codigo**
+
+El JWT Authorizer de API Gateway HTTP API valida la firma RS256, el issuer y el audience de Cognito antes de llamar a la Lambda. La Lambda recibe los claims ya validados en `requestContext.authorizer.jwt.claims`. No hay ni una linea de criptografia en el codigo Python.
+
+---
+
 ## Caso G - Event Driven
 
 **Que se hizo**

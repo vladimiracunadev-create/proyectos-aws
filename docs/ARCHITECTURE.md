@@ -86,6 +86,34 @@ graph TB
     style Tier2_G fill:#fff8e1,stroke:#ff8f00,stroke-width:2px
 ```
 
+### Tier 2.5: Seguridad y Observabilidad (Casos F, H)
+
+*Enfoque: perimetro de identidad, validacion nativa de tokens y monitoreo como codigo.*
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#7b2ff7', 'edgeColor': '#c77dff', 'fontsize': '16px' }}}%%
+graph TB
+    subgraph Tier_F["🔐 Caso F: Security First"]
+        direction TB
+        F1[☁️ WAF WebACL<br/>SQLi + Common Rules] -->|filtra| F2[🌐 API GW HTTP API<br/>JWT Authorizer]
+        F2 -->|rutas publicas| F3[⚡ Lambda — register / login]
+        F3 -->|sign_up / initiate_auth| F4[🔑 Cognito User Pool]
+        F4 -->|Pre-Signup trigger| F5[⚡ Lambda Pre-SignUp]
+        F2 -->|rutas protegidas — claims| F6[⚡ Lambda — profile]
+    end
+
+    subgraph Tier_H["📊 Caso H: Observability"]
+        direction TB
+        H1[🌐 API GW HTTP API] --> H2[⚡ Lambda + X-Ray]
+        H2 -->|PutMetricData| H3[📊 CloudWatch Custom Metrics]
+        H3 --> H4[🖥️ CW Dashboard IaC]
+        H3 --> H5[🔔 CW Alarms]
+    end
+
+    style Tier_F fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style Tier_H fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+```
+
 ### Tier 3: Contenedores y orquestación (Casos J, K)
 
 *Enfoque: portabilidad industrial y gestión de flotas.*

@@ -13,6 +13,9 @@ Este roadmap refleja el estado actual del proyecto y las proximas prioridades pa
 - [x] **Caso C**: Terraform + CloudFront con OAC (Origin Access Control)
 - [x] **Caso D**: Serverless API con Lambda, API Gateway y DynamoDB
 - [x] **Caso E**: Persistence Pro con Single Table Design, GSIs, landing publica y validacion real en AWS
+- [x] **Caso F**: Security First con Cognito User Pool, JWT Authorizer y WAF opcional
+- [x] **Caso G**: Event Driven con EventBridge + SQS + DLQ + SNS + landing publica
+- [x] **Caso H**: Observability con CloudWatch Dashboard IaC + X-Ray + Alarmas
 - [x] **Caso J**: Docker Dashboard Premium con ECS Fargate, ECR y Load Balancer
 - [x] **Caso K**: Orquestacion real con AWS EKS, Load Balancer L7 y Self-Healing
 - [x] **Caso L**: FinOps & Governance con AWS Budgets, OIDC y S3 Hosting Seguro
@@ -59,8 +62,10 @@ Este roadmap refleja el estado actual del proyecto y las proximas prioridades pa
 
 ### 4. Seguridad y autenticacion (Caso F)
 
-- [ ] **AWS Cognito**: User pools y autenticacion
-- [ ] **WAF**: Proteccion contra ataques web (DDoS, SQLi)
+- [x] **AWS Cognito**: User Pool con Pre-Signup trigger y `USER_PASSWORD_AUTH`
+- [x] **JWT Authorizer**: Validacion nativa en API Gateway HTTP API (sin codigo Lambda)
+- [x] **WAF opcional**: `AWSManagedRulesCommonRuleSet` + `AWSManagedRulesSQLiRuleSet` con `DeployWAF` param
+- [x] **Landing interactiva**: Flujo de 3 pasos: registro → login → perfil protegido
 - [ ] **IAM Roles avanzados**: Politicas granulares por caso
 - [ ] **Secrets Manager**: Migracion desde variables enmascaradas
 

@@ -9,8 +9,8 @@
 
 | Caso | Nombre | Estado Real | Scaffold existente |
 |---|---|---|---|
-| **F** | Security First (Cognito + WAF) | Solo README (~1KB) | ❌ Vacío |
-| **H** | Observability (CloudWatch + X-Ray) | Solo README (~1KB) | ❌ Vacío |
+| **F** | Security First (Cognito + WAF) | ✅ COMPLETADO | SAM + Lambda + tests + docs |
+| **H** | Observability (CloudWatch + X-Ray) | ✅ COMPLETADO | SAM + Lambda + tests + docs |
 | **I** | GenAI Bedrock | Solo README (~1KB) | ❌ Vacío |
 | **M** | Resiliencia & Failover | Fase 0 completa | ✅ Docs + IaC skeletons |
 

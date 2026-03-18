@@ -153,9 +153,11 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   ☁️ [Guía Paso a Paso AWS](caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md)
 *   👉 [API Endpoint](https://gqqm27j47c.execute-api.us-east-2.amazonaws.com)
 
-#### [📂 Caso F: Security First](./caso-f-security-cognito/index.html) `Nivel 5` `PROYECTADO`
-*   **Stack**: AWS Cognito + WAF + IAM Roles.
-*   **Enfoque**: **Seguridad Perimetral.** Implementa autenticación de usuarios y protección contra ataques web (DDoS/SQLi).
+#### [📂 Caso F: Security First](./caso-f-security-cognito/index.html) `Nivel 5` `COMPLETADO`
+*   **Stack**: AWS Cognito User Pool + JWT Authorizer (API GW nativo) + WAF opcional + AWS SAM.
+*   **Enfoque**: **Seguridad Perimetral.** Identidades con Cognito, tokens JWT validados por API Gateway sin código de criptografía en Lambda, y WAF opcional como primera capa de defensa.
+*   🏗️ [Arquitectura (Mermaid)](caso-f-security-cognito/docs/architecture.md)
+*   ☁️ [Guía Paso a Paso AWS](caso-f-security-cognito/AWS_PASO_A_PASO.md)
 
 #### [📂 Caso G: Event Driven](./caso-g-event-driven/README.md) `Nivel 6` `COMPLETADO (VALIDADO)`
 *   **Stack**: API Gateway + Lambda + EventBridge + SQS + SNS + AWS SAM.

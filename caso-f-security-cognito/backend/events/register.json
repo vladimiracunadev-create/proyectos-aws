@@ -1,0 +1,9 @@
+{
+  "requestContext": {
+    "http": {
+      "method": "POST"
+    }
+  },
+  "rawPath": "/auth/register",
+  "body": "{\"email\": \"demo@test.com\", \"password\": \"Demo1234\", \"name\": \"Demo User\"}"
+}

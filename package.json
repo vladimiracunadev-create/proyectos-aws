@@ -9,9 +9,10 @@
     "lint:js": "eslint . --ext .js",
     "lint:html": "htmlhint \"**/*.html\"",
     "format": "prettier --write \"**/*.{js,json,md,html,css,yml}\"",
-    "test": "npm run test:d && npm run test:e && npm run test:g && npm run test:h",
+    "test": "npm run test:d && npm run test:e && npm run test:f && npm run test:g && npm run test:h",
     "test:d": "python -m pytest caso-d-serverless-basic/backend/tests/ -v --tb=short",
     "test:e": "python -m pytest caso-e-dynamodb-persistence/backend/tests/ -v --tb=short",
+    "test:f": "python -m pytest caso-f-security-cognito/backend/tests/ -v --tb=short",
     "test:g": "python -m pytest caso-g-event-driven/backend/tests/ -v --tb=short",
     "test:h": "python -m pytest caso-h-observability/backend/tests/ -v --tb=short"
   },

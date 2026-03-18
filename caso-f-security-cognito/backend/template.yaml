@@ -1,0 +1,239 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: caso-f-security-cognito - Cognito User Pool + JWT Authorizer + WAF opcional
+
+Parameters:
+  DeployWAF:
+    Type: String
+    Default: "false"
+    AllowedValues: ["true", "false"]
+    Description: "Despliega WAF WebACL (~$5 USD/mes base). Mantener 'false' para demos."
+
+Conditions:
+  CreateWAF: !Equals [!Ref DeployWAF, "true"]
+
+Globals:
+  Function:
+    Timeout: 15
+    MemorySize: 256
+    Runtime: python3.12
+    Tracing: Active
+
+Resources:
+
+  # ---------------------------------------------------------------------------
+  # Cognito User Pool
+  # ---------------------------------------------------------------------------
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: caso-f-user-pool
+      UsernameAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: false
+      LambdaConfig:
+        PreSignUp: !GetAtt PreSignUpFunction.Arn
+      Schema:
+        - Name: email
+          AttributeDataType: String
+          Required: true
+          Mutable: true
+        - Name: name
+          AttributeDataType: String
+          Required: false
+          Mutable: true
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      ClientName: caso-f-app-client
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      AccessTokenValidity: 1
+      IdTokenValidity: 1
+      RefreshTokenValidity: 30
+      TokenValidityUnits:
+        AccessToken: hours
+        IdToken: hours
+        RefreshToken: days
+
+  # ---------------------------------------------------------------------------
+  # HTTP API con JWT Authorizer de Cognito
+  # ---------------------------------------------------------------------------
+  Api:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - "*"
+        AllowMethods:
+          - GET
+          - POST
+          - OPTIONS
+        AllowHeaders:
+          - content-type
+          - authorization
+      Auth:
+        DefaultAuthorizer: CognitoJwtAuth
+        Authorizers:
+          CognitoJwtAuth:
+            IdentitySource: "$request.header.Authorization"
+            JwtConfiguration:
+              issuer: !Sub "https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPool}"
+              audience:
+                - !Ref UserPoolClient
+
+  # ---------------------------------------------------------------------------
+  # Lambda Principal
+  # ---------------------------------------------------------------------------
+  SecurityFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: app.handler
+      Environment:
+        Variables:
+          COGNITO_CLIENT_ID: !Ref UserPoolClient
+          COGNITO_USER_POOL_ID: !Ref UserPool
+      Policies:
+        - Statement:
+            - Effect: Allow
+              Action:
+                - cognito-idp:SignUp
+                - cognito-idp:InitiateAuth
+                - xray:PutTelemetryRecords
+                - xray:PutTraceSegments
+              Resource: "*"
+      Events:
+        RootLanding:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /
+            Method: GET
+            Auth:
+              Authorizer: NONE
+        HealthCheck:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /health
+            Method: GET
+            Auth:
+              Authorizer: NONE
+        Register:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /auth/register
+            Method: POST
+            Auth:
+              Authorizer: NONE
+        Login:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /auth/login
+            Method: POST
+            Auth:
+              Authorizer: NONE
+        Profile:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /profile
+            Method: GET
+
+  # ---------------------------------------------------------------------------
+  # Lambda Pre-Signup Trigger (auto-confirma en demo)
+  # ---------------------------------------------------------------------------
+  PreSignUpFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: app.pre_signup_trigger
+      Description: "Auto-confirma usuarios en demo. NO usar en produccion."
+
+  PreSignUpPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt PreSignUpFunction.Arn
+      Action: lambda:InvokeFunction
+      Principal: cognito-idp.amazonaws.com
+      SourceArn: !GetAtt UserPool.Arn
+
+  # ---------------------------------------------------------------------------
+  # WAF WebACL (opcional — DeployWAF=true)
+  # ---------------------------------------------------------------------------
+  WafWebAcl:
+    Type: AWS::WAFv2::WebACL
+    Condition: CreateWAF
+    Properties:
+      Name: caso-f-waf
+      Scope: REGIONAL
+      DefaultAction:
+        Allow: {}
+      VisibilityConfig:
+        CloudWatchMetricsEnabled: true
+        MetricName: caso-f-waf
+        SampledRequestsEnabled: true
+      Rules:
+        - Name: AWSManagedRulesCommonRuleSet
+          Priority: 0
+          OverrideAction:
+            None: {}
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesCommonRuleSet
+          VisibilityConfig:
+            CloudWatchMetricsEnabled: true
+            MetricName: caso-f-waf-common
+            SampledRequestsEnabled: true
+        - Name: AWSManagedRulesSQLiRuleSet
+          Priority: 1
+          OverrideAction:
+            None: {}
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesSQLiRuleSet
+          VisibilityConfig:
+            CloudWatchMetricsEnabled: true
+            MetricName: caso-f-waf-sqli
+            SampledRequestsEnabled: true
+
+  WafAssociation:
+    Type: AWS::WAFv2::WebACLAssociation
+    Condition: CreateWAF
+    Properties:
+      ResourceArn: !Sub "arn:aws:apigateway:${AWS::Region}::/restapis/${Api}/stages/Prod"
+      WebACLArn: !GetAtt WafWebAcl.Arn
+
+Outputs:
+  ApiBaseUrl:
+    Description: URL base del HTTP API
+    Value: !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com"
+
+  UserPoolId:
+    Description: ID del Cognito User Pool
+    Value: !Ref UserPool
+
+  UserPoolClientId:
+    Description: ID del App Client (sin secreto)
+    Value: !Ref UserPoolClient
+
+  FunctionName:
+    Description: Nombre de la Lambda principal
+    Value: !Ref SecurityFunction

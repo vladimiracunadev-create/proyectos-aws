@@ -103,6 +103,17 @@ test_caso_h:
     - pip install --quiet pytest boto3
     - pytest caso-h-observability/backend/tests/ -v --tb=short
 
+# --- Caso F: Unit Tests ---
+test_caso_f:
+  stage: test
+  image: python:3.12-slim
+  rules:
+    - changes:
+        - caso-f-security-cognito/**/*
+  script:
+    - pip install --quiet pytest boto3
+    - pytest caso-f-security-cognito/backend/tests/ -v --tb=short
+
 # --- Caso B: Legacy S3 Sync ---
 deploy_case_b:
   stage: deploy
