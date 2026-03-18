@@ -91,6 +91,9 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 ### 👔 Para Reclutadores
 - 👨‍💼 **[Guía para Reclutadores](docs/RECRUITER.md)**: Tour ejecutivo y valor de negocio.
 
+### 📍 Estado y Hoja de Ruta
+- 📍 **[Estado Actual y Roadmap](docs/ESTADO_Y_ROADMAP.md)**: Radiografía completa del repositorio — qué está sólido, qué falta, mejoras futuras con diagramas Mermaid y tabla de prioridades.
+
 ### 📚 Otros Recursos
 - 🕒 **[Historial de Cambios](CHANGELOG.md)**: Registro detallado de versiones y mejoras.
 - 🗺️ **[Roadmap](ROADMAP.md)**: Plan de desarrollo y próximos hitos.

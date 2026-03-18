@@ -26,7 +26,7 @@ Claude lee el `SKILL.md` correspondiente y ejecuta el flujo documentado. No hace
 
 ---
 
-## Skills Disponibles (10 total)
+## Skills Disponibles (11 total)
 
 ### Por cuando usar cada uno
 
@@ -42,6 +42,7 @@ Claude lee el `SKILL.md` correspondiente y ejecuta el flujo documentado. No hace
 | Editar .gitlab-ci.yml o pipelines | `gitlab-aws-pipeline-editor` |
 | Crear o editar infraestructura Terraform | `terraform-aws-demo-patterns` |
 | Trabajar con costos, FinOps, dashboards | `finops-audit-and-budgeting` |
+| Analizar estado del repo / generar roadmap | `repo-status-analysis` |
 
 ---
 

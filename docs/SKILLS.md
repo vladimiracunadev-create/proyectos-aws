@@ -1,6 +1,6 @@
 # Skills Del Monorepo
 
-Este documento describe los 10 skills de Claude Code almacenados en `skills/` para este repositorio.
+Este documento describe los 11 skills de Claude Code almacenados en `skills/` para este repositorio.
 
 ## Proposito
 
@@ -65,6 +65,13 @@ Estructura estandar para crear un caso nuevo o promover uno proyectado a ejecuta
 #### `gitlab-aws-pipeline-editor`
 Jobs de GitLab CI para lint, seguridad, Terraform, OIDC, despliegue y publicacion de artefactos.
 
+### Estado y mejoras del repositorio
+
+#### `repo-status-analysis`
+Radiografia completa del repositorio: estado actual, gaps identificados, mejoras priorizadas y
+proxima sesion recomendada. Genera o actualiza `docs/ESTADO_Y_ROADMAP.md` con diagramas Mermaid.
+Usar al inicio de sesiones largas o al cierre de una sesion importante para dejar registro del estado.
+
 ---
 
 ## Tabla de decision rapida
@@ -81,6 +88,7 @@ Jobs de GitLab CI para lint, seguridad, Terraform, OIDC, despliegue y publicacio
 | Editar .gitlab-ci.yml | `gitlab-aws-pipeline-editor` |
 | Crear infra con Terraform | `terraform-aws-demo-patterns` |
 | Revisar o actualizar costos | `finops-audit-and-budgeting` |
+| Analizar estado del repo / generar roadmap | `repo-status-analysis` |
 
 ---
 
@@ -98,7 +106,8 @@ skills/
 ├── docs-portal-sync/SKILL.md
 ├── gitlab-aws-pipeline-editor/SKILL.md
 ├── terraform-aws-demo-patterns/SKILL.md
-└── finops-audit-and-budgeting/SKILL.md
+├── finops-audit-and-budgeting/SKILL.md
+└── repo-status-analysis/SKILL.md
 ```
 
 ## Notas

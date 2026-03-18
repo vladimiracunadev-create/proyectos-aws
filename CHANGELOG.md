@@ -3,6 +3,25 @@
 Todos los cambios notables en este proyecto serán documentados en este archivo.
 El formato seguirá [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) y este proyecto utiliza [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.7.0] - 2026-03-17
+
+### Added
+
+- **Skill `repo-status-analysis`** (`skills/repo-status-analysis/SKILL.md`): Nuevo skill para radiografia del repositorio. Genera o actualiza `docs/ESTADO_Y_ROADMAP.md` con barra de estado, diagramas Mermaid de progresion de casos, mapa de documentacion global, sistema de skills, gaps criticos y tabla de mejoras priorizadas. Se invoca con `/repo-status-analysis`.
+- **`docs/ESTADO_Y_ROADMAP.md`**: Documento de estado permanente generado por `repo-status-analysis`. Incluye 5 diagramas Mermaid, analisis de los 11 casos completados, gaps identificados (H sin VISUALIZATION.md, M en Fase 0, Wiki desincronizada), 10 mejoras futuras priorizadas y proxima sesion recomendada. Enlazado desde README principal en nueva seccion "Estado y Hoja de Ruta".
+- **`docs/FINOPS_COSTOS.md`**: Analisis detallado de costos para los 11 casos completados. Estrategia free tier, costos provisioned, tabla de riesgo financiero y proyeccion de casos futuros (M, I).
+- **`docs/CONCEPTOS_NUBE.md`**: Puente conceptual entre IT tradicional y terminologia AWS. Mapeo de conceptos conocidos (servidores, redes, DNS, seguridad) hacia servicios AWS con ejemplos de cada caso construido.
+- **`apps/cost-calculator/index.html`**: Calculadora interactiva de costos en GitLab Pages. Sliders por caso, precios reales 2026, desglose por servicio. Disponible en el portal de GitLab Pages.
+
+### Changed
+
+- **`docs/SKILLS.md`**: Actualizado de 10 a 11 skills. Agrega `repo-status-analysis` en nueva categoria "Estado y mejoras del repositorio", tabla de decision rapida y arbol de ubicacion.
+- **`docs/ESTADO_Y_ROADMAP.md`**: Barra de estado actualizada a "11 skills / 95%" para reflejar el skill nuevo. Diagrama de skills y subgrafo actualizados.
+- **`skills/README.md`**: Contador actualizado a 11 skills. Fila `repo-status-analysis` agregada a la tabla de situaciones.
+- **`README.md`**: Nueva seccion "Estado y Hoja de Ruta" con link directo a `docs/ESTADO_Y_ROADMAP.md`.
+
+---
+
 ## [3.6.0] - 2026-03-17
 
 ### Added
