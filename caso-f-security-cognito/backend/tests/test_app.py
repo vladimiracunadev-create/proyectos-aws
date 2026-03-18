@@ -127,15 +127,16 @@ def test_handle_register_success():
 
 
 def test_handle_register_missing_email_returns_400():
+    # Errors propagate through handler() — call via router
     event = _make_event("POST", "/auth/register", body={"password": "Pass1234"})
-    response = app.handle_register(event)
+    response = app.handler(event, None)
     assert response["statusCode"] == 400
     assert json.loads(response["body"])["ok"] is False
 
 
 def test_handle_register_missing_password_returns_400():
     event = _make_event("POST", "/auth/register", body={"email": "u@test.com"})
-    response = app.handle_register(event)
+    response = app.handler(event, None)
     assert response["statusCode"] == 400
 
 
@@ -145,7 +146,7 @@ def test_handle_register_cognito_error_username_exists():
 
     with patch.object(app, "cognito_client", mock_cog):
         event = _make_event("POST", "/auth/register", body={"email": "u@test.com", "password": "Pass1234"})
-        response = app.handle_register(event)
+        response = app.handler(event, None)
 
     assert response["statusCode"] == 409
 
@@ -178,8 +179,9 @@ def test_handle_login_success():
 
 
 def test_handle_login_missing_fields_returns_400():
+    # Errors propagate through handler() — call via router
     event = _make_event("POST", "/auth/login", body={"email": "u@test.com"})
-    response = app.handle_login(event)
+    response = app.handler(event, None)
     assert response["statusCode"] == 400
 
 
@@ -189,7 +191,7 @@ def test_handle_login_wrong_credentials():
 
     with patch.object(app, "cognito_client", mock_cog):
         event = _make_event("POST", "/auth/login", body={"email": "u@test.com", "password": "wrong"})
-        response = app.handle_login(event)
+        response = app.handler(event, None)
 
     assert response["statusCode"] == 401
 
