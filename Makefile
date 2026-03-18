@@ -9,7 +9,7 @@ S3_BUCKET ?= vladimir-caso-b-site-2026
 REGION ?= us-east-2
 TF_DIR = caso-c-terraform-s3
 
-.PHONY: help install lint format serve upload deploy-b tf-init tf-plan tf-apply tf-security docker-build k8s-lint clean case-k-init case-k-deploy case-k-destroy finops-check
+.PHONY: help install lint format serve upload deploy-b tf-init tf-plan tf-apply tf-security docker-build k8s-lint clean case-k-init case-k-deploy case-k-destroy finops-check test test-d test-e test-g test-h smoke-d smoke-e smoke-g smoke-h
 
 help: ## Muestra este mensaje de ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -132,6 +132,44 @@ case-k-destroy: ## 🚨 ELIMINA TODO EL CASO K (EVITA CARGOS EXTRAS)
 	@echo "ELIMINANDO Caso K de forma permanente..."
 	cd $(TF_K_DIR) && terraform destroy -auto-approve
 	@echo "Limpieza completada exitosamente!"
+
+# ==========================================
+# TESTING (pytest — Python Lambdas)
+# ==========================================
+
+test-d: ## Ejecuta tests unitarios del Caso D (Lambda contact form)
+	@echo "Testing Caso D..."
+	python -m pytest caso-d-serverless-basic/backend/tests/ -v --tb=short
+
+test-e: ## Ejecuta tests unitarios del Caso E (Lambda DynamoDB persistence)
+	@echo "Testing Caso E..."
+	python -m pytest caso-e-dynamodb-persistence/backend/tests/ -v --tb=short
+
+test-g: ## Ejecuta tests unitarios del Caso G (Lambda event-driven)
+	@echo "Testing Caso G..."
+	python -m pytest caso-g-event-driven/backend/tests/ -v --tb=short
+
+test-h: ## Ejecuta tests unitarios del Caso H (Lambda observability)
+	@echo "Testing Caso H..."
+	python -m pytest caso-h-observability/backend/tests/ -v --tb=short
+
+test: test-d test-e test-g test-h ## Ejecuta todos los tests unitarios de Lambdas
+
+# ==========================================
+# SMOKE TESTS (requieren API_*_URL definidas)
+# ==========================================
+
+smoke-d: ## Smoke test Caso D — requiere API_D_URL
+	bash scripts/smoke/smoke_caso_d.sh
+
+smoke-e: ## Smoke test Caso E — requiere API_E_URL
+	bash scripts/smoke/smoke_caso_e.sh
+
+smoke-g: ## Smoke test Caso G — requiere API_G_URL
+	bash scripts/smoke/smoke_caso_g.sh
+
+smoke-h: ## Smoke test Caso H — requiere API_H_URL
+	bash scripts/smoke/smoke_caso_h.sh
 
 clean: ## Limpia archivos temporales de Node y Terraform
 	@echo "Limpiando el proyecto..."

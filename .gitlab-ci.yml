@@ -59,6 +59,50 @@ lint:
         - .eslintrc.js
         - .prettierrc
 
+# --- Caso D: Unit Tests ---
+test_caso_d:
+  stage: test
+  image: python:3.12-slim
+  rules:
+    - changes:
+        - caso-d-serverless-basic/**/*
+  script:
+    - pip install --quiet pytest
+    - pytest caso-d-serverless-basic/backend/tests/ -v --tb=short
+
+# --- Caso E: Unit Tests ---
+test_caso_e:
+  stage: test
+  image: python:3.12-slim
+  rules:
+    - changes:
+        - caso-e-dynamodb-persistence/**/*
+  script:
+    - pip install --quiet pytest
+    - pytest caso-e-dynamodb-persistence/backend/tests/ -v --tb=short
+
+# --- Caso G: Unit Tests ---
+test_caso_g:
+  stage: test
+  image: python:3.12-slim
+  rules:
+    - changes:
+        - caso-g-event-driven/**/*
+  script:
+    - pip install --quiet pytest
+    - pytest caso-g-event-driven/backend/tests/ -v --tb=short
+
+# --- Caso H: Unit Tests ---
+test_caso_h:
+  stage: test
+  image: python:3.12-slim
+  rules:
+    - changes:
+        - caso-h-observability/**/*
+  script:
+    - pip install --quiet pytest
+    - pytest caso-h-observability/backend/tests/ -v --tb=short
+
 # --- Caso B: Legacy S3 Sync ---
 deploy_case_b:
   stage: deploy
