@@ -148,6 +148,8 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 #### [📂 Caso A: AWS Amplify](./caso-a-amplify/index.html) `Nivel 0` `COMPLETADO`
 *   **Stack**: AWS Amplify + GitLab Auto-Mirroring.
 *   **Enfoque**: **Integración Continua nativa.** Ideal para prototipos rápidos. Aprende cómo AWS gestiona automáticamente el escalado, SSL y CDN.
+*   **Prerequisito técnico**: Ninguno — punto de entrada al monorepo.
+*   **Costo**: $0 — Amplify free tier cubre hosting estático (5 GB storage, 15 GB bandwidth/mes).
 *   🏗️ [Arquitectura (Mermaid)](caso-a-amplify/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-a-amplify/AWS_PASO_A_PASO.md)
 *   👉 [Ver Demo en Vivo](https://main.d1uybq9oui7h8c.amplifyapp.com/)
@@ -155,6 +157,8 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 #### [📂 Caso B: S3 + GitLab CI](./caso-b-gitlab-s3/index.html) `Nivel 1` `COMPLETADO`
 *   **Stack**: GitLab Runners + AWS CLI + S3 Website Hosting.
 *   **Enfoque**: **Pipelines Artesanales.** Entiende qué pasa "bajo el capó". Aprendes sobre políticas de bucket, sincronización manual y gestión de secretos.
+*   **Prerequisito técnico**: Caso A (conceptual) — entender CI/CD antes de hacerlo manual.
+*   **Costo**: $0 — S3 website hosting dentro del free tier para volúmenes de lab (<5 GB).
 *   🏗️ [Arquitectura (Mermaid)](caso-b-gitlab-s3/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-b-gitlab-s3/AWS_PASO_A_PASO.md)
 *   👉 [Ver Demo en Vivo](http://vladimir-caso-b-site-2026.s3-website.us-east-2.amazonaws.com/)
@@ -164,6 +168,8 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 #### [📂 Caso C: Terraform + CloudFront](./caso-c-terraform-s3/index.html) `Nivel 2` `COMPLETADO`
 *   **Stack**: Terraform + S3 (OAC) + CloudFront + Remote State.
 *   **Enfoque**: **Infraestructura como Código (IaC).** Elimina el error humano. Aprende a centralizar el estado en la nube y proteger recursos con **Origin Access Control**.
+*   **Prerequisito técnico**: Caso B — entender S3 y pipelines antes de automatizar con Terraform.
+*   **Costo**: $0 — CloudFront free tier (1 TB transferencia/mes), S3 free tier.
 *   🏗️ [Arquitectura (Mermaid)](caso-c-terraform-s3/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-c-terraform-s3/AWS_PASO_A_PASO.md)
 *   👉 [Ver Demo en Vivo](https://d3otfpeykrm536.cloudfront.net/)
@@ -171,6 +177,8 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 #### [📂 Caso D: Serverless Basic (SAM)](./caso-d-serverless-basic/index.html) `Nivel 3` `COMPLETADO`
 *   **Stack**: API Gateway + AWS Lambda + DynamoDB.
 *   **Enfoque**: **Lógica Backend y Persistencia.** Añade vida a tus apps. Escalamiento a cero costos cuando no hay uso y potencia reactiva bajo demanda.
+*   **Prerequisito técnico**: Caso C — tener IaC claro antes de desplegar funciones serverless.
+*   **Costo**: $0 — Lambda (1M invocaciones/mes free), API Gateway (1M llamadas/mes free), DynamoDB (25 GB free tier permanente).
 *   🏗️ [Arquitectura (Mermaid)](caso-d-serverless-basic/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-d-serverless-basic/AWS_PASO_A_PASO.md)
 *   👉 [Demo Portafolio](https://staging.d3oq987bpa7ls7.amplifyapp.com/) / [API Endpoint](https://tc78a6xibg.execute-api.us-east-2.amazonaws.com)
@@ -180,6 +188,8 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 #### [📂 Caso E: Persistence Pro](./caso-e-dynamodb-persistence/README.md) `Nivel 4` `COMPLETADO (VALIDADO)`
 *   **Stack**: API Gateway + Lambda + DynamoDB (Single Table Design + GSI) + AWS SAM.
 *   **Enfoque**: **Modelado NoSQL Senior.** Diseña por patrones de acceso, crea auditoría transaccional y consulta por cliente, estado y producto sin scans.
+*   **Prerequisito técnico**: Caso D — dominar Lambda + API GW básico antes de modelado avanzado.
+*   **Costo**: $0 — DynamoDB on-demand free tier, Lambda y API Gateway free tier permanente.
 *   🏗️ [Arquitectura (Mermaid)](caso-e-dynamodb-persistence/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md)
 *   👉 [API Endpoint](https://gqqm27j47c.execute-api.us-east-2.amazonaws.com)
@@ -187,12 +197,16 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 #### [📂 Caso F: Security First](./caso-f-security-cognito/index.html) `Nivel 5` `COMPLETADO`
 *   **Stack**: AWS Cognito User Pool + JWT Authorizer (API GW nativo) + WAF opcional + AWS SAM.
 *   **Enfoque**: **Seguridad Perimetral.** Identidades con Cognito, tokens JWT validados por API Gateway sin código de criptografía en Lambda, y WAF opcional como primera capa de defensa.
+*   **Prerequisito técnico**: Casos D y E — entender Lambda + API GW antes de agregarles seguridad.
+*   **Costo**: $0 sin WAF / ~$7/mes con WAF activo — destruir WAF al terminar el lab.
 *   🏗️ [Arquitectura (Mermaid)](caso-f-security-cognito/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-f-security-cognito/AWS_PASO_A_PASO.md)
 
 #### [📂 Caso G: Event Driven](./caso-g-event-driven/README.md) `Nivel 6` `COMPLETADO (VALIDADO)`
 *   **Stack**: API Gateway + Lambda + EventBridge + SQS + SNS + AWS SAM.
 *   **Enfoque**: **Arquitecturas Reactivas.** Desacopla productor y consumidor con eventos, reintentos y DLQ para absorber fallos sin bloquear la entrada.
+*   **Prerequisito técnico**: Caso E — tener dominio de Lambda + DynamoDB antes de agregar eventos y colas.
+*   **Costo**: $0 — EventBridge (1M eventos/mes free), SQS (1M mensajes/mes free), SNS (1M notificaciones/mes free).
 *   🏗️ [Arquitectura (Mermaid)](caso-g-event-driven/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-g-event-driven/AWS_PASO_A_PASO.md)
 *   👉 [Landing y API pública](https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com/)
@@ -200,19 +214,25 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 #### [📂 Caso H: Observability & Health](./caso-h-observability/index.html) `Nivel 7` `COMPLETADO`
 *   **Stack**: CloudWatch + X-Ray + CloudWatch Dashboard (IaC) + Lambda.
 *   **Enfoque**: **Monitoreo Proactivo como Código.** Métricas custom, trazas X-Ray y dashboards definidos en CloudFormation. Detecta fallos antes que el usuario.
+*   **Prerequisito técnico**: Casos D, E y G — necesitas tener servicios reales corriendo para monitorearlos.
+*   **Costo**: $0 destruido / ~$3/mes con Dashboard activo — destruir el stack al terminar el lab.
 *   🏗️ [Arquitectura (Mermaid)](caso-h-observability/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-h-observability/AWS_PASO_A_PASO.md)
 *   👉 [Landing y API pública](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/)
 
 #### [📂 Caso I: GenAI Bedrock](./caso-i-genai-bedrock/index.html) `Nivel 8` `PROYECTADO`
-*   **Stack**: Amazon Bedrock + LangChain + Lambda.
-*   **Enfoque**: **Inteligencia Artificial Propia.** Integración de modelos LLM en tu infraestructura de forma privada y segura.
+*   **Stack**: Amazon Bedrock + Lambda (sin RAG, sin OpenSearch).
+*   **Enfoque**: **Inteligencia Artificial Propia.** Integración de modelos LLM (Claude Haiku) en tu infraestructura vía API Bedrock. Sin OpenSearch Serverless para mantener costo controlado.
+*   **Prerequisito técnico**: Casos F y H — seguridad y observabilidad antes de exponer un modelo de IA.
+*   **Costo**: < $5 por lab — Bedrock es pay-per-token. **Evitar OpenSearch Serverless** (~$350/mes).
 
 ### 🔴 Nivel 4: Contenedores y Escalamiento Grado Industrial
 
 #### [📂 Caso J: Dockerización de Microservicios](./caso-j-containers-ecs/README.md) `Nivel 9` `COMPLETADO`
 *   **Stack**: Docker + ECS Fargate + ECR + Terraform.
 *   **Enfoque**: **Portabilidad e Isolation.** Empaquetado industrial de apps para que corran igual en local y en la nube. Gestión de registros de imágenes.
+*   **Prerequisito técnico**: Caso C (Terraform) — IaC es obligatorio antes de desplegar contenedores.
+*   **Costo**: ~$0.02/min activo (~$12 en lab de 10 h) — **destruir al terminar** con `terraform destroy`.
 *   🏗️ [Arquitectura (Mermaid)](caso-j-containers-ecs/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-j-containers-ecs/AWS_PASO_A_PASO.md)
 *   🖼️ [Reporte de Visualización y Resultados](caso-j-containers-ecs/VISUALIZATION.md)
@@ -220,6 +240,8 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 #### [📂 Caso K: Kubernetes en AWS (EKS)](./caso-k-kubernetes-eks/README.md) `Nivel 10` `COMPLETADO (VALIDADO)`
 *   **Stack**: AWS EKS + YAML + GitLab Kubernetes Agent.
 *   **Enfoque**: **Orquestación Real en AWS.** Kubernetes directo en la nube. Gestiona flotas de contenedores, auto-sanación y balanceo masivo.
+*   **Prerequisito técnico**: Caso J — dominar Docker y ECS antes de subir a Kubernetes.
+*   **Costo**: ~$0.10/h el cluster EKS (~$8 en lab de 4 h) — **destruir INMEDIATAMENTE** al terminar.
 *   🏗️ [Arquitectura (Mermaid)](caso-k-kubernetes-eks/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-k-kubernetes-eks/AWS_PASO_A_PASO.md)
 *   🖼️ [Reporte de Visualización y Resultados](caso-k-kubernetes-eks/VISUALIZATION.md)
@@ -229,6 +251,8 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 #### [📂 Caso L: FinOps & Governance](./caso-l-finops-optimization/README.md) `Nivel 11` `COMPLETADO`
 *   **Stack**: AWS Budgets + GitLab OIDC + IAM Governance.
 *   **Enfoque**: **Excelencia Operativa.** Integración profunda de GitLab con AWS, control de costos y políticas de gobernanza corporativa.
+*   **Prerequisito técnico**: Casos J y K — tener infraestructura real que gobernar y controlar financieramente.
+*   **Costo**: $0 — S3 free tier, AWS Budgets (2 alertas gratis/mes), OIDC sin costo adicional.
 *   🏗️ [Arquitectura (Mermaid)](caso-l-finops-optimization/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS (OIDC + Budgets)](caso-l-finops-optimization/AWS_PASO_A_PASO.md)
 *   👉 [Ver Demo en Vivo](http://finops-vladimir-portfolio-case-l.s3-website.us-east-2.amazonaws.com)
@@ -253,6 +277,8 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   **Stack**: ALB Multi-AZ + ECS Fargate + Route 53 Failover + (Fase 3) Global Accelerator.
 *   **Enfoque**: **Confiabilidad y Recuperación ante Desastres (DR).** Esto es lo que diferencia un demo de un sistema profesional: la capacidad de detectar fallos y conmutar (failover) con runbooks y pruebas. Demuestra Alta Disponibilidad (Multi-AZ) y Recuperación ante Desastre (Multi-Región) con RTO < 120 segundos.
 *   **Qué demuestra a un reclutador:** dominio de Reliability / Resilience / DR; estándar mínimo exigido en roles SRE/Cloud/Arquitectura a nivel empresa.
+*   **Prerequisito técnico**: Casos J y K — necesitas dominar contenedores antes de hacerlos resilientes.
+*   **Costo**: ~$30 Fase 1 (Multi-AZ) / ~$60 Fase 2 (Multi-Region) — GameDay: deploy → validar → destroy.
 *   **Estado actual:** Fase 0 completada (scaffold + docs + plantillas IaC). La infraestructura real se activará en Fase 1-3.
 *   **GameDay futuro:** el caso es completamente demostrable con una sesión de 2-3 horas.
 *   🏗️ [Arquitectura Multi-AZ + Multi-Región](caso-m-resiliencia-failover/docs/architecture.md)
