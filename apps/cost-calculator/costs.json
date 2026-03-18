@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-03-18T00:00:00Z",
+  "month": "2026-03",
+  "source": "manual",
+  "note": "Actualizar ejecutando el job cost-explorer-sync en GitLab CI (requiere OIDC configurado en Caso L).",
+  "total_mtd_usd": 0.00,
+  "stacks": {
+    "caso-a": { "status": "active",    "cost_mtd": 0.00, "description": "Amplify Hosting" },
+    "caso-b": { "status": "active",    "cost_mtd": 0.00, "description": "S3 Website Hosting" },
+    "caso-c": { "status": "active",    "cost_mtd": 0.00, "description": "CloudFront + S3 + Terraform" },
+    "caso-d": { "status": "active",    "cost_mtd": 0.00, "description": "Lambda + API GW + DynamoDB" },
+    "caso-e": { "status": "active",    "cost_mtd": 0.00, "description": "DynamoDB Single Table + SAM" },
+    "caso-f": { "status": "destroyed", "cost_mtd": 0.00, "description": "Cognito + WAF — destruido post-lab" },
+    "caso-g": { "status": "active",    "cost_mtd": 0.00, "description": "EventBridge + SQS + DLQ + SNS" },
+    "caso-h": { "status": "destroyed", "cost_mtd": 0.00, "description": "CloudWatch Dashboard — destruido post-lab" },
+    "caso-j": { "status": "destroyed", "cost_mtd": 0.00, "description": "ECS Fargate + ALB — destruido post-lab" },
+    "caso-k": { "status": "destroyed", "cost_mtd": 0.00, "description": "EKS Cluster — destruido post-lab" },
+    "caso-l": { "status": "active",    "cost_mtd": 0.00, "description": "FinOps + OIDC + S3 Governance" }
+  }
+}

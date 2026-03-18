@@ -8,6 +8,7 @@ stages:
   - plan-infrastructure
   - test
   - deploy
+  - finops
 
 # --- Security Checks (IaC) ---
 # --- Security Checks (IaC) ---
@@ -278,3 +279,33 @@ deploy_case_l_final:
         - caso-l-finops-optimization/**/*
     - if: '$CI_PIPELINE_SOURCE == "web"'
 
+
+# --- FinOps: Cost Explorer Sync ---
+# Actualiza apps/cost-calculator/costs.json con datos reales de AWS Cost Explorer.
+# Ejecutar manualmente desde GitLab CI > Pipelines > Run pipeline,
+# o configurar un Schedule mensual en GitLab > CI/CD > Schedules.
+# Requiere variable AWS_ROLE_ARN configurada en GitLab CI/CD > Variables.
+cost_explorer_sync:
+  stage: finops
+  image: python:3.12-slim
+  id_tokens:
+    GITLAB_OIDC_TOKEN:
+      aud: https://gitlab.com
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+  variables:
+    AWS_REGION: "us-east-1"
+  script:
+    - pip install --quiet boto3
+    - python scripts/cost_explorer_sync.py
+    - git config user.email "ci-bot@gitlab.com"
+    - git config user.name "GitLab CI FinOps"
+    - git add apps/cost-calculator/costs.json
+    - |
+      if git diff --cached --quiet; then
+        echo "costs.json sin cambios — nada que commitear"
+      else
+        git commit -m "ci(finops): update costs.json from AWS Cost Explorer [skip ci]"
+        git push "https://oauth2:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git" HEAD:${CI_COMMIT_BRANCH}
+      fi
