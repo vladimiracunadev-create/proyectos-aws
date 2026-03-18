@@ -91,6 +91,12 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 ### 👔 Para Reclutadores
 - 👨‍💼 **[Guía para Reclutadores](docs/RECRUITER.md)**: Tour ejecutivo y valor de negocio.
 
+### 🎓 Ruta hacia Certificaciones AWS
+El repositorio cubre hasta el 80% del contenido de las certificaciones AWS Associate. Cada archivo detalla dominios, cobertura por caso y gaps de estudio:
+- ☁️ **[SAA-C03 — Solutions Architect Associate](docs/cert-saa-c03.md)**: 80% cubierto — la más cercana al estado actual.
+- 💻 **[DVA-C02 — Developer Associate](docs/cert-dva-c02.md)**: 60% cubierto — fuerte en Lambda, API Gateway y CI/CD.
+- ⚙️ **[SOA-C02 — SysOps Administrator Associate](docs/cert-soa-c02.md)**: 40% cubierto — requiere Caso M y labs externos.
+
 ### 📍 Estado y Hoja de Ruta
 - 📍 **[Estado Actual y Roadmap](docs/ESTADO_Y_ROADMAP.md)**: Radiografía completa del repositorio — qué está sólido, qué falta, mejoras futuras con diagramas Mermaid y tabla de prioridades.
 

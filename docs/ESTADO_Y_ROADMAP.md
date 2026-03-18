@@ -104,44 +104,46 @@ graph TB
 ### Infraestructura de documentacion
 
 ```mermaid
-flowchart LR
-    subgraph Raiz["Raiz del repositorio"]
-        RM["README.md\npunto de entrada"]
+flowchart TB
+    subgraph Raiz["📁 Raiz"]
+        direction TB
+        RM["README.md"]
         CL["CHANGELOG.md"]
         RD["ROADMAP.md"]
-        CJ["AWS_CLOUD_JOURNEY.md\nlibro tecnico"]
+        CJ["AWS_CLOUD_JOURNEY.md"]
     end
 
-    subgraph Docs["docs/"]
+    subgraph Docs["📂 docs/"]
+        direction TB
         AR["ARCHITECTURE.md"]
         FS["FILE_STRUCTURE.md"]
         FC["FINOPS_COSTOS.md"]
         SK["SKILLS.md"]
         CN["CONCEPTOS_NUBE.md"]
         RC["RECRUITER.md"]
-        BG["BEGINNERS_GUIDE.md"]
-        CC["COMPLETED_CASES_GUIDE.md"]
-        TS["TECHNICAL_SPECS.md"]
         ES["ESTADO_Y_ROADMAP.md"]
+        CE["cert-saa / cert-dva / cert-soa"]
     end
 
-    subgraph Skills["skills/ (11 skills)"]
-        S1["sam-serverless-workflow"]
-        S2["caso-completion-checklist"]
-        S3["architecture-doc-standard"]
-        S4["lambda-test-patterns"]
-        S5["visualizacion-evidencia"]
-        S6["docs-portal-sync"]
-        S7["aws-case-scaffolder"]
+    subgraph Skills["🛠️ skills/ (11)"]
+        direction TB
+        S1["aws-case-scaffolder"]
+        S2["sam-serverless-workflow"]
+        S3["lambda-test-patterns"]
+        S4["architecture-doc-standard"]
+        S5["caso-completion-checklist"]
+        S6["visualizacion-evidencia"]
+        S7["docs-portal-sync"]
         S8["gitlab-aws-pipeline-editor"]
         S9["terraform-aws-demo-patterns"]
         S10["finops-audit-and-budgeting"]
         S11["repo-status-analysis"]
     end
 
-    subgraph Portal["GitLab Pages"]
-        PO["index.html\nsidebar navegable"]
-        CA["apps/cost-calculator\ncalculadora interactiva"]
+    subgraph Portal["🌐 GitLab Pages"]
+        direction TB
+        PO["index.html — sidebar"]
+        CA["apps/cost-calculator"]
     end
 
     RM --> Docs
@@ -150,13 +152,11 @@ flowchart LR
     CJ --> Docs
 ```
 
-### Sistema de skills (10)
+### Sistema de skills (11)
 
 ```mermaid
-flowchart TD
-    TAREA["Nueva tarea en el repositorio"]
-
-    TAREA --> Q1{Que necesito hacer?}
+flowchart LR
+    Q1{{"¿Que\nnecesito\nhacer?"}}
 
     Q1 -->|Caso nuevo| SC["aws-case-scaffolder"]
     Q1 -->|Deploy SAM| SW["sam-serverless-workflow"]
@@ -165,10 +165,10 @@ flowchart TD
     Q1 -->|Completar caso| CH["caso-completion-checklist"]
     Q1 -->|Evidencia / destroy| VE["visualizacion-evidencia"]
     Q1 -->|Docs / portal| DS["docs-portal-sync"]
-    Q1 -->|CI/CD| GP["gitlab-aws-pipeline-editor"]
+    Q1 -->|CI/CD pipeline| GP["gitlab-aws-pipeline-editor"]
     Q1 -->|Terraform| TF["terraform-aws-demo-patterns"]
-    Q1 -->|Costos| FA["finops-audit-and-budgeting"]
-    Q1 -->|Estado del repo / roadmap| RS["repo-status-analysis"]
+    Q1 -->|Costos FinOps| FA["finops-audit-and-budgeting"]
+    Q1 -->|Estado / roadmap| RS["repo-status-analysis"]
 
     style SC fill:#1f6feb,color:#fff
     style SW fill:#1f6feb,color:#fff
@@ -190,26 +190,46 @@ flowchart TD
 ### Gaps actuales
 
 ```mermaid
-flowchart TD
-    subgraph CRITICO["Prioritario"]
-        G1["❌ Caso H\nVISUALIZATION.md faltante\n(unico caso con costo fijo sin reporte)"]
+flowchart TB
+    subgraph CRITICO["🔴 Prioritario"]
+        direction TB
+        G1["❌ Caso H — VISUALIZATION.md faltante"]
+        G1N["unico caso con costo fijo sin reporte de evidencia"]
+        G1 --- G1N
     end
 
-    subgraph MEDIO["En progreso"]
-        G2["🔄 Caso M Fase 0\nScaffolding y docs listos\nImplementacion pendiente"]
-        G3["🔄 Wiki submodulo\nDesfase posible entre\nwiki/ del repo y GitLab Wiki real"]
+    subgraph MEDIO["🟡 En progreso"]
+        direction TB
+        G2["🔄 Caso M — Fase 0 activa"]
+        G2N["Scaffolding listo, implementacion pendiente"]
+        G3["🔄 Wiki — submodulo desincronizado"]
+        G3N["wiki/ del repo no se sincroniza al GitLab Wiki real"]
+        G2 --- G2N
+        G3 --- G3N
     end
 
-    subgraph BAJO["Mejora futura"]
-        G4["🔧 Calculadora de costos\nUsa precios estaticos\nPodria leer Cost Explorer real"]
-        G5["🔧 Portal GitLab Pages\nVisor de Markdown basico\nPodria mostrar estado de stacks en vivo"]
+    subgraph BAJO["🟢 Mejora futura"]
+        direction TB
+        G4["🔧 Calculadora — usa precios estaticos"]
+        G4N["Podria conectarse a Cost Explorer real"]
+        G5["🔧 Portal — visor basico de Markdown"]
+        G5N["Podria mostrar estado de stacks en vivo"]
+        G4 --- G4N
+        G5 --- G5N
     end
+
+    CRITICO --> MEDIO --> BAJO
 
     style G1 fill:#da3633,color:#fff
     style G2 fill:#f0883e,color:#fff
     style G3 fill:#f0883e,color:#fff
     style G4 fill:#d29922,color:#fff
     style G5 fill:#d29922,color:#fff
+    style G1N fill:#21262d,color:#8b949e
+    style G2N fill:#21262d,color:#8b949e
+    style G3N fill:#21262d,color:#8b949e
+    style G4N fill:#21262d,color:#8b949e
+    style G5N fill:#21262d,color:#8b949e
 ```
 
 ---
@@ -306,16 +326,28 @@ Trazas X-Ray entre multiples Lambdas en cadena, dashboards operacionales complej
 
 ```mermaid
 flowchart LR
-    Repo["Este repositorio"] -->|cubre 80%| SAA["AWS Solutions Architect\nAssociate SAA-C03"]
-    Repo -->|cubre 60%| DVA["AWS Developer\nAssociate DVA-C02"]
-    Repo -->|cubre 40%| SOA["AWS SysOps\nAssociate SOA-C02"]
+    Repo["Este\nrepositorio"]
+
+    Repo -->|"80% cubierto"| SAA["☁️ SAA-C03\nSolutions Architect\nAssociate"]
+    Repo -->|"60% cubierto"| DVA["💻 DVA-C02\nDeveloper\nAssociate"]
+    Repo -->|"40% cubierto"| SOA["⚙️ SOA-C02\nSysOps\nAssociate"]
+
+    SAA --> SAAD["Ver detalle →\ndocs/cert-saa-c03.md"]
+    DVA --> DVAD["Ver detalle →\ndocs/cert-dva-c02.md"]
+    SOA --> SOAD["Ver detalle →\ndocs/cert-soa-c02.md"]
 
     style SAA fill:#f90,color:#000
     style DVA fill:#f90,color:#000
-    style SOA fill:#c8c,color:#000
+    style SOA fill:#d29922,color:#000
+    style SAAD fill:#21262d,color:#8b949e
+    style DVAD fill:#21262d,color:#8b949e
+    style SOAD fill:#21262d,color:#8b949e
 ```
 
-El repositorio ya cubre el 80% del temario de Solutions Architect Associate. Con una ruta de estudio paralela al desarrollo de los casos, puede usarse como material de preparacion para la certificacion.
+Cada certificacion tiene su propio documento con dominios, temas requeridos y cobertura exacta por caso:
+- 📄 [SAA-C03 — Solutions Architect Associate](cert-saa-c03.md): 80% cubierto — la más cercana
+- 📄 [DVA-C02 — Developer Associate](cert-dva-c02.md): 60% cubierto — fuerte en Lambda y CI/CD
+- 📄 [SOA-C02 — SysOps Associate](cert-soa-c02.md): 40% cubierto — requiere M y O para completar
 
 ---
 
