@@ -18,9 +18,9 @@ proyectos-aws-gitlab/
 ├── caso-c-terraform-s3/    # Caso C: Terraform + CloudFront
 ├── caso-d-serverless-basic/# Caso D: Lambda + API Gateway
 ├── caso-e-dynamodb-*/      # Caso E: DynamoDB Persistence
-├── caso-f-security-*/      # Caso F: Cognito (Proyectado)
-├── caso-g-event-driven/    # Caso G: EventBridge (Validado en AWS)
-├── caso-h-observability/   # Caso H: CloudWatch (Proyectado)
+├── caso-f-security-*/      # Caso F: Cognito + JWT + WAF (Completado)
+├── caso-g-event-driven/    # Caso G: EventBridge + SQS + SNS (Validado en AWS)
+├── caso-h-observability/   # Caso H: CloudWatch + X-Ray (Validado en AWS)
 ├── caso-i-genai-bedrock/   # Caso I: Bedrock (Proyectado)
 ├── caso-j-containers-ecs/  # Caso J: Docker + ECS Fargate
 ├── caso-k-kubernetes-eks/  # Caso K: Kubernetes EKS
@@ -204,6 +204,19 @@ Cada directorio `caso-X-*` es un **proyecto autocontenido**. Aquí la anatomía 
 | `docs/architecture.md` | Diagramas Mermaid del Single Table Design, la landing y los flujos de consulta. |
 | `AWS_PASO_A_PASO.md` | Guía detallada para desplegar, probar y destruir el caso. |
 
+### Caso F: `caso-f-security-cognito/` — Security First `Nivel 5` `COMPLETADO`
+| Archivo/Dir | Descripción |
+|-------------|-------------|
+| `backend/template.yaml` | Infraestructura SAM: Cognito UserPool + UserPoolClient + HttpApi con JWT Authorizer + WAF opcional. |
+| `backend/src/app.py` | Handler Python: register, login, profile, health, pre_signup_trigger. |
+| `backend/events/register.json` | Evento de prueba para `sam local invoke` — registro. |
+| `backend/events/login.json` | Evento de prueba para `sam local invoke` — login. |
+| `backend/tests/test_app.py` | 35+ tests unitarios con `unittest.mock.patch` (sin moto, sin credenciales). |
+| `index.html` | Landing interactiva con flujo 3 pasos: registrar → login → perfil protegido. |
+| `docs/architecture.md` | Diagramas Mermaid: secuencia auth, 4 capas de defensa, arquitectura SAM, JWT Authorizer vs Custom Lambda. |
+| `README.md` | Stack, endpoints, decisiones tecnicas y guia de deploy. |
+| `AWS_PASO_A_PASO.md` | 10 pasos verificados con curl, troubleshooting y notas de costo. |
+
 ### Caso G: `caso-g-event-driven/` — Event Driven `Nivel 6` `COMPLETADO (VALIDADO)`
 | Archivo/Dir | Descripción |
 |-------------|-------------|
@@ -213,6 +226,18 @@ Cada directorio `caso-X-*` es un **proyecto autocontenido**. Aquí la anatomía 
 | `index.html` | Landing local complementaria para publicar eventos y probar el endpoint del caso. |
 | `docs/architecture.md` | Diagramas Mermaid del flujo asincrono, DLQ y contrato del evento. |
 | `AWS_PASO_A_PASO.md` | Guia detallada para desplegar, validar, inspeccionar y destruir el caso. |
+
+### Caso H: `caso-h-observability/` — Observability `Nivel 7` `COMPLETADO (VALIDADO)`
+| Archivo/Dir | Descripción |
+|-------------|-------------|
+| `backend/template.yaml` | Infraestructura SAM: HttpApi + Lambda con `Tracing: Active` + CloudWatch Dashboard IaC + 2 Alarmas. |
+| `backend/src/app.py` | Handler Python: landing HTML, health JSON/HTML, POST /metrics con `cloudwatch.put_metric_data`. |
+| `backend/events/health-check.json` | Evento de prueba para `sam local invoke`. |
+| `backend/tests/test_app.py` | 14 tests unitarios con `unittest.mock.patch` sobre `cloudwatch`. |
+| `index.html` | Landing interactiva con formulario de metricas custom y health check en vivo. |
+| `docs/architecture.md` | Diagramas Mermaid: flujo X-Ray, arquitectura AWS completa, mapa de metricas/alarmas, service map esperado. |
+| `README.md` | Stack, endpoints, decisiones tecnicas y URLs de demo. |
+| `AWS_PASO_A_PASO.md` | Guia detallada para desplegar, validar dashboard, alarmas y destruir el caso. |
 
 ### Caso J: `caso-j-containers-ecs/` — Docker + ECS `Nivel 9`
 | Archivo | Descripción |
@@ -257,5 +282,5 @@ Cada directorio `caso-X-*` es un **proyecto autocontenido**. Aquí la anatomía 
 
 ---
 
-> **Última actualización:** 2026-03-11
+> **Última actualización:** 2026-03-17
 > **Mantenido por:** Vladimir Acuña

@@ -107,9 +107,9 @@
 
 ```mermaid
 graph LR
-    D[Caso D: Serverless ✅] --> F[Caso F: Security]
+    D[Caso D: Serverless ✅] --> F[Caso F: Security ✅]
     E[Caso E: DynamoDB ✅]  --> F
-    D                       --> H[Caso H: Observability]
+    D                       --> H[Caso H: Observability ✅]
     E                       --> H
     G[Caso G: EventBridge ✅] --> H
     J[Caso J: ECS ✅]       --> M[Caso M: Resiliencia]
@@ -138,38 +138,39 @@ graph LR
 
 ---
 
-### 🥇 1er lugar — Caso H: Observability (CloudWatch + X-Ray)
+### ✅ 1er lugar — Caso H: Observability (CloudWatch + X-Ray) — COMPLETADO
 
 | Criterio | Valor |
 |---|---|
 | Complejidad | ⭐⭐⭐ (3/10) |
 | Costo demo | < $1 USD |
 | Dependencias | ✅ Todas satisfechas (D, E, G) |
-| Tiempo estimado | 4–6 horas |
+| Estado | **✅ Desplegado y validado** |
 
-**¿Por qué primero?**
+**Por qué fue primero:**
 
-- Costo prácticamente nulo (free tier de X-Ray cubre el 100% de un demo).
+- Costo prácticamente nulo (free tier de X-Ray cubre el 100% del demo).
 - Se integra directamente sobre las Lambdas y APIs ya desplegadas.
-- Genera **evidencia visual inmediata** (Dashboards + Traces) para el portafolio de todos los casos anteriores.
-- Sienta las bases de observación que benefician a **todos los casos siguientes**.
+- Genera **evidencia visual inmediata** (Dashboards + Traces) para el portafolio.
+- Sentó las bases de observación que benefician a todos los casos siguientes.
+- Demo activa: [Landing / API](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/)
 
 ---
 
-### 🥈 2do lugar — Caso F: Security First (Cognito + WAF)
+### ✅ 2do lugar — Caso F: Security First (Cognito + WAF) — COMPLETADO
 
 | Criterio | Valor |
 |---|---|
 | Complejidad | ⭐⭐⭐⭐⭐ (5/10) |
 | Costo demo | < $2 USD |
 | Dependencias | ✅ Satisfechas (D, E) |
-| Tiempo estimado | 1–2 días |
+| Estado | **✅ Completado con tests y docs** |
 
-**¿Por qué segundo?**
+**Por qué fue segundo:**
 
 - Costo bajo y controlable (WAF se destruye al terminar).
 - Cognito Lite: **10,000 MAUs gratuitos/mes** — ideal para portafolio.
-- Integra y "completa" los casos D y E,haciéndolos más enterprise.
+- Integra y completa los casos D y E, haciéndolos más enterprise.
 - El caso más exigido en roles **Cloud Security Engineer / Solutions Architect**.
 - Habilitar F antes de I es estratégico: la IA necesita endpoints protegidos.
 
@@ -223,21 +224,21 @@ graph LR
 ## 📋 Resumen Ejecutivo
 
 ```
-Orden de implementación recomendado:
+Estado de implementación:
 
-  1. 🟢 H — Observability  → Costo < $1   | Complejidad 3/10 | Quick Win
-  2. 🔵 F — Security       → Costo < $2   | Complejidad 5/10 | Alto valor CV
+  ✅ H — Observability  → COMPLETADO | Complejidad 3/10 | Quick Win
+  ✅ F — Security       → COMPLETADO | Complejidad 5/10 | Alto valor CV
   3. 🟠 M — Resiliencia    → Costo ~$15   | Complejidad 7/10 | Diferenciador SRE
   4. 🔴 I — GenAI Bedrock  → Costo < $5*  | Complejidad 8/10 | Innovación
                                * Sin RAG completo. Con RAG: $350+/mes ⚠️
 ```
 
-| Caso | Costo Total Demo | Tiempo | Impacto Portafolio |
+| Caso | Costo Total Demo | Estado | Impacto Portafolio |
 |---|---|---|---|
-| H — Observability | < $1 USD | 4–6 h | ⭐⭐⭐⭐ |
-| F — Security | < $2 USD | 1–2 días | ⭐⭐⭐⭐⭐ |
-| M — Resiliencia | ~$15–30 USD | 2–3 días/fase | ⭐⭐⭐⭐⭐ |
-| I — GenAI | < $5 USD* | 3–5 días | ⭐⭐⭐⭐⭐ |
+| H — Observability | < $1 USD | ✅ Completado | ⭐⭐⭐⭐ |
+| F — Security | < $2 USD | ✅ Completado | ⭐⭐⭐⭐⭐ |
+| M — Resiliencia | ~$15–30 USD | 🔄 Fase 0 completa | ⭐⭐⭐⭐⭐ |
+| I — GenAI | < $5 USD* | ⏳ Proyectado | ⭐⭐⭐⭐⭐ |
 
 > **Free Tier Mindset**: H y F son prácticamente gratuitos. M y I requieren disciplina
 > con `terraform destroy`. Total para completar el portafolio completo: **< $50 USD** aplicando estrategia GameDay.

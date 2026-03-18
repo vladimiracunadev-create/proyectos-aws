@@ -1,4 +1,4 @@
-﻿# Manual de Aprendizaje: La Guia del Novato
+# Manual de Aprendizaje: La Guia del Novato
 
 Bienvenido. Si estas aqui, es porque quieres entender que hay "bajo el capo" de este proyecto. Piensa en este repositorio como un **gimnasio de arquitectura cloud**. Cada carpeta es una maquina de ejercicios distinta que te prepara para retos reales en AWS.
 
@@ -8,7 +8,7 @@ Bienvenido. Si estas aqui, es porque quieres entender que hay "bajo el capo" de 
 
 1. **Git**: Guarda el historial de todo para poder volver atras si rompemos algo.
 2. **GitLab**: Aloja el codigo y ejecuta robots de `CI/CD`.
-3. **AWS**: Es el terreno donde viven las apps y servicios (`S3`, `Lambda`, `CloudFront`, `DynamoDB`, `EKS`).
+3. **AWS**: Es el terreno donde viven las apps y servicios (`S3`, `Lambda`, `CloudFront`, `DynamoDB`, `Cognito`, `CloudWatch`, `EKS`).
 4. **Makefile**: Resume comandos largos en atajos faciles.
 5. **Docker**: Permite que el proyecto funcione igual en distintas maquinas.
 
@@ -48,15 +48,52 @@ Que demuestra este caso:
 
 Este caso ya esta **resuelto, desplegado y validado** en AWS.
 
-### Casos F-I: expansion de seguridad, eventos y operacion
+### Caso F: Security First (Identidad y perimetro)
 
-- **F - Seguridad**: Cognito, WAF y endurecimiento de acceso.
-- **G - Eventos**: Arquitectura asincrona validada con EventBridge, SQS, DLQ y una landing publica para explicar por que se desacopla el procesamiento.
-- **H - Observabilidad**: CloudWatch, trazas y salud operativa.
-- **I - GenAI**: Integracion de modelos de lenguaje con Bedrock.
+**Objetivo**: Agregar seguridad de verdad. Gestionar quienes son los usuarios y asegurarse de que solo ellos accedan a los endpoints protegidos.
 
-`Caso G` ya esta **desplegado y validado** en AWS. Es importante porque muestra el paso desde
-"guardar datos" a "reaccionar a hechos de negocio" sin bloquear la API de entrada.
+Que demuestra este caso:
+
+- registro y login de usuarios con Cognito User Pool
+- emision de tokens JWT (estandar RS256)
+- validacion del token en API Gateway sin escribir codigo de criptografia
+- WAF opcional como primera capa de defensa contra SQLi y XSS
+- landing interactiva con flujo completo: registrar → login → perfil protegido
+
+Este caso ya esta **completado** con tests y documentacion completa.
+
+### Caso G: Event Driven (Arquitectura asincrona)
+
+**Objetivo**: Aprender que no todo tiene que resolverse en la misma llamada HTTP. Publicar un hecho de negocio y dejar que otros componentes lo procesen.
+
+Que demuestra este caso:
+
+- EventBridge como bus de eventos
+- SQS para amortiguar carga y desacoplar ritmos
+- DLQ para aislar mensajes que fallan repetidamente
+- SNS para notificar al final del flujo sin tocar el productor
+- `/health` con doble lectura: HTML para navegador, JSON para scripts
+
+Este caso ya esta **desplegado y validado** en AWS.
+
+### Caso H: Observabilidad (Ver lo que no se ve)
+
+**Objetivo**: Saber que esta pasando antes de que el usuario se queje. Medir, graficar y alertar de forma automatica.
+
+Que demuestra este caso:
+
+- metricas custom publicadas desde Lambda a CloudWatch
+- dashboard CloudWatch definido en el SAM template (IaC — no clics en consola)
+- alarmas sobre errores Lambda y latencia p99
+- trazas X-Ray para seguir una peticion a traves de servicios
+- la diferencia entre metricas tecnicas y metricas de negocio
+
+Este caso ya esta **desplegado y validado** en AWS.
+
+### Caso I: GenAI Bedrock (Inteligencia Artificial)
+
+**Objetivo**: Integrar modelos de lenguaje de AWS en una API privada y segura.
+**Estado**: proyectado — requiere el Caso F como prerequisito.
 
 ### Caso J: Dockerizacion (Combo industrial)
 
@@ -70,6 +107,11 @@ Este caso ya esta **resuelto, desplegado y validado** en AWS.
 
 **Objetivo**: Controlar costos, gobernanza y acceso para operar con madurez.
 
+### Caso M: Resiliencia y Failover
+
+**Objetivo**: Demostrar que el sistema sobrevive a fallos de region. Alta disponibilidad y recuperacion ante desastres.
+**Estado**: Fase 0 completada (scaffold, docs, IaC skeleton).
+
 ---
 
 ## Que significan los casos completados
@@ -81,7 +123,9 @@ Los casos ya completados no son "carpetas sueltas". Cada uno demuestra una habil
 - **C**: definir infraestructura como codigo
 - **D**: crear backend serverless
 - **E**: modelar datos con criterio
+- **F**: proteger endpoints con identidad y perimetro
 - **G**: desacoplar procesamiento con eventos
+- **H**: medir, graficar y alertar con observabilidad
 - **J**: empaquetar y ejecutar contenedores
 - **K**: orquestar contenedores a nivel plataforma
 - **L**: gobernar costo, identidad y operacion
@@ -95,9 +139,9 @@ Si quieres una explicacion mas aterrizada de todos los casos ya terminados, revi
 ## Como se conecta todo
 
 1. Haces un cambio en tu PC o entorno de desarrollo.
-2. Ejecutas validaciones locales.
+2. Ejecutas validaciones locales (`make test`, `make lint`).
 3. Haces `push` a GitLab.
-4. El pipeline valida, construye y despliega segun el caso.
+4. El pipeline valida (seguridad, lint, tests unitarios por caso) y despliega.
 5. Revisas costos, seguridad y estado operativo antes de cerrar el ciclo.
 
 ---
@@ -110,6 +154,20 @@ En SQL solemos pensar en tablas relacionadas. En DynamoDB, y especialmente en es
 - se parte de "que consultas debe responder la aplicacion"
 
 Por eso `Caso E` es importante: muestra un cambio de mentalidad que se espera en roles senior de backend cloud.
+
+---
+
+## Idea clave para entender el Caso F
+
+En sistemas simples, el token JWT lo valida el codigo de la Lambda: importas `PyJWT`, verificas la firma, manejas errores criptograficos.
+
+En `Caso F` cambia la idea:
+
+- API Gateway valida el token antes de invocar la Lambda
+- si el token es invalido, la Lambda nunca se llama
+- la Lambda solo lee los claims que ya estan validados en `requestContext`
+
+Eso significa que si el token es incorrecto o expirado, el costo es cero: no hay Lambda que arranque.
 
 ---
 
@@ -137,6 +195,21 @@ Eso permite:
 - para personas en navegador: pagina HTML explicativa
 
 Eso ayuda a no confundir "la API esta viva" con "todo el flujo ya se proceso".
+
+---
+
+## Idea clave para entender el Caso H
+
+Una alarma que configuras a mano en la consola AWS no existe en el repositorio. Si alguien borra el stack, la alarma desaparece y nadie lo sabe.
+
+En `Caso H` cambia la idea:
+
+- el dashboard CloudWatch esta en el SAM template
+- las alarmas estan en el SAM template
+- cuando haces `sam deploy`, todo el monitoreo se crea automaticamente
+- cuando haces `sam delete`, todo se destruye limpiamente
+
+Eso es **observabilidad como codigo**: el monitoreo vive donde vive la infraestructura.
 
 ---
 

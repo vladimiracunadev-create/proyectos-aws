@@ -1,4 +1,4 @@
-﻿# Guia para Reclutadores y Evaluadores Tecnicos
+# Guia para Reclutadores y Evaluadores Tecnicos
 
 > **Proposito**: ayudar a entender rapidamente el valor tecnico y de negocio de este monorepo, con foco en decisiones arquitectonicas reales y capacidades ya demostradas.
 
@@ -6,15 +6,16 @@
 
 ## Resumen ejecutivo
 
-**Proyectos AWS GitLab** es un monorepo profesional que muestra la evolucion de un perfil cloud desde hosting estatico hasta contenedores, Kubernetes, FinOps y persistencia NoSQL avanzada.
+**Proyectos AWS GitLab** es un monorepo profesional que muestra la evolucion de un perfil cloud desde hosting estatico hasta seguridad perimetral, observabilidad como codigo, contenedores, Kubernetes y FinOps.
 
-Lo importante no es solo la variedad de tecnologias, sino que varios casos ya estan **desplegados, validados y documentados con evidencia operativa**.
+Lo importante no es solo la variedad de tecnologias, sino que **11 casos ya estan completados**, varios de ellos **desplegados, validados y documentados con evidencia operativa**.
 
-- **Arquitectura**: progresion desde hosting simple hasta plataformas multi-servicio.
-- **IaC**: uso de Terraform y AWS SAM.
-- **CI/CD**: GitLab integrado con AWS.
-- **Seguridad**: escaneo de secretos, minimo privilegio y direccion hacia OIDC.
+- **Arquitectura**: progresion desde hosting simple hasta plataformas multi-servicio con identidad y perimetro.
+- **IaC**: uso de Terraform y AWS SAM. Todo recurso relevante tiene definicion declarativa.
+- **CI/CD**: GitLab integrado con AWS, incluyendo test jobs por caso y stages de seguridad.
+- **Seguridad**: autenticacion con Cognito + JWT Authorizer nativo, WAF opcional, escaneo de secretos, minimo privilegio y OIDC.
 - **Datos**: DynamoDB modelado por patrones de acceso, no como traduccion directa de SQL.
+- **Observabilidad**: dashboards CloudWatch como codigo, alarmas proactivas y trazas X-Ray.
 
 ---
 
@@ -23,11 +24,12 @@ Lo importante no es solo la variedad de tecnologias, sino que varios casos ya es
 | Pilar | Beneficio para el negocio | Implementacion visible |
 | :--- | :--- | :--- |
 | **Agilidad** | Despliegues rapidos y repetibles | Pipelines y guias operativas por caso |
-| **Seguridad** | Menor riesgo de errores manuales y fugas | Validaciones, IAM y documentacion de hardening |
-| **Costo** | Uso eficiente de recursos administrados | Amplify, Lambda, DynamoDB On-Demand, hibernacion FinOps |
+| **Seguridad** | Identidad gestionada, perimetro declarativo | Caso F: Cognito + JWT Authorizer + WAF |
+| **Costo** | Uso eficiente de recursos administrados | Amplify, Lambda, DynamoDB On-Demand, FinOps |
 | **Escalabilidad** | Respuesta elastica segun el tipo de carga | CloudFront, Lambda, ECS y EKS |
-| **Persistencia** | Diseños de datos pensados para consultas reales | Caso E con Single Table Design y GSIs |
-| **Integracion asincrona** | Sistemas menos acoplados y mas tolerantes a picos y errores | Caso G con EventBridge, SQS, DLQ y SNS |
+| **Persistencia** | Diseños de datos pensados para consultas reales | Caso E: Single Table Design y GSIs |
+| **Integracion asincrona** | Sistemas menos acoplados y mas tolerantes a errores | Caso G: EventBridge, SQS, DLQ y SNS |
+| **Observabilidad** | Deteccion proactiva antes que el usuario | Caso H: CloudWatch Dashboard IaC + X-Ray + Alarmas |
 
 ---
 
@@ -40,6 +42,9 @@ Cada carpeta representa una capacidad concreta y acumulativa. No son demos desco
 - hosting y deploy
 - IaC y backend
 - persistencia avanzada
+- integracion asincrona
+- seguridad perimetral e identidad
+- observabilidad como codigo
 - contenedores y orquestacion
 - FinOps y resiliencia
 
@@ -47,6 +52,7 @@ Cada carpeta representa una capacidad concreta y acumulativa. No son demos desco
 
 - **Terraform** para infraestructura tradicional e industrial
 - **AWS SAM** para serverless y APIs
+- **CloudFormation inline** para dashboards y alarmas (Caso H)
 
 ### 3. Persistencia modelada por acceso
 
@@ -59,9 +65,13 @@ Incluye:
 - escritura transaccional de orden y auditoria
 - validacion operativa con API publica y landing de demostracion
 
-### 4. Direccion de seguridad correcta
+### 4. Seguridad sin codigo de criptografia
 
-El repositorio apunta a operar con credenciales temporales y controles cada vez mas fuertes, reduciendo dependencia de llaves permanentes.
+El `Caso F` muestra un patron maduro: el JWT Authorizer nativo de API Gateway valida la firma RS256, el issuer y el audience de Cognito **antes de invocar la Lambda**. La Lambda solo lee claims ya validados. Cero codigo de criptografia propio.
+
+### 5. Observabilidad como codigo
+
+El `Caso H` no crea el dashboard desde la consola: el `AWS::CloudWatch::Dashboard` nace con el SAM stack y muere con el. Las alarmas sobre errores Lambda y latencia p99 estan definidas declarativamente. Igual que la infraestructura.
 
 ---
 
@@ -70,14 +80,8 @@ El repositorio apunta a operar con credenciales temporales y controles cada vez 
 ### Caso C: Infraestructura como codigo (Terraform)
 
 **Problema**: despliegues manuales poco auditables.
-**Solucion**: Terraform con estado remoto y distribucion global con CloudFront.
+**Solucion**: Terraform con estado remoto y distribucion global con CloudFront y OAC.
 **Habilidad demostrada**: IaC, AWS networking, control declarativo.
-
-### Caso D: Serverless API
-
-**Problema**: backend que consume recursos aunque no haya trafico.
-**Solucion**: API Gateway + Lambda + DynamoDB.
-**Habilidad demostrada**: arquitectura serverless y backend en AWS.
 
 ### Caso E: Persistence Pro
 
@@ -87,13 +91,28 @@ El repositorio apunta a operar con credenciales temporales y controles cada vez 
 **Estado**: desplegado y validado en AWS.
 **Demo**: [API + landing publica](https://gqqm27j47c.execute-api.us-east-2.amazonaws.com/)
 
+### Caso F: Security First (Cognito + JWT + WAF)
+
+**Problema**: APIs publicas sin autenticacion ni perimetro.
+**Solucion**: Cognito User Pool para identidades, JWT Authorizer nativo en API Gateway para autorizacion sin codigo Lambda, WAF opcional para bloquear SQLi y XSS.
+**Habilidad demostrada**: identidad en AWS, defensa en profundidad, IaC de seguridad, separacion autenticacion/autorizacion.
+**Estado**: completado con tests y documentacion.
+
 ### Caso G: Event Driven
 
-**Problema**: una API sincrona puede quedar lenta o fragil cuando intenta hacer too much trabajo en la misma llamada.
+**Problema**: una API sincrona puede quedar lenta o fragil cuando intenta hacer demasiado trabajo en la misma llamada.
 **Solucion**: aceptar el evento, publicarlo en EventBridge, amortiguarlo con SQS, procesarlo fuera de banda y aislar errores con DLQ.
 **Habilidad demostrada**: event-driven design, desacoplamiento, reintentos, DLQ y lectura operativa del flujo.
 **Estado**: desplegado y validado en AWS.
 **Demo**: [Landing + API publica](https://ajcjvroq0a.execute-api.us-east-2.amazonaws.com/)
+
+### Caso H: Observability & Health
+
+**Problema**: no saber que falla hasta que el usuario se queja.
+**Solucion**: CloudWatch Dashboard definido como codigo en SAM, alarmas sobre errores Lambda y latencia p99, metricas custom, trazas X-Ray en todas las invocaciones.
+**Habilidad demostrada**: los tres pilares de observabilidad (metricas, logs, trazas), IaC de monitorizacion, diferencia entre metricas tecnicas y de negocio.
+**Estado**: desplegado y validado en AWS.
+**Demo**: [Landing + API publica](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/)
 
 ### Caso K: Kubernetes en AWS
 
@@ -104,41 +123,44 @@ El repositorio apunta a operar con credenciales temporales y controles cada vez 
 ### Caso L: FinOps y governance
 
 **Problema**: credenciales permanentes y costos sin control.
-**Solucion**: presupuestos, gobernanza y direccion hacia OIDC.
+**Solucion**: presupuestos AWS Budgets, gobernanza IAM y autenticacion OIDC Zero-Trust.
 **Habilidad demostrada**: costo, seguridad y operacion responsable.
 
 ---
 
 ## Que diferencia este portafolio
 
-- No se queda en infraestructura basica; incluye datos, costos y operacion.
-- No documenta solo aspiraciones; varios casos estan ya publicados y verificables.
-- El `Caso E` agrega una capa de madurez poco comun: persistencia NoSQL orientada a negocio.
-- El `Caso G` suma una segunda capa de criterio senior: procesamiento asincrono y tolerancia a fallos sin romper la API de entrada.
+- No se queda en infraestructura basica; incluye datos, seguridad, observabilidad, costos y operacion.
+- No documenta solo aspiraciones; varios casos estan ya publicados y verificables con URL activa.
+- El `Caso F` agrega autenticacion sin codigo de criptografia: un patron que diferencia a perfiles cloud maduros.
+- El `Caso H` muestra que la observabilidad es codigo, no configuracion manual posterior al deploy.
+- 60+ tests unitarios cubren todas las Lambdas — pipeline CI/CD verde en cada push.
 
 ---
 
 ## Tour guiado sugerido
 
-1. [README.md](../README.md)
-2. [docs/ARCHITECTURE.md](./ARCHITECTURE.md)
-3. [caso-e-dynamodb-persistence/README.md](../caso-e-dynamodb-persistence/README.md)
-4. [caso-g-event-driven/README.md](../caso-g-event-driven/README.md)
-5. [caso-g-event-driven/docs/architecture.md](../caso-g-event-driven/docs/architecture.md)
-6. [caso-g-event-driven/AWS_PASO_A_PASO.md](../caso-g-event-driven/AWS_PASO_A_PASO.md)
+1. [README.md](../README.md) — vision global y mapa de relaciones entre casos
+2. [docs/ARCHITECTURE.md](./ARCHITECTURE.md) — evolucion por tiers
+3. [caso-e-dynamodb-persistence/README.md](../caso-e-dynamodb-persistence/README.md) — persistencia NoSQL
+4. [caso-f-security-cognito/docs/architecture.md](../caso-f-security-cognito/docs/architecture.md) — seguridad como IaC
+5. [caso-g-event-driven/README.md](../caso-g-event-driven/README.md) — arquitectura event-driven
+6. [caso-h-observability/docs/architecture.md](../caso-h-observability/docs/architecture.md) — observabilidad como codigo
 
 ---
 
 ## Habilidades demostradas
 
-- **Cloud Computing**: AWS aplicado a multiples patrones
-- **IaC**: Terraform y CloudFormation/SAM
-- **Backend**: APIs serverless y persistencia NoSQL
-- **Containers**: Docker, ECS y EKS
-- **FinOps y seguridad**: presupuestos, IAM, escaneo y controles operativos
+- **Cloud Computing**: AWS aplicado a multiples patrones arquitectonicos
+- **IaC**: Terraform y CloudFormation/SAM para infraestructura, seguridad y observabilidad
+- **Backend**: APIs serverless, persistencia NoSQL y arquitectura event-driven
+- **Seguridad**: Cognito, JWT Authorizer, WAF, IAM, escaneo de secretos y OIDC
+- **Observabilidad**: CloudWatch Dashboard IaC, alarmas proactivas y trazas X-Ray
+- **Containers**: Docker, ECS Fargate y Kubernetes EKS
+- **FinOps**: presupuestos, gobernanza y controles de costo
+- **Testing**: 60+ tests unitarios con pytest, CI jobs por caso y smoke tests post-deploy
 - **Comunicacion tecnica**: documentacion amplia, trazable y orientada a distintos lectores
 
 ---
 
-_Ultima actualizacion: 2026-03-12_
-
+_Ultima actualizacion: 2026-03-17_

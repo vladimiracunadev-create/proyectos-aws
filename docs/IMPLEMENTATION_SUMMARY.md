@@ -10,13 +10,14 @@ Se ha implementado exitosamente una **capa de tooling profesional** con Docker, 
 
 | Métrica | Valor |
 | :--- | :--- |
-| **Archivos creados** | 25 |
-| **Archivos modificados** | 8 |
-| **Líneas de código** | ~3,000 |
-| **Documentación** | 17 documentos en docs/ |
+| **Archivos creados** | 25+ |
+| **Archivos modificados** | 8+ |
+| **Líneas de código** | ~5,000+ |
+| **Documentación** | 18 documentos en docs/ |
 | **Security checks** | 40/40 (100%) con tfsec |
-| **Smoke tests** | 12 |
-| **Casos AWS** | 9 Completados (A, B, C, D, E, G, J, K, L) |
+| **Smoke tests** | 16 (D, E, F, G, H + scripts legacy) |
+| **Tests unitarios** | 60+ (pytest, casos D, E, F, G, H) |
+| **Casos AWS** | 11 Completados (A, B, C, D, E, F, G, H, J, K, L) |
 
 ---
 
@@ -285,7 +286,7 @@ make k8s-demo
 
 ---
 
-**Implementado por:** Antigravity AI  
-**Fecha:** 2026-02-04  
-**Versión:** 1.0.0  
-**Repositorio:** proyectos-aws
+**Mantenido por:** Vladimir Acuña
+**Ultima actualizacion:** 2026-03-17
+**Version actual:** 3.6.0
+**Repositorio:** proyectos-aws-gitlab
