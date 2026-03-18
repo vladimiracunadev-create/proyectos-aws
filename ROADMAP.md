@@ -116,6 +116,22 @@ Este roadmap refleja el estado actual del proyecto y las proximas prioridades pa
 - [ ] **Fase 3**: Automatizacion GameDay + CloudWatch Dashboards + opcion de Global Accelerator
 - [ ] [Ver carpeta del Caso M](./caso-m-resiliencia-failover/README.md)
 
+### 10. CI/CD avanzado con GitLab (Caso N) `PROYECTADO`
+
+- [ ] **Pipelines multi-stage**: stages dev → staging → prod con environments de GitLab
+- [ ] **Deployment protection rules**: aprobacion manual antes de pasar a prod
+- [ ] **Rollback automatizado**: revertir despliegue si el health check falla post-deploy
+- [ ] **Revisiones de PR como gates**: el merge a main solo se permite si el pipeline de staging pasa
+- [ ] **Prerequisito**: todos los casos anteriores completados
+
+### 11. Observabilidad distribuida (Caso O) `PROYECTADO`
+
+- [ ] **Trazas X-Ray multi-servicio**: correlacion de trazas entre multiples Lambdas en cadena
+- [ ] **CloudWatch Synthetics**: canaries que simulan usuarios reales en endpoints criticos
+- [ ] **SLOs definidos**: error budget, availability target, alertas basadas en SLO
+- [ ] **Integracion externa de alertas**: webhook a canal externo cuando se quema el error budget
+- [ ] **Prerequisito**: Caso H completado; Caso M recomendado para infraestructura distribuida
+
 ---
 
 ## Mejoras continuas

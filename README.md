@@ -231,6 +231,20 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   ☁️ [Guía Paso a Paso AWS (OIDC + Budgets)](caso-l-finops-optimization/AWS_PASO_A_PASO.md)
 *   👉 [Ver Demo en Vivo](http://finops-vladimir-portfolio-case-l.s3-website.us-east-2.amazonaws.com)
 
+### 🟤 Nivel 5b: DevOps Avanzado y Observabilidad Distribuida
+
+#### [📂 Caso N: CI/CD Avanzado con GitLab](./caso-n-cicd-avanzado/README.md) `Nivel 12` `PROYECTADO`
+*   **Stack**: GitLab CI/CD multi-stage + Environments + Deployment protection rules.
+*   **Enfoque**: **DevOps de producción real.** Pipelines con ambientes dev/staging/prod, revisiones de PR como gates de despliegue, rollback automatizado. Cierra el ciclo DevOps del monorepo.
+*   **Prerequisito técnico**: Todos los casos anteriores completados.
+*   **Costo**: $0 — usa infraestructura GitLab, no levanta recursos AWS adicionales.
+
+#### [📂 Caso O: Observabilidad Distribuida](./caso-o-observabilidad-distribuida/README.md) `Nivel 13` `PROYECTADO`
+*   **Stack**: X-Ray distributed tracing + múltiples Lambdas en cadena + CloudWatch Synthetics + alertas externas.
+*   **Enfoque**: **Trazas entre servicios.** Correlación de trazas X-Ray a través de múltiples Lambdas encadenadas, dashboards operacionales con SLOs definidos, alertas con integración a canal externo. Expande el Caso H a escenarios reales multi-servicio.
+*   **Prerequisito técnico**: Caso H completado, Caso M recomendado.
+*   **Costo**: < $5 por lab — mismo modelo que Caso H.
+
 ### 🔴 Nivel 6: SRE Enterprise — Confiabilidad y Continuidad Operacional
 
 #### [📂 Caso M: Resiliencia & Failover](./caso-m-resiliencia-failover/README.md) `Nivel 12` `FUTURO / PLANIFICADO`
@@ -267,6 +281,9 @@ graph TD
     K --> M
     F --> I[Caso I<br/>GenAI]
     H --> I
+    H --> O[Caso O<br/>Observabilidad Distribuida]
+    M --> O
+    L --> N[Caso N<br/>CI/CD Avanzado]
     L[Caso L<br/>FinOps] -. gobernanza .-> D
     L -. gobernanza .-> J
     L -. gobernanza .-> K
@@ -286,17 +303,20 @@ graph TD
 | **F + H → I** | GenAI necesita endpoints seguros (F) y observabilidad (H) antes de exponer modelos LLM en producción. |
 | **J → K** | K es la evolución natural de J: misma imagen Docker, mayor orquestación con Kubernetes. |
 | **J + K → M** | M replica el patrón ECS de J en multi-región con Route 53 Failover; K aporta el modelo de health checks. |
+| **H + M → O** | O expande la observabilidad de H a escenarios multi-servicio reales; M aporta la infraestructura distribuida para trazarla. |
+| **L → N** | N usa la base de CI/CD del monorepo para construir pipelines multi-ambiente profesionales. |
 | **L → todos** | FinOps y OIDC son gobernanza transversal: aplican sobre cualquier recurso AWS del monorepo. |
 
 ### Capas de madurez
 
 ```
-Capa 1 — Hosting y CI/CD básico       → A, B
-Capa 2 — IaC y backend serverless     → C, D
-Capa 3 — Datos, eventos, seguridad    → E, F, G
-Capa 4 — Observabilidad y GenAI       → H, I
-Capa 5 — Contenedores y orquestación  → J, K
-Capa 6 — Gobernanza y resiliencia     → L, M
+Capa 1 — Hosting y CI/CD básico           → A, B
+Capa 2 — IaC y backend serverless         → C, D
+Capa 3 — Datos, eventos, seguridad        → E, F, G
+Capa 4 — Observabilidad y GenAI           → H, I
+Capa 5 — Contenedores y orquestación      → J, K
+Capa 6 — Gobernanza y resiliencia         → L, M
+Capa 7 — DevOps avanzado y trazas reales  → N, O
 ```
 
 > Fuente: [`docs/PROYECTADOS_ANALISIS.md`](docs/PROYECTADOS_ANALISIS.md) · [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)

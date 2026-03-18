@@ -1,7 +1,7 @@
 # 📊 Análisis de Casos PROYECTADO — Complejidad & Costos
 
-> **Repositorio**: `proyectos-aws-gitlab` | **Última actualización**: 2026-03-17
-> **Casos en scope**: F (Security), H (Observability), I (GenAI), M (Resiliencia)
+> **Repositorio**: `proyectos-aws-gitlab` | **Última actualización**: 2026-03-18
+> **Casos en scope**: I (GenAI), M (Resiliencia), N (CI/CD Avanzado), O (Observabilidad Distribuida)
 
 ---
 
@@ -11,8 +11,10 @@
 |---|---|---|---|
 | **F** | Security First (Cognito + WAF) | ✅ COMPLETADO | SAM + Lambda + tests + docs |
 | **H** | Observability (CloudWatch + X-Ray) | ✅ COMPLETADO | SAM + Lambda + tests + docs |
-| **I** | GenAI Bedrock | Solo README (~1KB) | ❌ Vacío |
 | **M** | Resiliencia & Failover | Fase 0 completa | ✅ Docs + IaC skeletons |
+| **I** | GenAI Bedrock | Solo README (~1KB) | ❌ Vacío |
+| **N** | CI/CD Avanzado GitLab | Proyectado | ❌ Sin scaffold |
+| **O** | Observabilidad Distribuida | Proyectado | ❌ Sin scaffold |
 
 ---
 
@@ -116,6 +118,9 @@ graph LR
     K[Caso K: EKS ✅]       --> M
     F                       --> I[Caso I: GenAI]
     H                       --> I
+    H                       --> O[Caso O: Observabilidad Dist.]
+    M                       --> O
+    L[Caso L: FinOps ✅]    --> N[Caso N: CI/CD Avanzado]
 ```
 
 **Lectura**:
@@ -123,7 +128,9 @@ graph LR
 - **H** → Se monta sobre D, E, G ✅ ya existentes.
 - **F** → Integra con D y E ✅ ya existentes.
 - **M** → Extiende el patrón ECS del Caso J ✅ ya existente.
-- **I** → Se beneficia de H (observabilidad) y F (seguridad) → ir último.
+- **I** → Se beneficia de H (observabilidad) y F (seguridad) → ir último entre los de IA.
+- **N** → Se apoya en toda la base CI/CD del monorepo. Prerequisito: L completado.
+- **O** → Expande H a multi-servicio real. Prerequisito: H completado, M recomendado.
 
 ---
 
@@ -239,9 +246,11 @@ Estado de implementación:
 | F — Security | < $2 USD | ✅ Completado | ⭐⭐⭐⭐⭐ |
 | M — Resiliencia | ~$15–30 USD | 🔄 Fase 0 completa | ⭐⭐⭐⭐⭐ |
 | I — GenAI | < $5 USD* | ⏳ Proyectado | ⭐⭐⭐⭐⭐ |
+| N — CI/CD Avanzado | $0 USD | ⏳ Proyectado | ⭐⭐⭐⭐ |
+| O — Observabilidad Dist. | < $5 USD | ⏳ Proyectado | ⭐⭐⭐⭐⭐ |
 
-> **Free Tier Mindset**: H y F son prácticamente gratuitos. M y I requieren disciplina
-> con `terraform destroy`. Total para completar el portafolio completo: **< $50 USD** aplicando estrategia GameDay.
+> **Free Tier Mindset**: H, F y N son prácticamente gratuitos. M, I y O requieren disciplina
+> con `terraform destroy` / `sam delete`. Total para completar el portafolio completo: **< $60 USD** aplicando estrategia GameDay.
 
 ---
 

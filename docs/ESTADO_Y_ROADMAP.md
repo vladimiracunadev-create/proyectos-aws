@@ -104,52 +104,19 @@ graph TB
 ### Infraestructura de documentacion
 
 ```mermaid
-flowchart TB
-    subgraph Raiz["📁 Raiz"]
-        direction TB
-        RM["README.md"]
-        CL["CHANGELOG.md"]
-        RD["ROADMAP.md"]
-        CJ["AWS_CLOUD_JOURNEY.md"]
-    end
+flowchart LR
+    RAIZ["📁 Raiz\nREADME · CHANGELOG\nROADMAP · AWS_CLOUD_JOURNEY"]
 
-    subgraph Docs["📂 docs/"]
-        direction TB
-        AR["ARCHITECTURE.md"]
-        FS["FILE_STRUCTURE.md"]
-        FC["FINOPS_COSTOS.md"]
-        SK["SKILLS.md"]
-        CN["CONCEPTOS_NUBE.md"]
-        RC["RECRUITER.md"]
-        ES["ESTADO_Y_ROADMAP.md"]
-        CE["cert-saa / cert-dva / cert-soa"]
-    end
+    DOCS["📂 docs/ (15+ archivos)\nArquitectura · FinOps · Skills\nCertificaciones · Conceptos\nEstado y Roadmap"]
 
-    subgraph Skills["🛠️ skills/ (11)"]
-        direction TB
-        S1["aws-case-scaffolder"]
-        S2["sam-serverless-workflow"]
-        S3["lambda-test-patterns"]
-        S4["architecture-doc-standard"]
-        S5["caso-completion-checklist"]
-        S6["visualizacion-evidencia"]
-        S7["docs-portal-sync"]
-        S8["gitlab-aws-pipeline-editor"]
-        S9["terraform-aws-demo-patterns"]
-        S10["finops-audit-and-budgeting"]
-        S11["repo-status-analysis"]
-    end
+    SKILLS["🛠️ skills/ (11 workflows)\nScaffolding · SAM · Tests\nArquitectura · Completion\nEvidencia · Docs · CI-CD\nTerraform · FinOps · Status"]
 
-    subgraph Portal["🌐 GitLab Pages"]
-        direction TB
-        PO["index.html — sidebar"]
-        CA["apps/cost-calculator"]
-    end
+    PORTAL["🌐 GitLab Pages\nPortal navegable con sidebar\nCalculadora interactiva de costos"]
 
-    RM --> Docs
-    RM --> Skills
-    RM --> Portal
-    CJ --> Docs
+    RAIZ --> DOCS
+    RAIZ --> SKILLS
+    RAIZ --> PORTAL
+    DOCS -. "referenciado desde" .-> RAIZ
 ```
 
 ### Sistema de skills (11)

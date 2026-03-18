@@ -114,6 +114,21 @@ Estos temas aparecen con frecuencia en el examen y requieren estudio adicional f
 
 ---
 
+## Que es el simulacro y donde hacerlo
+
+El **simulacro** es un examen de practica — no es AWS oficial. Son proveedores externos que venden bancos de preguntas construidos para imitar el estilo y dificultad del examen real. Se hacen en formato cronometrado (65 preguntas en 130 minutos) y al terminar muestran cada respuesta con explicacion detallada.
+
+**Proveedores recomendados:**
+
+| Proveedor | Formato | Costo aprox. | Por que usarlo |
+|---|---|---|---|
+| **Tutorials Dojo — Jon Bonso** | Practice exams online | $15-20 USD | El mas cercano al examen real en estilo y dificultad. Muy detallado en explicaciones. |
+| **Stephane Maarek (Udemy)** | Curso + practice exams | $15-25 USD (con oferta) | Curso completo + preguntas. Ideal si aun faltan conceptos teoricos. |
+
+**Estrategia:** sacar 80%+ en 3 simulacros distintos antes de agendar el examen real. El examen real cuesta $300 — los $20 del simulacro son la mejor inversion.
+
+---
+
 ## Plan de estudio recomendado
 
 ```
@@ -121,10 +136,10 @@ Semana 1-2:  Repasar los 11 casos del repo — architecture.md de cada uno
 Semana 3:    Completar Caso M Fase 1 (Route 53 + failover real)
 Semana 4:    RDS: leer AWS docs + hacer 1 lab en Free Tier (db.t3.micro)
 Semana 5:    ElastiCache: whitepaper + preguntas de practica
-Semana 6:    Simulacro completo (65 preguntas, 130 min)
-             Recurso: Stephane Maarek en Udemy o Jon Bonso practice exams
-Semana 7:    Repasar errores del simulacro
-Semana 8:    Examen
+Semana 6:    Simulacro 1 completo (Tutorials Dojo — 65 preguntas, 130 min)
+             → Repasar todos los errores con las explicaciones
+Semana 7:    Simulacro 2 y 3 hasta sacar 80%+ consistente
+Semana 8:    Agendar y rendir el examen
 ```
 
 ---

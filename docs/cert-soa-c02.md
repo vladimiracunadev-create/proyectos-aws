@@ -170,17 +170,33 @@ El trabajo en este repositorio con consola y CLI te prepara bien para este lab.
 
 ---
 
+## Que es el simulacro y donde hacerlo
+
+El **simulacro** es un examen de practica cronometrado que imita el formato real. Para la SOA-C02 es especialmente importante porque **el examen real incluye un exam lab de 20 minutos en consola AWS real** — algo unico en las certificaciones Associate.
+
+**Proveedores recomendados:**
+
+| Proveedor | Formato | Costo aprox. | Por que usarlo |
+|---|---|---|---|
+| **Tutorials Dojo — Jon Bonso** | Practice exams + exam labs simulados | $20-25 USD | El unico proveedor que incluye simulacion del exam lab de consola. Imprescindible para SOA-C02. |
+| **Stephane Maarek (Udemy)** | Curso + practice exams | $15-25 USD | Tiene curso SOA-C02 especifico con enfoque en operaciones y automatizacion. |
+
+**Estrategia:** la SOA-C02 es la mas dificil de las tres Associate. Usar Tutorials Dojo es casi obligatorio por el simulador del exam lab. Sacar 80%+ en 3 simulacros antes del examen.
+
+---
+
 ## Plan de estudio recomendado
 
 ```
-Prerequisito:  Completar SAA-C03 primero
-Semana 1-2:   Completar Caso M (Route 53 failover real)
-Semana 3:     Systems Manager — lab completo (Run Command, Patch Manager)
+Prerequisito:  Completar SAA-C03 primero (logica requerida)
+Semana 1-2:   Completar Caso M (Route 53 failover real) — cubre Dom 2 y Dom 5
+Semana 3:     Systems Manager — lab completo (Run Command, Patch Manager, Session Manager)
 Semana 4:     AWS Config + CloudTrail — labs dedicados
-Semana 5:     AWS Backup + GuardDuty — conceptual + demo
-Semana 6:     VPC avanzado (endpoints, peering)
-Semana 7:     Simulacro con exam labs (usar Tutorials Dojo SOA-C02)
-Semana 8:     Examen
+Semana 5:     AWS Backup + GuardDuty — conceptual + demo en consola
+Semana 6:     VPC avanzado (endpoints, PrivateLink, peering)
+Semana 7:     Simulacro 1 con exam lab (Tutorials Dojo SOA-C02)
+              → Repasar errores — especial atencion al exam lab
+Semana 8:     Simulacros 2 y 3 hasta 80%+ → agendar examen
 ```
 
 ---

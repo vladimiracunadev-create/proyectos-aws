@@ -128,15 +128,31 @@ El examen DVA-C02 no evalua GitLab CI/CD ni Terraform, pero el trabajo real con 
 
 ---
 
+## Que es el simulacro y donde hacerlo
+
+El **simulacro** es un examen de practica cronometrado con preguntas similares al examen real. No es AWS oficial — son proveedores externos especializados en preparacion para certificaciones.
+
+**Proveedores recomendados:**
+
+| Proveedor | Formato | Costo aprox. | Por que usarlo |
+|---|---|---|---|
+| **Tutorials Dojo — Jon Bonso** | Practice exams online | $15-20 USD | El mas cercano al examen real. Las explicaciones de cada respuesta son muy didacticas. |
+| **Stephane Maarek (Udemy)** | Curso + practice exams | $15-25 USD (con oferta) | Tiene curso especifico para DVA-C02 con mucho enfoque en SDK y CI/CD. |
+
+**Estrategia:** hacer simulacros hasta sacar 80%+ antes de agendar el examen ($300). Los simulacros cuestan $15-20 — son la mejor inversion de preparacion.
+
+---
+
 ## Plan de estudio recomendado
 
 ```
-Semana 1:    Repasar casos D, E, F, G, H del repo — enfocarse en el SDK
-Semana 2:    Hacer 1 lab completo con CodePipeline → CodeBuild → Lambda
+Semana 1:    Repasar casos D, E, F, G, H del repo — enfocarse en el SDK y los errores
+Semana 2:    Hacer 1 lab completo con CodePipeline → CodeBuild → Lambda deploy
 Semana 3:    Secrets Manager y SSM Parameter Store desde Lambda (2 horas practica)
-Semana 4:    Step Functions — 1 state machine simple
-Semana 5:    Simulacro completo (65 preguntas, 130 min)
-Semana 6:    Repasar errores + examen
+Semana 4:    Step Functions — 1 state machine simple con Lambda
+Semana 5:    Simulacro 1 completo (Tutorials Dojo — 65 preguntas, 130 min)
+             → Repasar todos los errores con explicaciones
+Semana 6:    Simulacro 2 y 3 hasta 80%+ → agendar examen
 ```
 
 ---
