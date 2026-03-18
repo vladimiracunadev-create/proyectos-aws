@@ -198,6 +198,24 @@ Para un caso recien completado, procesar en este orden:
 
 ---
 
+## Subida al repositorio remoto
+
+Al terminar el barrido, este skill siempre debe subir los cambios. No esperar confirmacion adicional del usuario salvo que haya indicado lo contrario.
+
+```bash
+# Verificar que no queden cambios sin commitear
+git status --short
+
+# Subir a la rama principal
+git push origin main
+```
+
+Si el submodulo `wiki/` tuvo cambios, asegurarse de que su commit interno ya fue hecho antes del push del repo principal. El puntero del submodulo se sube junto con el resto en el push normal.
+
+Si el push falla por divergencia de ramas, informar al usuario antes de hacer cualquier rebase o force push.
+
+---
+
 ## Navegacion del portal
 
 El root `index.html` carga markdown dinamicamente. Reglas:
