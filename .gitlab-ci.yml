@@ -67,7 +67,7 @@ test_caso_d:
     - changes:
         - caso-d-serverless-basic/**/*
   script:
-    - pip install --quiet pytest
+    - pip install --quiet pytest boto3
     - pytest caso-d-serverless-basic/backend/tests/ -v --tb=short
 
 # --- Caso E: Unit Tests ---
@@ -78,7 +78,7 @@ test_caso_e:
     - changes:
         - caso-e-dynamodb-persistence/**/*
   script:
-    - pip install --quiet pytest
+    - pip install --quiet pytest boto3
     - pytest caso-e-dynamodb-persistence/backend/tests/ -v --tb=short
 
 # --- Caso G: Unit Tests ---
@@ -89,7 +89,7 @@ test_caso_g:
     - changes:
         - caso-g-event-driven/**/*
   script:
-    - pip install --quiet pytest
+    - pip install --quiet pytest boto3
     - pytest caso-g-event-driven/backend/tests/ -v --tb=short
 
 # --- Caso H: Unit Tests ---
@@ -100,7 +100,7 @@ test_caso_h:
     - changes:
         - caso-h-observability/**/*
   script:
-    - pip install --quiet pytest
+    - pip install --quiet pytest boto3
     - pytest caso-h-observability/backend/tests/ -v --tb=short
 
 # --- Caso B: Legacy S3 Sync ---
