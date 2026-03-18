@@ -28,6 +28,12 @@ Usa este skill cuando crees o actualices Terraform para demos de AWS dentro de e
 
 Usa este skill para visibilidad de costos, scripts de FinOps, automatizacion relacionada con presupuestos y generacion de datos para dashboards.
 
+### `visualizacion-evidencia`
+
+Usa este skill cuando un caso completa su despliegue y necesitas decidir si corresponde una "Demo en Vivo" o un "Reporte de Visualizacion y Resultados". Evalua el costo del caso, genera el `VISUALIZATION.md` con instrucciones paso a paso para capturar evidencia en la consola AWS, convencion de nombres de imagenes, tabla de validacion e instrucciones de destruccion del stack.
+
+Aplica a casos con recursos de costo fijo: H (CloudWatch Dashboard), J (ALB + Fargate), K (EKS + NAT Gateway), M (futuro).
+
 ## Ubicacion
 
 Las fuentes de los skills viven en `skills/`:
@@ -38,6 +44,7 @@ Las fuentes de los skills viven en `skills/`:
 - `skills/docs-portal-sync/SKILL.md`
 - `skills/terraform-aws-demo-patterns/SKILL.md`
 - `skills/finops-audit-and-budgeting/SKILL.md`
+- `skills/visualizacion-evidencia/SKILL.md`
 
 ## Notas
 
