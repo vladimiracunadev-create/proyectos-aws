@@ -50,6 +50,7 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 - 📘 **[Guía para Principiantes](docs/BEGINNERS_GUIDE.md)**: Glosario y conceptos básicos.
 - 🧭 **[Guía de Casos Completados](docs/COMPLETED_CASES_GUIDE.md)**: Qué demuestra cada caso ya validado y cómo leerlo.
 - ⚡ **[Referencia Rápida](docs/QUICK_REFERENCE.md)**: Comandos esenciales y atajos.
+- 🗺️ **[De IT Tradicional a la Nube](docs/CONCEPTOS_NUBE.md)**: Mapeo de conceptos IT conocidos a terminología y productos AWS, con retroalimentación por caso.
 
 ### 🏗️ Arquitectura y Stack
 - 📂 **[Estructura de Archivos](docs/FILE_STRUCTURE.md)**: Mapa detallado de carpetas y archivos del sistema.
