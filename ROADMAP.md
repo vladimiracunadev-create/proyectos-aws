@@ -81,12 +81,14 @@ Este roadmap refleja el estado actual del proyecto y las proximas prioridades pa
 
 ## Largo plazo (Innovacion)
 
-### 6. Observabilidad completa (Caso H)
+### 6. Observabilidad completa (Caso H) ✅ COMPLETADO
 
-- [ ] **X-Ray**: Trazabilidad distribuida
-- [ ] **CloudWatch Logs Insights**: Queries avanzadas
-- [ ] **GitLab Observability**: Integracion de metricas
-- [ ] **Custom Metrics**: KPIs de negocio
+- [x] **X-Ray**: Trazabilidad distribuida con `Tracing: Active` en todas las Lambdas
+- [x] **Custom Metrics**: KPIs de negocio publicados desde Lambda a CloudWatch namespace `CasoH`
+- [x] **CloudWatch Dashboard IaC**: Dashboard definido en SAM template (se crea/destruye con el stack)
+- [x] **CloudWatch Alarms**: Errores Lambda y latencia p99 configuradas declarativamente
+- [ ] **CloudWatch Logs Insights**: Queries avanzadas sobre logs estructurados
+- [ ] **GitLab Observability**: Integracion de metricas de pipeline
 
 ### 7. IA generativa (Caso I)
 
@@ -164,4 +166,4 @@ Al completar todos los casos, se habran dominado:
 
 ---
 
-_Ultima actualizacion: 2026-03-11_
+_Ultima actualizacion: 2026-03-17_

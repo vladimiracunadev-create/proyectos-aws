@@ -281,7 +281,7 @@ El repositorio sigue un plan de crecimiento incremental. El estado detallado de 
 | Caso | Estado | Próxima Acción |
 |---|---|---|
 | E — Persistence Pro (DynamoDB) | COMPLETADO (VALIDADO) | Operativo: API + landing + DynamoDB |
-| F — Security First (Cognito) | PROYECTADO | Fase 1: User Pools + WAF |
+| F — Security First (Cognito) | COMPLETADO | Cognito + JWT Authorizer + WAF opcional |
 | G — Event Driven (EventBridge) | COMPLETADO (VALIDADO) | Operativo: API + EventBridge + SQS + DLQ + SNS |
 | H — Observability (CloudWatch) | COMPLETADO | Dashboard IaC + X-Ray + Alarmas |
 | I — GenAI (Bedrock) | PROYECTADO | Fase 1: LLM Integration |

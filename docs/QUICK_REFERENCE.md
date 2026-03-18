@@ -79,6 +79,38 @@ URL desplegada actualmente:
 
 ---
 
+## Caso H rapido
+
+```bash
+cd caso-h-observability/backend
+sam build && sam deploy --guided
+```
+
+Validaciones utiles:
+
+```bash
+# Landing con metricas
+curl "$API_H_URL/"
+
+# Health check
+curl "$API_H_URL/health"
+
+# Publicar metrica custom
+curl -X POST "$API_H_URL/metrics" \
+  -H "Content-Type: application/json" \
+  -d '{"metricName":"DemoMetric","value":1,"unit":"Count"}'
+
+# Listar metricas
+curl "$API_H_URL/metrics"
+```
+
+URL desplegada actualmente:
+
+- [Caso H - Landing + API](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/)
+- [Caso H - Health](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/health)
+
+---
+
 ## Hub CLI
 
 ### Linux/macOS
@@ -181,6 +213,8 @@ curl -s -o /dev/null -w "%{http_code}" "$API_F_URL/profile"
 | [caso-f-security-cognito/AWS_PASO_A_PASO.md](../caso-f-security-cognito/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso F |
 | [caso-g-event-driven/README.md](../caso-g-event-driven/README.md) | Resumen del Caso G |
 | [caso-g-event-driven/AWS_PASO_A_PASO.md](../caso-g-event-driven/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso G |
+| [caso-h-observability/README.md](../caso-h-observability/README.md) | Resumen del Caso H |
+| [caso-h-observability/AWS_PASO_A_PASO.md](../caso-h-observability/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso H |
 
 ---
 
@@ -195,4 +229,4 @@ git push origin main
 
 ---
 
-_Ultima actualizacion: 2026-03-12_
+_Ultima actualizacion: 2026-03-17_

@@ -4,7 +4,7 @@
 > Edicion: 3.0 - Author's Cut
 > Proposito: construir un libro propio, con criterio tecnico, caracter editorial y una lectura progresiva sobre madurez cloud en AWS.
 > Base documental: este repositorio, su documentacion interna y referencias oficiales de AWS.
-> Ultima actualizacion documental: 12 de marzo de 2026
+> Ultima actualizacion documental: 17 de marzo de 2026
 
 ---
 
@@ -70,6 +70,8 @@ Este repositorio demuestra una progresion realista de madurez cloud sobre AWS:
 | Profesionalizacion | Hacer infraestructura repetible | Terraform, CloudFront, DynamoDB state lock | Lo manual no escala ni audita bien |
 | Serverless | Backend elastico y eventos | API Gateway, Lambda, DynamoDB, SAM | Menos servidores no significa menos arquitectura |
 | Datos | Modelar por patrones de acceso | DynamoDB, GSI, TransactWriteItems | El diseño de datos define el rendimiento |
+| Seguridad | Identidades y perimetro declarativo | Cognito, JWT Authorizer, WAF, IAM | La seguridad no es un parche, es la base |
+| Observabilidad | Medir, graficar y alertar como codigo | CloudWatch, X-Ray, Alarms, Dashboards | No puedes mejorar lo que no puedes medir |
 | Contenedores | Portabilidad y ejecucion durable | Docker, ECR, ECS Fargate, ALB | Contenerizar es estandarizar |
 | Orquestacion | Operar plataformas mas complejas | EKS, kubectl, YAML, Terraform | Kubernetes aporta poder y tambien costo operativo |
 | Gobernanza | Controlar riesgo y gasto | IAM, OIDC, Budgets, Cost Explorer | Seniority tambien es operar con responsabilidad |
@@ -99,8 +101,11 @@ graph TB
     B --> C["Caso C\nTerraform + CloudFront"]
     C --> D["Caso D\nAPI Gateway + Lambda + DynamoDB"]
     D --> E["Caso E\nDynamoDB Single Table + GSI"]
+    E --> F["Caso F\nCognito + JWT + WAF"]
     E --> G["Caso G\nEventBridge + SQS + DLQ"]
-    G --> J["Caso J\nDocker + ECS Fargate + ECR"]
+    F --> H["Caso H\nCloudWatch + X-Ray + Dashboard IaC"]
+    G --> H
+    H --> J["Caso J\nDocker + ECS Fargate + ECR"]
     J --> K["Caso K\nKubernetes en EKS"]
     K --> L["Caso L\nFinOps + OIDC + IAM"]
     L --> M["Caso M\nResiliencia y Failover"]
@@ -306,7 +311,82 @@ Referencias AWS:
 
 ---
 
-## Capitulo V. Contenedores y plataformas de ejecucion
+## Capitulo V. Seguridad perimetral e identidad
+
+### Caso F: Cognito + JWT Authorizer + WAF
+
+#### Lo que demuestra
+
+`Caso F` introduce el modelo de seguridad perimetral en AWS: identidades gestionadas por Cognito, tokens JWT validados nativamente por API Gateway y WAF como primera linea de defensa opcional.
+
+#### Aprendizajes tecnicos
+
+- Cognito User Pool gestiona el ciclo completo: registro, confirmacion y emision de tokens JWT RS256.
+- El JWT Authorizer nativo de API Gateway HTTP API valida firma, issuer y audience antes de invocar la Lambda.
+- La Lambda recibe los claims ya validados en `requestContext.authorizer.jwt.claims`: cero codigo de criptografia.
+- WAF con `AWSManagedRulesCommonRuleSet` y `AWSManagedRulesSQLiRuleSet` bloquea ataques comunes antes de llegar a la API.
+- Todo el perimetro —Cognito, JWT Authorizer, WAF— esta definido en el SAM template: IaC puro.
+
+#### Cambio de mentalidad
+
+En un sistema simple, el token lo valida el codigo de la Lambda. En el `Caso F`, la validacion ocurre en la infraestructura. Si el token es invalido, la Lambda nunca arranca: costo cero, superficie de ataque reducida.
+
+#### Trade-off real
+
+Cognito aporta mucho "gratis" (tokens, MFA, flujos OAuth2), pero la curva de aprendizaje es real: flujos, escopos, audience, claims y tipos de token tienen matices que importan en produccion.
+
+#### Valor editorial del libro
+
+Este capitulo demuestra algo que diferencia a perfiles cloud maduros: saber donde NO poner la logica de seguridad. La criptografia pertenece a la infraestructura, no al codigo de negocio.
+
+Referencias AWS:
+
+- [Amazon Cognito User Pools](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html)
+- [HTTP API JWT authorizers - Amazon API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-jwt-authorizer.html)
+- [AWS WAF managed rule groups](https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html)
+
+---
+
+## Capitulo VI. Observabilidad como codigo
+
+### Caso H: CloudWatch + X-Ray + Dashboard IaC
+
+#### Lo que demuestra
+
+`Caso H` introduce el tercer pilar de madurez cloud: la observabilidad. No como herramienta post-deploy, sino como codigo que nace y muere con la infraestructura.
+
+#### Aprendizajes tecnicos
+
+- X-Ray activo en Lambda (`Tracing: Active`) genera service maps y traces distribuidos sin cambios de codigo.
+- `CloudWatch.put_metric_data` desde Lambda publica metricas custom al namespace `CasoH`: KPIs de negocio visibles junto a metricas tecnicas.
+- El `AWS::CloudWatch::Dashboard` esta definido en el SAM template: si se destruye el stack, el dashboard desaparece. Si se despliega de nuevo, vuelve exactamente igual.
+- Las alarmas sobre errores Lambda y latencia p99 estan declaradas como codigo: no existe configuracion manual en consola.
+
+#### Cambio de mentalidad
+
+Una alarma configurada a mano en la consola no vive en el repositorio. Si alguien destruye el stack, la alarma desaparece y nadie lo sabe. En `Caso H`, el monitoreo es codigo: versionado, revisable, reproducible.
+
+#### La diferencia entre metricas tecnicas y metricas de negocio
+
+- **Tecnica**: `Errors`, `Duration`, `Throttles` — viene gratis de Lambda.
+- **Negocio**: `OrdersCreated`, `PaymentsProcessed`, `AuthFailures` — las publica la Lambda explicitamente.
+
+Las dos son necesarias. Solo las dos juntas dan visibilidad real.
+
+#### Valor editorial del libro
+
+Este capitulo cierra el ciclo de madurez tecnica antes de los contenedores: desplegar ya no es suficiente. Un sistema adulto se observa, se mide y alerta antes de que el usuario se queje.
+
+Referencias AWS:
+
+- [Using AWS X-Ray with Lambda](https://docs.aws.amazon.com/lambda/latest/dg/services-xray.html)
+- [Publishing custom metrics - Amazon CloudWatch](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html)
+- [Create a CloudWatch dashboard](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/create_dashboard.html)
+- [Creating a CloudWatch alarm](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ConsoleAlarms.html)
+
+---
+
+## Capitulo VII. Contenedores y plataformas de ejecucion
 
 ### Caso G: EventBridge + SQS + DLQ
 
@@ -341,7 +421,7 @@ Referencias AWS:
 
 ---
 
-## Capitulo VI. Contenedores y plataformas de ejecucion
+## Capitulo VIII. Contenedores y plataformas de ejecucion
 
 ### Caso J: Docker + ECR + ECS Fargate
 
@@ -402,7 +482,7 @@ Referencias AWS:
 
 ---
 
-## Capitulo VII. Gobernanza, FinOps y seguridad operativa
+## Capitulo IX. Gobernanza, FinOps y seguridad operativa
 
 ### Caso L: FinOps, OIDC e IAM governance
 
@@ -433,7 +513,7 @@ Referencias AWS:
 
 ---
 
-## Capitulo VIII. Resiliencia, continuidad y fallos reales
+## Capitulo X. Resiliencia, continuidad y fallos reales
 
 ### Caso M: resiliencia, failover y operacion de verdad
 
@@ -530,9 +610,11 @@ La madurez que propone este libro es esta:
 1. aprender a publicar,
 2. aprender a repetir,
 3. aprender a modelar,
-4. aprender a operar,
-5. aprender a gobernar,
-6. aprender a resistir fallos.
+4. aprender a proteger,
+5. aprender a observar,
+6. aprender a operar,
+7. aprender a gobernar,
+8. aprender a resistir fallos.
 
 Dicho de otra forma:
 
@@ -597,6 +679,12 @@ Si esa frase se mantiene viva en cada capitulo, el libro tendra identidad propia
 - [AWS Budgets - creating a cost budget](https://docs.aws.amazon.com/cost-management/latest/userguide/create-cost-budget.html)
 - [Route 53 failover routing](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-failover.html)
 - [Active-active and active-passive failover - Amazon Route 53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-types.html)
+- [Amazon Cognito User Pools](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html)
+- [HTTP API JWT authorizers - Amazon API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-jwt-authorizer.html)
+- [AWS WAF managed rule groups](https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html)
+- [Using AWS X-Ray with Lambda](https://docs.aws.amazon.com/lambda/latest/dg/services-xray.html)
+- [Publishing custom metrics - Amazon CloudWatch](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html)
+- [Create a CloudWatch dashboard](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/create_dashboard.html)
 
 ---
 

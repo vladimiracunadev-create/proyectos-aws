@@ -290,11 +290,13 @@ Porque cloud maduro no es solo desplegar: tambien es controlar acceso, riesgo y 
 2. [BEGINNERS_GUIDE.md](./BEGINNERS_GUIDE.md)
 3. [ARCHITECTURE.md](./ARCHITECTURE.md)
 4. [caso-e-dynamodb-persistence/README.md](../caso-e-dynamodb-persistence/README.md)
-5. [caso-g-event-driven/README.md](../caso-g-event-driven/README.md)
-6. [caso-j-containers-ecs/README.md](../caso-j-containers-ecs/README.md)
-7. [caso-k-kubernetes-eks/README.md](../caso-k-kubernetes-eks/README.md)
-8. [caso-l-finops-optimization/README.md](../caso-l-finops-optimization/README.md)
+5. [caso-f-security-cognito/README.md](../caso-f-security-cognito/README.md)
+6. [caso-g-event-driven/README.md](../caso-g-event-driven/README.md)
+7. [caso-h-observability/README.md](../caso-h-observability/README.md)
+8. [caso-j-containers-ecs/README.md](../caso-j-containers-ecs/README.md)
+9. [caso-k-kubernetes-eks/README.md](../caso-k-kubernetes-eks/README.md)
+10. [caso-l-finops-optimization/README.md](../caso-l-finops-optimization/README.md)
 
 ---
 
-_Ultima actualizacion: 2026-03-12_
+_Ultima actualizacion: 2026-03-17_
