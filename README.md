@@ -6,21 +6,21 @@
 [![Container-Docker](https://img.shields.io/badge/Container-Docker-2496ED?style=for-the-badge&logo=docker)]()
 [![Orchestrator-K8s](https://img.shields.io/badge/Orchestrator-K8s-326CE5?style=for-the-badge&logo=kubernetes)]()
 
-Este monorepo es una suite educativa avanzada diseñada para modernizar y automatizar el flujo de despliegue en la nube. Desde el alojamiento estático hasta la orquestación industrial de contenedores en AWS, exploramos cómo construir infraestructuras seguras, escalables y profesionales.
+Este monorepo es una suite educativa avanzada que recorre la evolución completa de un Ingeniero Cloud: desde hosting estático hasta seguridad perimetral, arquitecturas event-driven, observabilidad, contenedores industriales, FinOps y resiliencia SRE. Cada caso construye sobre el anterior con infraestructura real en AWS.
 
 ---
 
 ### 📖 Recurso Destacado
-👉 [**Libro: AWS Cloud Journey**](./AWS_CLOUD_JOURNEY.md) — **¡NUEVO!** El compendio técnico definitivo de este repositorio. Una narración paso a paso desde el nivel 0 hasta arquitectura enterprise.
+👉 [**Libro: AWS Cloud Journey**](./AWS_CLOUD_JOURNEY.md) — El compendio técnico definitivo de este repositorio. Una narración paso a paso desde el nivel 0 hasta arquitectura enterprise.
 
 ---
 
 ## 🌐 Portal de Documentación (PWA)
-¡Nuevo! Hemos lanzado un portal web interactivo para explorar este repositorio con un diseño moderno y premium (**Glassmorphism**).
+Portal web interactivo para explorar este repositorio con un diseño moderno y premium (**Glassmorphism**).
 
 *   **Acceso Local**: Abre `index.html` usando un servidor local (ej: `npx serve .`).
 *   **Experiencia PWA**: Instálalo en tu móvil o escritorio para acceso rápido y soporte offline.
-*   **Contraste**: Navega por todas las guías, diagramas y especificaciones de forma dinámica.
+*   **Navega**: Explora todas las guías, diagramas, calculadora de costos y especificaciones de forma dinámica.
 
 ---
 
@@ -58,6 +58,7 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 - 🛠️ **[Especificaciones Técnicas](docs/TECHNICAL_SPECS.md)**: Requerimientos de hardware y software.
 - 🔧 **[Tooling](docs/TOOLING.md)**: Docker, Kubernetes, Makefile y validaciones.
 - 📊 **[Resumen de Implementación](docs/IMPLEMENTATION_SUMMARY.md)**: Overview del tooling y seguridad.
+
 ### 🧠 Skills de Claude Code
 
 > Invoca cualquier skill escribiendo `/nombre-del-skill` en una sesión de Claude Code.
@@ -74,6 +75,7 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 | [`/gitlab-aws-pipeline-editor`](skills/gitlab-aws-pipeline-editor/SKILL.md) | Editar `.gitlab-ci.yml` y pipelines |
 | [`/terraform-aws-demo-patterns`](skills/terraform-aws-demo-patterns/SKILL.md) | Crear o actualizar infraestructura Terraform |
 | [`/finops-audit-and-budgeting`](skills/finops-audit-and-budgeting/SKILL.md) | Costos, auditoría y dashboards FinOps |
+| [`/repo-status-analysis`](skills/repo-status-analysis/SKILL.md) | Análisis del estado del repo, gaps y roadmap |
 
 📖 Ver catálogo completo: **[docs/SKILLS.md](docs/SKILLS.md)**
 
@@ -85,7 +87,7 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 ### 💰 FinOps & Auditoría
 - 💰 **[Costos por Caso Completado](docs/FINOPS_COSTOS.md)**: Análisis detallado para los 11 casos: free tier, provisioned, estrategias y tabla de riesgo financiero.
 - 🔧 **[Manual de FinOps](docs/FINOPS_MANUAL.md)**: Auditoría rápida y semáforo de riesgo financiero.
-- 📊 **[Análisis de Casos Proyectados](docs/PROYECTADOS_ANALISIS.md)**: Complejidad, costos y orden de implementación para casos futuros (I, M).
+- 📊 **[Análisis de Casos Proyectados](docs/PROYECTADOS_ANALISIS.md)**: Complejidad, costos y orden de implementación para casos futuros (I, M, N, O).
 - 🧮 **Calculadora Interactiva de Costos**: Disponible en GitLab Pages — sección 💰 FinOps del portal.
 
 ### 👔 Para Reclutadores
@@ -233,13 +235,13 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 
 ### 🟤 Nivel 5b: DevOps Avanzado y Observabilidad Distribuida
 
-#### [📂 Caso N: CI/CD Avanzado con GitLab](./caso-n-cicd-avanzado/README.md) `Nivel 12` `PROYECTADO`
+#### [📂 Caso N: CI/CD Avanzado con GitLab](./caso-n-cicd-avanzado/README.md) `Nivel 13` `PROYECTADO`
 *   **Stack**: GitLab CI/CD multi-stage + Environments + Deployment protection rules.
 *   **Enfoque**: **DevOps de producción real.** Pipelines con ambientes dev/staging/prod, revisiones de PR como gates de despliegue, rollback automatizado. Cierra el ciclo DevOps del monorepo.
 *   **Prerequisito técnico**: Todos los casos anteriores completados.
 *   **Costo**: $0 — usa infraestructura GitLab, no levanta recursos AWS adicionales.
 
-#### [📂 Caso O: Observabilidad Distribuida](./caso-o-observabilidad-distribuida/README.md) `Nivel 13` `PROYECTADO`
+#### [📂 Caso O: Observabilidad Distribuida](./caso-o-observabilidad-distribuida/README.md) `Nivel 14` `PROYECTADO`
 *   **Stack**: X-Ray distributed tracing + múltiples Lambdas en cadena + CloudWatch Synthetics + alertas externas.
 *   **Enfoque**: **Trazas entre servicios.** Correlación de trazas X-Ray a través de múltiples Lambdas encadenadas, dashboards operacionales con SLOs definidos, alertas con integración a canal externo. Expande el Caso H a escenarios reales multi-servicio.
 *   **Prerequisito técnico**: Caso H completado, Caso M recomendado.
@@ -281,12 +283,12 @@ graph TD
     K --> M
     F --> I[Caso I<br/>GenAI]
     H --> I
-    H --> O[Caso O<br/>Observabilidad Distribuida]
-    M --> O
-    L --> N[Caso N<br/>CI/CD Avanzado]
     L[Caso L<br/>FinOps] -. gobernanza .-> D
     L -. gobernanza .-> J
     L -. gobernanza .-> K
+    L --> N[Caso N<br/>CI/CD Avanzado]
+    H --> O[Caso O<br/>Observabilidad Distribuida]
+    M --> O
 ```
 
 ### Por qué están conectados así
@@ -329,12 +331,12 @@ El repositorio sigue un plan de crecimiento incremental. El estado detallado de 
 
 | Caso | Estado | Próxima Acción |
 |---|---|---|
-| E — Persistence Pro (DynamoDB) | COMPLETADO (VALIDADO) | Operativo: API + landing + DynamoDB |
-| F — Security First (Cognito) | COMPLETADO | Cognito + JWT Authorizer + WAF opcional |
-| G — Event Driven (EventBridge) | COMPLETADO (VALIDADO) | Operativo: API + EventBridge + SQS + DLQ + SNS |
-| H — Observability (CloudWatch) | COMPLETADO | Dashboard IaC + X-Ray + Alarmas |
-| I — GenAI (Bedrock) | PROYECTADO | Fase 1: LLM Integration |
-| **M — Resiliencia & Failover** | **FUTURO (Fase 0 ✅)** | **Fase 1: Multi-AZ + ALB** |
+| **M — Resiliencia & Failover** | Fase 0 ✅ — pendiente Fase 1 | `terraform apply` Multi-AZ + Route 53 health checks |
+| **I — GenAI Bedrock** | PROYECTADO | Lambda → Bedrock Claude Haiku (sin RAG, < $5) |
+| **N — CI/CD Avanzado** | PROYECTADO | Pipelines multi-stage GitLab con environments |
+| **O — Observabilidad Distribuida** | PROYECTADO | X-Ray multi-servicio + Synthetics + SLOs |
+
+Ver todos los casos completados en: **[docs/COMPLETED_CASES_GUIDE.md](docs/COMPLETED_CASES_GUIDE.md)**
 
 ---
 
