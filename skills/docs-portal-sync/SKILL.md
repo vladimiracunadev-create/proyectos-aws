@@ -233,4 +233,4 @@ El root `index.html` carga markdown dinamicamente. Reglas:
 - Si el archivo fuente ya tiene texto con tildes y no-ASCII, preservarlo.
 - No mezclar codificaciones dentro del mismo archivo.
 
-_Ultima actualizacion: 2026-03-17_
+_Ultima actualizacion: 2026-03-18_

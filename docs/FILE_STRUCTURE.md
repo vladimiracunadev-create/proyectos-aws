@@ -25,6 +25,7 @@ proyectos-aws-gitlab/
 ├── caso-j-containers-ecs/  # Caso J: Docker + ECS Fargate
 ├── caso-k-kubernetes-eks/  # Caso K: Kubernetes EKS
 ├── caso-l-finops-*/        # Caso L: FinOps & Governance
+├── caso-m-resiliencia-failover/ # Caso M: Resiliencia & Failover (Fase 0 completada)
 ├── docs/                   # 📚 Documentación técnica completa
 ├── scripts/                # 🛠️ Scripts de auditoría y mantenimiento
 ├── wiki/                   # Wiki sincronizada con GitLab
@@ -46,7 +47,7 @@ Estos archivos controlan **cómo se construye, valida y despliega** todo el proy
 |---------|:-----------:|-------------|
 | **`Makefile`** | 🔴 Crítica | Centro de automatización. Contiene ~20 comandos (`make help`, `make deploy-b`, `make finops-check`, `make case-k-deploy`, etc.). Es el primer punto de contacto para cualquier operación. |
 | **`.gitlab-ci.yml`** | 🔴 Crítica | Pipeline CI/CD principal. Define jobs de seguridad (`secret_detection`, `dependency_scan`, `scan_infrastructure`), calidad (`lint`) y despliegue modular para los Casos B, C, L y M. Implementa un flujo profesional de **Plan -> Apply -> Invalidate** para CloudFront. |
-| **`README.md`** | 🔴 Crítica | Punto de entrada. Contiene la visión general, Quick Start, enlaces a toda la documentación y el catálogo de los 12 casos de estudio con demos en vivo. |
+| **`README.md`** | 🔴 Crítica | Punto de entrada. Contiene la visión general, Quick Start, enlaces a toda la documentación y el catálogo de los 15 casos de estudio (11 completados + 4 proyectados) con demos en vivo. |
 | **`index.html`** | 🟠 Alta | Portal web interactivo (PWA) con diseño Glassmorphism. Dashboard para navegar la documentación visualmente. |
 | **`package.json`** | 🟠 Alta | Define las dependencias de desarrollo (ESLint, Prettier, HTMLHint, Stylelint, Commitlint, Husky) y los scripts de linting (`npm run lint`, `npm run format`). |
 | **`package-lock.json`** | 🟠 Alta | Lockfile de dependencias. Garantiza instalaciones reproducibles en CI/CD. **No editar manualmente.** |
@@ -93,6 +94,14 @@ La inteligencia documentada del proyecto. Cada archivo tiene un rol específico:
 | **`CODE_OF_CONDUCT.md`** | Normas de conducta de la comunidad. | Colaboradores |
 | **`CONTRIBUTING.md`** | Copia local de la guía de contribución (también existe en root). | Colaboradores |
 | **`killed.md`** | 🔐 Registro de secretos comprometidos y rotados. Documenta cuándo se filtraron y qué acciones se tomaron. | Seguridad |
+| **`ESTADO_Y_ROADMAP.md`** | Estado actual del repositorio, gaps identificados, mejoras priorizadas y proxima sesion recomendada. Generado por el skill `repo-status-analysis`. | Todos |
+| **`FINOPS_COSTOS.md`** | Analisis de costos reales por cada uno de los 11 casos completados: estrategia free tier, costos provisioned y tabla de riesgo financiero. | FinOps |
+| **`CONCEPTOS_NUBE.md`** | Mapeo de conceptos IT tradicionales a servicios AWS, con ejemplos de cada caso del repositorio. | IT tradicional |
+| **`PROYECTADOS_ANALISIS.md`** | Analisis tecnico de los casos proyectados (I, M, N, O): esfuerzo, valor y prerequisitos. | Planificacion |
+| **`SKILLS.md`** | Catalogo de los 11 skills de Claude Code del repositorio con tabla de decision rapida. | Claude Code |
+| **`cert-saa-c03.md`** | Guia de preparacion para AWS Solutions Architect Associate usando los casos del repo. | Certificacion |
+| **`cert-dva-c02.md`** | Guia de preparacion para AWS Developer Associate usando los casos del repo. | Certificacion |
+| **`cert-soa-c02.md`** | Guia de preparacion para AWS SysOps Administrator Associate usando los casos del repo. | Certificacion |
 | **`LICENSE`** | Copia local de la licencia MIT. | Legal |
 
 ---
@@ -266,6 +275,16 @@ Cada directorio `caso-X-*` es un **proyecto autocontenido**. Aquí la anatomía 
 | `img/` | Screenshots y evidencias del caso. |
 | `AWS_PASO_A_PASO.md` | Guía exhaustiva: AWS Budgets, OIDC con GitLab, IAM Governance, S3+CloudFront. |
 
+### Caso M: `caso-m-resiliencia-failover/` — Resiliencia `Nivel 12` `FASE 0 COMPLETADA`
+| Archivo/Dir | Descripción |
+|-------------|-------------|
+| `infra/` | Plantillas Terraform skeleton (sin `apply`). |
+| `docs/architecture.md` | Arquitectura objetivo Multi-AZ y Multi-Region. |
+| `docs/runbook-failover.md` | Runbook de failover con procedimientos documentados. |
+| `docs/roadmap.md` | Roadmap detallado de fases 0 a 3. |
+| `AWS_PASO_A_PASO.md` | Guía de implementación por fases. |
+| `README.md` | Estado actual (Fase 0), propósito y roadmap de fases. |
+
 ---
 
 ## 🔗 Navegación Rápida
@@ -282,5 +301,5 @@ Cada directorio `caso-X-*` es un **proyecto autocontenido**. Aquí la anatomía 
 
 ---
 
-> **Última actualización:** 2026-03-17
+> **Última actualización:** 2026-03-18
 > **Mantenido por:** Vladimir Acuña

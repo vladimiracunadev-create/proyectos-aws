@@ -42,7 +42,7 @@ Demostrar los fundamentos de una arquitectura event-driven moderna:
 - amortiguar carga con colas
 - aislar fallos con reintentos y `Dead Letter Queue`
 - separar escritura transaccional de procesamiento posterior
-- dejar una base natural para el futuro Caso H de observabilidad
+- dejar una base natural para el Caso H de observabilidad (ya completado)
 
 ## Stack
 

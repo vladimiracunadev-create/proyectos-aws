@@ -91,6 +91,11 @@ Usalo al crear o actualizar codigo Terraform para S3, CloudFront, ECS, EKS, IAM 
 Mantiene los scripts de FinOps, flujos de presupuestos y dashboards de revision de costos.
 Usalo al editar el caso de FinOps, scripts de auditoria AWS o automatizacion guiada por presupuesto.
 
+### `repo-status-analysis`
+Genera una radiografia completa del repositorio: estado actual de casos y skills, gaps identificados,
+mejoras priorizadas y proxima sesion recomendada. Produce o actualiza `docs/ESTADO_Y_ROADMAP.md`.
+Se activa cuando el usuario pide un analisis de estado, que falta mejorar, o cual es la mejor proxima tarea.
+
 ---
 
 ## Convenciones

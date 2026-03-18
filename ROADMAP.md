@@ -36,7 +36,7 @@ Este roadmap refleja el estado actual del proyecto y las proximas prioridades pa
 
 ### 1. Mejoras de calidad y observabilidad
 
-- [ ] **Testing automatizado**: Tests unitarios para Lambdas y scripts
+- [x] **Testing automatizado**: 60+ tests unitarios para Lambdas (D, E, F, G, H) — completado
 - [ ] **Monitoreo CloudWatch**: Dashboards basicos para casos A-E y J
 - [ ] **Alertas**: Configuracion de alarmas para errores y costos
 - [ ] **Lighthouse CI**: Validacion de performance para frontends
@@ -97,13 +97,14 @@ Este roadmap refleja el estado actual del proyecto y las proximas prioridades pa
 - [ ] **RAG**: Retrieval-Augmented Generation con datos propios
 - [ ] **Lambda con IA**: Endpoints inteligentes
 
-### 8. Orquestacion con Kubernetes (Caso K)
+### 8. Orquestacion con Kubernetes (Caso K) ✅ COMPLETADO
 
-- [ ] **AWS EKS**: Cluster en produccion
-- [ ] **Helm Charts**: Gestion de aplicaciones
-- [ ] **GitLab Kubernetes Agent**: CI/CD integrado
-- [ ] **Auto-scaling**: HPA y Cluster Autoscaler
-- [ ] **Service Mesh**: Istio para observabilidad
+- [x] **AWS EKS**: Cluster EKS v1.32 con Auto Mode desplegado y validado
+- [x] **Helm Charts**: Gestion de aplicaciones
+- [x] **ALB Ingress Controller**: Balanceo de carga L7
+- [x] **Self-Healing**: Pruebas de resiliencia documentadas
+- [ ] **GitLab Kubernetes Agent**: CI/CD integrado (mejora futura)
+- [ ] **Service Mesh**: Istio para observabilidad (mejora futura)
 
 ### 9. Resiliencia y failover (Caso M) `FUTURO / PLANIFICADO`
 
@@ -138,7 +139,7 @@ Este roadmap refleja el estado actual del proyecto y las proximas prioridades pa
 
 ### Seguridad
 
-- [ ] **OIDC con GitLab**: Eliminar IAM keys permanentes
+- [x] **OIDC con GitLab**: Implementado en Caso L — credenciales efimeras en CI/CD
 - [ ] **Policy as Code**: OPA (Open Policy Agent)
 - [ ] **Compliance**: AWS Config para auditoria continua
 - [ ] **Vulnerability Scanning**: Trivy para imagenes Docker
@@ -182,4 +183,4 @@ Al completar todos los casos, se habran dominado:
 
 ---
 
-_Ultima actualizacion: 2026-03-17_
+_Ultima actualizacion: 2026-03-18_

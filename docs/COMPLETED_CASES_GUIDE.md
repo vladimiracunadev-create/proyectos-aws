@@ -215,6 +215,31 @@ Porque una API no deberia intentar hacer todo en la misma llamada si eso vuelve 
 
 ---
 
+## Caso H - Observabilidad (CloudWatch + X-Ray)
+
+**Que se hizo**
+
+Se implemento observabilidad completa como codigo: dashboard CloudWatch definido en el SAM template, alarmas sobre errores Lambda y latencia p99, metricas custom desde Lambda y trazas X-Ray.
+
+**Por que**
+
+Porque no saber que falla hasta que el usuario se queja es una postura reactiva. La observabilidad como codigo permite que el monitoreo nazca y muera con la infraestructura, sin configuracion manual.
+
+**Que resuelve**
+
+- metricas custom de negocio publicadas desde Lambda
+- dashboard CloudWatch definido en IaC (no en consola)
+- alarmas sobre errores Lambda y latencia p99
+- trazas distribuidas X-Ray sin codigo adicional
+
+**Que mirar primero**
+
+- [Caso H](../caso-h-observability/README.md)
+- [Arquitectura Caso H](../caso-h-observability/docs/architecture.md)
+- [Paso a paso Caso H](../caso-h-observability/AWS_PASO_A_PASO.md)
+
+---
+
 ## Caso J - Docker + ECS
 
 **Que se hizo**
@@ -299,4 +324,4 @@ Porque cloud maduro no es solo desplegar: tambien es controlar acceso, riesgo y 
 
 ---
 
-_Ultima actualizacion: 2026-03-17_
+_Ultima actualizacion: 2026-03-18_

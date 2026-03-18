@@ -159,4 +159,4 @@ El paso natural es complementar este caso con:
 - metricas de profundidad de cola
 - alarmas sobre DLQ
 - correlacion por `eventId`
-- dashboards y trazas distribuidas en el futuro Caso H
+- dashboards y trazas distribuidas en el Caso H (ya completado)

@@ -135,6 +135,7 @@ El `Caso H` no crea el dashboard desde la consola: el `AWS::CloudWatch::Dashboar
 - El `Caso F` agrega autenticacion sin codigo de criptografia: un patron que diferencia a perfiles cloud maduros.
 - El `Caso H` muestra que la observabilidad es codigo, no configuracion manual posterior al deploy.
 - 60+ tests unitarios cubren todas las Lambdas — pipeline CI/CD verde en cada push.
+- El repositorio soporta preparacion para certificaciones AWS: SAA-C03, DVA-C02 y SOA-C02 (ver `docs/cert-*.md`).
 
 ---
 
@@ -163,4 +164,4 @@ El `Caso H` no crea el dashboard desde la consola: el `AWS::CloudWatch::Dashboar
 
 ---
 
-_Ultima actualizacion: 2026-03-17_
+_Ultima actualizacion: 2026-03-18_

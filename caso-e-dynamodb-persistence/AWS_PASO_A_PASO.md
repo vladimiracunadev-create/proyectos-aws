@@ -245,6 +245,6 @@ La evolución natural de este caso es:
 - enviar eventos a SQS o EventBridge
 - agregar actualización de estados con auditoría
 - crear dashboards operativos para pedidos `PENDING` y `PAID`
-- publicar métricas de negocio y observabilidad en el futuro Caso H
+- publicar métricas de negocio y observabilidad en el Caso H (ya completado)
 
 Eso conecta directamente con el ya validado **Caso G - Event Driven**.

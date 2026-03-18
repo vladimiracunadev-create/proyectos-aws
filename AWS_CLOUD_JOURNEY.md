@@ -4,7 +4,7 @@
 > Edicion: 3.0 - Author's Cut
 > Proposito: construir un libro propio, con criterio tecnico, caracter editorial y una lectura progresiva sobre madurez cloud en AWS.
 > Base documental: este repositorio, su documentacion interna y referencias oficiales de AWS.
-> Ultima actualizacion documental: 17 de marzo de 2026
+> Ultima actualizacion documental: 18 de marzo de 2026
 
 ---
 
@@ -109,6 +109,9 @@ graph TB
     J --> K["Caso K\nKubernetes en EKS"]
     K --> L["Caso L\nFinOps + OIDC + IAM"]
     L --> M["Caso M\nResiliencia y Failover"]
+    F --> I["Caso I\nGenAI Bedrock (proyectado)"]
+    M --> N["Caso N\nCI/CD Avanzado (proyectado)"]
+    H --> O["Caso O\nObservabilidad Distribuida (proyectado)"]
 ```
 
 ---
@@ -386,7 +389,7 @@ Referencias AWS:
 
 ---
 
-## Capitulo VII. Contenedores y plataformas de ejecucion
+## Capitulo VII. Arquitectura asincrona y desacoplamiento
 
 ### Caso G: EventBridge + SQS + DLQ
 

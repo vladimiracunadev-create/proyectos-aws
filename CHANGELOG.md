@@ -216,4 +216,4 @@ El formato seguirá [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) y e
 - Documentación base de aprendizaje.
 
 ---
-_Ultima actualización: 2026-03-05_
+_Ultima actualización: 2026-03-18_

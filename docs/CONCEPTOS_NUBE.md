@@ -163,7 +163,7 @@ BIND, Windows DNS. Resuelve nombres a IPs. Registros A, CNAME, MX, TTL.
 
 | Concepto IT | AWS | Usado en |
 |---|---|---|
-| Servidor DNS | **Amazon Route 53** | Caso M (planificado) |
+| Servidor DNS | **Amazon Route 53** | Caso M (Fase 0 completada, Fase 1 planificada) |
 
 **Route 53** hace todo lo que hace un DNS tradicional, más:
 - **Failover Routing**: si el servidor primario falla, redirige automáticamente al secundario
@@ -419,8 +419,14 @@ Nivel 4 — Contenedores
 Nivel 5 — Gobernanza
   Caso L → FinOps + OIDC + IAM             = Controlar costo, identidad y acceso
 
-Nivel 6 — Resiliencia (planificado)
+Nivel 6 — Resiliencia (Fase 0 completada)
   Caso M → Route 53 Failover + Multi-AZ    = El sistema sobrevive a fallos
+
+Nivel 7 — CI/CD avanzado (proyectado)
+  Caso N → GitLab Environments + Protection Rules = Entrega controlada y verificada
+
+Nivel 8 — Observabilidad distribuida (proyectado)
+  Caso O → X-Ray multi-servicio + Synthetics + SLOs = Ver el sistema completo
 ```
 
 ---
@@ -469,4 +475,4 @@ Nivel 6 — Resiliencia (planificado)
 ---
 
 _Mantenido por: Vladimir Acuña_
-_Última actualización: 2026-03-17_
+_Última actualización: 2026-03-18_

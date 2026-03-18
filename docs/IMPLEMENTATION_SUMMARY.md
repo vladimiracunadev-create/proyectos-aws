@@ -13,7 +13,7 @@ Se ha implementado exitosamente una **capa de tooling profesional** con Docker, 
 | **Archivos creados** | 25+ |
 | **Archivos modificados** | 8+ |
 | **Líneas de código** | ~5,000+ |
-| **Documentación** | 18 documentos en docs/ |
+| **Documentación** | 24+ documentos en docs/ |
 | **Security checks** | 40/40 (100%) con tfsec |
 | **Smoke tests** | 16 (D, E, F, G, H + scripts legacy) |
 | **Tests unitarios** | 60+ (pytest, casos D, E, F, G, H) |
@@ -287,6 +287,6 @@ make k8s-demo
 ---
 
 **Mantenido por:** Vladimir Acuña
-**Ultima actualizacion:** 2026-03-17
+**Ultima actualizacion:** 2026-03-18
 **Version actual:** 3.6.0
 **Repositorio:** proyectos-aws-gitlab

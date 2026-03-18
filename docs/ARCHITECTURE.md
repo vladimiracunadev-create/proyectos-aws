@@ -160,6 +160,13 @@ graph TB
     style Tier4_M fill:#ffebee,stroke:#c62828,stroke-width:2px
 ```
 
+### Tier 5: CI/CD avanzado y observabilidad distribuida (Casos N, O) `PROYECTADOS`
+
+*Enfoque: madurez operativa y ciclos de entrega controlados.*
+
+- **Caso N**: Pipelines multi-stage con entornos de GitLab, protection rules, rollback automatizado.
+- **Caso O**: Trazas X-Ray multi-servicio, CloudWatch Synthetics, SLOs y error budget.
+
 ---
 
 ## Donde encajan los Casos E y G
@@ -265,7 +272,7 @@ La arquitectura prioriza costo bajo o controlado:
 | Fallo de funcion | Reintento serverless / nueva invocacion | Segundos | 0 o minimo |
 | Error de consumidor asincrono | Reintentos SQS + DLQ | Segundos a minutos | 0 o minimo |
 | Caida de AZ | Multi-AZ en servicios administrados | < 60 segundos | 0 o minimo |
-| Caida de region | Route 53 Failover (futuro Caso M) | < 120 segundos | < 5 minutos |
+| Caida de region | Route 53 Failover (Caso M — Fase 0 completada, Fase 1 planificada) | < 120 segundos | < 5 minutos |
 
 ---
 

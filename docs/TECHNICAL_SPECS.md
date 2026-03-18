@@ -1,6 +1,6 @@
 # Especificaciones Tecnicas y Requerimientos
 
-Este documento resume que necesitas para ejecutar, validar y extender el monorepo, incluyendo todos los casos con backend Lambda ya completados: D, E, F, G y H.
+Este documento resume que necesitas para ejecutar, validar y extender el monorepo, incluyendo todos los 11 casos completados: A, B, C, D, E, F, G, H, J, K y L. Las secciones de permisos y flujos minimos cubren en detalle los casos Lambda (D, E, F, G, H); para contenedores (J, K) y FinOps (L) consultar los README de cada caso.
 
 ---
 

@@ -334,4 +334,4 @@ La evolucion natural de este caso es:
 - agregar metrica de negocio y latencia en CloudWatch
 - incorporar tracing y correlacion de eventos
 - crear dashboards y alarmas sobre DLQ
-- conectar estos indicadores al futuro **Caso H - Observability**
+- conectar estos indicadores al **Caso H - Observability** (ya completado)

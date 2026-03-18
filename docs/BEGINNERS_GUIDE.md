@@ -110,7 +110,17 @@ Este caso ya esta **desplegado y validado** en AWS.
 ### Caso M: Resiliencia y Failover
 
 **Objetivo**: Demostrar que el sistema sobrevive a fallos de region. Alta disponibilidad y recuperacion ante desastres.
-**Estado**: Fase 0 completada (scaffold, docs, IaC skeleton).
+**Estado**: Fase 0 completada (scaffold, docs, IaC skeleton). Fase 1 planificada.
+
+### Caso N: CI/CD Avanzado
+
+**Objetivo**: Pipelines multi-stage con proteccion de entornos, aprobacion manual y rollback automatizado.
+**Estado**: proyectado — requiere todos los casos anteriores como base.
+
+### Caso O: Observabilidad Distribuida
+
+**Objetivo**: Trazas X-Ray multi-servicio, CloudWatch Synthetics, SLOs y error budget.
+**Estado**: proyectado — requiere Caso H completado y Caso M recomendado.
 
 ---
 
