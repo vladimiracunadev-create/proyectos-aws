@@ -1,12 +1,26 @@
 ---
 name: repo-status-analysis
-description: Analiza el estado actual del repositorio, identifica gaps, genera el documento docs/ESTADO_Y_ROADMAP.md actualizado con diagramas Mermaid y tabla de mejoras priorizadas. Usar al inicio de una sesion para tener contexto completo, o al final para documentar el estado tras cambios importantes.
+description: Se activa cuando el usuario pide explicitamente un analisis del estado actual del repositorio, que falta mejorar, o que es mejor para el producto. Frases tipicas de activacion: "analiza la situacion actual", "que falta mejorar", "cual es el estado del repo", "futuras mejoras", "que es lo mejor para el producto", "vuelve a hacer un analisis". NO se activa al terminar una sesion por defecto — solo cuando el usuario lo pide.
 ---
 
 # Repo Status Analysis
 
-Este skill produce una radiografia completa del repositorio en un documento estructurado con diagramas.
-Usarlo como primer paso en sesiones largas, o como cierre de sesion para dejar registro del estado.
+Este skill se activa cuando el usuario pide un analisis de estado, mejoras o evolucion del repositorio.
+El flujo siempre es: analizar → presentar → preguntar confirmacion → guardar MD → subir.
+Nunca guardar ni subir sin confirmacion explicita del usuario.
+
+---
+
+## Flujo obligatorio
+
+```
+1. Leer el repositorio (Pasos 1 y 2 abajo)
+2. Presentar el analisis al usuario en texto — estado, gaps, mejoras priorizadas
+3. Preguntar: "¿Aplico estos cambios en docs/ESTADO_Y_ROADMAP.md y subo?"
+4. Solo si el usuario confirma → ejecutar Pasos 3, 4 y 5 (generar MD + commit + push)
+```
+
+Nunca saltarse el paso 3. El usuario decide si el analisis queda guardado.
 
 ---
 

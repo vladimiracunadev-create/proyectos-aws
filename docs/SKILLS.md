@@ -69,8 +69,9 @@ Jobs de GitLab CI para lint, seguridad, Terraform, OIDC, despliegue y publicacio
 
 #### `repo-status-analysis`
 Radiografia completa del repositorio: estado actual, gaps identificados, mejoras priorizadas y
-proxima sesion recomendada. Genera o actualiza `docs/ESTADO_Y_ROADMAP.md` con diagramas Mermaid.
-Usar al inicio de sesiones largas o al cierre de una sesion importante para dejar registro del estado.
+proxima sesion recomendada. Se activa cuando el usuario pide explicitamente un analisis de estado,
+que falta mejorar, o que es mejor para el producto. Flujo: analizar → presentar → confirmar →
+generar `docs/ESTADO_Y_ROADMAP.md` → subir. Nunca guarda sin confirmacion del usuario.
 
 ---
 
@@ -88,7 +89,7 @@ Usar al inicio de sesiones largas o al cierre de una sesion importante para deja
 | Editar .gitlab-ci.yml | `gitlab-aws-pipeline-editor` |
 | Crear infra con Terraform | `terraform-aws-demo-patterns` |
 | Revisar o actualizar costos | `finops-audit-and-budgeting` |
-| Analizar estado del repo / generar roadmap | `repo-status-analysis` |
+| "analiza la situacion", "que falta mejorar", "futuras mejoras" | `repo-status-analysis` |
 
 ---
 
