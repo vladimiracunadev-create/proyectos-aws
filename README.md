@@ -215,6 +215,63 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 
 ---
 
+## 🔗 Mapa de Relaciones entre Casos
+
+Los casos no son ejercicios aislados: cada uno extiende, instrumenta o protege lo construido antes. Este mapa muestra las dependencias técnicas reales del monorepo.
+
+```mermaid
+graph TD
+    A[Caso A<br/>Amplify] --> B[Caso B<br/>S3 + CI]
+    B --> C[Caso C<br/>Terraform + CDN]
+    C --> D[Caso D<br/>Serverless API]
+    D --> E[Caso E<br/>DynamoDB Pro]
+    E --> G[Caso G<br/>Event Driven]
+    D --> F[Caso F<br/>Security]
+    E --> F
+    D --> H[Caso H<br/>Observability]
+    E --> H
+    G --> H
+    J[Caso J<br/>ECS Fargate] --> K[Caso K<br/>EKS]
+    J --> M[Caso M<br/>Resiliencia]
+    K --> M
+    F --> I[Caso I<br/>GenAI]
+    H --> I
+    L[Caso L<br/>FinOps] -. gobernanza .-> D
+    L -. gobernanza .-> J
+    L -. gobernanza .-> K
+```
+
+### Por qué están conectados así
+
+| Relación | Justificación técnica |
+|---|---|
+| **A → B** | Amplify abstrae lo que B hace manualmente: S3 + CI + CDN. Entender B desmitifica A. |
+| **B → C** | El pipeline manual de B se convierte en IaC reproducible con Terraform en C. |
+| **C → D** | C introduce el estado remoto y OAC; D añade la primera Lambda sobre esa base de IaC. |
+| **D → E** | E toma el DynamoDB básico de D y lo eleva a Single Table Design con GSIs y transacciones. |
+| **E → G** | G extiende el patrón de E: en vez de persistir síncronamente, publica el hecho como evento en EventBridge. |
+| **D + E → F** | F protege los endpoints ya existentes de D y E con Cognito (auth) y WAF (perimetral). |
+| **D + E + G → H** | H instrumenta las Lambdas ya desplegadas en D, E y G: sus invocaciones generan las trazas X-Ray y métricas del dashboard. |
+| **F + H → I** | GenAI necesita endpoints seguros (F) y observabilidad (H) antes de exponer modelos LLM en producción. |
+| **J → K** | K es la evolución natural de J: misma imagen Docker, mayor orquestación con Kubernetes. |
+| **J + K → M** | M replica el patrón ECS de J en multi-región con Route 53 Failover; K aporta el modelo de health checks. |
+| **L → todos** | FinOps y OIDC son gobernanza transversal: aplican sobre cualquier recurso AWS del monorepo. |
+
+### Capas de madurez
+
+```
+Capa 1 — Hosting y CI/CD básico       → A, B
+Capa 2 — IaC y backend serverless     → C, D
+Capa 3 — Datos, eventos, seguridad    → E, F, G
+Capa 4 — Observabilidad y GenAI       → H, I
+Capa 5 — Contenedores y orquestación  → J, K
+Capa 6 — Gobernanza y resiliencia     → L, M
+```
+
+> Fuente: [`docs/PROYECTADOS_ANALISIS.md`](docs/PROYECTADOS_ANALISIS.md) · [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+
+---
+
 ## 📌 Backlog & Roadmap
 
 El repositorio sigue un plan de crecimiento incremental. El estado detallado de cada fase se encuentra en el [ROADMAP.md](ROADMAP.md) global.
