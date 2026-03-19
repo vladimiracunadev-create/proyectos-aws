@@ -189,7 +189,7 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 
 ### 🟠 Nivel 3: Gestión de Aplicaciones y Datos (Senior)
 
-#### [📂 Caso E: Persistence Pro](./caso-e-dynamodb-persistence/README.md) `Nivel 4` `COMPLETADO (VALIDADO)`
+#### [📂 Caso E: Persistence Pro](./caso-e-dynamodb-persistence/README.md) `Nivel 4` `COMPLETADO`
 *   **Stack**: API Gateway + Lambda + DynamoDB (Single Table Design + GSI) + AWS SAM.
 *   **Enfoque**: **Modelado NoSQL Senior.** Diseña por patrones de acceso, crea auditoría transaccional y consulta por cliente, estado y producto sin scans.
 *   **Prerequisito técnico**: Caso D — dominar Lambda + API GW básico antes de modelado avanzado.
@@ -208,7 +208,7 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   🏗️ [Arquitectura (Mermaid)](caso-f-security-cognito/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-f-security-cognito/AWS_PASO_A_PASO.md)
 
-#### [📂 Caso G: Event Driven](./caso-g-event-driven/README.md) `Nivel 6` `COMPLETADO (VALIDADO)`
+#### [📂 Caso G: Event Driven](./caso-g-event-driven/README.md) `Nivel 6` `COMPLETADO`
 *   **Stack**: API Gateway + Lambda + EventBridge + SQS + SNS + AWS SAM.
 *   **Enfoque**: **Arquitecturas Reactivas.** Desacopla productor y consumidor con eventos, reintentos y DLQ para absorber fallos sin bloquear la entrada.
 *   **Prerequisito técnico**: Caso E — tener dominio de Lambda + DynamoDB antes de agregar eventos y colas.
@@ -247,7 +247,7 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   ☁️ [Guía Paso a Paso AWS](caso-j-containers-ecs/AWS_PASO_A_PASO.md)
 *   🖼️ [Reporte de Visualización y Resultados](caso-j-containers-ecs/VISUALIZATION.md)
 
-#### [📂 Caso K: Kubernetes en AWS (EKS)](./caso-k-kubernetes-eks/README.md) `Nivel 10` `COMPLETADO (VALIDADO)`
+#### [📂 Caso K: Kubernetes en AWS (EKS)](./caso-k-kubernetes-eks/README.md) `Nivel 10` `COMPLETADO`
 *   **Stack**: AWS EKS + YAML + GitLab Kubernetes Agent.
 *   **Enfoque**: **Orquestación Real en AWS.** Kubernetes directo en la nube. Gestiona flotas de contenedores, auto-sanación y balanceo masivo.
 *   **Prerequisito técnico**: Caso J — dominar Docker y ECS antes de subir a Kubernetes.
