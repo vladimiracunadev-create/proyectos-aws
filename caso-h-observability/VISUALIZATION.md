@@ -103,6 +103,60 @@ AWS puede mostrar menus distintos segun el idioma configurado en tu cuenta. En e
 > 2. el stack ya fue eliminado con `sam delete`
 > 3. estas mirando otra region distinta de `us-east-2`
 
+### Problemas reales detectados durante la captura
+Durante la generacion de esta evidencia aparecieron dos problemas practicos que conviene dejar documentados:
+
+#### 1. PowerShell y `curl`
+En Windows PowerShell, `curl` normalmente es un alias de `Invoke-WebRequest`, no `curl` real.
+
+Eso significa que este comando puede fallar:
+
+```powershell
+curl -X POST "https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/metrics"
+```
+
+Error observado:
+
+```text
+Invoke-WebRequest : No se encuentra ningún parámetro que coincida con el nombre del parámetro 'X'.
+```
+
+Usa una de estas alternativas correctas:
+
+```powershell
+Invoke-RestMethod "https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/health?format=json"
+Invoke-RestMethod -Method Post "https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/metrics"
+```
+
+O, si prefieres `curl` real:
+
+```powershell
+curl.exe "https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/health?format=json"
+curl.exe -X POST "https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/metrics"
+```
+
+> [!WARNING]
+> Si ejecutas solo `GET /health`, generas trafico util para salud y trazas, pero **no** publicas la metrica custom `CasoH/HealthChecks`.
+> Para que aparezca la evidencia del paso de metricas, necesitas ejecutar el `POST /metrics` correctamente.
+
+#### 2. X-Ray puede verse desde CloudWatch
+En algunas cuentas o vistas de consola, cuando intentas entrar a `X-Ray`, AWS te redirige a **CloudWatch**.
+
+Eso es esperable. Para este caso, busca la evidencia en:
+
+- **CloudWatch > X-Ray traces > Trace Map**
+- **CloudWatch > X-Ray traces > Traces**
+
+Si no encuentras esa seccion:
+
+1. verifica que estas en **`us-east-2`**
+2. genera trafico real con `GET /health` y `POST /metrics`
+3. espera 1-2 minutos
+4. revisa permisos de lectura X-Ray / CloudWatch si la seccion sigue sin aparecer
+
+> [!IMPORTANT]
+> Si la consola no muestra la palabra exacta `X-Ray`, busca dentro de CloudWatch secciones como `X-Ray traces`, `Trace Map`, `Traces` o sus equivalentes en espanol.
+
 ### Orden recomendado de ventanas
 No intentes documentar la landing o el dashboard con una sola captura completa. Este caso tiene **mas de un estado visual** y requiere evidencia separada por ventana:
 
@@ -113,7 +167,7 @@ No intentes documentar la landing o el dashboard con una sola captura completa. 
 5. **Ventana E**: `GET /health` HTML.
 6. **Ventana F**: `GET /health?format=json`.
 7. **Consola AWS 1**: CloudWatch Dashboard `caso-h-observability`.
-8. **Consola AWS 2**: X-Ray `Service map` y `Traces`.
+8. **Consola AWS 2**: CloudWatch > X-Ray traces (`Trace Map` y `Traces`).
 9. **Consola AWS 3**: CloudFormation, Lambda y API Gateway.
 
 > [!IMPORTANT]
