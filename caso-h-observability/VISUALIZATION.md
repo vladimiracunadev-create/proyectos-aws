@@ -71,6 +71,32 @@ Necesitaras estos datos:
 - `FunctionName`
 - `DashboardUrl`
 
+### Nota sobre idioma de la consola AWS
+AWS puede mostrar menus distintos segun el idioma configurado en tu cuenta. En este documento, cuando aparezca un nombre de menu, interpretalo asi:
+
+- `Stacks` = `Pilas`
+- `Overview` = `Informacion general` o `Resumen`
+- `Outputs` = `Salidas`
+- `Routes` = `Rutas`
+- `Functions` = `Funciones`
+- `Configuration` = `Configuracion`
+- `Dashboards` = `Paneles`
+- `Metrics` = `Metricas`
+- `Alarms` = `Alarmas`
+- `Service map` = `Mapa de servicios`
+- `Traces` = `Trazas`
+- `Logs Insights` = `Informacion de logs`, `Logs Insights` o `Analisis de registros`, segun la consola
+
+> [!IMPORTANT]
+> En CloudFormation, `stack` no es `Slack`.
+> - **Stack** = la pila o conjunto de recursos creados por el template
+> - **Slack** = una herramienta de mensajeria externa, que **no forma parte** de este caso
+>
+> Si no encuentras nada en CloudFormation, normalmente significa una de estas tres cosas:
+> 1. el stack `caso-h-observability` todavia no fue desplegado
+> 2. el stack ya fue eliminado con `sam delete`
+> 3. estas mirando otra region distinta de `us-east-2`
+
 ### Orden recomendado de ventanas
 No intentes documentar la landing o el dashboard con una sola captura completa. Este caso tiene **mas de un estado visual** y requiere evidencia separada por ventana:
 
@@ -94,10 +120,13 @@ No intentes documentar la landing o el dashboard con una sola captura completa. 
 ### 1. Stack base desplegado (AWS CloudFormation)
 > **Instrucciones paso a paso**:
 > 1. Ve a la **Consola de AWS** y busca el servicio **CloudFormation**.
-> 2. En el menu izquierdo, entra a **Stacks**.
-> 3. Busca el stack llamado `caso-h-observability`.
-> 4. Haz clic en el stack y deja visible la seccion **Overview** u **Outputs**.
-> 5. **Captura**: toma la imagen donde se vea:
+> 2. Verifica primero la region en la esquina superior derecha: debe ser **us-east-2**.
+> 3. En el menu izquierdo, entra a **Stacks** (`Pilas`).
+> 4. Si no ves nada, usa el buscador de la tabla y escribe `caso-h-observability`.
+> 5. Si aun no aparece, vuelve al paso de despliegue de este documento: el stack no existe en esa region o ya fue destruido.
+> 6. Busca el stack llamado `caso-h-observability`.
+> 7. Haz clic en el stack y deja visible la seccion **Overview** (`Informacion general` o `Resumen`) u **Outputs** (`Salidas`).
+> 8. **Captura**: toma la imagen donde se vea:
 >    - `Stack name: caso-h-observability`
 >    - `Status: CREATE_COMPLETE` o `UPDATE_COMPLETE`
 >    - la region `us-east-2`
@@ -109,7 +138,7 @@ No intentes documentar la landing o el dashboard con una sola captura completa. 
 > **Instrucciones paso a paso**:
 > 1. Busca el servicio **Amazon API Gateway**.
 > 2. Ve a **APIs** y entra al HTTP API creado por el stack `caso-h-observability`.
-> 3. En el menu del API, abre **Routes**.
+> 3. En el menu del API, abre **Routes** (`Rutas`).
 > 4. **Captura**: toma la foto donde se vean exactamente estas rutas:
 >    - `GET /`
 >    - `GET /health`
@@ -121,9 +150,9 @@ No intentes documentar la landing o el dashboard con una sola captura completa. 
 ### 3. Lambda instrumentada con X-Ray
 > **Instrucciones paso a paso**:
 > 1. Busca el servicio **AWS Lambda**.
-> 2. Entra a **Functions** y abre la funcion cuyo nombre fisico aparece en el output `FunctionName`.
-> 3. Ve a **Configuration**.
-> 4. Si tu consola muestra el bloque **Monitoring and operations tools**, dejalo visible. Si no, usa **General configuration** y **Environment variables**.
+> 2. Entra a **Functions** (`Funciones`) y abre la funcion cuyo nombre fisico aparece en el output `FunctionName`.
+> 3. Ve a **Configuration** (`Configuracion`).
+> 4. Si tu consola muestra el bloque **Monitoring and operations tools**, dejalo visible. Si no, usa **General configuration** (`Configuracion general`) y **Environment variables** (`Variables de entorno`).
 > 5. **Captura**: toma la foto donde se vea:
 >    - `Runtime: Python 3.12`
 >    - `Timeout: 15 sec`
@@ -215,7 +244,7 @@ No intentes documentar la landing o el dashboard con una sola captura completa. 
 ### 10. CloudWatch Dashboard - mitad superior
 > **Instrucciones paso a paso**:
 > 1. Busca el servicio **Amazon CloudWatch**.
-> 2. Ve a **Dashboards**.
+> 2. Ve a **Dashboards** (`Paneles`).
 > 3. Abre el dashboard `caso-h-observability`.
 > 4. Ajusta el rango de tiempo a **Last 1 hour** o **Last 3 hours**.
 > 5. Asegurate de haber ejecutado antes los pasos 6 y 7 para tener trafico y metricas.
@@ -239,7 +268,7 @@ No intentes documentar la landing o el dashboard con una sola captura completa. 
 
 ### 12. Metricas custom en detalle (`CasoH / HealthChecks`)
 > **Instrucciones paso a paso**:
-> 1. En **Amazon CloudWatch**, entra a **Metrics**.
+> 1. En **Amazon CloudWatch**, entra a **Metrics** (`Metricas`).
 > 2. Selecciona **All metrics**.
 > 3. Entra a **Custom namespaces** y luego a `CasoH`.
 > 4. Abre la dimension `Service`.
@@ -250,7 +279,7 @@ No intentes documentar la landing o el dashboard con una sola captura completa. 
 
 ### 13. Alarmas CloudWatch en estado OK
 > **Instrucciones paso a paso**:
-> 1. En **Amazon CloudWatch**, entra a **Alarms** > **All alarms**.
+> 1. En **Amazon CloudWatch**, entra a **Alarms** (`Alarmas`) > **All alarms** (`Todas las alarmas`).
 > 2. Filtra por `caso-h-`.
 > 3. **Captura**: toma la foto donde se vea:
 >    - `caso-h-lambda-errors`
@@ -283,7 +312,7 @@ aws cloudwatch set-alarm-state \
 ### 14. X-Ray Service Map
 > **Instrucciones paso a paso**:
 > 1. Busca el servicio **AWS X-Ray**.
-> 2. Entra a **Service map**.
+> 2. Entra a **Service map** (`Mapa de servicios`).
 > 3. Ajusta el tiempo a los ultimos **15 minutos**.
 > 4. Antes de capturar, ejecuta una llamada a `GET /health` y una a `POST /metrics`.
 > 5. **Captura**: toma la foto donde se vea al menos:
@@ -295,7 +324,7 @@ aws cloudwatch set-alarm-state \
 
 ### 15. X-Ray detalle de una traza
 > **Instrucciones paso a paso**:
-> 1. En **AWS X-Ray**, entra a **Traces**.
+> 1. En **AWS X-Ray**, entra a **Traces** (`Trazas`).
 > 2. Selecciona una traza reciente del endpoint `/metrics` (preferible) o `/health`.
 > 3. Abre el detalle completo de la traza.
 > 4. **Captura**: toma la foto donde se vea:
@@ -308,7 +337,7 @@ aws cloudwatch set-alarm-state \
 
 ### 16. CloudWatch Logs Insights
 > **Instrucciones paso a paso**:
-> 1. Ve a **Amazon CloudWatch** > **Logs Insights**.
+> 1. Ve a **Amazon CloudWatch** > **Logs Insights** (`Analisis de logs`, `Analisis de registros` o nombre equivalente segun idioma).
 > 2. Selecciona el log group `/aws/lambda/<FunctionName>` del Caso H.
 > 3. Ejecuta esta query:
 >
