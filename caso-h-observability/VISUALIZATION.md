@@ -15,6 +15,22 @@ Por esa razon, este caso se documenta con una estrategia **Deploy -> Validar -> 
 
 ---
 
+## Despliegue validado: Landing y API publica
+El despliegue que origina esta evidencia no es teorico ni local. Corresponde a la publicacion real del laboratorio en:
+
+- **Landing y API publica**: [https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/)
+- **Health HTML**: [https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/health](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/health)
+- **Health JSON**: [https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/health?format=json](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/health?format=json)
+
+Las capturas de las ventanas A-F de este documento deben salir exactamente de ese despliegue o de uno equivalente re-creado con el mismo stack `caso-h-observability`.
+
+> [!IMPORTANT]
+> Este enlace **no reemplaza** al reporte. Conviven ambos:
+> - el enlace `Landing y API publica` muestra el ultimo despliegue validado
+> - el `Reporte de Visualizacion y Resultados` conserva la evidencia cuando el stack se destruye por costo
+
+---
+
 ## Resumen de la implementacion
 Se construyo un stack SAM autocontenido que publica una landing interactiva, un health check HTML/JSON, metricas custom y trazas X-Ray, todo conectado a un dashboard CloudWatch y dos alarmas declaradas en CloudFormation.
 

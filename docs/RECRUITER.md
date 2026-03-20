@@ -113,6 +113,7 @@ El `Caso H` no crea el dashboard desde la consola: el `AWS::CloudWatch::Dashboar
 **Habilidad demostrada**: los tres pilares de observabilidad (metricas, logs, trazas), IaC de monitorizacion, diferencia entre metricas tecnicas y de negocio.
 **Estado**: desplegado y validado en AWS.
 **Evidencia**: [Reporte de Visualizacion y Resultados](../caso-h-observability/VISUALIZATION.md)
+**Landing / API publica**: [https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/)
 **Nota FinOps**: el dashboard CloudWatch tiene costo fijo, por eso la demo se levanta por ventanas controladas y luego se destruye.
 
 ### Caso K: Kubernetes en AWS
