@@ -152,7 +152,7 @@ graph LR
 | Complejidad | ⭐⭐⭐ (3/10) |
 | Costo demo | < $1 USD |
 | Dependencias | ✅ Todas satisfechas (D, E, G) |
-| Estado | **✅ Desplegado y validado** |
+| Estado | **✅ Validado; stack destruido por FinOps** |
 
 **Por qué fue primero:**
 

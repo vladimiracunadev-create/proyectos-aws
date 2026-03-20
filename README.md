@@ -222,12 +222,12 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   **Stack**: CloudWatch + X-Ray + CloudWatch Dashboard (IaC) + Lambda.
 *   **Enfoque**: **Monitoreo Proactivo como Código.** Métricas custom, trazas X-Ray y dashboards definidos en CloudFormation. Detecta fallos antes que el usuario.
 *   **Prerequisito técnico**: Casos D, E y G — necesitas tener servicios reales corriendo para monitorearlos.
-*   **Costo**: $0 destruido / ~$3/mes con Dashboard activo — destruir el stack al terminar el lab.
+*   **Costo**: ~~$3/mes con Dashboard activo~~ / $0 destruido — stack retirado tras la ventana de laboratorio por costos FinOps.
 *   **Qué demuestra a un reclutador**: cultura DevOps real — métricas custom, trazas X-Ray y dashboards como código; estándar exigido en cualquier equipo que opere servicios en producción.
 *   🏗️ [Arquitectura (Mermaid)](caso-h-observability/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-h-observability/AWS_PASO_A_PASO.md)
 *   🖼️ [Reporte de Visualización y Resultados](caso-h-observability/VISUALIZATION.md)
-*   👉 [Landing y API pública](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/)
+*   **Estado demo**: desactivado por costos FinOps; reactivar solo para una nueva ventana de capturas.
 
 #### [📂 Caso I: GenAI Bedrock](./caso-i-genai-bedrock/index.html) `Nivel 8` `PROYECTADO`
 *   **Stack**: Amazon Bedrock + Lambda (sin RAG, sin OpenSearch).

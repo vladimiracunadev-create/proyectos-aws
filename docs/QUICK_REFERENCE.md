@@ -112,7 +112,7 @@ aws cloudwatch get-metric-statistics \
 Evidencia y referencia:
 
 - [Caso H - Reporte de Visualizacion y Resultados](../caso-h-observability/VISUALIZATION.md)
-- URL temporal del ultimo laboratorio validado: `https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/`
+- URL historica del ultimo laboratorio validado (puede no responder mientras el stack este destruido): `https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/`
 
 Cierre recomendado:
 

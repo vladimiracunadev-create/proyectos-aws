@@ -333,7 +333,7 @@ Cada certificacion tiene su propio documento con dominios, temas requeridos y co
 ## Proxima sesion recomendada
 
 ```
-1. Ejecutar las capturas reales del Caso H con el nuevo VISUALIZATION.md y cerrar con `make case-h-destroy`
+1. Caso H cerrado: evidencia estatica completada y stack destruido con estrategia FinOps
 2. Comandos SAM del Caso F            ← pendiente de la sesion anterior
 3. Planificar Caso M Fase 1           ← siguiente nivel tecnico
 ```

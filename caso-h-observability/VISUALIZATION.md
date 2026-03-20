@@ -12,6 +12,7 @@ Mientras los casos serverless puros pueden quedar publicados por largos periodos
 Por esa razon, este caso se documenta con una estrategia **Deploy -> Validar -> Capturar -> Destroy**. La evidencia visual reemplaza a la demo permanente y permite justificar la decision FinOps sin perder valor tecnico para entrevistas o revision del portafolio.
 
 **Ultima URL validada del laboratorio**: `https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/`
+**Estado actual del stack**: destruido despues de capturar esta evidencia; la URL puede no responder hasta un nuevo despliegue controlado.
 
 ---
 
@@ -25,9 +26,11 @@ El despliegue que origina esta evidencia no es teorico ni local. Corresponde a l
 Las capturas de las ventanas A-F de este documento deben salir exactamente de ese despliegue o de uno equivalente re-creado con el mismo stack `caso-h-observability`.
 
 > [!IMPORTANT]
-> Este enlace **no reemplaza** al reporte. Conviven ambos:
-> - el enlace `Landing y API publica` muestra el ultimo despliegue validado
+> Durante la ventana de laboratorio conviven ambos:
+> - el enlace `Landing y API publica` muestra el despliegue activo de ese momento
 > - el `Reporte de Visualizacion y Resultados` conserva la evidencia cuando el stack se destruye por costo
+>
+> Fuera de esa ventana, este reporte queda como evidencia principal y la URL historica puede no responder.
 
 ---
 
@@ -463,45 +466,159 @@ Aunque el Caso H conceptualmente se apoya en esos casos como prerequisito de mad
 ### Opcion A: via Makefile (recomendada)
 Desde la raiz del proyecto:
 
-```bash
+```powershell
 make case-h-destroy
 ```
 
 ### Opcion B: via AWS SAM directo
 
-```bash
+```powershell
 cd caso-h-observability/backend
 sam delete --stack-name caso-h-observability --region us-east-2 --no-prompts
 ```
 
-### Verificacion manual obligatoria
-Despues del comando, verifica manualmente en AWS:
+### Verificacion obligatoria por linea de comando
+Para un cierre serio de costos, no basta con mirar una sola pantalla en la consola. La baja correcta se confirma por CLI, porque cada servicio responde distinto cuando el recurso ya no existe.
 
-1. **CloudFormation > Stacks**: `caso-h-observability` debe desaparecer o quedar en `DELETE_COMPLETE`.
-2. **API Gateway > APIs**: el HTTP API del Caso H ya no debe existir.
-3. **Lambda > Functions**: la funcion fisica del Caso H ya no debe aparecer.
-4. **CloudWatch > Dashboards**: el dashboard `caso-h-observability` ya no debe existir.
-5. **CloudWatch > Alarms**: las dos alarmas `caso-h-*` ya no deben existir.
-6. **CloudWatch > Log groups**: si quedo el grupo `/aws/lambda/<FunctionName>`, puedes borrarlo manualmente para limpieza total.
+#### Antes de borrar: inventario exacto
+Ejecuta estos comandos y guarda su salida:
 
-### Limpieza opcional de logs
-Solo si confirmaste el nombre exacto de la funcion del Caso H:
+```powershell
+aws cloudformation describe-stacks --stack-name caso-h-observability --region us-east-2
+aws cloudformation list-stack-resources --stack-name caso-h-observability --region us-east-2
+aws cloudwatch get-dashboard --dashboard-name caso-h-observability --region us-east-2
+aws cloudwatch describe-alarms --alarm-name-prefix "caso-h-" --region us-east-2
+aws lambda get-function --function-name caso-h-observability-HealthDashboardFunction-atOsHTOsDHbI --region us-east-2
+aws apigatewayv2 get-apis --region us-east-2 --query "Items[?Name=='caso-h-observability']"
+aws logs describe-log-groups --log-group-name-prefix "/aws/lambda/caso-h-observability-HealthDashboardFunction-atOsHTOsDHbI" --region us-east-2
+```
 
-```bash
-aws logs delete-log-group \
-  --log-group-name "/aws/lambda/<FunctionName>" \
-  --region us-east-2
+Resultado real observado en este laboratorio:
+
+- `describe-stacks`: el stack existia en `CREATE_COMPLETE`.
+- `list-stack-resources`: confirmo API, stage, Lambda, dashboard, alarmas e IAM Role propios del Caso H.
+- `get-dashboard`: devolvio el dashboard `caso-h-observability`.
+- `describe-alarms`: devolvio `caso-h-lambda-errors` y `caso-h-lambda-duration-p99`.
+- `get-function`: devolvio la Lambda `caso-h-observability-HealthDashboardFunction-atOsHTOsDHbI`.
+- `get-apis`: devolvio el HTTP API `z7evf8mrzf`.
+- `describe-log-groups`: devolvio el log group `/aws/lambda/caso-h-observability-HealthDashboardFunction-atOsHTOsDHbI`.
+
+#### Comando de eliminacion ejecutado
+
+```powershell
+sam delete --stack-name caso-h-observability --region us-east-2 --no-prompts
+```
+
+Salida real resumida:
+
+```text
+- Deleting Cloudformation stack caso-h-observability
+Deleted successfully
+- Deleting S3 object with key ...
+- Deleting S3 object with key ...template
+```
+
+Eso confirma dos cosas:
+
+- la pila de CloudFormation fue eliminada correctamente
+- los artefactos SAM empaquetados para ese despliegue tambien fueron limpiados
+
+#### Despues de borrar: verificacion real por recurso
+Repite estas comprobaciones:
+
+```powershell
+aws cloudformation describe-stacks --stack-name caso-h-observability --region us-east-2
+aws lambda get-function --function-name caso-h-observability-HealthDashboardFunction-atOsHTOsDHbI --region us-east-2
+aws cloudwatch get-dashboard --dashboard-name caso-h-observability --region us-east-2
+aws cloudwatch describe-alarms --alarm-name-prefix "caso-h-" --region us-east-2
+aws apigatewayv2 get-apis --region us-east-2 --query "Items[?Name=='caso-h-observability']"
+aws iam get-role --role-name caso-h-observability-HealthDashboardFunctionRole-QQy4rf1NQH0q
+aws logs describe-log-groups --log-group-name-prefix "/aws/lambda/caso-h-observability-HealthDashboardFunction-atOsHTOsDHbI" --region us-east-2
+```
+
+Resultado real observado:
+
+- `describe-stacks`: `ValidationError` porque `caso-h-observability` ya no existe.
+- `get-function`: `ResourceNotFoundException`.
+- `get-dashboard`: `ResourceNotFound`.
+- `describe-alarms`: lista vacia.
+- `get-apis`: lista vacia `[]`.
+- `get-role`: `NoSuchEntity`.
+- `describe-log-groups`: **todavia devolvio 1 log group**. Este fue el unico residuo material despues del `sam delete`.
+
+#### Limpieza adicional realmente necesaria
+El log group no estaba declarado en `template.yaml`; fue creado por Lambda al invocarse. Por eso puede sobrevivir aunque el stack ya haya sido destruido.
+
+### Limpieza final del log group residual
+En este caso fue necesaria para dejar el cierre realmente limpio:
+
+```powershell
+aws logs delete-log-group --log-group-name "/aws/lambda/caso-h-observability-HealthDashboardFunction-atOsHTOsDHbI" --region us-east-2
+aws logs describe-log-groups --log-group-name-prefix "/aws/lambda/caso-h-observability-HealthDashboardFunction-atOsHTOsDHbI" --region us-east-2
+```
+
+Resultado real final:
+
+```json
+{
+  "logGroups": []
+}
 ```
 
 > [!WARNING]
 > No borres log groups, Lambdas ni alarmas usando filtros genericos como `caso-*`. Haz la limpieza solo sobre el nombre exacto del Caso H para no tocar otros laboratorios del portafolio.
 
-### Que puede seguir visible y por que no rompe otros casos
-- Historico de trazas X-Ray por retencion temporal.
-- Datapoints historicos en CloudWatch Metrics.
-- Evidencia local en este documento y en `./img/`.
+### Lo que puede seguir visible y por que
+Aunque el stack ya no exista, todavia puede aparecer informacion historica. Eso no significa que el costo fijo siga activo.
 
-Eso es normal y **no rompe** ni altera los Casos D, E o G. Lo importante para cortar el costo fijo es eliminar el dashboard y el stack administrado.
+#### Metricas custom en CloudWatch
+
+```powershell
+aws cloudwatch list-metrics --namespace CasoH --region us-east-2
+```
+
+Resultado real observado despues de destruir el stack:
+
+- la metrica `CasoH / HealthChecks / Service=caso-h-observability` sigue apareciendo en el listado
+- eso corresponde a datapoints historicos, no a un recurso vivo administrado por CloudFormation
+
+#### Trazas historicas de X-Ray
+
+```powershell
+$end = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+$start = $end - 21600
+aws xray get-service-graph --region us-east-2 --start-time $start --end-time $end
+```
+
+Hallazgos reales:
+
+- el comando **no acepta** ventanas mayores a 6 horas; al intentar 24 horas devolvio `Time range cannot be longer than 6 hours`
+- dentro de la ventana correcta, X-Ray todavia devolvio el service graph historico del Caso H
+- eso refleja retencion de trazas ya capturadas; no implica que la Lambda, API o dashboard sigan desplegados
+
+#### API Gateway por ID borrado: matiz del CLI
+Tras destruir el stack, este comando:
+
+```powershell
+aws apigatewayv2 get-api --api-id z7evf8mrzf --region us-east-2
+```
+
+devolvio un `NotFoundException` con un mensaje poco intuitivo sobre `Invalid API identifier`. Para una verificacion mas limpia conviene usar:
+
+```powershell
+aws apigatewayv2 get-apis --region us-east-2 --query "Items[?Name=='caso-h-observability']"
+```
+
+Si retorna `[]`, no queda ningun API con el nombre del Caso H.
+
+### Cierre correcto del Caso H
+El cierre queda realmente bien hecho cuando se cumplen estas tres condiciones:
+
+1. El stack `caso-h-observability` ya no existe.
+2. Ya no existen su API, Lambda, dashboard, alarmas ni role IAM.
+3. El log group residual fue borrado con el nombre exacto de la funcion.
+
+Si despues de eso siguen apareciendo metricas o trazas historicas, eso es normal y **no rompe** ni altera los Casos D, E o G. Lo que genera el costo fijo era el dashboard vivo del stack, y ese ya fue eliminado.
 
 ---
 

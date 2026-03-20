@@ -19,9 +19,10 @@
 - **Metricas custom** en namespace `CasoH` publicadas desde Lambda.
 - Stack name: `caso-h-observability` | Region: `us-east-2`
 - Infraestructura de evidencia estatica: el dashboard se levanta solo en ventanas de laboratorio por su costo fijo.
+- Estado actual AWS: stack destruido tras la ultima ventana de laboratorio para evitar costo fijo continuo.
 - **[Reporte de Visualizacion y Resultados](./VISUALIZATION.md)**
-- **[Landing y API publica](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/)**
-- URL temporal del ultimo laboratorio validado: `https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/`
+- Demo publica permanente: desactivada por costos FinOps; reactivar solo para validaciones puntuales.
+- URL historica del ultimo laboratorio validado: `https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/`
 
 ---
 

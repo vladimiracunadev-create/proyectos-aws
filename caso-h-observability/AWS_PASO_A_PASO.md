@@ -319,14 +319,21 @@ fields @timestamp, @duration, @message
 
 ---
 
-## 10. Limpieza
+## 10. Limpieza por linea de comando
 
 Cuando termines el laboratorio:
 
-```bash
+```powershell
 make case-h-destroy
 
 # Alternativa directa:
+sam delete --stack-name caso-h-observability --region us-east-2 --no-prompts
+```
+
+Si estas en Windows PowerShell y no tienes `make`, usa directamente:
+
+```powershell
+cd caso-h-observability/backend
 sam delete --stack-name caso-h-observability --region us-east-2 --no-prompts
 ```
 
@@ -339,8 +346,72 @@ Esto elimina:
 - IAM Role de la Lambda
 - Bucket S3 de artefactos SAM (si se creó con `--resolve-s3`)
 
-> Las métricas y logs permanecen en CloudWatch según la política de retención
-> (por defecto nunca expiran, salvo que configures retención manual).
+### Verificacion previa recomendada
+
+```powershell
+aws cloudformation describe-stacks --stack-name caso-h-observability --region us-east-2
+aws cloudformation list-stack-resources --stack-name caso-h-observability --region us-east-2
+aws cloudwatch get-dashboard --dashboard-name caso-h-observability --region us-east-2
+aws cloudwatch describe-alarms --alarm-name-prefix "caso-h-" --region us-east-2
+aws apigatewayv2 get-apis --region us-east-2 --query "Items[?Name=='caso-h-observability']"
+aws lambda get-function --function-name caso-h-observability-HealthDashboardFunction-atOsHTOsDHbI --region us-east-2
+aws logs describe-log-groups --log-group-name-prefix "/aws/lambda/caso-h-observability-HealthDashboardFunction-atOsHTOsDHbI" --region us-east-2
+```
+
+### Verificacion posterior obligatoria
+
+```powershell
+aws cloudformation describe-stacks --stack-name caso-h-observability --region us-east-2
+aws cloudwatch get-dashboard --dashboard-name caso-h-observability --region us-east-2
+aws cloudwatch describe-alarms --alarm-name-prefix "caso-h-" --region us-east-2
+aws apigatewayv2 get-apis --region us-east-2 --query "Items[?Name=='caso-h-observability']"
+aws lambda get-function --function-name caso-h-observability-HealthDashboardFunction-atOsHTOsDHbI --region us-east-2
+aws iam get-role --role-name caso-h-observability-HealthDashboardFunctionRole-QQy4rf1NQH0q
+aws logs describe-log-groups --log-group-name-prefix "/aws/lambda/caso-h-observability-HealthDashboardFunction-atOsHTOsDHbI" --region us-east-2
+```
+
+Esperado:
+
+- stack inexistente (`ValidationError`)
+- dashboard inexistente (`ResourceNotFound`)
+- Lambda inexistente (`ResourceNotFoundException`)
+- role IAM inexistente (`NoSuchEntity`)
+- alarmas vacias
+- APIs vacias
+
+### Residuo habitual: log group de Lambda
+En la ejecucion real de este laboratorio, `sam delete` elimino el stack pero dejo vivo el log group de Lambda. Eso ocurre porque el log group no estaba modelado como recurso propio en `template.yaml`.
+
+Limpieza final:
+
+```powershell
+aws logs delete-log-group --log-group-name "/aws/lambda/caso-h-observability-HealthDashboardFunction-atOsHTOsDHbI" --region us-east-2
+aws logs describe-log-groups --log-group-name-prefix "/aws/lambda/caso-h-observability-HealthDashboardFunction-atOsHTOsDHbI" --region us-east-2
+```
+
+Debes terminar con:
+
+```json
+{
+  "logGroups": []
+}
+```
+
+### Lo que puede seguir apareciendo y por que
+
+```powershell
+aws cloudwatch list-metrics --namespace CasoH --region us-east-2
+$end = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+$start = $end - 21600
+aws xray get-service-graph --region us-east-2 --start-time $start --end-time $end
+```
+
+Notas importantes:
+
+- La metrica custom `CasoH/HealthChecks` puede seguir listandose como dato historico aunque el stack ya no exista.
+- El service graph de X-Ray puede seguir mostrando trazas historicas dentro de la ventana de retencion.
+- `aws xray get-service-graph` no acepta ventanas mayores a 6 horas.
+- Ninguno de esos dos puntos significa que el costo fijo del dashboard siga activo.
 
 ---
 
