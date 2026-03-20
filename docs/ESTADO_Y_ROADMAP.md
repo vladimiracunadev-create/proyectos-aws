@@ -1,7 +1,7 @@
 # 📍 Estado Actual y Hoja de Ruta
 
 > **Autor:** Vladimir Acuna
-> **Ultima actualizacion:** 17 de marzo de 2026
+> **Ultima actualizacion:** 20 de marzo de 2026
 > **Proposito:** Radiografia del repositorio — que hay, que falta, que viene, en que orden.
 
 ---
@@ -13,7 +13,7 @@ Madurez técnica:     ████████░░  80%  — 11/~13 casos core
 Documentación:       █████████░  90%  — completa, actualizada, navegable
 Skills y flujos:     █████████░  95%  — 11 skills cubren todos los workflows
 FinOps:              ████████░░  80%  — falta conectar datos reales en calculadora
-Evidencia visual:    ███████░░░  70%  — Caso H sin VISUALIZATION.md
+Evidencia visual:    ██████████  100%  — Casos H, J y K con reportes de evidencia
 Casos futuros:       ████░░░░░░  40%  — M en Fase 0, I proyectado
 ```
 
@@ -96,7 +96,7 @@ graph TB
 | E | DynamoDB Persistence | Single Table + GSI + Transacciones | Demo en vivo |
 | F | Security First | Cognito + JWT Authorizer + WAF | Demo en vivo |
 | G | Event Driven | EventBridge + SQS + DLQ + SNS | Demo en vivo |
-| H | Observability | CloudWatch + X-Ray + Dashboard IaC | Demo en vivo |
+| H | Observability | CloudWatch + X-Ray + Dashboard IaC | Reporte de evidencia |
 | J | Contenedores ECS | Docker + ECR + Fargate + ALB | Reporte de evidencia |
 | K | Kubernetes EKS | EKS + kubectl + Terraform | Reporte de evidencia |
 | L | FinOps Governance | Budgets + OIDC + Cost Explorer | Demo en vivo |
@@ -158,10 +158,10 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-    subgraph CRITICO["🔴 Prioritario"]
+    subgraph CRITICO["🟢 Sin bloqueos criticos"]
         direction TB
-        G1["❌ Caso H — VISUALIZATION.md faltante"]
-        G1N["unico caso con costo fijo sin reporte de evidencia"]
+        G1["✅ Caso H — VISUALIZATION.md agregado"]
+        G1N["evidencia estatica alineada con costo fijo de CloudWatch Dashboard"]
         G1 --- G1N
     end
 
@@ -187,7 +187,7 @@ flowchart TB
 
     CRITICO --> MEDIO --> BAJO
 
-    style G1 fill:#da3633,color:#fff
+    style G1 fill:#2ea043,color:#fff
     style G2 fill:#f0883e,color:#fff
     style G3 fill:#f0883e,color:#fff
     style G4 fill:#d29922,color:#fff
@@ -205,10 +205,7 @@ flowchart TB
 
 ### Prioridad Alta
 
-#### 1. Caso H — VISUALIZATION.md
-El unico caso con recurso de costo fijo (CloudWatch Dashboard $3/mes) que no tiene reporte de evidencia. Los casos J y K ya lo tienen. Usar `/visualizacion-evidencia caso-h`.
-
-#### 2. Caso M Fase 1 — Resiliencia Multi-AZ
+#### 1. Caso M Fase 1 — Resiliencia Multi-AZ
 
 ```mermaid
 flowchart LR
@@ -231,7 +228,7 @@ flowchart LR
 
 Estrategia: deploy → validar failover real → destroy. Prerequisito: Caso K completado.
 
-#### 3. Caso I — GenAI Bedrock (sin RAG)
+#### 2. Caso I — GenAI Bedrock (sin RAG)
 
 ```mermaid
 flowchart LR
@@ -253,7 +250,7 @@ Claude Haiku via Bedrock en Lambda. Costo < $5 por laboratorio. **Sin OpenSearch
 
 ### Prioridad Media
 
-#### 4. Portal GitLab Pages mejorado
+#### 3. Portal GitLab Pages mejorado
 
 Estado actual vs estado futuro:
 
@@ -265,11 +262,11 @@ Estado actual vs estado futuro:
 | CI status badges | ❌ | ✅ via GitLab API |
 | Smoke test results | ❌ | ✅ desde artefactos CI |
 
-#### 5. Calculadora de costos con datos reales
+#### 4. Calculadora de costos con datos reales
 
 Conectar la calculadora de GitLab Pages a un endpoint Lambda que lea AWS Cost Explorer y devuelva el gasto real del mes. El Caso L ya tiene OIDC configurado — la infraestructura de autenticacion existe.
 
-#### 6. Script de deploy-evidence-destroy automatizado
+#### 5. Script de deploy-evidence-destroy automatizado
 
 Para casos J y K, un script bash interactivo que:
 1. Hace `terraform apply`
@@ -281,11 +278,11 @@ Para casos J y K, un script bash interactivo que:
 
 ### Prioridad Baja / Largo plazo
 
-#### 7. Caso N — CI/CD avanzado
+#### 6. Caso N — CI/CD avanzado
 
 Pipelines multi-stage con ambientes reales (dev/staging/prod), deployment protection rules, revisiones de PR como gates de despliegue. Completaria el stack DevOps del repositorio.
 
-#### 8. Caso O — Observabilidad distribuida
+#### 7. Caso O — Observabilidad distribuida
 
 Trazas X-Ray entre multiples Lambdas en cadena, dashboards operacionales complejos, alertas con integracion externa. Prerequisito: Caso M completado.
 
@@ -322,26 +319,25 @@ Cada certificacion tiene su propio documento con dominios, temas requeridos y co
 
 | # | Mejora | Prioridad | Esfuerzo | Costo lab | Prerequisito |
 |---|---|---|---|---|---|
-| 1 | Caso H VISUALIZATION.md | 🔴 Alta | 30 min | $0 | Ninguno |
-| 2 | Caso M Fase 1 Multi-AZ | 🔴 Alta | 1-2 dias | ~$30 | Caso K ✅ |
-| 3 | Caso I GenAI Bedrock | 🔴 Alta | 1 dia | < $5 | Caso H ✅ |
-| 4 | Portal mejorado (estado stacks) | 🟡 Media | 1 dia | $0 | Caso L ✅ |
-| 5 | Calculadora con Cost Explorer real | 🟡 Media | 1 dia | $0 | Caso L ✅ |
-| 6 | Script deploy-evidence-destroy | 🟡 Media | 2-3 horas | $0 | J ✅, K ✅ |
-| 7 | Caso N CI/CD avanzado | 🟢 Baja | 2-3 dias | $0 | Todos anteriores |
-| 8 | Caso O Observabilidad distribuida | 🟢 Baja | 2-3 dias | < $5 | Caso M |
-| 9 | Ruta certificacion AWS | 🟢 Baja | Estudio paralelo | $300 (examen) | Ninguno |
+| 1 | Caso M Fase 1 Multi-AZ | 🔴 Alta | 1-2 dias | ~$30 | Caso K ✅ |
+| 2 | Caso I GenAI Bedrock | 🔴 Alta | 1 dia | < $5 | Caso H ✅ |
+| 3 | Portal mejorado (estado stacks) | 🟡 Media | 1 dia | $0 | Caso L ✅ |
+| 4 | Calculadora con Cost Explorer real | 🟡 Media | 1 dia | $0 | Caso L ✅ |
+| 5 | Script deploy-evidence-destroy | 🟡 Media | 2-3 horas | $0 | J ✅, K ✅ |
+| 6 | Caso N CI/CD avanzado | 🟢 Baja | 2-3 dias | $0 | Todos anteriores |
+| 7 | Caso O Observabilidad distribuida | 🟢 Baja | 2-3 dias | < $5 | Caso M |
+| 8 | Ruta certificacion AWS | 🟢 Baja | Estudio paralelo | $300 (examen) | Ninguno |
 
 ---
 
 ## Proxima sesion recomendada
 
 ```
-1. /visualizacion-evidencia caso-h    ← 30 minutos, cierra el unico gap pendiente
+1. Ejecutar las capturas reales del Caso H con el nuevo VISUALIZATION.md y cerrar con `make case-h-destroy`
 2. Comandos SAM del Caso F            ← pendiente de la sesion anterior
 3. Planificar Caso M Fase 1           ← siguiente nivel tecnico
 ```
 
 ---
 
-*Documento generado el 17 de marzo de 2026 — refleja el estado real del repositorio tras las sesiones de implementacion de los casos F, H y la infraestructura de documentacion completa.*
+*Documento generado el 20 de marzo de 2026 — refleja el estado real del repositorio tras cerrar la evidencia estatica del Caso H y sincronizar la documentacion visible.*

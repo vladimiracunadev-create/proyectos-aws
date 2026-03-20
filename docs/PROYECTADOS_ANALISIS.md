@@ -1,6 +1,6 @@
 # 📊 Análisis de Casos PROYECTADO — Complejidad & Costos
 
-> **Repositorio**: `proyectos-aws-gitlab` | **Última actualización**: 2026-03-18
+> **Repositorio**: `proyectos-aws-gitlab` | **Última actualización**: 2026-03-20
 > **Casos en scope**: I (GenAI), M (Resiliencia), N (CI/CD Avanzado), O (Observabilidad Distribuida)
 
 ---
@@ -160,7 +160,7 @@ graph LR
 - Se integra directamente sobre las Lambdas y APIs ya desplegadas.
 - Genera **evidencia visual inmediata** (Dashboards + Traces) para el portafolio.
 - Sentó las bases de observación que benefician a todos los casos siguientes.
-- Demo activa: [Landing / API](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/)
+- Evidencia principal: [Reporte de Visualizacion y Resultados](../caso-h-observability/VISUALIZATION.md)
 
 ---
 

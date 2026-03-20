@@ -82,8 +82,7 @@ URL desplegada actualmente:
 ## Caso H rapido
 
 ```bash
-cd caso-h-observability/backend
-sam build && sam deploy --guided
+make case-h-deploy
 ```
 
 Validaciones utiles:
@@ -92,22 +91,34 @@ Validaciones utiles:
 # Landing con metricas
 curl "$API_H_URL/"
 
-# Health check
-curl "$API_H_URL/health"
+# Health check JSON
+curl "$API_H_URL/health?format=json"
 
 # Publicar metrica custom
-curl -X POST "$API_H_URL/metrics" \
-  -H "Content-Type: application/json" \
-  -d '{"metricName":"DemoMetric","value":1,"unit":"Count"}'
+curl -X POST "$API_H_URL/metrics"
 
-# Listar metricas
-curl "$API_H_URL/metrics"
+# Validar el datapoint en CloudWatch
+aws cloudwatch get-metric-statistics \
+  --namespace CasoH \
+  --metric-name HealthChecks \
+  --dimensions Name=Service,Value=caso-h-observability \
+  --start-time 2026-03-17T00:00:00Z \
+  --end-time 2026-03-18T00:00:00Z \
+  --period 300 \
+  --statistics Sum \
+  --region us-east-2
 ```
 
-URL desplegada actualmente:
+Evidencia y referencia:
 
-- [Caso H - Landing + API](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/)
-- [Caso H - Health](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/health)
+- [Caso H - Reporte de Visualizacion y Resultados](../caso-h-observability/VISUALIZATION.md)
+- URL temporal del ultimo laboratorio validado: `https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/`
+
+Cierre recomendado:
+
+```bash
+make case-h-destroy
+```
 
 ---
 
@@ -215,6 +226,7 @@ curl -s -o /dev/null -w "%{http_code}" "$API_F_URL/profile"
 | [caso-g-event-driven/AWS_PASO_A_PASO.md](../caso-g-event-driven/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso G |
 | [caso-h-observability/README.md](../caso-h-observability/README.md) | Resumen del Caso H |
 | [caso-h-observability/AWS_PASO_A_PASO.md](../caso-h-observability/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso H |
+| [caso-h-observability/VISUALIZATION.md](../caso-h-observability/VISUALIZATION.md) | Evidencia estatica y cierre FinOps del Caso H |
 
 ---
 
@@ -229,4 +241,4 @@ git push origin main
 
 ---
 
-_Ultima actualizacion: 2026-03-18_
+_Ultima actualizacion: 2026-03-20_

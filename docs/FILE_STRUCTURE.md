@@ -243,10 +243,12 @@ Cada directorio `caso-X-*` es un **proyecto autocontenido**. Aquí la anatomía 
 | `backend/src/app.py` | Handler Python: landing HTML, health JSON/HTML, POST /metrics con `cloudwatch.put_metric_data`. |
 | `backend/events/health-check.json` | Evento de prueba para `sam local invoke`. |
 | `backend/tests/test_app.py` | 14 tests unitarios con `unittest.mock.patch` sobre `cloudwatch`. |
-| `index.html` | Landing interactiva con formulario de metricas custom y health check en vivo. |
+| `index.html` | Landing estatica local del caso para lectura rapida del stack y los pilares de observabilidad. |
 | `docs/architecture.md` | Diagramas Mermaid: flujo X-Ray, arquitectura AWS completa, mapa de metricas/alarmas, service map esperado. |
-| `README.md` | Stack, endpoints, decisiones tecnicas y URLs de demo. |
+| `README.md` | Stack, endpoints, decisiones tecnicas y enlace principal al reporte de evidencia. |
 | `AWS_PASO_A_PASO.md` | Guia detallada para desplegar, validar dashboard, alarmas y destruir el caso. |
+| `VISUALIZATION.md` | Evidencia estatica del despliegue, capturas por ventana/estado y cierre FinOps. |
+| `img/` | Carpeta donde se almacenan las capturas referenciadas por `VISUALIZATION.md`. |
 
 ### Caso J: `caso-j-containers-ecs/` — Docker + ECS `Nivel 9`
 | Archivo | Descripción |

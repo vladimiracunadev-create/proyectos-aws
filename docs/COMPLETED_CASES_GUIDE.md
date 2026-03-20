@@ -237,6 +237,16 @@ Porque no saber que falla hasta que el usuario se queja es una postura reactiva.
 - [Caso H](../caso-h-observability/README.md)
 - [Arquitectura Caso H](../caso-h-observability/docs/architecture.md)
 - [Paso a paso Caso H](../caso-h-observability/AWS_PASO_A_PASO.md)
+- [Reporte de Visualizacion Caso H](../caso-h-observability/VISUALIZATION.md)
+
+**Como leer la evidencia**
+
+Este caso no se deja publicado de forma permanente porque el dashboard CloudWatch tiene costo fijo. La referencia principal para evaluarlo es el reporte de visualizacion, que documenta:
+
+- estados de la landing por ventana
+- dashboard dividido en dos mitades por tamano
+- trazas X-Ray
+- procedimiento de eliminacion segura sin tocar otros casos
 
 ---
 

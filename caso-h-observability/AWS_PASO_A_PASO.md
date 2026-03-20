@@ -9,6 +9,7 @@ Estado actual validado el **17 de marzo de 2026**:
 - Dashboard URL: `https://us-east-2.console.aws.amazon.com/cloudwatch/home?region=us-east-2#dashboards:name=caso-h-observability`.
 - Alarma Errores: `caso-h-lambda-errors` (Estado: OK).
 - Alarma Latencia: `caso-h-lambda-duration-p99` (Estado: OK).
+- Antes de destruir el stack, captura la evidencia guiada en `VISUALIZATION.md`.
 
 ---
 
@@ -314,7 +315,10 @@ fields @timestamp, @duration, @message
 Cuando termines el laboratorio:
 
 ```bash
-sam delete --stack-name caso-h-observability --region us-east-2
+make case-h-destroy
+
+# Alternativa directa:
+sam delete --stack-name caso-h-observability --region us-east-2 --no-prompts
 ```
 
 Esto elimina:

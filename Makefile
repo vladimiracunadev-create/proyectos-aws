@@ -9,7 +9,7 @@ S3_BUCKET ?= vladimir-caso-b-site-2026
 REGION ?= us-east-2
 TF_DIR = caso-c-terraform-s3
 
-.PHONY: help install lint format serve upload deploy-b tf-init tf-plan tf-apply tf-security docker-build k8s-lint clean case-k-init case-k-deploy case-k-destroy finops-check test test-d test-e test-f test-g test-h smoke-d smoke-e smoke-f smoke-g smoke-h
+.PHONY: help install lint format serve upload deploy-b tf-init tf-plan tf-apply tf-security docker-build k8s-lint clean case-h-build case-h-deploy case-h-destroy case-k-init case-k-deploy case-k-destroy finops-check test test-d test-e test-f test-g test-h smoke-d smoke-e smoke-f smoke-g smoke-h
 
 help: ## Muestra este mensaje de ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -78,6 +78,25 @@ tf-apply: ## Aplica los cambios de infraestructura del Caso C
 tf-destroy: ## Destruye la infraestructura del Caso C
 	@echo "ATENCION: Destruyendo infraestructura de $(TF_DIR)..."
 	cd $(TF_DIR) && terraform destroy -auto-approve
+
+
+# ==========================================
+# CASO H: Observability + CloudWatch + X-Ray
+# ==========================================
+CASE_H_DIR = caso-h-observability/backend
+
+case-h-build: ## Compila el Caso H con AWS SAM
+	@echo "Compilando Caso H..."
+	cd $(CASE_H_DIR) && sam build
+
+case-h-deploy: case-h-build ## Despliega el Caso H (Dashboard con costo fijo: destruir tras capturas)
+	@echo "Desplegando Caso H en $(REGION)..."
+	cd $(CASE_H_DIR) && sam deploy --stack-name caso-h-observability --region $(REGION) --resolve-s3 --capabilities CAPABILITY_IAM --no-confirm-changeset --no-fail-on-empty-changeset
+
+case-h-destroy: ## ELIMINA TODO EL CASO H sin tocar otros stacks del portafolio
+	@echo "ELIMINANDO Caso H de forma segura..."
+	cd $(CASE_H_DIR) && sam delete --stack-name caso-h-observability --region $(REGION) --no-prompts
+	@echo "Caso H eliminado. Verifica dashboard, alarmas y API en consola AWS."
 
 
 # ==========================================

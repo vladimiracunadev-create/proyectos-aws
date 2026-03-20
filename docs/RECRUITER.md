@@ -112,7 +112,8 @@ El `Caso H` no crea el dashboard desde la consola: el `AWS::CloudWatch::Dashboar
 **Solucion**: CloudWatch Dashboard definido como codigo en SAM, alarmas sobre errores Lambda y latencia p99, metricas custom, trazas X-Ray en todas las invocaciones.
 **Habilidad demostrada**: los tres pilares de observabilidad (metricas, logs, trazas), IaC de monitorizacion, diferencia entre metricas tecnicas y de negocio.
 **Estado**: desplegado y validado en AWS.
-**Demo**: [Landing + API publica](https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/)
+**Evidencia**: [Reporte de Visualizacion y Resultados](../caso-h-observability/VISUALIZATION.md)
+**Nota FinOps**: el dashboard CloudWatch tiene costo fijo, por eso la demo se levanta por ventanas controladas y luego se destruye.
 
 ### Caso K: Kubernetes en AWS
 
@@ -164,4 +165,4 @@ El `Caso H` no crea el dashboard desde la consola: el `AWS::CloudWatch::Dashboar
 
 ---
 
-_Ultima actualizacion: 2026-03-18_
+_Ultima actualizacion: 2026-03-20_
