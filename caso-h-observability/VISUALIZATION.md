@@ -71,6 +71,12 @@ Necesitaras estos datos:
 - `FunctionName`
 - `DashboardUrl`
 
+Para este reporte, la variable queda explicitamente asi:
+
+- `ApiBaseUrl = https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/`
+
+Si vuelves a desplegar el stack en otra sesion, reemplaza esa URL por el output real del stack vigente.
+
 ### Nota sobre idioma de la consola AWS
 AWS puede mostrar menus distintos segun el idioma configurado en tu cuenta. En este documento, cuando aparezca un nombre de menu, interpretalo asi:
 
@@ -130,7 +136,7 @@ No intentes documentar la landing o el dashboard con una sola captura completa. 
 >    - `Stack name: caso-h-observability`
 >    - `Status: CREATE_COMPLETE` o `UPDATE_COMPLETE`
 >    - la region `us-east-2`
->    - al menos el output `ApiBaseUrl` o `DashboardUrl`
+>    - al menos el output `ApiBaseUrl` (`https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/`) o `DashboardUrl`
 
 ![CloudFormation Stack](./img/cloudformation-stack-complete.png "Stack caso-h-observability desplegado")
 
@@ -164,7 +170,7 @@ No intentes documentar la landing o el dashboard con una sola captura completa. 
 
 ### 4. Landing principal - Ventana A (parte superior, estado inicial)
 > **Instrucciones paso a paso**:
-> 1. Abre en el navegador `ApiBaseUrl/`.
+> 1. Abre en el navegador `https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/` (`ApiBaseUrl`).
 > 2. No hagas clic en ningun boton todavia.
 > 3. Deja visible solo la parte superior de la landing.
 > 4. **Captura**: toma la foto donde se vea:
@@ -177,7 +183,7 @@ No intentes documentar la landing o el dashboard con una sola captura completa. 
 
 ### 5. Landing principal - Ventana B (seccion interactiva en espera)
 > **Instrucciones paso a paso**:
-> 1. Abre una nueva pestana en `ApiBaseUrl/`.
+> 1. Abre una nueva pestana en `https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/` (`ApiBaseUrl`).
 > 2. Desplazate hasta la seccion **Demo en vivo** y el panel **Respuesta**.
 > 3. No presiones ningun boton.
 > 4. **Captura**: toma la foto donde se vea:
@@ -191,7 +197,7 @@ No intentes documentar la landing o el dashboard con una sola captura completa. 
 
 ### 6. Landing principal - Ventana C (estado despues de `Probar health check`)
 > **Instrucciones paso a paso**:
-> 1. Abre otra pestana nueva en `ApiBaseUrl/`.
+> 1. Abre otra pestana nueva en `https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/` (`ApiBaseUrl`).
 > 2. Desplazate hasta **Demo en vivo**.
 > 3. Haz clic en **Probar health check**.
 > 4. Espera a que el badge cambie a `Health OK - traza registrada en X-Ray`.
@@ -204,7 +210,7 @@ No intentes documentar la landing o el dashboard con una sola captura completa. 
 
 ### 7. Landing principal - Ventana D (estado despues de `Publicar metrica custom`)
 > **Instrucciones paso a paso**:
-> 1. Abre una cuarta pestana nueva en `ApiBaseUrl/`.
+> 1. Abre una cuarta pestana nueva en `https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/` (`ApiBaseUrl`).
 > 2. Desplazate hasta **Demo en vivo**.
 > 3. Haz clic en **Publicar metrica custom**.
 > 4. Espera a que el badge cambie a `Metrica publicada en CasoH/HealthChecks`.
@@ -217,7 +223,7 @@ No intentes documentar la landing o el dashboard con una sola captura completa. 
 
 ### 8. Endpoint `/health` como pagina HTML
 > **Instrucciones paso a paso**:
-> 1. Abre una nueva pestana en `ApiBaseUrl/health`.
+> 1. Abre una nueva pestana en `https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/health`.
 > 2. No agregues `?format=json`.
 > 3. **Captura**: toma la foto donde se vea:
 >    - el titulo `Estado operativo del servicio de observabilidad`
@@ -231,7 +237,7 @@ No intentes documentar la landing o el dashboard con una sola captura completa. 
 
 ### 9. Endpoint `/health?format=json` como salida cruda
 > **Instrucciones paso a paso**:
-> 1. Abre una nueva pestana en `ApiBaseUrl/health?format=json`.
+> 1. Abre una nueva pestana en `https://z7evf8mrzf.execute-api.us-east-2.amazonaws.com/health?format=json`.
 > 2. Si el navegador muestra JSON crudo, dejalo asi. Si lo descarga, usa la vista de red del navegador o una terminal con `curl`.
 > 3. **Captura**: toma la foto donde se vea el payload JSON con:
 >    - `status: ok`
