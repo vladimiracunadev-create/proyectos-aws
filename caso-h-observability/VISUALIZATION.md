@@ -311,6 +311,15 @@ aws cloudwatch set-alarm-state \
   --region us-east-2
 ```
 
+En **PowerShell**, usa una sola linea o el acento grave <code>`</code> como continuacion:
+
+```powershell
+aws cloudwatch set-alarm-state --alarm-name "caso-h-lambda-errors" --state-value ALARM --state-reason "Prueba manual de alarma" --region us-east-2
+
+# Restaurar:
+aws cloudwatch set-alarm-state --alarm-name "caso-h-lambda-errors" --state-value OK --state-reason "Restaurado tras evidencia" --region us-east-2
+```
+
 > **Captura opcional**: toma una imagen adicional mostrando el estado `ALARM`, luego restaura a `OK` antes de destruir el stack.
 
 ![CloudWatch Alarm Simulated](./img/cloudwatch-alarms-alarm-simulated.png "Alarma simulada para documentar el estado ALARM")

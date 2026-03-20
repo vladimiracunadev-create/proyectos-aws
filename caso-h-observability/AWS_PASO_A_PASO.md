@@ -231,6 +231,15 @@ aws cloudwatch set-alarm-state \
   --region us-east-2
 ```
 
+Si estás en **PowerShell**, ejecuta el comando en una sola linea:
+
+```powershell
+aws cloudwatch set-alarm-state --alarm-name "caso-h-lambda-errors" --state-value ALARM --state-reason "Prueba manual de alarma" --region us-east-2
+
+# Restaurar:
+aws cloudwatch set-alarm-state --alarm-name "caso-h-lambda-errors" --state-value OK --state-reason "Restaurado para demostración" --region us-east-2
+```
+
 ### Verificar métricas custom en CloudWatch
 
 ```bash
