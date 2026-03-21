@@ -10,6 +10,8 @@ COGNITO_CLIENT_ID = os.environ.get("COGNITO_CLIENT_ID", "")
 COGNITO_USER_POOL_ID = os.environ.get("COGNITO_USER_POOL_ID", "")
 DEPLOYMENT_MODE = os.environ.get("DEPLOYMENT_MODE", "demo-http-jwt")
 PERIMETER_MODE = os.environ.get("PERIMETER_MODE", "native-authorizer")
+SUPPORT_PAGE_URL = os.environ.get("SUPPORT_PAGE_URL", "").strip()
+DEMO_PAGE_URL = os.environ.get("DEMO_PAGE_URL", "").strip()
 
 cognito_client = boto3.client("cognito-idp")
 
@@ -17,7 +19,7 @@ cognito_client = boto3.client("cognito-idp")
 # ---------------------------------------------------------------------------
 # Landing Page HTML
 # ---------------------------------------------------------------------------
-LANDING_PAGE = r"""<!DOCTYPE html>
+DEMO_LANDING_PAGE = r"""<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -120,6 +122,13 @@ LANDING_PAGE = r"""<!DOCTYPE html>
       word-break: break-all; font-size: 0.82rem; color: var(--ok); font-family: monospace;
     }
     .waf-note { padding: 16px; border-radius: 18px; background: rgba(255,148,71,0.08); border: 1px solid rgba(255,148,71,0.22); color: var(--warn); margin-top: 14px; font-size: 0.9rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+    .link-button {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 46px;
+      padding: 12px 16px; border-radius: 14px; text-decoration: none; font-weight: 800;
+      background: linear-gradient(135deg, #4cc9f0, #4361ee); color: #fff;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
     @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
     @media (max-width: 640px) { .shell { width: min(100% - 18px, 1200px); } .step-tab { font-size: 0.78rem; padding: 10px 6px; } }
   </style>
@@ -130,17 +139,17 @@ LANDING_PAGE = r"""<!DOCTYPE html>
       <p class="eyebrow">Caso F · Nivel 5 · Security First</p>
       <h1>Identidad y perimetro: Cognito + Authorizer nativo + WAF</h1>
       <p class="lead">
-        Este caso tiene dos modalidades reales en AWS: demo permanente con HTTP API
-        y JWT Authorizer nativo, y visualization temporal con REST API, Cognito
-        Authorizer y WAF para capturar la evidencia del perimetro sin dejar costo fijo
-        activo fuera de la ventana del laboratorio.
+        Estas viendo el producto completo del Caso F. Aqui demostramos identidad,
+        autenticacion y autorizacion nativa con Cognito + HTTP API + JWT Authorizer,
+        para resolver seguridad perimetral sin escribir criptografia manual en Lambda.
+        El enlace WAF abre la evidencia complementaria del perimetro avanzado.
       </p>
       <div class="hero-grid">
         <div class="mini-panel">
           <div class="stats">
             <div class="stat"><strong>JWT</strong><span>Validado por API GW</span></div>
             <div class="stat"><strong>Cognito</strong><span>User Pool + Auth Flow</span></div>
-            <div class="stat"><strong>WAF</strong><span>Solo en visualization</span></div>
+            <div class="stat"><strong>WAF</strong><span>En pagina auxiliar enlazada</span></div>
             <div class="stat"><strong>0 crypto</strong><span>manual dentro de Lambda</span></div>
           </div>
           <div class="chips">
@@ -151,28 +160,35 @@ LANDING_PAGE = r"""<!DOCTYPE html>
           </div>
         </div>
         <div class="mini-panel">
-          <h2>Que hace cada capa</h2>
+          <h2>Que estas viendo y por que importa</h2>
           <div class="story">
             <article class="story-card">
-              <strong>Cognito User Pool</strong>
-              <p>Gestiona identidades: registro, login y emision de tokens JWT estandar.</p>
+              <strong>Que estamos haciendo</strong>
+              <p>Protegemos un flujo real de registro, login y perfil usando Cognito y validacion JWT nativa en API Gateway.</p>
             </article>
             <article class="story-card">
-              <strong>JWT Authorizer</strong>
-              <p>En modo demo, HTTP API valida JWT sin que tu Lambda escriba ni una linea de criptografia.</p>
+              <strong>Para que sirve</strong>
+              <p>Para mover la seguridad al borde: API Gateway valida el token antes de invocar la Lambda y reduce codigo sensible.</p>
             </article>
             <article class="story-card">
-              <strong>WAF (visualization)</strong>
-              <p>En la modalidad de evidencia, REST API agrega WAF para bloquear SQLi, XSS e IPs maliciosas antes del API.</p>
+              <strong>Que se gana</strong>
+              <p>Una demo barata, simple de explicar y alineada con una arquitectura real de produccion basada en servicios administrados.</p>
             </article>
+            <article class="story-card">
+              <strong>Que estas resolviendo</strong>
+              <p>Seguridad perimetral: DEMO barato con HTTP API + JWT Authorizer, y evidencia real del perimetro con REST API + Cognito Authorizer + WAF.</p>
+            </article>
+          </div>
+          <div class="hero-actions">
+            __SUPPORT_LINK__
           </div>
         </div>
       </div>
     </section>
 
     <section class="panel">
-      <h2>Demo en vivo del flujo completo</h2>
-      <p class="helper">Sigue los tres pasos: registrate, inicia sesion y llama al endpoint protegido con tu token.</p>
+      <h2>Producto en vivo: flujo completo de identidad</h2>
+      <p class="helper">Sigue los tres pasos para ver lo que resuelve el producto: alta de usuario, emision de token y acceso protegido sin criptografia manual en la Lambda.</p>
 
       <div class="step-tabs">
         <div class="step-tab active" id="tab-1">1. Registrar</div>
@@ -203,7 +219,7 @@ LANDING_PAGE = r"""<!DOCTYPE html>
       </div>
 
       <div class="step-panel" id="panel-3">
-        <p class="helper">Con el token en memoria, llama al endpoint <code class="inline">GET /profile</code>. API Gateway valida el token automaticamente antes de pasarlo a la Lambda, ya sea con JWT Authorizer o Cognito Authorizer segun la modalidad desplegada.</p>
+        <p class="helper">Con el token en memoria, llama al endpoint <code class="inline">GET /profile</code>. En este DEMO, API Gateway HTTP API valida el JWT automaticamente antes de invocar la Lambda.</p>
         <button class="btn-secondary" id="btn-profile">Llamar /profile con token</button>
         <p class="helper" id="profile-msg"></p>
       </div>
@@ -230,7 +246,7 @@ LANDING_PAGE = r"""<!DOCTYPE html>
         </article>
         <article class="story-card">
           <strong>Perimetro antes de la logica</strong>
-          <p>Cuando despliegas la modalidad visualization, WAF bloquea SQLi y XSS antes de API Gateway. Dos capas de defensa independientes.</p>
+          <p>Cuando activas la pagina auxiliar WAF, el trafico sospechoso se bloquea antes de API Gateway. La logica de negocio no tiene que absorber ese ruido.</p>
         </article>
         <article class="story-card">
           <strong>Prerequisito para el Caso I</strong>
@@ -238,9 +254,9 @@ LANDING_PAGE = r"""<!DOCTYPE html>
         </article>
       </div>
       <div class="waf-note">
-        Modo demo: <code class="inline">backend/template.yaml</code> con HTTP API y costo base cero.
-        Modo visualization: <code class="inline">backend/template-visualization.yaml</code> con REST API + WAF para capturas controladas.
-        Destruye siempre el stack de visualization al terminar.
+        DEMO principal: <code class="inline">backend/template.yaml</code> con HTTP API, Cognito y JWT Authorizer.
+        Pagina auxiliar WAF: <code class="inline">backend/template-visualization.yaml</code> con REST API + WAF para mostrar el perimetro en una URL separada.
+        El costo temporal y la ventana de uso se documentan en <code class="inline">VISUALIZATION.md</code>.
       </div>
     </section>
   </main>
@@ -377,6 +393,247 @@ LANDING_PAGE = r"""<!DOCTYPE html>
 </body>
 </html>"""
 
+WAF_LANDING_PAGE = r"""<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caso F | WAF Support</title>
+  <style>
+    :root {
+      --bg: #07151d;
+      --panel: rgba(8, 28, 36, 0.9);
+      --panel-soft: rgba(255, 255, 255, 0.04);
+      --line: rgba(72, 187, 120, 0.22);
+      --text: #eefaf7;
+      --muted: #9cc8bd;
+      --accent: #56d364;
+      --accent-2: #0ea5a0;
+      --ok: #8cf3c0;
+      --warn: #ffd479;
+      --danger: #ff9f9f;
+      --shadow: 0 28px 70px rgba(0, 0, 0, 0.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(14, 165, 160, 0.18), transparent 28%),
+        radial-gradient(circle at right, rgba(86, 211, 100, 0.14), transparent 26%),
+        linear-gradient(180deg, #07151d 0%, #0c1f29 100%);
+    }
+    .shell { width: min(1180px, calc(100% - 28px)); margin: 0 auto; padding: 28px 0 56px; }
+    .hero, .panel {
+      border: 1px solid var(--line); border-radius: 24px;
+      background: var(--panel); backdrop-filter: blur(16px); box-shadow: var(--shadow);
+    }
+    .hero { padding: 28px; margin-bottom: 18px; }
+    .eyebrow { margin: 0 0 10px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.78rem; }
+    h1 { margin: 0; font-size: clamp(2.2rem, 6vw, 4rem); line-height: 0.98; }
+    h2 { margin: 0 0 12px; font-size: 1.2rem; }
+    .lead { color: var(--muted); max-width: 76ch; margin: 14px 0 0; line-height: 1.58; }
+    .hero-grid, .story { display: grid; gap: 16px; }
+    .hero-grid { grid-template-columns: 1.05fr 0.95fr; margin-top: 22px; }
+    .story { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .mini-panel, .story-card {
+      border-radius: 20px; border: 1px solid rgba(255,255,255,0.08);
+      background: var(--panel-soft); padding: 16px;
+    }
+    .story-card strong { display: block; margin-bottom: 6px; }
+    .story-card p { margin: 0; color: var(--muted); line-height: 1.45; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+    .stat {
+      padding: 14px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+    }
+    .stat strong { display: block; font-size: 1.2rem; margin-bottom: 4px; color: var(--accent); }
+    .stat span { color: var(--muted); font-size: 0.9rem; }
+    .panel { padding: 22px; margin-bottom: 18px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+    button, .link-button {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 48px;
+      cursor: pointer; font-weight: 800; padding: 13px 16px; border-radius: 14px;
+      border: none; font: inherit; text-decoration: none; transition: transform 120ms ease, filter 120ms ease;
+    }
+    button:hover, .link-button:hover { transform: translateY(-1px); filter: brightness(1.08); }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; }
+    .btn-secondary { background: linear-gradient(135deg, #38bdf8, #0ea5a0); color: #fff; }
+    .link-button { background: linear-gradient(135deg, #56d364, #0891b2); color: #fff; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px;
+      border-radius: 999px; border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04); color: var(--muted); font-size: 0.9rem;
+    }
+    .badge.ok { color: var(--ok); border-color: rgba(140,243,192,0.2); }
+    .badge.warn { color: var(--warn); }
+    .badge.danger { color: var(--danger); }
+    pre {
+      margin: 0; padding: 16px; border-radius: 14px;
+      background: rgba(2, 8, 20, 0.92); border: 1px solid rgba(255,255,255,0.06);
+      color: #c7fff0; overflow: auto; min-height: 110px; font-size: 0.88rem;
+    }
+    .helper { color: var(--muted); font-size: 0.92rem; margin-top: 8px; line-height: 1.5; }
+    .note {
+      padding: 16px; border-radius: 18px; background: rgba(255, 212, 121, 0.08);
+      border: 1px solid rgba(255, 212, 121, 0.22); color: var(--warn); margin-top: 14px;
+    }
+    @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .shell { width: min(100% - 18px, 1180px); } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <p class="eyebrow">Caso F · WAF Support · Security Perimeter</p>
+      <h1>Pagina auxiliar para demostrar WAF de forma clara</h1>
+      <p class="lead">
+        Esta URL no reemplaza al DEMO principal. Existe para mostrar, con una
+        experiencia web dedicada, por que el perimetro se despliega aparte, que
+        problema resuelve y como se valida un bloqueo real antes de llegar a la
+        logica de negocio.
+      </p>
+      <div class="hero-grid">
+        <div class="mini-panel">
+          <div class="stats">
+            <div class="stat"><strong>REST API</strong><span>Superficie separada para WAF</span></div>
+            <div class="stat"><strong>WAF</strong><span>Bloquea trafico malicioso</span></div>
+            <div class="stat"><strong>Feedback</strong><span>Prueba visible con 403</span></div>
+            <div class="stat"><strong>Temporal</strong><span>Destruir al terminar</span></div>
+          </div>
+        </div>
+        <div class="mini-panel">
+          <h2>Que resuelve este despliegue</h2>
+          <div class="story">
+            <article class="story-card">
+              <strong>Explica la decision</strong>
+              <p>El DEMO vive en HTTP API + JWT. AWS WAF necesita REST API. Esta pagina hace visible esa restriccion tecnica sin confundir el producto principal.</p>
+            </article>
+            <article class="story-card">
+              <strong>Prueba el perimetro</strong>
+              <p>Con una prueba controlada de SQLi puedes observar el 403 del WAF antes de que la Lambda procese la solicitud.</p>
+            </article>
+            <article class="story-card">
+              <strong>Entrega evidencia</strong>
+              <p>Sirve para capturas, explicacion funcional y demostracion de seguridad a reclutadores o evaluadores tecnicos.</p>
+            </article>
+          </div>
+          <div class="hero-actions">
+            __DEMO_LINK__
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Prueba controlada del perimetro</h2>
+      <p class="helper">
+        Primero consulta <code>/health</code> para confirmar que la pagina esta viva.
+        Luego ejecuta una prueba SQLi controlada sobre ese mismo endpoint para ver
+        el bloqueo del WAF con un <code>403</code>.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" id="btn-health">Consultar /health</button>
+        <button class="btn-secondary" id="btn-probe">Probar bloqueo WAF</button>
+      </div>
+      <p class="helper" id="probe-msg"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Respuesta</h2>
+      <div class="hero-actions" style="margin-top:0;margin-bottom:12px;">
+        <span class="badge" id="statusBadge">Esperando accion</span>
+        <span class="badge ok">Perimetro explicado</span>
+        <span class="badge warn">Costo temporal documentado</span>
+      </div>
+      <pre id="output">Usa los botones para ver el health y la respuesta del WAF.</pre>
+    </section>
+
+    <section class="panel">
+      <h2>Como leer esta pagina</h2>
+      <div class="story">
+        <article class="story-card">
+          <strong>Por que existe</strong>
+          <p>Para no mezclar la experiencia principal del producto con la evidencia especifica del perimetro.</p>
+        </article>
+        <article class="story-card">
+          <strong>Que demuestra</strong>
+          <p>Que el trafico malicioso puede ser interceptado antes de que llegue a la aplicacion.</p>
+        </article>
+        <article class="story-card">
+          <strong>Que no es</strong>
+          <p>No es un segundo producto. Es una pagina auxiliar enlazada desde el DEMO principal.</p>
+        </article>
+      </div>
+      <div class="note">
+        El control de costo y la ventana de vida de este stack se documentan en
+        <code>VISUALIZATION.md</code>. La regla es simple: desplegar, capturar, explicar y destruir.
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const outputEl = document.getElementById("output");
+    const statusBadgeEl = document.getElementById("statusBadge");
+
+    function setBadge(label, kind) {
+      statusBadgeEl.className = "badge";
+      if (kind) statusBadgeEl.classList.add(kind);
+      statusBadgeEl.textContent = label;
+    }
+
+    function showOutput(data) {
+      outputEl.textContent = JSON.stringify(data, null, 2);
+    }
+
+    function buildUrl(path) {
+      const pagePath = window.location.pathname || "/";
+      const basePath = pagePath === "/" ? "/" : pagePath.replace(/\/?$/, "/");
+      const cleanPath = String(path || "").replace(/^\/+/, "");
+      return `${window.location.origin}${basePath}${cleanPath}`;
+    }
+
+    async function call(path) {
+      const response = await fetch(buildUrl(path));
+      const text = await response.text();
+      let data = { raw: text };
+      try { data = JSON.parse(text); } catch (_) {}
+      return { status: response.status, data };
+    }
+
+    document.getElementById("btn-health").addEventListener("click", async () => {
+      const msgEl = document.getElementById("probe-msg");
+      msgEl.textContent = "Consultando /health...";
+      setBadge("Consultando health...", "warn");
+      const { status, data } = await call("/health");
+      showOutput({ step: "health", status, data });
+      if (status === 200) {
+        msgEl.textContent = "Health OK. El despliegue auxiliar esta listo para la prueba controlada.";
+        setBadge("Health OK", "ok");
+      } else {
+        msgEl.textContent = "No se pudo consultar /health.";
+        setBadge("Health error", "danger");
+      }
+    });
+
+    document.getElementById("btn-probe").addEventListener("click", async () => {
+      const msgEl = document.getElementById("probe-msg");
+      msgEl.textContent = "Ejecutando prueba SQLi controlada...";
+      setBadge("Probando WAF...", "warn");
+      const { status, data } = await call("/health?filter=%27%20or%201%3D1%20--");
+      showOutput({ step: "waf-probe", status, data });
+      if (status === 403) {
+        msgEl.textContent = "WAF bloqueo la solicitud antes de la logica de negocio. Esa es la evidencia buscada.";
+        setBadge("WAF bloqueo OK", "ok");
+      } else {
+        msgEl.textContent = "La respuesta no fue 403. Revisa la asociacion del WebACL o espera la propagacion.";
+        setBadge("Revisar WAF", "danger");
+      }
+    });
+  </script>
+</body>
+</html>"""
+
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -406,6 +663,23 @@ def _html_response(html):
         },
         "body": html,
     }
+
+
+def _landing_page():
+    if DEPLOYMENT_MODE.startswith("visualization"):
+        demo_link = (
+            f'<a class="link-button" href="{DEMO_PAGE_URL}">Abrir DEMO principal</a>'
+            if DEMO_PAGE_URL
+            else '<span class="helper">Configura DEMO_PAGE_URL para enlazar este despliegue con el DEMO principal.</span>'
+        )
+        return WAF_LANDING_PAGE.replace("__DEMO_LINK__", demo_link)
+
+    support_link = (
+        f'<a class="link-button" href="{SUPPORT_PAGE_URL}">Abrir despliegue WAF</a>'
+        if SUPPORT_PAGE_URL
+        else '<span class="helper">El enlace a la pagina WAF se activa cuando SUPPORT_PAGE_URL apunta al stack auxiliar.</span>'
+    )
+    return DEMO_LANDING_PAGE.replace("__SUPPORT_LINK__", support_link)
 
 
 def _load_body(event):
@@ -581,7 +855,7 @@ def handler(event, _context):
             return _json_response(200, {"ok": True})
 
         if path in ("/", ""):
-            return _html_response(LANDING_PAGE)
+            return _html_response(_landing_page())
 
         if path == "/health":
             return handle_health(event)

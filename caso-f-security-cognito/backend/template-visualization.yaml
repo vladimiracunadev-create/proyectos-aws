@@ -2,6 +2,12 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: caso-f-security-cognito visualization - REST API + Cognito Authorizer + WAF
 
+Parameters:
+  DemoPageUrl:
+    Type: String
+    Default: ""
+    Description: URL publica del DEMO principal para enlazar desde la pagina WAF
+
 Globals:
   Function:
     Timeout: 15
@@ -82,6 +88,7 @@ Resources:
           COGNITO_USER_POOL_ID: !Ref UserPool
           DEPLOYMENT_MODE: visualization-rest-waf
           PERIMETER_MODE: rest-api-cognito-authorizer-waf
+          DEMO_PAGE_URL: !Ref DemoPageUrl
       Policies:
         - Statement:
             - Effect: Allow

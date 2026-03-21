@@ -200,10 +200,10 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   👉 [API Endpoint](https://gqqm27j47c.execute-api.us-east-2.amazonaws.com)
 
 #### [📂 Caso F: Security First](./caso-f-security-cognito/index.html) `Nivel 5` `COMPLETADO`
-*   **Stack**: AWS Cognito User Pool + Authorizer nativo de API Gateway + WAF en modalidad separada + AWS SAM.
-*   **Enfoque**: **Seguridad Perimetral.** Demo barata con HTTP API + JWT Authorizer, y evidencia real de perimetro con REST API + Cognito Authorizer + WAF.
+*   **Stack**: AWS Cognito User Pool + JWT Authorizer nativo para el DEMO + pagina WAF auxiliar + AWS SAM.
+*   **Enfoque**: **Seguridad Perimetral.** El producto principal vive en el DEMO con HTTP API + JWT Authorizer, y la evidencia perimetral vive en una pagina WAF separada y enlazada.
 *   **Prerequisito técnico**: Casos D y E — entender Lambda + API GW antes de agregarles seguridad.
-*   **Costo**: $0 en DEMO / ~$7/mes en VISUALIZATION con WAF activo — destruir WAF al terminar el lab.
+*   **Costo**: $0 en DEMO / ~$7/mes solo mientras la pagina WAF auxiliar este activa — destruirla al terminar la ventana de evidencia.
 *   **Qué demuestra a un reclutador**: seguridad cloud aplicada con una decision madura de arquitectura, respetando las capacidades reales de AWS.
 *   🏗️ [Arquitectura (Mermaid)](caso-f-security-cognito/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-f-security-cognito/AWS_PASO_A_PASO.md)

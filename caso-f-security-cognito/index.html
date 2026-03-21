@@ -101,6 +101,13 @@
       word-break: break-all; font-size: 0.82rem; color: var(--ok); font-family: monospace;
     }
     .waf-note { padding: 16px; border-radius: 18px; background: rgba(255,148,71,0.08); border: 1px solid rgba(255,148,71,0.22); color: var(--warn); margin-top: 14px; font-size: 0.9rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+    .link-button {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 46px;
+      padding: 12px 16px; border-radius: 14px; text-decoration: none; font-weight: 800;
+      background: linear-gradient(135deg, #4cc9f0, #4361ee); color: #fff;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
     @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
     @media (max-width: 640px) { .shell { width: min(100% - 18px, 1200px); } .step-tab { font-size: 0.78rem; padding: 10px 6px; } }
   </style>
@@ -111,17 +118,17 @@
       <p class="eyebrow">Caso F &middot; Nivel 5 &middot; Security First</p>
       <h1>Identidad y perimetro: Cognito + Authorizer nativo + WAF</h1>
       <p class="lead">
-        Este caso tiene dos modalidades reales en AWS: demo permanente con HTTP API
-        y JWT Authorizer nativo, y visualization temporal con REST API, Cognito
-        Authorizer y WAF para capturar la evidencia del perimetro sin dejar costo fijo
-        activo fuera de la ventana del laboratorio.
+        Estas viendo el producto completo del Caso F. Aqui demostramos identidad,
+        autenticacion y autorizacion nativa con Cognito + HTTP API + JWT Authorizer,
+        para resolver seguridad perimetral sin escribir criptografia manual en Lambda.
+        El enlace WAF abre la evidencia complementaria del perimetro avanzado.
       </p>
       <div class="hero-grid">
         <div class="mini-panel">
           <div class="stats">
             <div class="stat"><strong>JWT</strong><span>Validado por API GW</span></div>
             <div class="stat"><strong>Cognito</strong><span>User Pool + Auth Flow</span></div>
-            <div class="stat"><strong>WAF</strong><span>Solo en visualization</span></div>
+            <div class="stat"><strong>WAF</strong><span>En pagina auxiliar enlazada</span></div>
             <div class="stat"><strong>0 crypto</strong><span>manual dentro de Lambda</span></div>
           </div>
           <div class="chips">
@@ -132,28 +139,35 @@
           </div>
         </div>
         <div class="mini-panel">
-          <h2>Que hace cada capa</h2>
+          <h2>Que estas viendo y por que importa</h2>
           <div class="story">
             <article class="story-card">
-              <strong>Cognito User Pool</strong>
-              <p>Gestiona identidades: registro, login y emision de tokens JWT estandar.</p>
+              <strong>Que estamos haciendo</strong>
+              <p>Protegemos un flujo real de registro, login y perfil usando Cognito y validacion JWT nativa en API Gateway.</p>
             </article>
             <article class="story-card">
-              <strong>JWT Authorizer</strong>
-              <p>En modo demo, HTTP API valida JWT sin que tu Lambda escriba ni una linea de criptografia.</p>
+              <strong>Para que sirve</strong>
+              <p>Para mover la seguridad al borde: API Gateway valida el token antes de invocar la Lambda y reduce codigo sensible.</p>
             </article>
             <article class="story-card">
-              <strong>WAF (visualization)</strong>
-              <p>En la modalidad de evidencia, REST API agrega WAF para bloquear SQLi, XSS e IPs maliciosas antes del API.</p>
+              <strong>Que se gana</strong>
+              <p>Una demo barata, simple de explicar y alineada con una arquitectura real de produccion basada en servicios administrados.</p>
             </article>
+            <article class="story-card">
+              <strong>Que estas resolviendo</strong>
+              <p>Seguridad perimetral: DEMO barato con HTTP API + JWT Authorizer, y evidencia real del perimetro con REST API + Cognito Authorizer + WAF.</p>
+            </article>
+          </div>
+          <div class="hero-actions">
+            <a class="link-button" href="https://2i88ijfu54.execute-api.us-east-2.amazonaws.com/Prod">Abrir despliegue WAF</a>
           </div>
         </div>
       </div>
     </section>
 
     <section class="panel">
-      <h2>Demo en vivo del flujo completo</h2>
-      <p class="helper">Sigue los tres pasos: registrate, inicia sesion y llama al endpoint protegido con tu token.</p>
+      <h2>Producto en vivo: flujo completo de identidad</h2>
+      <p class="helper">Sigue los tres pasos para ver lo que resuelve el producto: alta de usuario, emision de token y acceso protegido sin criptografia manual en la Lambda.</p>
 
       <div class="step-tabs">
         <div class="step-tab active" id="tab-1">1. Registrar</div>
@@ -184,7 +198,7 @@
       </div>
 
       <div class="step-panel" id="panel-3">
-        <p class="helper">Con el token en memoria, llama al endpoint <code class="inline">GET /profile</code>. API Gateway valida el token automaticamente antes de pasarlo a la Lambda, ya sea con JWT Authorizer o Cognito Authorizer segun la modalidad desplegada.</p>
+        <p class="helper">Con el token en memoria, llama al endpoint <code class="inline">GET /profile</code>. En este DEMO, API Gateway HTTP API valida el JWT automaticamente antes de invocar la Lambda.</p>
         <button class="btn-secondary" id="btn-profile">Llamar /profile con token</button>
         <p class="helper" id="profile-msg"></p>
       </div>
@@ -211,7 +225,7 @@
         </article>
         <article class="story-card">
           <strong>Perimetro antes de la logica</strong>
-          <p>Cuando despliegas la modalidad visualization, WAF bloquea SQLi y XSS antes de API Gateway. Dos capas de defensa independientes.</p>
+          <p>Cuando activas la pagina auxiliar WAF, el trafico sospechoso se bloquea antes de API Gateway. La logica de negocio no tiene que absorber ese ruido.</p>
         </article>
         <article class="story-card">
           <strong>Prerequisito para el Caso I</strong>
@@ -219,9 +233,9 @@
         </article>
       </div>
       <div class="waf-note">
-        Modo demo: <code class="inline">backend/template.yaml</code> con HTTP API y costo base cero.
-        Modo visualization: <code class="inline">backend/template-visualization.yaml</code> con REST API + WAF para capturas controladas.
-        Destruye siempre el stack de visualization al terminar.
+        DEMO principal: <code class="inline">backend/template.yaml</code> con HTTP API, Cognito y JWT Authorizer.
+        Pagina auxiliar WAF: <code class="inline">backend/template-visualization.yaml</code> con REST API + WAF para mostrar el perimetro en una URL separada.
+        El costo temporal y la ventana de uso se documentan en <code class="inline">VISUALIZATION.md</code>.
       </div>
     </section>
   </main>

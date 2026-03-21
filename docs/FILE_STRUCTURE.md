@@ -217,7 +217,7 @@ Cada directorio `caso-X-*` es un **proyecto autocontenido**. Aquí la anatomía 
 | Archivo/Dir | Descripción |
 |-------------|-------------|
 | `backend/template.yaml` | Infraestructura SAM del modo DEMO: Cognito + HTTP API + JWT Authorizer. |
-| `backend/template-visualization.yaml` | Infraestructura SAM del modo VISUALIZATION: REST API + Cognito Authorizer + WAF. |
+| `backend/template-visualization.yaml` | Infraestructura SAM de la pagina WAF auxiliar: REST API + Cognito Authorizer + WAF. |
 | `backend/src/app.py` | Handler Python compatible con eventos de HTTP API v2 y REST API v1. |
 | `backend/events/register.json` | Evento de prueba para `sam local invoke` — registro. |
 | `backend/events/login.json` | Evento de prueba para `sam local invoke` — login. |
@@ -225,8 +225,8 @@ Cada directorio `caso-X-*` es un **proyecto autocontenido**. Aquí la anatomía 
 | `index.html` | Landing interactiva con flujo 3 pasos y soporte para base path con stage `/Prod`. |
 | `docs/architecture.md` | Diagramas Mermaid y explicacion de por que el caso usa dos modalidades. |
 | `README.md` | Resumen del stack dual, endpoints y decisiones tecnicas. |
-| `AWS_PASO_A_PASO.md` | Deploy y validacion de DEMO y VISUALIZATION. |
-| `VISUALIZATION.md` | Checklist de capturas y cierre FinOps del despliegue con WAF. |
+| `AWS_PASO_A_PASO.md` | Deploy del DEMO, despliegue de la pagina WAF y enlace entre ambas. |
+| `VISUALIZATION.md` | Costo, ventana de uso y destruccion segura del stack WAF. |
 
 ### Caso G: `caso-g-event-driven/` — Event Driven `Nivel 6` `COMPLETADO (VALIDADO)`
 | Archivo/Dir | Descripción |

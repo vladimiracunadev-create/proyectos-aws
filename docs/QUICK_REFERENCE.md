@@ -187,7 +187,7 @@ cd caso-f-security-cognito/backend
 # DEMO
 sam build && sam deploy --guided
 
-# VISUALIZATION
+# Pagina WAF auxiliar
 sam build --template-file template-visualization.yaml
 sam deploy --template-file template-visualization.yaml \
   --stack-name caso-f-security-cognito-visualization
@@ -228,7 +228,7 @@ curl -s -o /dev/null -w "%{http_code}" "$API_F_URL/profile"
 | [caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md](../caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso E |
 | [caso-f-security-cognito/README.md](../caso-f-security-cognito/README.md) | Resumen del Caso F |
 | [caso-f-security-cognito/AWS_PASO_A_PASO.md](../caso-f-security-cognito/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso F |
-| [caso-f-security-cognito/VISUALIZATION.md](../caso-f-security-cognito/VISUALIZATION.md) | Evidencia estatica del modo con WAF |
+| [caso-f-security-cognito/VISUALIZATION.md](../caso-f-security-cognito/VISUALIZATION.md) | Costo, ventana WAF y destruccion segura |
 | [caso-g-event-driven/README.md](../caso-g-event-driven/README.md) | Resumen del Caso G |
 | [caso-g-event-driven/AWS_PASO_A_PASO.md](../caso-g-event-driven/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso G |
 | [caso-h-observability/README.md](../caso-h-observability/README.md) | Resumen del Caso H |

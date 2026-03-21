@@ -1,182 +1,107 @@
-# Reporte de Visualization y Resultados - Caso F
+# VISUALIZATION - Costo, Ventana WAF y Cierre Seguro
 
-## Por que existe este documento
+## Regla de lectura
 
-El Caso F ahora tiene dos modalidades:
+En el Caso F:
 
-- `DEMO`: queda bien como demo viva porque no tiene costo base.
-- `VISUALIZATION`: existe para demostrar WAF real y debe destruirse al terminar.
+- `DEMO` es el producto principal y la URL que demuestra el flujo completo.
+- La pagina WAF es un despliegue auxiliar enlazado desde el DEMO.
+- `VISUALIZATION.md` no describe otro producto: documenta costo, ventana de uso y destruccion segura del stack WAF.
 
-Este reporte es la guia para capturar la evidencia de la modalidad `VISUALIZATION` sin confundirla con la demo barata.
+## Que controla este documento
 
-## Regla de evidencia
+Este archivo responde solo estas preguntas:
 
-La evidencia del Caso F se divide asi:
+1. cuando conviene levantar el stack WAF
+2. cuanto cuesta mantenerlo encendido
+3. que evidencia debe sacarse mientras esta activo
+4. como apagarlo al terminar
 
-- `DEMO` valida que el producto existe y funciona de verdad.
-- `DEMO` tambien puede aportar las capturas funcionales de registro, login y perfil.
-- `VISUALIZATION` aporta las capturas especificas que exigen REST API + WAF: asociacion del WebACL y bloqueo de trafico malicioso.
+## Modelo operativo
 
-## Resumen de la estrategia
+| Elemento | Rol | Estado recomendado |
+|---|---|---|
+| `DEMO` | Producto principal con Cognito + HTTP API + JWT Authorizer | Puede quedar vivo |
+| Pagina WAF auxiliar | Explica el perimetro y prueba el bloqueo con WAF | Levantar solo cuando se necesite evidencia |
+| `VISUALIZATION.md` | Control de costo y procedimiento de cierre | Siempre presente en el repo |
 
-| Modalidad | Vive publicada | Costo base | Evidencia principal |
-|---|---|---|---|
-| `DEMO` | Si | $0 | URL en vivo |
-| `VISUALIZATION` | No, solo ventanas controladas | ~`$7/mes` | Este documento + capturas |
+## Costo
 
-## Stack a desplegar para evidencia
+El costo base del Caso F sigue siendo:
+
+- `DEMO`: `$0`
+- Pagina WAF auxiliar: `~$7/mes` mientras el stack exista
+
+Ese costo viene de:
+
+- `Web ACL`: ~`$5/mes`
+- `2 managed rule groups`: ~`$2/mes`
+
+## Cuando levantar la pagina WAF
+
+Activa el stack WAF solo en estas situaciones:
+
+- necesitas capturas reales del perimetro
+- quieres demostrar un `403` antes de la Lambda
+- estas preparando una revision tecnica o una entrevista
+
+Si no necesitas esa evidencia puntual, mantente solo en el `DEMO`.
+
+## Comandos de ventana WAF
 
 ```bash
 cd caso-f-security-cognito/backend
+
 sam build --template-file template-visualization.yaml
 sam deploy --template-file template-visualization.yaml \
   --stack-name caso-f-security-cognito-visualization \
   --region us-east-2 \
   --resolve-s3 \
-  --capabilities CAPABILITY_IAM
+  --capabilities CAPABILITY_IAM \
+  --parameter-overrides DemoPageUrl=https://<demo-url>
 ```
 
-Outputs a guardar:
+## Evidencia minima a capturar mientras esta activa
 
-- `ApiBaseUrl`
-- `UserPoolId`
-- `UserPoolClientId`
-- `FunctionName`
-- `WebAclArn`
-- `DeploymentMode`
+La captura funcional del producto sale del `DEMO`.
 
-## Checklist de evidencia
+De la pagina WAF auxiliar solo necesitas evidencia de:
 
-### 1. CloudFormation
+- landing explicativa del despliegue WAF
+- `GET /health` respondiendo `200`
+- prueba SQLi controlada devolviendo `403`
+- `AWS WAF & Shield > Web ACLs` mostrando la asociacion
 
-Captura donde se vea:
+## Senal de que ya puedes destruirla
 
-- stack `caso-f-security-cognito-visualization`
-- estado `CREATE_COMPLETE` o `UPDATE_COMPLETE`
-- region correcta
-- output `ApiBaseUrl`
+Puedes destruir el stack WAF cuando ya tengas:
 
-### 2. API Gateway REST API
+- URL del `DEMO`
+- capturas funcionales del producto
+- captura de la pagina WAF
+- captura del bloqueo `403`
+- captura de la asociacion del `WebACL`
 
-Captura donde se vea:
-
-- stage `Prod`
-- rutas `GET /`, `GET /health`, `POST /auth/register`, `POST /auth/login`, `GET /profile`
-- authorizer de Cognito activo en `/profile`
-
-### 3. Cognito
-
-Captura donde se vea:
-
-- User Pool creado
-- App Client sin secreto
-- password policy
-
-### 4. WAF
-
-Captura donde se vea:
-
-- WebACL asociado al REST API
-- `AWSManagedRulesCommonRuleSet`
-- `AWSManagedRulesSQLiRuleSet`
-
-### 5. Landing inicial
-
-Puede salir desde `DEMO` o `VISUALIZATION`. Si la pantalla es puramente funcional y no depende de WAF, se acepta capturarla desde `DEMO`.
-
-Captura de `GET /` mostrando:
-
-- hero del Caso F
-- explicacion de los dos modos
-- panel de demo de 3 pasos
-
-### 6. Registro exitoso
-
-Preferencia: capturar desde `DEMO`, porque es la prueba viva del producto funcionando.
-
-Captura con:
-
-- respuesta `201`
-- usuario creado
-- paso 1 completado
-
-### 7. Login exitoso
-
-Preferencia: capturar desde `DEMO`, usando el flujo real de login.
-
-Captura con:
-
-- `idToken` visible parcialmente
-- paso 2 completado
-- respuesta `200`
-
-### 8. Perfil protegido
-
-Preferencia: capturar desde `DEMO`, porque demuestra authorizer nativo activo y producto real en ejecucion.
-
-Captura con:
-
-- llamada a `/profile`
-- `email`, `sub` y `name`
-- badge de exito
-
-### 9. WAF bloqueando SQLi
-
-Esta captura si debe salir de `VISUALIZATION`.
-
-Ejecuta:
+## Destruccion segura
 
 ```bash
-curl -s "$API_F_URL/auth/login?q=1' OR '1'='1" -w "\nHTTP: %{http_code}\n"
+cd caso-f-security-cognito/backend
+
+sam delete --stack-name caso-f-security-cognito-visualization \
+  --region us-east-2 \
+  --no-prompts
 ```
 
-Captura donde se vea:
+## Checklist de cierre
 
-- `HTTP 403`
-- request bloqueado por WAF
-
-### 10. Limpieza
-
-Captura o evidencia de:
-
-```bash
-sam delete --template-file template-visualization.yaml \
-  --stack-name caso-f-security-cognito-visualization \
-  --region us-east-2
-```
-
-## Nombres sugeridos para capturas
-
-Guarda las imagenes en `caso-f-security-cognito/img/` con nombres como:
-
-- `cloudformation-stack-complete.png`
-- `rest-api-routes.png`
-- `cognito-user-pool.png`
-- `waf-web-acl.png`
-- `landing-initial.png`
-- `register-success.png`
-- `login-success.png`
-- `profile-success.png`
-- `waf-sqli-blocked.png`
-
-## Verificacion final
-
-| Hito | Estado esperado |
+| Punto | Estado esperado |
 |---|---|
-| Stack visualization desplegado | OK |
-| REST API con authorizer | OK |
-| WAF asociado | OK |
-| Login entrega `idToken` | OK |
-| `/profile` devuelve claims | OK |
-| SQLi de prueba devuelve `403` | OK |
-| Stack destruido al terminar | CRITICO |
+| DEMO sigue vivo | SI |
+| Pagina WAF ya fue explicada/capturada | SI |
+| Prueba SQLi devolvio `403` | SI |
+| Stack WAF destruido | SI |
+| Costo fijo detenido | SI |
 
-## Cierre FinOps
+## Frase guia
 
-La evidencia de WAF vale mas que dejar el recurso encendido permanentemente.  
-La regla para este caso es simple:
-
-1. desplegar
-2. validar
-3. capturar
-4. destruir
+La idea del Caso F es simple: dejar el producto principal siempre claro y barato, y usar la pagina WAF solo durante la ventana exacta en que necesitas demostrar la capa perimetral.

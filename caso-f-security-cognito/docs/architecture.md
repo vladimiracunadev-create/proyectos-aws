@@ -1,33 +1,37 @@
-# Arquitectura: Caso F - Security First
+# Arquitectura: Caso F - DEMO principal + pagina WAF auxiliar
 
-> Stack compartido: Cognito + Lambda + API Gateway  
-> Modalidades: DEMO (HTTP API) y VISUALIZATION (REST API + WAF)
+## Idea central
 
-## Decision principal
+El Caso F tiene un solo producto principal:
 
-El Caso F usa **dos arquitecturas hermanas** porque hay una restriccion real de AWS:
+- `DEMO` con Cognito + HTTP API + JWT Authorizer
 
-- `HTTP API` soporta JWT Authorizer nativo y es la mejor opcion para demo barata.
-- `AWS WAF` se asocia a `REST API`, no a `HTTP API`.
+Y un despliegue complementario:
 
-La solucion final no intenta forzar una combinacion imposible. En vez de eso, separa el caso en:
+- pagina WAF auxiliar con REST API + WAF para explicar y validar el perimetro
 
-1. `DEMO`: despliegue vivo, costo base cero, HTTP API + JWT Authorizer.
-2. `VISUALIZATION`: despliegue temporal, evidencia y capturas, REST API + Cognito Authorizer + WAF.
+`VISUALIZATION.md` no es otro despliegue. Es la bitacora de costo y cierre seguro del stack WAF.
 
-## Diagrama 1: Decision de arquitectura
+## Por que se separa
+
+- `HTTP API` es la opcion mas barata y simple para el DEMO
+- `AWS WAF` se asocia a `REST API`
+- separar el perimetro en una pagina auxiliar evita confundir el producto principal
+
+## Diagrama 1: Vista general
 
 ```mermaid
 flowchart TD
-    Goal["Objetivo del caso F"]
-    Goal --> Cheap["Demo barata y permanente"]
-    Goal --> Perimeter["Evidencia real de perimetro con WAF"]
+    Product["DEMO principal"]
+    Product --> Demo["HTTP API<br/>JWT Authorizer<br/>Cognito"]
 
-    Cheap --> Demo["template.yaml<br/>HTTP API<br/>JWT Authorizer"]
-    Perimeter --> Viz["template-visualization.yaml<br/>REST API<br/>Cognito Authorizer + WAF"]
+    Product --> Link["Enlace visible al despliegue WAF"]
+    Link --> Waf["REST API<br/>WAF<br/>Pagina auxiliar"]
+
+    Waf --> Cost["VISUALIZATION.md<br/>costo y destruccion"]
 ```
 
-## Diagrama 2: Modalidad DEMO
+## Diagrama 2: Flujo del DEMO
 
 ```mermaid
 sequenceDiagram
@@ -39,22 +43,22 @@ sequenceDiagram
     U->>APIGW: POST /auth/register
     APIGW->>L: invoke
     L->>C: sign_up
-    C-->>L: user created
+    C-->>L: usuario creado
     L-->>U: 201
 
     U->>APIGW: POST /auth/login
     APIGW->>L: invoke
     L->>C: initiate_auth
-    C-->>L: accessToken + idToken
+    C-->>L: idToken
     L-->>U: 200
 
     U->>APIGW: GET /profile + Bearer idToken
-    APIGW->>APIGW: JWT Authorizer valida firma, issuer y audience
+    APIGW->>APIGW: JWT Authorizer valida token
     APIGW->>L: invoke con claims
-    L-->>U: 200 profile
+    L-->>U: 200
 ```
 
-## Diagrama 3: Modalidad VISUALIZATION
+## Diagrama 3: Flujo de la pagina WAF
 
 ```mermaid
 sequenceDiagram
@@ -62,72 +66,27 @@ sequenceDiagram
     participant W as AWS WAF
     participant APIGW as API Gateway REST API
     participant L as Lambda
-    participant C as Cognito
 
-    U->>W: Request
-    alt Payload malicioso
-        W-->>U: 403 bloqueado
-    else Request valido
-        W->>APIGW: Forward
-        APIGW->>APIGW: Cognito Authorizer valida token
-        APIGW->>L: invoke con claims
-        L-->>U: 200 profile
-    end
+    U->>W: GET /health
+    W->>APIGW: trafico normal
+    APIGW->>L: invoke
+    L-->>U: 200
+
+    U->>W: GET /health?filter=' or 1=1 --
+    W-->>U: 403
 ```
 
-## Diagrama 4: Componentes compartidos
+## Que resuelve cada pieza
 
-```mermaid
-flowchart LR
-    subgraph Shared["Recursos compartidos"]
-        UP["Cognito User Pool"]
-        UC["User Pool Client"]
-        L["SecurityFunction"]
-        PRE["PreSignUpFunction"]
-    end
-
-    subgraph Demo["Modo DEMO"]
-        H["HTTP API"]
-        J["JWT Authorizer"]
-    end
-
-    subgraph Viz["Modo VISUALIZATION"]
-        R["REST API"]
-        A["Cognito Authorizer"]
-        W["WAF WebACL"]
-    end
-
-    UP --> UC
-    UP --> PRE
-    H --> J
-    J --> L
-    R --> A
-    A --> L
-    W --> R
-    L <--> UP
-```
-
-## Beneficios del diseno
-
-- No hay codigo de validacion criptografica dentro de Lambda.
-- La demo sigue viva sin costo base.
-- WAF se prueba de forma autentica cuando se necesita evidencia.
-- El frontend funciona en ambos modos porque resuelve automaticamente la base path.
-- El mismo handler soporta eventos de HTTP API v2 y REST API v1.
-
-## Riesgos controlados
-
-| Riesgo | Mitigacion |
+| Pieza | Rol |
 |---|---|
-| Mezclar WAF con HTTP API | Separamos templates |
-| Mostrar claims incompletos | `/profile` usa `idToken` |
-| Romper la landing en REST API por el stage `/Prod` | El frontend calcula la base URL en runtime |
-| Mantener costo fijo por WAF | `VISUALIZATION.md` documenta deploy -> capture -> destroy |
+| `template.yaml` | producto principal del caso |
+| `template-visualization.yaml` | pagina WAF enlazada desde el DEMO |
+| `VISUALIZATION.md` | control de costo y destruccion del stack WAF |
 
-## Referencias
+## Resultado esperado
 
-- [README del Caso F](../README.md)
-- [Paso a paso AWS](../AWS_PASO_A_PASO.md)
-- [Reporte de visualization](../VISUALIZATION.md)
-- [Template DEMO](../backend/template.yaml)
-- [Template VISUALIZATION](../backend/template-visualization.yaml)
+- el usuario entiende el producto apenas abre el DEMO
+- el DEMO muestra el flujo funcional completo
+- el enlace WAF abre una pagina separada y explicativa
+- el stack WAF se destruye despues de la ventana de evidencia

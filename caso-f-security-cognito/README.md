@@ -1,139 +1,132 @@
-# Caso F: Security First - Cognito + Authorizer nativo + WAF
+# Caso F: Security First - Cognito + JWT Authorizer + WAF
 
 [![Nivel-5](https://img.shields.io/badge/Nivel-5_Seguridad-red?style=for-the-badge)]()
 [![Status](https://img.shields.io/badge/Status-Completado-brightgreen?style=for-the-badge)]()
 [![SAM](https://img.shields.io/badge/IaC-AWS_SAM-orange?style=for-the-badge)]()
 [![Python](https://img.shields.io/badge/Runtime-Python_3.12-blue?style=for-the-badge)]()
 
-La seguridad no es un parche, es la base. Este caso demuestra identidad gestionada con Cognito, validacion nativa del token en API Gateway y una modalidad separada con WAF para capturar evidencia real del perimetro sin dejar costo fijo activo fuera del laboratorio.
+La seguridad no es un parche, es la base. En este caso el producto principal vive en un `DEMO` con Cognito + HTTP API + JWT Authorizer. Cuando necesitas mostrar la capa perimetral con WAF, el DEMO enlaza a una pagina auxiliar separada que existe solo para explicar y validar ese perimetro.
 
-## Punto clave
+## Regla simple
 
-AWS WAF no se asocia a API Gateway HTTP API. Por eso el Caso F se implementa en **dos modalidades validas**:
+| Concepto | Significado real | Costo |
+|---|---|---|
+| `DEMO` | Producto principal, flujo completo y URL viva | `$0` |
+| Pagina WAF auxiliar | Despliegue complementario enlazado desde el DEMO | `~$7/mes` mientras exista |
+| `VISUALIZATION.md` | Documento de costo, ventana de uso y destruccion segura | `$0` |
 
-| Modalidad | Template | API Gateway | Authorizer | WAF | Uso recomendado |
-|---|---|---|---|---|---|
-| `DEMO` | `backend/template.yaml` | HTTP API | JWT Authorizer nativo | No | Demo permanente, costo base cero |
-| `VISUALIZATION` | `backend/template-visualization.yaml` | REST API | Cognito User Pool Authorizer | Si | Capturas, evidencia y validacion perimetral |
+## Enfoque
 
-La regla del caso es esta: **DEMO prueba que el producto existe y funciona de verdad**. Luego, esa misma experiencia funcional sirve para las capturas de producto, y `VISUALIZATION` agrega las evidencias especificas del perimetro con WAF.
+**Seguridad Perimetral.** Demo barata con `HTTP API + JWT Authorizer`, y evidencia real de perimetro con `REST API + Cognito Authorizer + WAF`.
 
-## Objetivo
+## Que demuestra el DEMO
 
-- Gestionar identidades de usuario con Amazon Cognito.
-- Proteger `/profile` sin escribir criptografia en Lambda.
-- Mantener una demo barata y, a la vez, una variante seria para mostrar WAF real.
+- registro y login reales con Amazon Cognito
+- validacion nativa del JWT en API Gateway
+- acceso a `/profile` sin criptografia manual en Lambda
+- una pagina clara que explica que estas viendo, para que sirve y que problema resuelve
+
+## Que demuestra la pagina WAF
+
+- por que WAF vive en un despliegue aparte
+- que se gana al frenar trafico malicioso antes de la aplicacion
+- una prueba controlada que termina en `403`
+- evidencia clara para reclutadores, revisores o capturas tecnicas
 
 ## Arquitectura
 
 ```text
-Modo DEMO
+Producto principal (DEMO)
 Internet -> API Gateway HTTP API -> JWT Authorizer -> Lambda
                   ^                     ^
                   |                     |
                Cognito ------------- emite tokens
 
-Modo VISUALIZATION
-Internet -> WAF -> API Gateway REST API -> Cognito Authorizer -> Lambda
-                 ^                           ^
-                 |                           |
-              reglas managed ----------- Cognito
+Pagina WAF auxiliar
+Internet -> WAF -> API Gateway REST API -> Lambda
 ```
 
-Ver [docs/architecture.md](docs/architecture.md) para el diagrama completo y la decision tecnica.
+Ver [docs/architecture.md](docs/architecture.md) para el detalle completo.
 
-## Componentes
-
-| Recurso | Modalidad | Descripcion |
-|---|---|---|
-| `UserPool` | Ambas | Email como username, auto-verified, password policy |
-| `UserPoolClient` | Ambas | `USER_PASSWORD_AUTH`, sin client secret |
-| `SecurityFunction` | Ambas | Registro, login, profile, health |
-| `PreSignUpFunction` | Ambas | Auto-confirma usuarios para demo controlada |
-| `Api` | `DEMO` | `AWS::Serverless::HttpApi` con JWT Authorizer |
-| `Api` | `VISUALIZATION` | `AWS::Serverless::Api` con Cognito Authorizer |
-| `WafWebAcl` | `VISUALIZATION` | Common Rules + SQLi Rules para validar perimetro |
-
-## Endpoints
+## Endpoints del DEMO
 
 | Metodo | Ruta | Auth | Descripcion |
 |---|---|---|---|
-| `GET` | `/` | Publica | Landing interactiva |
-| `GET` | `/health` | Publica | Estado del servicio y modalidad desplegada |
-| `POST` | `/auth/register` | Publica | Crea usuario en Cognito |
-| `POST` | `/auth/login` | Publica | Devuelve `accessToken`, `idToken`, `refreshToken` |
-| `GET` | `/profile` | Requerida | Devuelve claims ya validados por API Gateway |
+| `GET` | `/` | Publica | Landing principal del producto |
+| `GET` | `/health` | Publica | Estado del DEMO |
+| `POST` | `/auth/register` | Publica | Registro en Cognito |
+| `POST` | `/auth/login` | Publica | Emision de tokens |
+| `GET` | `/profile` | Requerida | Perfil protegido por JWT Authorizer |
+
+## Endpoints de la pagina WAF
+
+| Metodo | Ruta | Auth | Descripcion |
+|---|---|---|---|
+| `GET` | `/` | Publica | Pagina explicativa del despliegue WAF |
+| `GET` | `/health` | Publica | Health del stack auxiliar |
 
 ## Despliegue rapido
 
 ```bash
 cd caso-f-security-cognito/backend
 
-# Modalidad DEMO
+# DEMO principal
 sam build
 sam deploy --guided
 
-# Modalidad VISUALIZATION
+# Pagina WAF auxiliar
 sam build --template-file template-visualization.yaml
 sam deploy --template-file template-visualization.yaml \
-  --stack-name caso-f-security-cognito-visualization
+  --stack-name caso-f-security-cognito-visualization \
+  --parameter-overrides DemoPageUrl=https://<demo-url>
 ```
 
-## Validacion rapida
+Para que el DEMO enlace a la pagina WAF, despliega o actualiza el DEMO con:
 
 ```bash
-# Tests unitarios
-python -m pytest caso-f-security-cognito/backend/tests/ -v --tb=short
-
-# Smoke test demo o visualization
-export API_F_URL=https://<api-id>.execute-api.us-east-2.amazonaws.com
-bash scripts/smoke/smoke_caso_f.sh
-
-# Smoke con chequeo WAF
-EXPECT_WAF=true bash scripts/smoke/smoke_caso_f.sh
+sam deploy \
+  --stack-name caso-f-security-cognito \
+  --parameter-overrides SupportPageUrl=https://<waf-url>
 ```
 
-En `/profile`, usa preferentemente el `idToken`:
+## Validacion rapida del DEMO
 
 ```bash
+export API_F_URL=https://<demo-url>
+
+curl -s -X POST "$API_F_URL/auth/register" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@demo.com","password":"Demo1234"}' | jq .
+
 TOKEN=$(curl -s -X POST "$API_F_URL/auth/login" \
   -H "Content-Type: application/json" \
   -d '{"email":"test@demo.com","password":"Demo1234"}' | jq -r '.idToken')
 
-curl -s "$API_F_URL/profile" -H "Authorization: Bearer $TOKEN" | jq .
+curl -s "$API_F_URL/profile" \
+  -H "Authorization: Bearer $TOKEN" | jq .
 ```
 
-## Limpieza
+## Validacion rapida de la pagina WAF
 
 ```bash
-# Demo
-sam delete --stack-name caso-f-security-cognito
+export API_F_WAF_URL=https://<waf-url>
 
-# Visualization
-sam delete --template-file template-visualization.yaml \
-  --stack-name caso-f-security-cognito-visualization
+curl -s "$API_F_WAF_URL/health" | jq .
+curl -s "$API_F_WAF_URL/health?filter=1%27%20or%201%3D1%20--" -o /dev/null -w "%{http_code}\n"
 ```
 
-## Decisiones tecnicas
+Esperado:
 
-**Por que dos templates en vez de un flag `DeployWAF`?**  
-Porque HTTP API + JWT Authorizer es el camino correcto para la demo barata, pero WAF se asocia a REST API. Separar los templates evita prometer una combinacion que AWS no soporta.
+- `200` en `GET /health`
+- `403` en la prueba SQLi controlada
 
-**Por que usar `idToken` en `/profile`?**  
-Porque contiene claims de identidad como `email` y `name`, que son los que el endpoint muestra al reclutador o al evaluador del laboratorio.
+## Decision tecnica
 
-**Por que mantener `USER_PASSWORD_AUTH`?**  
-Porque simplifica `curl`, smoke tests y la landing interactiva. En produccion, `SRP_AUTH` o flujos hosted UI son preferibles.
+**Por que no se unifica todo en una sola URL?**  
+Porque `HTTP API + JWT Authorizer` es el mejor camino para el DEMO barato, pero AWS WAF se asocia a `REST API`. El producto se mantiene claro dejando el DEMO como principal y WAF como pagina auxiliar enlazada.
 
-## Relacion con otros casos
+## Documentos clave
 
-- **Caso E**: agrega identidad sobre la API serverless con datos.
-- **Caso H**: la siguiente mejora natural es observabilidad de rechazos, login failures y WAF.
-- **Caso I**: prerequisito directo antes de exponer endpoints de IA.
-
-## Links
-
-- [Roadmap Principal](../README.md)
-- [Arquitectura detallada](docs/architecture.md)
 - [Paso a paso AWS](AWS_PASO_A_PASO.md)
-- [Reporte de visualization](VISUALIZATION.md)
+- [Arquitectura](docs/architecture.md)
+- [VISUALIZATION.md](VISUALIZATION.md)

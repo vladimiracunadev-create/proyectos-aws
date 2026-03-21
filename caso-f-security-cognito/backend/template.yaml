@@ -2,6 +2,12 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: caso-f-security-cognito demo - Cognito User Pool + HTTP API JWT Authorizer
 
+Parameters:
+  SupportPageUrl:
+    Type: String
+    Default: ""
+    Description: URL publica de la pagina WAF auxiliar enlazada desde el DEMO
+
 Globals:
   Function:
     Timeout: 15
@@ -88,6 +94,7 @@ Resources:
           COGNITO_USER_POOL_ID: !Ref UserPool
           DEPLOYMENT_MODE: demo-http-jwt
           PERIMETER_MODE: http-api-jwt-authorizer
+          SUPPORT_PAGE_URL: !Ref SupportPageUrl
       Policies:
         - Statement:
             - Effect: Allow

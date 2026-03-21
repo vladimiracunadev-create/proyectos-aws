@@ -144,7 +144,7 @@ Porque DynamoDB no se modela como SQL tradicional; se modela segun las consultas
 
 **Que se hizo**
 
-Se implemento un modelo de seguridad perimetral con AWS Cognito y dos modalidades reales: una DEMO con HTTP API + JWT Authorizer y una VISUALIZATION con REST API + Cognito Authorizer + WAF.
+Se implemento un modelo de seguridad perimetral con un DEMO principal en HTTP API + JWT Authorizer y una pagina WAF auxiliar separada para demostrar el perimetro sin confundir el producto.
 
 **Por que**
 
@@ -154,7 +154,7 @@ Porque ningun sistema de produccion deberia exponer endpoints sin autenticacion.
 
 - gestion de identidades (registro, login, tokens JWT)
 - autorizacion sin codigo de criptografia en Lambda
-- proteccion contra SQLi y XSS antes del API (WAF en modalidad VISUALIZATION)
+- proteccion contra SQLi y XSS antes del API (pagina WAF auxiliar)
 - prerequisito directo para el Caso I (GenAI expuesto publicamente)
 
 **Que mirar primero**
@@ -166,7 +166,7 @@ Porque ningun sistema de produccion deberia exponer endpoints sin autenticacion.
 
 **Como funciona el JWT sin codigo**
 
-En DEMO, el JWT Authorizer de API Gateway HTTP API valida la firma RS256, el issuer y el audience de Cognito antes de llamar a la Lambda. En VISUALIZATION, el authorizer nativo de Cognito protege el REST API para poder asociar WAF. La Lambda no valida criptografia en ninguno de los dos caminos.
+En DEMO, el JWT Authorizer de API Gateway HTTP API valida la firma RS256, el issuer y el audience de Cognito antes de llamar a la Lambda. La pagina WAF auxiliar existe para mostrar el perimetro en un despliegue separado y enlazado. La Lambda no valida criptografia manual.
 
 ---
 
