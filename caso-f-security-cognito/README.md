@@ -12,6 +12,20 @@ La seguridad no es un parche, es la base. Este caso ensena seguridad por capas c
 
 Ambas piezas cuentan la misma historia de producto. No son dos productos distintos.
 
+## Explicacion sin jerga
+
+Si una aplicacion tiene usuarios, necesita una puerta segura.
+
+Eso es exactamente lo que hace este caso:
+
+1. creas un usuario real
+2. haces login
+3. AWS emite una credencial digital
+4. esa credencial abre un endpoint privado
+5. luego WAF demuestra que ademas puedes bloquear trafico sospechoso antes de llegar a la app
+
+En una frase: este caso ensena como una app deja entrar solo a usuarios validos y como agrega una segunda capa para frenar solicitudes maliciosas.
+
 ## Idea principal
 
 El Caso F se entiende mejor asi:
@@ -32,6 +46,25 @@ La relacion correcta es:
 ## Enfoque
 
 **Seguridad Perimetral.** Demo barata con `HTTP API + JWT Authorizer`, y evidencia real de perimetro con `REST API + Cognito Authorizer + WAF`.
+
+## Que problema real resuelve
+
+En la vida real, este patron evita cosas como:
+
+- exponer datos privados a cualquiera que conozca la URL
+- validar tokens JWT "a mano" dentro de Lambda
+- mezclar autenticacion con logica de negocio
+- dejar que trafico sospechoso llegue sin filtro hasta la aplicacion
+
+## Donde se usa en la vida real
+
+Este mismo patron aparece en:
+
+- portales de clientes
+- dashboards internos
+- backoffice de operaciones
+- apps moviles con login
+- APIs privadas con datos de usuario
 
 ## Que demuestra cada pieza
 
@@ -62,6 +95,7 @@ La landing principal del `DEMO` debe dejar claro:
 - para que sirve: mover la validacion del token al borde
 - que se gana: menos codigo sensible en Lambda
 - que estas resolviendo: identidad y autorizacion sin criptografia manual
+- que significa eso en simple: "solo entra el usuario valido"
 - por que luego existe una pagina WAF: para demostrar una segunda capa distinta
 
 ## Que estas viendo en la pagina WAF

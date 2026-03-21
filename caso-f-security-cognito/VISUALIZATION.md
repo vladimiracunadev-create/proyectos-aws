@@ -22,6 +22,51 @@ Por esa razon, este documento sigue la misma regla que ya aparece en los casos d
 
 ---
 
+## Que debe entender un novato antes de mirar capturas
+
+Este caso no esta mostrando dos productos distintos.
+
+La lectura correcta es:
+
+- `DEMO`: la app prueba identidad, login y acceso privado
+- pagina WAF: la misma app prueba perimetro y bloqueo de trafico sospechoso
+- `VISUALIZATION.md`: explica la ventana de evidencia y el costo de dejar WAF activo
+
+En lenguaje simple:
+
+1. creas un usuario
+2. haces login
+3. AWS emite un token
+4. con ese token entras a `/profile`
+5. luego vas a la pagina WAF con el mismo token
+6. ahi compruebas que el usuario sigue siendo valido y que WAF puede bloquear una solicitud sospechosa con `403`
+
+Si alguien mira este caso por primera vez, lo que deberia entender es esto:
+
+- el problema principal es "no dejar entrar a cualquiera"
+- el `DEMO` resuelve autenticacion y autorizacion
+- WAF agrega la pregunta "que ni siquiera deberia pasar"
+- la segunda URL no es otra app, sino otra puerta de entrada para ensenar la segunda capa
+
+---
+
+## Estado real AWS y regla de costo
+
+- `DEMO`: puede quedar activo porque su costo base es practicamente cero
+- pagina WAF: no deberia quedar viva indefinidamente porque agrega costo fijo mensual
+- este documento existe para dejar evidencia completa aunque luego destruyas solo la capa WAF
+
+> [!IMPORTANT]
+> El `DEMO` se explica en espanol dentro de la landing.
+>
+> En este documento, las referencias EN/ES existen solo para orientar menus y pantallas de AWS:
+> - `Stacks` / `Pilas`
+> - `Outputs` / `Salidas`
+> - `User pools` / `Pools de usuarios`
+> - `Web ACLs` / `Web ACLs`
+
+---
+
 ## Despliegue validado del laboratorio
 
 Durante esta ventana se validaron estas URLs reales:

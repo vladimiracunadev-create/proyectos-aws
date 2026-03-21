@@ -181,6 +181,11 @@ docker run --rm -it -v "$(pwd):/workspace" proyectos-aws/tooling:1.0.0 /bin/bash
 
 ## Caso F rapido
 
+Lectura simple del caso:
+
+- `DEMO`: crear usuario, hacer login y abrir `/profile`
+- pagina WAF: usar el mismo token para demostrar la segunda capa perimetral
+
 ```bash
 cd caso-f-security-cognito/backend
 

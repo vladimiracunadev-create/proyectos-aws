@@ -17,6 +17,25 @@ No intentes entenderlo como "dos productos". Leelo asi:
 2. pagina WAF: demuestra la capa perimetral usando la misma identidad del `DEMO`
 3. `VISUALIZATION.md`: documenta evidencia y cierre FinOps
 
+## Que estas construyendo realmente
+
+Piensalo como la puerta segura de una app con usuarios.
+
+En simple:
+
+1. una persona crea su cuenta
+2. hace login
+3. AWS le entrega un token
+4. ese token abre un endpoint privado
+5. despues WAF demuestra que tambien puedes bloquear trafico sospechoso antes de la app
+
+Problema real que resuelve:
+
+- no dejar rutas privadas abiertas a cualquiera
+- no validar JWT a mano dentro de Lambda
+- separar identidad de la logica de negocio
+- agregar una capa perimetral para detener solicitudes sospechosas
+
 ## Paso 1: Ejecutar tests
 
 ```bash

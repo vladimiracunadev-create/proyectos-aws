@@ -146,6 +146,15 @@ Porque DynamoDB no se modela como SQL tradicional; se modela segun las consultas
 
 Se implemento un modelo de seguridad perimetral con un DEMO principal en HTTP API + JWT Authorizer y una pagina WAF auxiliar separada para demostrar el perimetro sin confundir el producto.
 
+**En simple**
+
+El caso ensena como una app con usuarios:
+
+1. crea cuentas reales
+2. emite una credencial digital
+3. deja entrar solo al usuario valido
+4. luego agrega una segunda capa para bloquear trafico sospechoso
+
 **Por que**
 
 Porque ningun sistema de produccion deberia exponer endpoints sin autenticacion. Y la validacion del token no deberia vivir en el codigo de la Lambda sino en la infraestructura.

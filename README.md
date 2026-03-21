@@ -201,10 +201,10 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 
 #### [📂 Caso F: Security First](./caso-f-security-cognito/index.html) `Nivel 5` `COMPLETADO`
 *   **Stack**: AWS Cognito User Pool + JWT Authorizer nativo para el DEMO + pagina WAF auxiliar + AWS SAM.
-*   **Enfoque**: **Seguridad Perimetral.** El producto principal vive en el DEMO con HTTP API + JWT Authorizer, y la evidencia perimetral vive en una pagina WAF separada y enlazada.
+*   **Enfoque**: **Seguridad Perimetral.** En simple: crear usuario, hacer login, recibir un token y abrir un endpoint privado sin validar JWT a mano en Lambda. La evidencia perimetral vive en una pagina WAF separada y enlazada.
 *   **Prerequisito técnico**: Casos D y E — entender Lambda + API GW antes de agregarles seguridad.
 *   **Costo**: $0 en DEMO / ~$7/mes solo mientras la pagina WAF auxiliar este activa — destruirla al terminar la ventana de evidencia.
-*   **Qué demuestra a un reclutador**: seguridad cloud aplicada con una decision madura de arquitectura, respetando las capacidades reales de AWS.
+*   **Qué demuestra a un reclutador**: seguridad cloud aplicada a un problema real: no dejar rutas privadas abiertas a cualquiera y mover la validacion del token al borde.
 *   🏗️ [Arquitectura (Mermaid)](caso-f-security-cognito/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-f-security-cognito/AWS_PASO_A_PASO.md)
 *   🖼️ [Reporte de Visualización y Resultados](caso-f-security-cognito/VISUALIZATION.md)
