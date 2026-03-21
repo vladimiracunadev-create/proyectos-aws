@@ -74,11 +74,12 @@ DEMO_LANDING_PAGE = r"""<!DOCTYPE html>
     .chip { padding: 9px 12px; border-radius: 999px; background: rgba(199,125,255,0.12); border: 1px solid rgba(199,125,255,0.24); font-size: 0.9rem; }
     .chip.green { background: rgba(126,240,184,0.12); border-color: rgba(126,240,184,0.24); color: var(--ok); }
     label { display: block; margin: 12px 0 6px; color: #d9d9ff; font-size: 0.94rem; }
-    input {
+    input, textarea {
       width: 100%; border-radius: 14px; border: 1px solid rgba(255,255,255,0.12);
       padding: 12px 14px; color: var(--text); background: rgba(255,255,255,0.05); font: inherit;
     }
-    input:focus { outline: none; border-color: var(--accent); }
+    textarea { min-height: 124px; resize: vertical; }
+    input:focus, textarea:focus { outline: none; border-color: var(--accent); }
     button {
       width: 100%; cursor: pointer; font-weight: 800; padding: 13px 16px;
       border-radius: 14px; border: none; font: inherit;
@@ -123,11 +124,16 @@ DEMO_LANDING_PAGE = r"""<!DOCTYPE html>
     }
     .waf-note { padding: 16px; border-radius: 18px; background: rgba(255,148,71,0.08); border: 1px solid rgba(255,148,71,0.22); color: var(--warn); margin-top: 14px; font-size: 0.9rem; }
     .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+    .token-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
     .link-button {
       display: inline-flex; align-items: center; justify-content: center; min-height: 46px;
       padding: 12px 16px; border-radius: 14px; text-decoration: none; font-weight: 800;
       background: linear-gradient(135deg, #4cc9f0, #4361ee); color: #fff;
       border: 1px solid rgba(255,255,255,0.08);
+    }
+    .copy-btn {
+      width: auto; background: rgba(255,255,255,0.06); color: var(--text);
+      border: 1px solid rgba(255,255,255,0.1);
     }
     @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
     @media (max-width: 640px) { .shell { width: min(100% - 18px, 1200px); } .step-tab { font-size: 0.78rem; padding: 10px 6px; } }
@@ -160,23 +166,23 @@ DEMO_LANDING_PAGE = r"""<!DOCTYPE html>
           </div>
         </div>
         <div class="mini-panel">
-          <h2>Que estas viendo y por que importa</h2>
+          <h2>Que estas viendo y como se conecta con WAF</h2>
           <div class="story">
             <article class="story-card">
-              <strong>Que estamos haciendo</strong>
-              <p>Protegemos un flujo real de registro, login y perfil usando Cognito y validacion JWT nativa en API Gateway.</p>
+              <strong>Que estamos haciendo aqui</strong>
+              <p>Validamos identidad real: crear usuario, iniciar sesion y abrir un endpoint protegido con claims entregados por Cognito.</p>
             </article>
             <article class="story-card">
-              <strong>Para que sirve</strong>
-              <p>Para mover la seguridad al borde: API Gateway valida el token antes de invocar la Lambda y reduce codigo sensible.</p>
+              <strong>Que problema resuelve</strong>
+              <p>Evita que la Lambda tenga que validar JWT manualmente. La verificacion ocurre antes, en API Gateway.</p>
             </article>
             <article class="story-card">
-              <strong>Que se gana</strong>
-              <p>Una demo barata, simple de explicar y alineada con una arquitectura real de produccion basada en servicios administrados.</p>
+              <strong>Que ya demostraste al llegar a /profile</strong>
+              <p>Que el usuario es autentico y que el token puede abrir una ruta protegida sin criptografia escrita a mano.</p>
             </article>
             <article class="story-card">
-              <strong>Que estas resolviendo</strong>
-              <p>Seguridad perimetral: DEMO barato con HTTP API + JWT Authorizer, y evidencia real del perimetro con REST API + Cognito Authorizer + WAF.</p>
+              <strong>Por que existe la pagina WAF</strong>
+              <p>Porque la segunda capa no responde "quien eres", sino "que trafico ni siquiera deberia entrar". La veras con el mismo token, pero con otro front door.</p>
             </article>
           </div>
           <div class="hero-actions">
@@ -215,6 +221,10 @@ DEMO_LANDING_PAGE = r"""<!DOCTYPE html>
         <div id="token-display" style="display:none">
           <p class="helper">Token recomendado para <code class="inline">GET /profile</code> (ID Token):</p>
           <div class="token-box" id="token-value"></div>
+          <div class="token-actions">
+            <button class="copy-btn" id="btn-copy-token" type="button">Copiar token para la pagina WAF</button>
+          </div>
+          <p class="helper" id="token-bridge-msg">Este mismo token se usa en la pagina WAF enlazada para demostrar que la identidad es la misma y lo que cambia es la capa perimetral.</p>
         </div>
       </div>
 
@@ -241,22 +251,21 @@ DEMO_LANDING_PAGE = r"""<!DOCTYPE html>
       <h2>Por que este caso importa</h2>
       <div class="story">
         <article class="story-card">
-          <strong>Sin codigo de criptografia</strong>
-          <p>La validacion del token vive en API Gateway. La Lambda solo consume claims ya validados.</p>
+          <strong>Primera capa: identidad</strong>
+          <p>Este DEMO responde "quien eres". Cognito emite el token y API Gateway comprueba que ese token es valido antes de llegar a tu codigo.</p>
         </article>
         <article class="story-card">
-          <strong>Perimetro antes de la logica</strong>
-          <p>Cuando activas la pagina auxiliar WAF, el trafico sospechoso se bloquea antes de API Gateway. La logica de negocio no tiene que absorber ese ruido.</p>
+          <strong>Segunda capa: perimetro</strong>
+          <p>La pagina WAF responde "que solicitudes se frenan antes de entrar". Ahi veras bloqueos 403 por trafico sospechoso antes de API Gateway.</p>
         </article>
         <article class="story-card">
-          <strong>Prerequisito para el Caso I</strong>
-          <p>Los endpoints de IA generativa necesitan autenticacion y perimetro antes de exponerse. Caso F habilita Caso I.</p>
+          <strong>Por que no es la misma URL</strong>
+          <p>AWS permite JWT Authorizer nativo en HTTP API, pero WAF se asocia a REST API. Por eso el aprendizaje se divide en dos front doors conectados a la misma historia de seguridad.</p>
         </article>
       </div>
       <div class="waf-note">
         DEMO principal: <code class="inline">backend/template.yaml</code> con HTTP API, Cognito y JWT Authorizer.
-        Pagina auxiliar WAF: <code class="inline">backend/template-visualization.yaml</code> con REST API + WAF para mostrar el perimetro en una URL separada.
-        El costo temporal y la ventana de uso se documentan en <code class="inline">VISUALIZATION.md</code>.
+        Cuando termines <code class="inline">GET /profile</code>, abre la pagina WAF y usa este mismo token para ver la segunda capa. El costo temporal y la ventana de uso se documentan en <code class="inline">VISUALIZATION.md</code>.
       </div>
     </section>
   </main>
@@ -358,8 +367,8 @@ DEMO_LANDING_PAGE = r"""<!DOCTYPE html>
 
       if (status === 200) {
         profileToken = data.idToken || data.accessToken;
-        msgEl.textContent = "Tokens emitidos. Avanza al paso 3.";
-        setBadge("Login OK - token listo", "ok");
+        msgEl.textContent = "Tokens emitidos. Avanza al paso 3 y luego reutiliza este mismo token en la pagina WAF.";
+        setBadge("Login OK - token del DEMO listo", "ok");
         document.getElementById("token-display").style.display = "block";
         document.getElementById("token-value").textContent = (profileToken || "").slice(0, 80) + "...";
         activateStep(3);
@@ -382,11 +391,25 @@ DEMO_LANDING_PAGE = r"""<!DOCTYPE html>
 
       showOutput({ step: "profile", status, data });
       if (status === 200) {
-        msgEl.textContent = "Perfil obtenido. El token fue validado por API Gateway automaticamente.";
-        setBadge("Perfil OK - token validado", "ok");
+        msgEl.textContent = "Perfil obtenido. Ya validaste identidad. El siguiente paso es abrir la pagina WAF y probar este mismo token en la segunda capa.";
+        setBadge("Perfil OK - identidad demostrada", "ok");
       } else {
         msgEl.textContent = data.error || "Token invalido o expirado.";
         setBadge("Token rechazado", "danger");
+      }
+    });
+
+    document.getElementById("btn-copy-token").addEventListener("click", async () => {
+      const msgEl = document.getElementById("token-bridge-msg");
+      if (!profileToken) {
+        msgEl.textContent = "Primero inicia sesion para obtener el token del DEMO.";
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(profileToken);
+        msgEl.textContent = "Token copiado. Abre la pagina WAF y pegalo en la prueba del mismo usuario con otro front door.";
+      } catch (_) {
+        msgEl.textContent = "No se pudo copiar automaticamente. Selecciona el token y copialo manualmente.";
       }
     });
   </script>
@@ -474,6 +497,12 @@ WAF_LANDING_PAGE = r"""<!DOCTYPE html>
       color: #c7fff0; overflow: auto; min-height: 110px; font-size: 0.88rem;
     }
     .helper { color: var(--muted); font-size: 0.92rem; margin-top: 8px; line-height: 1.5; }
+    textarea {
+      width: 100%; min-height: 132px; resize: vertical; border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12); padding: 12px 14px;
+      color: var(--text); background: rgba(255,255,255,0.05); font: inherit;
+    }
+    textarea:focus { outline: none; border-color: var(--accent); }
     .note {
       padding: 16px; border-radius: 18px; background: rgba(255, 212, 121, 0.08);
       border: 1px solid rgba(255, 212, 121, 0.22); color: var(--warn); margin-top: 14px;
@@ -486,36 +515,36 @@ WAF_LANDING_PAGE = r"""<!DOCTYPE html>
   <main class="shell">
     <section class="hero">
       <p class="eyebrow">Caso F · WAF Support · Security Perimeter</p>
-      <h1>Pagina auxiliar para demostrar WAF de forma clara</h1>
+      <h1>Mismo usuario, mismo token, otro front door con WAF</h1>
       <p class="lead">
-        Esta URL no reemplaza al DEMO principal. Existe para mostrar, con una
-        experiencia web dedicada, por que el perimetro se despliega aparte, que
-        problema resuelve y como se valida un bloqueo real antes de llegar a la
-        logica de negocio.
+        Esta URL no reemplaza al DEMO principal. Usa la misma identidad del DEMO
+        para mostrar la segunda mitad de la historia: no solo quien entra, sino
+        que solicitudes se frenan antes de llegar a la aplicacion. Lo nuevo aqui
+        no es el usuario: es la capa de entrada REST API + Cognito Authorizer + WAF.
       </p>
       <div class="hero-grid">
         <div class="mini-panel">
           <div class="stats">
-            <div class="stat"><strong>REST API</strong><span>Superficie separada para WAF</span></div>
-            <div class="stat"><strong>WAF</strong><span>Bloquea trafico malicioso</span></div>
-            <div class="stat"><strong>Feedback</strong><span>Prueba visible con 403</span></div>
-            <div class="stat"><strong>Temporal</strong><span>Destruir al terminar</span></div>
+            <div class="stat"><strong>Misma identidad</strong><span>Reutiliza el User Pool del DEMO</span></div>
+            <div class="stat"><strong>Mismo token</strong><span>Pega aqui el idToken del DEMO</span></div>
+            <div class="stat"><strong>Nuevo front door</strong><span>REST API + Cognito Authorizer + WAF</span></div>
+            <div class="stat"><strong>Nuevo resultado</strong><span>403 antes de llegar a Lambda</span></div>
           </div>
         </div>
         <div class="mini-panel">
-          <h2>Que resuelve este despliegue</h2>
+          <h2>Como se conecta con el DEMO</h2>
           <div class="story">
             <article class="story-card">
-              <strong>Explica la decision</strong>
-              <p>El DEMO vive en HTTP API + JWT. AWS WAF necesita REST API. Esta pagina hace visible esa restriccion tecnica sin confundir el producto principal.</p>
+              <strong>Lo que ya probaste</strong>
+              <p>En el DEMO demostraste identidad: usuario real, login real y acceso real a <code>/profile</code>.</p>
             </article>
             <article class="story-card">
-              <strong>Prueba el perimetro</strong>
-              <p>Con una prueba controlada de SQLi puedes observar el 403 del WAF antes de que la Lambda procese la solicitud.</p>
+              <strong>Lo que cambia aqui</strong>
+              <p>La identidad sigue siendo la misma, pero el camino cambia: ahora pasas por REST API con Cognito Authorizer y por un Web ACL antes de tocar la app.</p>
             </article>
             <article class="story-card">
-              <strong>Entrega evidencia</strong>
-              <p>Sirve para capturas, explicacion funcional y demostracion de seguridad a reclutadores o evaluadores tecnicos.</p>
+              <strong>Lo que vas a demostrar</strong>
+              <p>Que el mismo token del DEMO sigue siendo valido en otra puerta de entrada y que, ademas, WAF puede bloquear trafico sospechoso antes de la logica.</p>
             </article>
           </div>
           <div class="hero-actions">
@@ -526,13 +555,16 @@ WAF_LANDING_PAGE = r"""<!DOCTYPE html>
     </section>
 
     <section class="panel">
-      <h2>Prueba controlada del perimetro</h2>
+      <h2>Secuencia guiada para novatos</h2>
       <p class="helper">
-        Primero consulta <code>/health</code> para confirmar que la pagina esta viva.
-        Luego ejecuta una prueba SQLi controlada sobre ese mismo endpoint para ver
-        el bloqueo del WAF con un <code>403</code>.
+        1. En el DEMO crea usuario, inicia sesion y copia el <code>idToken</code>.
+        2. Pegalo aqui y llama a <code>/profile</code> para comprobar que la identidad es la misma.
+        3. Luego ejecuta la prueba SQLi controlada para ver que WAF agrega una segunda capa.
       </p>
+      <label for="demo-token">Pega aqui el mismo ID Token obtenido en el DEMO</label>
+      <textarea id="demo-token" placeholder="Pega aqui el mismo idToken que obtuviste en el DEMO principal"></textarea>
       <div class="hero-actions">
+        <button class="btn-primary" id="btn-profile">Probar /profile con token del DEMO</button>
         <button class="btn-primary" id="btn-health">Consultar /health</button>
         <button class="btn-secondary" id="btn-probe">Probar bloqueo WAF</button>
       </div>
@@ -553,16 +585,16 @@ WAF_LANDING_PAGE = r"""<!DOCTYPE html>
       <h2>Como leer esta pagina</h2>
       <div class="story">
         <article class="story-card">
-          <strong>Por que existe</strong>
-          <p>Para no mezclar la experiencia principal del producto con la evidencia especifica del perimetro.</p>
+          <strong>Lo que se mantiene igual</strong>
+          <p>Usuario, token y endpoint logico de perfil. La pregunta sigue siendo "quien eres".</p>
         </article>
         <article class="story-card">
-          <strong>Que demuestra</strong>
-          <p>Que el trafico malicioso puede ser interceptado antes de que llegue a la aplicacion.</p>
+          <strong>Lo que cambia</strong>
+          <p>La puerta de entrada: aqui agregas REST API + Cognito Authorizer + WAF para responder "que ni siquiera deberia entrar".</p>
         </article>
         <article class="story-card">
-          <strong>Que no es</strong>
-          <p>No es un segundo producto. Es una pagina auxiliar enlazada desde el DEMO principal.</p>
+          <strong>Lo que demuestra al final</strong>
+          <p>No es un segundo producto. Es la misma historia de seguridad, completada con una capa perimetral que el DEMO barato no puede mostrar solo.</p>
         </article>
       </div>
       <div class="note">
@@ -593,13 +625,35 @@ WAF_LANDING_PAGE = r"""<!DOCTYPE html>
       return `${window.location.origin}${basePath}${cleanPath}`;
     }
 
-    async function call(path) {
-      const response = await fetch(buildUrl(path));
+    async function call(path, options) {
+      const response = await fetch(buildUrl(path), options || {});
       const text = await response.text();
       let data = { raw: text };
       try { data = JSON.parse(text); } catch (_) {}
       return { status: response.status, data };
     }
+
+    document.getElementById("btn-profile").addEventListener("click", async () => {
+      const msgEl = document.getElementById("probe-msg");
+      const token = document.getElementById("demo-token").value.trim();
+      if (!token) {
+        msgEl.textContent = "Primero pega el mismo idToken obtenido en el DEMO.";
+        return;
+      }
+      msgEl.textContent = "Probando /profile con el mismo token del DEMO...";
+      setBadge("Probando misma identidad...", "warn");
+      const { status, data } = await call("/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      showOutput({ step: "shared-profile", status, data });
+      if (status === 200) {
+        msgEl.textContent = "Exito: el mismo token del DEMO funciono aqui. Ahora ya se entiende la relacion entre identidad y perimetro.";
+        setBadge("Misma identidad validada", "ok");
+      } else {
+        msgEl.textContent = "El token no fue aceptado. Verifica que pegaste el idToken del DEMO principal y no un valor recortado.";
+        setBadge("Token DEMO no valido", "danger");
+      }
+    });
 
     document.getElementById("btn-health").addEventListener("click", async () => {
       const msgEl = document.getElementById("probe-msg");
@@ -675,9 +729,9 @@ def _landing_page():
         return WAF_LANDING_PAGE.replace("__DEMO_LINK__", demo_link)
 
     support_link = (
-        f'<a class="link-button" href="{SUPPORT_PAGE_URL}">Abrir despliegue WAF</a>'
+        f'<a class="link-button" href="{SUPPORT_PAGE_URL}">Abrir capa WAF: misma identidad, otro front door</a>'
         if SUPPORT_PAGE_URL
-        else '<span class="helper">El enlace a la pagina WAF se activa cuando SUPPORT_PAGE_URL apunta al stack auxiliar.</span>'
+        else '<span class="helper">Activa SUPPORT_PAGE_URL para completar el recorrido: misma identidad en el DEMO, nueva capa perimetral en la pagina WAF.</span>'
     )
     return DEMO_LANDING_PAGE.replace("__SUPPORT_LINK__", support_link)
 
@@ -727,6 +781,12 @@ def _authorizer_claims(event):
     jwt_claims = (authorizer.get("jwt") or {}).get("claims") or {}
     rest_claims = authorizer.get("claims") or {}
     return jwt_claims or rest_claims
+
+
+def _available_routes():
+    if DEPLOYMENT_MODE.startswith("visualization"):
+        return ["GET /", "GET /health", "GET /profile"]
+    return ["GET /", "GET /health", "POST /auth/register", "POST /auth/login", "GET /profile"]
 
 
 def _as_bool(value):
@@ -819,6 +879,8 @@ def handle_health(_event):
         "cognito": "configured" if COGNITO_USER_POOL_ID else "not-configured",
         "deploymentMode": DEPLOYMENT_MODE,
         "perimeterMode": PERIMETER_MODE,
+        "productRole": "waf-support" if DEPLOYMENT_MODE.startswith("visualization") else "demo-primary",
+        "linkedPage": DEMO_PAGE_URL if DEPLOYMENT_MODE.startswith("visualization") else SUPPORT_PAGE_URL,
         "timestamp": _utc_now(),
     })
 
@@ -872,7 +934,7 @@ def handler(event, _context):
         return _json_response(404, {
             "ok": False,
             "error": "Ruta no encontrada.",
-            "availableRoutes": ["GET /", "GET /health", "POST /auth/register", "POST /auth/login", "GET /profile"],
+            "availableRoutes": _available_routes(),
         })
 
     except ValueError as exc:

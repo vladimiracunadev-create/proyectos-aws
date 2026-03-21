@@ -1,44 +1,50 @@
-# Arquitectura: Caso F - DEMO principal + pagina WAF auxiliar
+# Arquitectura: Caso F - identidad primero, perimetro despues
 
 ## Idea central
 
-El Caso F tiene un solo producto principal:
+El Caso F tiene una sola historia tecnica:
 
-- `DEMO` con Cognito + HTTP API + JWT Authorizer
+- primero demuestras identidad
+- despues demuestras perimetro
 
-Y un despliegue complementario:
+Eso se reparte en dos despliegues porque AWS no permite exactamente la misma combinacion en una sola puerta de entrada:
 
-- pagina WAF auxiliar con REST API + WAF para explicar y validar el perimetro
-
-`VISUALIZATION.md` no es otro despliegue. Es la bitacora de costo y cierre seguro del stack WAF.
-
-## Por que se separa
-
-- `HTTP API` es la opcion mas barata y simple para el DEMO
+- `HTTP API` soporta muy bien `JWT Authorizer`
 - `AWS WAF` se asocia a `REST API`
-- separar el perimetro en una pagina auxiliar evita confundir el producto principal
 
-## Diagrama 1: Vista general
+## Regla de lectura
+
+| Pieza | Pregunta que responde |
+|---|---|
+| `DEMO` | `quien eres` |
+| Pagina WAF | `que trafico ni siquiera deberia entrar` |
+
+## Diagrama 1: producto completo
 
 ```mermaid
 flowchart TD
-    Product["DEMO principal"]
-    Product --> Demo["HTTP API<br/>JWT Authorizer<br/>Cognito"]
+    U["Usuario"]
+    D["DEMO principal<br/>HTTP API + JWT Authorizer"]
+    W["Pagina WAF auxiliar<br/>REST API + Cognito Authorizer + WAF"]
+    C["Cognito User Pool compartido"]
+    L["Lambda"]
 
-    Product --> Link["Enlace visible al despliegue WAF"]
-    Link --> Waf["REST API<br/>WAF<br/>Pagina auxiliar"]
-
-    Waf --> Cost["VISUALIZATION.md<br/>costo y destruccion"]
+    U --> D
+    U --> W
+    C --> D
+    C --> W
+    D --> L
+    W --> L
 ```
 
-## Diagrama 2: Flujo del DEMO
+## Diagrama 2: lo que prueba el DEMO
 
 ```mermaid
 sequenceDiagram
     actor U as Usuario
-    participant APIGW as API Gateway HTTP API
-    participant L as Lambda
+    participant APIGW as HTTP API
     participant C as Cognito
+    participant L as Lambda
 
     U->>APIGW: POST /auth/register
     APIGW->>L: invoke
@@ -58,35 +64,40 @@ sequenceDiagram
     L-->>U: 200
 ```
 
-## Diagrama 3: Flujo de la pagina WAF
+## Diagrama 3: lo que prueba la pagina WAF
 
 ```mermaid
 sequenceDiagram
     actor U as Usuario
-    participant W as AWS WAF
-    participant APIGW as API Gateway REST API
+    participant WAF as AWS WAF
+    participant REST as REST API
+    participant C as Cognito Authorizer
     participant L as Lambda
 
-    U->>W: GET /health
-    W->>APIGW: trafico normal
-    APIGW->>L: invoke
+    U->>WAF: GET /profile + mismo token del DEMO
+    WAF->>REST: trafico valido
+    REST->>C: valida token del mismo User Pool
+    C-->>REST: token valido
+    REST->>L: invoke con claims
     L-->>U: 200
 
-    U->>W: GET /health?filter=' or 1=1 --
-    W-->>U: 403
+    U->>WAF: GET /health?filter=' or 1=1 --
+    WAF-->>U: 403
 ```
 
-## Que resuelve cada pieza
+## Que cambia y que no cambia
 
-| Pieza | Rol |
-|---|---|
-| `template.yaml` | producto principal del caso |
-| `template-visualization.yaml` | pagina WAF enlazada desde el DEMO |
-| `VISUALIZATION.md` | control de costo y destruccion del stack WAF |
+| Elemento | DEMO | Pagina WAF |
+|---|---|---|
+| Usuario | igual | igual |
+| User Pool | igual | igual |
+| Token | igual | igual |
+| Tipo de API | HTTP API | REST API |
+| Authorizer | JWT Authorizer | Cognito Authorizer |
+| WAF | no | si |
 
-## Resultado esperado
+## Conclusiones
 
-- el usuario entiende el producto apenas abre el DEMO
-- el DEMO muestra el flujo funcional completo
-- el enlace WAF abre una pagina separada y explicativa
-- el stack WAF se destruye despues de la ventana de evidencia
+- El `DEMO` no compite con la pagina WAF; la prepara.
+- La pagina WAF no repite el producto; completa la explicacion de seguridad.
+- La relacion correcta para un novato es: mismo usuario, mismo token, otra puerta de entrada, segunda capa de defensa.

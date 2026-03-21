@@ -168,6 +168,10 @@ Outputs:
     Description: ID del Cognito User Pool
     Value: !Ref UserPool
 
+  UserPoolArn:
+    Description: ARN del Cognito User Pool
+    Value: !GetAtt UserPool.Arn
+
   UserPoolClientId:
     Description: ID del App Client (sin secreto)
     Value: !Ref UserPoolClient

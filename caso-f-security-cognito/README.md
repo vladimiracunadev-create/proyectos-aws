@@ -1,95 +1,164 @@
-# Caso F: Security First - Cognito + JWT Authorizer + WAF
+# Caso F: Security First - Cognito + JWT + WAF
 
 [![Nivel-5](https://img.shields.io/badge/Nivel-5_Seguridad-red?style=for-the-badge)]()
 [![Status](https://img.shields.io/badge/Status-Completado-brightgreen?style=for-the-badge)]()
 [![SAM](https://img.shields.io/badge/IaC-AWS_SAM-orange?style=for-the-badge)]()
 [![Python](https://img.shields.io/badge/Runtime-Python_3.12-blue?style=for-the-badge)]()
 
-La seguridad no es un parche, es la base. En este caso el producto principal vive en un `DEMO` con Cognito + HTTP API + JWT Authorizer. Cuando necesitas mostrar la capa perimetral con WAF, el DEMO enlaza a una pagina auxiliar separada que existe solo para explicar y validar ese perimetro.
+La seguridad no es un parche, es la base. Este caso ensena seguridad por capas con un mensaje simple para novatos:
 
-## Regla simple
+- el `DEMO` responde "quien eres"
+- la pagina WAF responde "que ni siquiera deberia entrar"
 
-| Concepto | Significado real | Costo |
-|---|---|---|
-| `DEMO` | Producto principal, flujo completo y URL viva | `$0` |
-| Pagina WAF auxiliar | Despliegue complementario enlazado desde el DEMO | `~$7/mes` mientras exista |
-| `VISUALIZATION.md` | Documento de costo, ventana de uso y destruccion segura | `$0` |
+Ambas piezas cuentan la misma historia de producto. No son dos productos distintos.
+
+## Idea principal
+
+El Caso F se entiende mejor asi:
+
+1. en el `DEMO` creas un usuario real en Cognito
+2. haces login y obtienes un `idToken`
+3. abres `/profile` y pruebas identidad + autorizacion nativa
+4. luego abres la pagina WAF y usas ese mismo token
+5. ahi compruebas que la identidad sigue siendo valida, pero ahora entra una segunda capa: `REST API + Cognito Authorizer + WAF`
+
+La relacion correcta es:
+
+- mismo usuario
+- mismo `User Pool`
+- mismo token
+- distinta puerta de entrada
 
 ## Enfoque
 
 **Seguridad Perimetral.** Demo barata con `HTTP API + JWT Authorizer`, y evidencia real de perimetro con `REST API + Cognito Authorizer + WAF`.
 
-## Que demuestra el DEMO
+## Que demuestra cada pieza
 
-- registro y login reales con Amazon Cognito
-- validacion nativa del JWT en API Gateway
-- acceso a `/profile` sin criptografia manual en Lambda
-- una pagina clara que explica que estas viendo, para que sirve y que problema resuelve
+| Pieza | Que demuestra | Costo |
+|---|---|---|
+| `DEMO` | Identidad real, login real, token real y acceso protegido a `/profile` | `$0` |
+| Pagina WAF | La misma identidad pasando por otra puerta de entrada y un bloqueo real `403` antes de Lambda | `~$7/mes` mientras exista |
+| `VISUALIZATION.md` | Ventana de evidencia, capturas, menus AWS y cierre FinOps | `$0` |
 
-## Que demuestra la pagina WAF
-
-- por que WAF vive en un despliegue aparte
-- que se gana al frenar trafico malicioso antes de la aplicacion
-- una prueba controlada que termina en `403`
-- evidencia clara para reclutadores, revisores o capturas tecnicas
-
-## Arquitectura
+## Arquitectura mental para novatos
 
 ```text
-Producto principal (DEMO)
-Internet -> API Gateway HTTP API -> JWT Authorizer -> Lambda
-                  ^                     ^
-                  |                     |
-               Cognito ------------- emite tokens
+DEMO principal
+Usuario -> HTTP API -> JWT Authorizer -> Lambda
+              ^            ^
+              |            |
+           Cognito ---- emite token
 
 Pagina WAF auxiliar
-Internet -> WAF -> API Gateway REST API -> Lambda
+Mismo usuario + mismo token -> WAF -> REST API -> Cognito Authorizer -> Lambda
 ```
 
-Ver [docs/architecture.md](docs/architecture.md) para el detalle completo.
+## Que estas viendo en el DEMO
+
+La landing principal del `DEMO` debe dejar claro:
+
+- que estamos haciendo: proteger un flujo real con Cognito
+- para que sirve: mover la validacion del token al borde
+- que se gana: menos codigo sensible en Lambda
+- que estas resolviendo: identidad y autorizacion sin criptografia manual
+- por que luego existe una pagina WAF: para demostrar una segunda capa distinta
+
+## Que estas viendo en la pagina WAF
+
+La pagina WAF no vuelve a ensenar registro y login desde cero. Su rol es conectar lo que ya probaste en el `DEMO` con la segunda capa de seguridad:
+
+- pegas el mismo `idToken` del `DEMO`
+- llamas a `/profile` para confirmar que la identidad es la misma
+- ejecutas una prueba SQLi controlada
+- observas un `403` antes de llegar a la logica
+
+## Componentes
+
+| Recurso | Rol |
+|---|---|
+| `UserPool` | Identidad principal del producto |
+| `UserPoolClient` | Cliente sin secreto para flujo del `DEMO` |
+| `SecurityFunction` | Landing, health, register, login y profile |
+| `Api` en `template.yaml` | `HTTP API` con `JWT Authorizer` |
+| `Api` en `template-visualization.yaml` | `REST API` con `Cognito Authorizer` |
+| `WafWebAcl` | Capa perimetral para bloquear trafico sospechoso |
 
 ## Endpoints del DEMO
 
-| Metodo | Ruta | Auth | Descripcion |
+| Metodo | Ruta | Auth | Que muestra |
 |---|---|---|---|
 | `GET` | `/` | Publica | Landing principal del producto |
-| `GET` | `/health` | Publica | Estado del DEMO |
-| `POST` | `/auth/register` | Publica | Registro en Cognito |
-| `POST` | `/auth/login` | Publica | Emision de tokens |
-| `GET` | `/profile` | Requerida | Perfil protegido por JWT Authorizer |
+| `GET` | `/health` | Publica | Estado del `DEMO` |
+| `POST` | `/auth/register` | Publica | Registro real en Cognito |
+| `POST` | `/auth/login` | Publica | Emision de `idToken` y `accessToken` |
+| `GET` | `/profile` | Requerida | Claims validados por `JWT Authorizer` |
 
 ## Endpoints de la pagina WAF
 
-| Metodo | Ruta | Auth | Descripcion |
+| Metodo | Ruta | Auth | Que muestra |
 |---|---|---|---|
-| `GET` | `/` | Publica | Pagina explicativa del despliegue WAF |
-| `GET` | `/health` | Publica | Health del stack auxiliar |
+| `GET` | `/` | Publica | Landing explicativa de la segunda capa |
+| `GET` | `/health` | Publica | Que el stack WAF esta vivo |
+| `GET` | `/profile` | Requerida | La misma identidad del `DEMO`, pero pasando por `REST API + Cognito Authorizer + WAF` |
 
 ## Despliegue rapido
 
+### 1. DEMO principal
+
 ```bash
 cd caso-f-security-cognito/backend
-
-# DEMO principal
 sam build
 sam deploy --guided
+```
 
-# Pagina WAF auxiliar
+### 2. Recuperar outputs del DEMO
+
+```bash
+aws cloudformation describe-stacks \
+  --stack-name caso-f-security-cognito \
+  --region us-east-2 \
+  --query "Stacks[0].Outputs"
+```
+
+Necesitas:
+
+- `ApiBaseUrl`
+- `UserPoolId`
+- `UserPoolArn`
+- `UserPoolClientId`
+
+### 3. Pagina WAF auxiliar enlazada al DEMO
+
+```bash
+cd caso-f-security-cognito/backend
 sam build --template-file template-visualization.yaml
 sam deploy --template-file template-visualization.yaml \
   --stack-name caso-f-security-cognito-visualization \
-  --parameter-overrides DemoPageUrl=https://<demo-url>
+  --region us-east-2 \
+  --resolve-s3 \
+  --capabilities CAPABILITY_IAM \
+  --parameter-overrides \
+    DemoPageUrl=https://<demo-url> \
+    ExistingUserPoolArn=arn:aws:cognito-idp:us-east-2:<account-id>:userpool/<user-pool-id> \
+    ExistingUserPoolId=<user-pool-id> \
+    ExistingUserPoolClientId=<client-id>
 ```
 
-Para que el DEMO enlace a la pagina WAF, despliega o actualiza el DEMO con:
+### 4. Enlazar el DEMO con la pagina WAF
 
 ```bash
 sam deploy \
   --stack-name caso-f-security-cognito \
+  --region us-east-2 \
+  --resolve-s3 \
+  --capabilities CAPABILITY_IAM \
   --parameter-overrides SupportPageUrl=https://<waf-url>
 ```
 
-## Validacion rapida del DEMO
+## Validacion rapida
+
+### DEMO
 
 ```bash
 export API_F_URL=https://<demo-url>
@@ -106,24 +175,29 @@ curl -s "$API_F_URL/profile" \
   -H "Authorization: Bearer $TOKEN" | jq .
 ```
 
-## Validacion rapida de la pagina WAF
+### Pagina WAF
 
 ```bash
 export API_F_WAF_URL=https://<waf-url>
 
 curl -s "$API_F_WAF_URL/health" | jq .
+curl -s "$API_F_WAF_URL/profile" -H "Authorization: Bearer $TOKEN" | jq .
 curl -s "$API_F_WAF_URL/health?filter=1%27%20or%201%3D1%20--" -o /dev/null -w "%{http_code}\n"
 ```
 
 Esperado:
 
-- `200` en `GET /health`
+- `200` en `/health`
+- `200` en `/profile` con el mismo token del `DEMO`
 - `403` en la prueba SQLi controlada
 
 ## Decision tecnica
 
-**Por que no se unifica todo en una sola URL?**  
-Porque `HTTP API + JWT Authorizer` es el mejor camino para el DEMO barato, pero AWS WAF se asocia a `REST API`. El producto se mantiene claro dejando el DEMO como principal y WAF como pagina auxiliar enlazada.
+**Por que no existe una sola URL con todo junto?**  
+Porque AWS soporta bien `JWT Authorizer` nativo en `HTTP API`, pero AWS WAF se asocia a `REST API`. La forma mas didactica de ensenarlo es:
+
+- `DEMO` barato y claro para identidad
+- pagina WAF enlazada para la segunda capa
 
 ## Documentos clave
 

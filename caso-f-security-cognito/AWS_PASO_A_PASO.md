@@ -1,4 +1,4 @@
-# AWS Paso a Paso - Caso F: DEMO principal + pagina WAF auxiliar
+# AWS Paso a Paso - Caso F
 
 ## Antes de empezar
 
@@ -7,15 +7,15 @@ Necesitas:
 - AWS CLI configurado
 - AWS SAM CLI instalado
 - Python 3.12+
-- permisos para Lambda, API Gateway, Cognito, CloudFormation y WAF
+- permisos para Cognito, Lambda, API Gateway, CloudFormation y WAF
 
-## Modelo del caso
+## Como leer este caso
 
-No hay dos productos. Hay tres piezas con roles distintos:
+No intentes entenderlo como "dos productos". Leelo asi:
 
-1. `DEMO`: producto principal y flujo completo
-2. pagina WAF auxiliar: despliegue complementario enlazado desde el DEMO
-3. `VISUALIZATION.md`: control de costo y destruccion segura
+1. `DEMO`: demuestra identidad y autorizacion
+2. pagina WAF: demuestra la capa perimetral usando la misma identidad del `DEMO`
+3. `VISUALIZATION.md`: documenta evidencia y cierre FinOps
 
 ## Paso 1: Ejecutar tests
 
@@ -37,27 +37,51 @@ Valores sugeridos:
 - `AWS Region`: `us-east-2`
 - `Allow SAM CLI IAM role creation`: `y`
 
-## Paso 3: Validar que el DEMO realmente funciona
+## Paso 3: Recuperar outputs reales del DEMO
 
-Abre la URL del output `ApiBaseUrl`.
+```bash
+aws cloudformation describe-stacks \
+  --stack-name caso-f-security-cognito \
+  --region us-east-2 \
+  --query "Stacks[0].Outputs"
+```
 
-En la landing debes entender de inmediato:
+Debes guardar:
 
-- que estas viendo
+- `ApiBaseUrl`
+- `UserPoolId`
+- `UserPoolArn`
+- `UserPoolClientId`
+
+## Paso 4: Entender que demuestra el DEMO
+
+Abre la URL `ApiBaseUrl` en el navegador.
+
+La landing debe responderle a un novato estas preguntas:
+
+- que estoy viendo
 - que estamos haciendo
 - para que sirve
-- que se gana
-- que problema resuelve
+- que gano con esta arquitectura
+- que problema estoy resolviendo
 
-Luego valida el flujo:
+Luego ejecuta el flujo:
 
 1. registrar usuario
 2. iniciar sesion
-3. llamar a `/profile`
+3. copiar el `idToken`
+4. llamar a `/profile`
 
-## Paso 4: Desplegar la pagina WAF auxiliar
+Cuando `/profile` devuelve `200`, ya demostraste:
 
-Esta URL existe para explicar y validar el perimetro. No reemplaza al DEMO.
+- identidad real
+- token real
+- authorizer nativo
+- Lambda sin validacion criptografica manual
+
+## Paso 5: Desplegar la pagina WAF usando la misma identidad del DEMO
+
+La pagina WAF no crea otro usuario. Reutiliza la identidad del `DEMO`.
 
 ```bash
 cd caso-f-security-cognito/backend
@@ -67,12 +91,14 @@ sam deploy --template-file template-visualization.yaml \
   --region us-east-2 \
   --resolve-s3 \
   --capabilities CAPABILITY_IAM \
-  --parameter-overrides DemoPageUrl=https://<demo-url>
+  --parameter-overrides \
+    DemoPageUrl=https://<demo-url> \
+    ExistingUserPoolArn=arn:aws:cognito-idp:us-east-2:<account-id>:userpool/<user-pool-id> \
+    ExistingUserPoolId=<user-pool-id> \
+    ExistingUserPoolClientId=<client-id>
 ```
 
-## Paso 5: Enlazar el DEMO con la pagina WAF
-
-Actualiza el DEMO para que muestre el enlace al despliegue WAF:
+## Paso 6: Volver a desplegar el DEMO con el enlace WAF
 
 ```bash
 cd caso-f-security-cognito/backend
@@ -84,44 +110,80 @@ sam deploy \
   --parameter-overrides SupportPageUrl=https://<waf-url>
 ```
 
-## Paso 6: Validar la pagina WAF
+## Paso 7: Probar la relacion entre DEMO y WAF
 
-Abre la URL del stack auxiliar.
+Abre la pagina WAF auxiliar.
 
-La pagina debe dejar claro:
+La lectura correcta es esta:
 
-- por que existe este despliegue
-- que resuelve el perimetro
-- que prueba controlada puedes ejecutar
-- que esta pagina es complementaria al DEMO
+- en el `DEMO` probaste "quien eres"
+- aqui pruebas "que solicitudes se frenan antes de entrar"
+- el token debe ser el mismo
 
-Luego valida:
+Haz estas tres pruebas:
 
-```bash
-curl -s "$API_F_WAF_URL/health" | jq .
-curl -s "$API_F_WAF_URL/health?filter=1%27%20or%201%3D1%20--" -o /dev/null -w "%{http_code}\n"
-```
+1. `GET /health`
+2. `GET /profile` pegando el mismo `idToken` del `DEMO`
+3. `GET /health?filter=1%27%20or%201%3D1%20--`
 
 Esperado:
 
 - `200` en `GET /health`
-- `403` en la prueba de WAF
+- `200` en `GET /profile` con el mismo token
+- `403` en la prueba SQLi controlada
 
-## Paso 7: Menus de AWS que debes revisar
+## Paso 8: Menus AWS en ingles y espanol
 
-Usa estas rutas de consola. El nombre exacto suele verse en ingles; a la derecha dejo la referencia en espanol.
+AWS puede mostrar nombres distintos segun idioma. Usa esta tabla de traduccion:
 
-| AWS Console (EN) | Referencia ES | Que validar |
+| AWS Console (EN) | Referencia ES | Que revisar |
 |---|---|---|
-| `CloudFormation > Stacks` | `CloudFormation > Pilas` | stacks `caso-f-security-cognito` y `caso-f-security-cognito-visualization` |
-| `Lambda > Functions` | `Lambda > Funciones` | funcion principal del DEMO y funcion del stack WAF |
-| `Amazon Cognito > User pools` | `Amazon Cognito > Pools de usuarios` | user pool del DEMO |
-| `API Gateway > APIs` | `API Gateway > API` | HTTP API del DEMO y REST API del stack WAF |
-| `AWS WAF & Shield > Web ACLs` | `AWS WAF y Shield > Web ACLs` | asociacion del WebACL al REST API auxiliar |
+| `CloudFormation > Stacks` | `CloudFormation > Pilas` | stacks del `DEMO` y de la pagina WAF |
+| `API Gateway > APIs` | `API Gateway > API` | una `HTTP API` para el `DEMO` y una `REST API` para WAF |
+| `API Gateway > Routes` | `API Gateway > Rutas` | rutas del `DEMO` y la ruta protegida `/profile` del stack WAF |
+| `API Gateway > Authorizers` | `API Gateway > Autorizadores` | `JWT Authorizer` en `HTTP API` y `Cognito Authorizer` en `REST API` |
+| `Amazon Cognito > User pools` | `Amazon Cognito > Pools de usuarios` | el mismo `User Pool` reutilizado por ambos despliegues |
+| `AWS WAF & Shield > Web ACLs` | `AWS WAF y Shield > Web ACLs` | asociacion del `Web ACL` al `REST API` |
+| `Lambda > Functions` | `Lambda > Funciones` | funciones del caso |
 
-## Paso 8: Cerrar la ventana WAF
+## Paso 9: Nota importante si usas PowerShell
 
-Cuando ya tengas la evidencia, destruye el stack auxiliar:
+En Windows PowerShell, `curl` suele ser alias de `Invoke-WebRequest`.
+
+Si un comando con `curl -X` falla, usa:
+
+```powershell
+curl.exe "https://<url>"
+```
+
+o bien:
+
+```powershell
+Invoke-RestMethod "https://<url>"
+```
+
+## Paso 10: Validacion por script
+
+### DEMO
+
+```bash
+export API_F_URL=https://<demo-url>
+bash scripts/smoke/smoke_caso_f.sh
+```
+
+### Pagina WAF
+
+```bash
+export API_F_URL=https://<waf-url>
+export CASE_F_MODE=waf
+export DEMO_ID_TOKEN=<id-token-del-demo>
+export EXPECT_WAF=true
+bash scripts/smoke/smoke_caso_f.sh
+```
+
+## Paso 11: Cerrar solo la ventana WAF
+
+Cuando ya terminaste las capturas y pruebas perimetrales:
 
 ```bash
 cd caso-f-security-cognito/backend
@@ -130,4 +192,4 @@ sam delete --stack-name caso-f-security-cognito-visualization \
   --no-prompts
 ```
 
-Deja el `DEMO` vivo.
+El `DEMO` puede quedar vivo.

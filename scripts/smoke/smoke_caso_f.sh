@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
-# Smoke test - Caso F: Security First (Cognito + Authorizer nativo)
-# Requiere: API_F_URL, TEST_EMAIL (opcional), TEST_PASSWORD (opcional)
-# Opcional: EXPECT_WAF=true para validar bloqueo SQLi en modo visualization
+# Smoke test - Caso F: Security First (Cognito + Authorizer nativo + WAF)
+# Requiere: API_F_URL
+# Modo DEMO (default): TEST_EMAIL y TEST_PASSWORD opcionales
+# Modo WAF: CASE_F_MODE=waf y DEMO_ID_TOKEN obligatorio
+# Opcional: EXPECT_WAF=true para validar bloqueo SQLi
 
 set -euo pipefail
 
 BASE="${API_F_URL:?La variable API_F_URL no esta definida}"
+MODE="${CASE_F_MODE:-demo}"
 EMAIL="${TEST_EMAIL:-smoketest_$(date +%s)@demo.com}"
 PASSWORD="${TEST_PASSWORD:-SmokeTest1!}"
 
@@ -25,7 +28,8 @@ check() {
 
 echo "=== Smoke Test: Caso F ==="
 echo "Base URL: $BASE"
-echo "Email: $EMAIL"
+echo "Modo: $MODE"
+[ "$MODE" = "demo" ] && echo "Email: $EMAIL"
 echo ""
 
 # 1. Landing page
@@ -55,40 +59,49 @@ else
   FAIL=$((FAIL + 1))
 fi
 
-# 4. Registro de usuario
-REGISTER_BODY=$(curl -s -X POST "$BASE/auth/register" \
-  -H "Content-Type: application/json" \
-  -d "{\"email\":\"$EMAIL\",\"password\":\"$PASSWORD\"}")
-REGISTER_STATUS=$(echo "$REGISTER_BODY" | python3 -c "import sys,json; d=json.load(sys.stdin); print('ok' if d.get('ok') else 'fail')" 2>/dev/null || echo "fail")
+# 4+. Flujo DEMO o flujo WAF segun modo
+if [ "$MODE" = "demo" ]; then
+  REGISTER_BODY=$(curl -s -X POST "$BASE/auth/register" \
+    -H "Content-Type: application/json" \
+    -d "{\"email\":\"$EMAIL\",\"password\":\"$PASSWORD\"}")
+  REGISTER_STATUS=$(echo "$REGISTER_BODY" | python3 -c "import sys,json; d=json.load(sys.stdin); print('ok' if d.get('ok') else 'fail')" 2>/dev/null || echo "fail")
 
-if [ "$REGISTER_STATUS" = "ok" ]; then
-  echo "  [OK]  POST /auth/register crea usuario"
-  PASS=$((PASS + 1))
-else
-  if echo "$REGISTER_BODY" | grep -q "UsernameExistsException\|ya existe"; then
-    echo "  [OK]  POST /auth/register (usuario ya existe - re-run OK)"
+  if [ "$REGISTER_STATUS" = "ok" ]; then
+    echo "  [OK]  POST /auth/register crea usuario"
     PASS=$((PASS + 1))
   else
-    echo "  [FAIL] POST /auth/register - respuesta: $REGISTER_BODY"
+    if echo "$REGISTER_BODY" | grep -q "UsernameExistsException\|ya existe"; then
+      echo "  [OK]  POST /auth/register (usuario ya existe - re-run OK)"
+      PASS=$((PASS + 1))
+    else
+      echo "  [FAIL] POST /auth/register - respuesta: $REGISTER_BODY"
+      FAIL=$((FAIL + 1))
+    fi
+  fi
+  
+  LOGIN_RESP=$(curl -s -X POST "$BASE/auth/login" \
+    -H "Content-Type: application/json" \
+    -d "{\"email\":\"$EMAIL\",\"password\":\"$PASSWORD\"}")
+  PROFILE_TOKEN=$(echo "$LOGIN_RESP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('idToken') or d.get('accessToken',''))" 2>/dev/null || echo "")
+
+  if [ -n "$PROFILE_TOKEN" ]; then
+    echo "  [OK]  POST /auth/login devuelve token util para /profile"
+    PASS=$((PASS + 1))
+  else
+    echo "  [FAIL] POST /auth/login no devolvio token util - respuesta: $LOGIN_RESP"
+    FAIL=$((FAIL + 1))
+  fi
+else
+  PROFILE_TOKEN="${DEMO_ID_TOKEN:-}"
+  if [ -n "$PROFILE_TOKEN" ]; then
+    echo "  [OK]  DEMO_ID_TOKEN recibido para probar la capa WAF"
+    PASS=$((PASS + 1))
+  else
+    echo "  [FAIL] En modo WAF debes definir DEMO_ID_TOKEN con el idToken del DEMO"
     FAIL=$((FAIL + 1))
   fi
 fi
 
-# 5. Login
-LOGIN_RESP=$(curl -s -X POST "$BASE/auth/login" \
-  -H "Content-Type: application/json" \
-  -d "{\"email\":\"$EMAIL\",\"password\":\"$PASSWORD\"}")
-PROFILE_TOKEN=$(echo "$LOGIN_RESP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('idToken') or d.get('accessToken',''))" 2>/dev/null || echo "")
-
-if [ -n "$PROFILE_TOKEN" ]; then
-  echo "  [OK]  POST /auth/login devuelve token util para /profile"
-  PASS=$((PASS + 1))
-else
-  echo "  [FAIL] POST /auth/login no devolvio token util - respuesta: $LOGIN_RESP"
-  FAIL=$((FAIL + 1))
-fi
-
-# 6. /profile con token valido
 if [ -n "$PROFILE_TOKEN" ]; then
   PROFILE_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/profile" \
     -H "Authorization: Bearer $PROFILE_TOKEN")
@@ -106,7 +119,7 @@ fi
 
 # 7. Validacion WAF opcional
 if [ "${EXPECT_WAF:-false}" = "true" ]; then
-  STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/auth/login?q=1'%20OR%20'1'='1")
+  STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/health?filter=1'%20OR%201%3D1%20--")
   check "WAF bloquea payload SQLi de prueba" "403" "$STATUS"
 fi
 

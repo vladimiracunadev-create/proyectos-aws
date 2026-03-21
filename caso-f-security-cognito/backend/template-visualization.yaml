@@ -1,12 +1,24 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: caso-f-security-cognito visualization - REST API + Cognito Authorizer + WAF
+Description: caso-f-security-cognito visualization - REST API + WAF enlazado al DEMO principal
 
 Parameters:
   DemoPageUrl:
     Type: String
     Default: ""
     Description: URL publica del DEMO principal para enlazar desde la pagina WAF
+
+  ExistingUserPoolArn:
+    Type: String
+    Description: ARN del Cognito User Pool ya creado por el DEMO principal
+
+  ExistingUserPoolId:
+    Type: String
+    Description: ID del Cognito User Pool ya creado por el DEMO principal
+
+  ExistingUserPoolClientId:
+    Type: String
+    Description: App Client ID del Cognito User Pool ya creado por el DEMO principal
 
 Globals:
   Function:
@@ -16,50 +28,6 @@ Globals:
     Tracing: Active
 
 Resources:
-  UserPool:
-    Type: AWS::Cognito::UserPool
-    Properties:
-      UserPoolName: caso-f-user-pool-visualization
-      UsernameAttributes:
-        - email
-      AutoVerifiedAttributes:
-        - email
-      Policies:
-        PasswordPolicy:
-          MinimumLength: 8
-          RequireUppercase: true
-          RequireLowercase: true
-          RequireNumbers: true
-          RequireSymbols: false
-      LambdaConfig:
-        PreSignUp: !GetAtt PreSignUpFunction.Arn
-      Schema:
-        - Name: email
-          AttributeDataType: String
-          Required: true
-          Mutable: true
-        - Name: name
-          AttributeDataType: String
-          Required: false
-          Mutable: true
-
-  UserPoolClient:
-    Type: AWS::Cognito::UserPoolClient
-    Properties:
-      UserPoolId: !Ref UserPool
-      ClientName: caso-f-app-client-visualization
-      GenerateSecret: false
-      ExplicitAuthFlows:
-        - ALLOW_USER_PASSWORD_AUTH
-        - ALLOW_REFRESH_TOKEN_AUTH
-      AccessTokenValidity: 1
-      IdTokenValidity: 1
-      RefreshTokenValidity: 30
-      TokenValidityUnits:
-        AccessToken: hours
-        IdToken: hours
-        RefreshToken: days
-
   Api:
     Type: AWS::Serverless::Api
     Properties:
@@ -75,7 +43,7 @@ Resources:
         AddDefaultAuthorizerToCorsPreflight: false
         Authorizers:
           CognitoAuthorizer:
-            UserPoolArn: !GetAtt UserPool.Arn
+            UserPoolArn: !Ref ExistingUserPoolArn
 
   SecurityFunction:
     Type: AWS::Serverless::Function
@@ -84,8 +52,8 @@ Resources:
       Handler: app.handler
       Environment:
         Variables:
-          COGNITO_CLIENT_ID: !Ref UserPoolClient
-          COGNITO_USER_POOL_ID: !Ref UserPool
+          COGNITO_CLIENT_ID: !Ref ExistingUserPoolClientId
+          COGNITO_USER_POOL_ID: !Ref ExistingUserPoolId
           DEPLOYMENT_MODE: visualization-rest-waf
           PERIMETER_MODE: rest-api-cognito-authorizer-waf
           DEMO_PAGE_URL: !Ref DemoPageUrl
@@ -93,8 +61,6 @@ Resources:
         - Statement:
             - Effect: Allow
               Action:
-                - cognito-idp:SignUp
-                - cognito-idp:InitiateAuth
                 - xray:PutTelemetryRecords
                 - xray:PutTraceSegments
               Resource: "*"
@@ -115,43 +81,12 @@ Resources:
             Method: get
             Auth:
               Authorizer: NONE
-        Register:
-          Type: Api
-          Properties:
-            RestApiId: !Ref Api
-            Path: /auth/register
-            Method: post
-            Auth:
-              Authorizer: NONE
-        Login:
-          Type: Api
-          Properties:
-            RestApiId: !Ref Api
-            Path: /auth/login
-            Method: post
-            Auth:
-              Authorizer: NONE
         Profile:
           Type: Api
           Properties:
             RestApiId: !Ref Api
             Path: /profile
             Method: get
-
-  PreSignUpFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: src/
-      Handler: app.pre_signup_trigger
-      Description: Auto-confirma usuarios para visualization. No usar en produccion.
-
-  PreSignUpPermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName: !GetAtt PreSignUpFunction.Arn
-      Action: lambda:InvokeFunction
-      Principal: cognito-idp.amazonaws.com
-      SourceArn: !GetAtt UserPool.Arn
 
   WafWebAcl:
     Type: AWS::WAFv2::WebACL
@@ -204,12 +139,16 @@ Outputs:
     Value: !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com/Prod"
 
   UserPoolId:
-    Description: ID del Cognito User Pool
-    Value: !Ref UserPool
+    Description: ID del Cognito User Pool reutilizado desde el DEMO
+    Value: !Ref ExistingUserPoolId
 
   UserPoolClientId:
-    Description: ID del App Client (sin secreto)
-    Value: !Ref UserPoolClient
+    Description: ID del App Client reutilizado desde el DEMO
+    Value: !Ref ExistingUserPoolClientId
+
+  UserPoolArn:
+    Description: ARN del Cognito User Pool reutilizado desde el DEMO
+    Value: !Ref ExistingUserPoolArn
 
   FunctionName:
     Description: Nombre de la Lambda principal
