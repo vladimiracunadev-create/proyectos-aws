@@ -64,10 +64,17 @@ EOF
   esac
 done
 
-if [[ -n "$OUTPUT_PATH" ]]; then
-  mkdir -p "$(dirname "$OUTPUT_PATH")"
-  exec > >(tee "$OUTPUT_PATH") 2>&1
+if [[ -z "$OUTPUT_PATH" ]]; then
+  if date +%Y%m%d-%H%M%S >/dev/null 2>&1; then
+    TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
+  else
+    TIMESTAMP="$(python -c "from datetime import datetime; print(datetime.now().strftime('%Y%m%d-%H%M%S'))")"
+  fi
+  OUTPUT_PATH="./.tmp/skill-output/finops-report-$TIMESTAMP.txt"
 fi
+
+mkdir -p "$(dirname "$OUTPUT_PATH")"
+exec > >(tee "$OUTPUT_PATH") 2>&1
 
 AWS_ARGS=()
 if [[ -n "$PROFILE" ]]; then
@@ -102,6 +109,7 @@ section "AWS Cost Control Report"
 echo "Workload regions : ${REGIONS[*]}"
 echo "Billing region   : $BILLING_REGION"
 echo "Cost window      : $START_DATE -> $END_DATE (End is exclusive in Cost Explorer)"
+echo "Report path      : $OUTPUT_PATH"
 
 PRIMARY_REGION="${REGIONS[0]}"
 ACCOUNT_ID="$(get_text sts get-caller-identity --region "$PRIMARY_REGION" --query Account --output text)"

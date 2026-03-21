@@ -13,13 +13,16 @@ if ($Regions.Count -eq 1 -and $Regions[0] -match ",") {
   $Regions = $Regions[0].Split(",").Trim()
 }
 
-if ($OutputPath) {
-  $outputDirectory = Split-Path -Path $OutputPath -Parent
-  if ($outputDirectory) {
-    New-Item -ItemType Directory -Force -Path $outputDirectory | Out-Null
-  }
-  Start-Transcript -Path $OutputPath -Force | Out-Null
+if (-not $OutputPath) {
+  $timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
+  $OutputPath = ".\.tmp\skill-output\finops-report-$timestamp.txt"
 }
+
+$outputDirectory = Split-Path -Path $OutputPath -Parent
+if ($outputDirectory) {
+  New-Item -ItemType Directory -Force -Path $outputDirectory | Out-Null
+}
+Start-Transcript -Path $OutputPath -Force | Out-Null
 
 function Write-Section {
   param([string]$Title)
@@ -87,6 +90,7 @@ Write-Section "AWS Cost Control Report"
 Write-Host "Workload regions : $($Regions -join ', ')" -ForegroundColor Gray
 Write-Host "Billing region   : $BillingRegion" -ForegroundColor Gray
 Write-Host "Cost window      : $StartDate -> $EndDate (End is exclusive in Cost Explorer)" -ForegroundColor Gray
+Write-Host "Report path      : $OutputPath" -ForegroundColor Gray
 
 $primaryRegion = $Regions[0]
 $accountId = Get-AwsText -Arguments @("sts", "get-caller-identity", "--region", $primaryRegion, "--query", "Account", "--output", "text")
@@ -344,6 +348,4 @@ Write-Host "1. docs/FINOPS_COSTOS.md"
 Write-Host "2. docs/FINOPS_MANUAL.md"
 Write-Host "3. docs/COST_CONTROL_COMMAND_CENTER.md"
 
-if ($OutputPath) {
-  Stop-Transcript | Out-Null
-}
+Stop-Transcript | Out-Null

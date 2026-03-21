@@ -26,11 +26,11 @@ finops-check: ## 💰 Escanea recursos activos en AWS (Multi-Región) para evita
 
 finops-control: ## 🧭 Ejecuta auditoría completa de cuenta, billing y recursos del monorepo
 	@if [ -f /bin/bash ]; then \
-		echo "Detectado entorno Bash. Ejecutando reporte completo .sh..."; \
+		echo "Detectado entorno Bash. Ejecutando reporte completo .sh con salida automática en .tmp/skill-output/..."; \
 		chmod +x ./scripts/aws-cost-control-report.sh; \
 		./scripts/aws-cost-control-report.sh --regions us-east-2,us-east-1,sa-east-1 --billing-region us-east-1; \
 	else \
-		echo "Detectado entorno Windows/PowerShell. Ejecutando reporte completo .ps1..."; \
+		echo "Detectado entorno Windows/PowerShell. Ejecutando reporte completo .ps1 con salida automática en .tmp/skill-output/..."; \
 		powershell -ExecutionPolicy Bypass -File ./scripts/aws-cost-control-report.ps1 -Regions us-east-2,us-east-1,sa-east-1 -BillingRegion us-east-1; \
 	fi
 

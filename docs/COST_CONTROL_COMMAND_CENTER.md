@@ -338,16 +338,20 @@ Sirve para una pasada corta sobre recursos de alto costo.
 make finops-control
 ```
 
+Sin pasar ningun parametro de salida, el flujo ya genera automaticamente un reporte local en:
+
+```text
+.tmp/skill-output/finops-report-YYYYMMDD-HHMMSS.txt
+```
+
 Alternativas directas:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\aws-cost-control-report.ps1 `
-  -OutputPath .\.tmp\skill-output\finops-report.txt
+powershell -ExecutionPolicy Bypass -File .\scripts\aws-cost-control-report.ps1
 ```
 
 ```bash
-./scripts/aws-cost-control-report.sh \
-  --output-path ./.tmp/skill-output/finops-report.txt
+./scripts/aws-cost-control-report.sh
 ```
 
 Con parametros:
@@ -389,7 +393,7 @@ Usalo cuando quieras:
 
 La idea del skill no es adivinar precios: es apoyarse en estos scripts y en las APIs reales de AWS para leer la cuenta.
 
-Para no ensuciar el repositorio, cualquier salida local generada por este flujo debe quedar dentro de:
+Para no ensuciar el repositorio, este flujo genera por defecto la salida local dentro de:
 
 ```text
 .tmp/skill-output/
