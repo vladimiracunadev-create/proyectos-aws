@@ -1,107 +1,139 @@
-# Caso F: Security First — Cognito + JWT + WAF
+# Caso F: Security First - Cognito + Authorizer nativo + WAF
 
 [![Nivel-5](https://img.shields.io/badge/Nivel-5_Seguridad-red?style=for-the-badge)]()
 [![Status](https://img.shields.io/badge/Status-Completado-brightgreen?style=for-the-badge)]()
 [![SAM](https://img.shields.io/badge/IaC-AWS_SAM-orange?style=for-the-badge)]()
 [![Python](https://img.shields.io/badge/Runtime-Python_3.12-blue?style=for-the-badge)]()
 
-La seguridad no es un parche, es la base. Este caso implementa el modelo de seguridad perimetral en AWS: identidades gestionadas por Cognito, tokens JWT validados nativamente por API Gateway y WAF opcional como primera línea de defensa.
+La seguridad no es un parche, es la base. Este caso demuestra identidad gestionada con Cognito, validacion nativa del token en API Gateway y una modalidad separada con WAF para capturar evidencia real del perimetro sin dejar costo fijo activo fuera del laboratorio.
 
----
+## Punto clave
+
+AWS WAF no se asocia a API Gateway HTTP API. Por eso el Caso F se implementa en **dos modalidades validas**:
+
+| Modalidad | Template | API Gateway | Authorizer | WAF | Uso recomendado |
+|---|---|---|---|---|---|
+| `DEMO` | `backend/template.yaml` | HTTP API | JWT Authorizer nativo | No | Demo permanente, costo base cero |
+| `VISUALIZATION` | `backend/template-visualization.yaml` | REST API | Cognito User Pool Authorizer | Si | Capturas, evidencia y validacion perimetral |
+
+La regla del caso es esta: **DEMO prueba que el producto existe y funciona de verdad**. Luego, esa misma experiencia funcional sirve para las capturas de producto, y `VISUALIZATION` agrega las evidencias especificas del perimetro con WAF.
 
 ## Objetivo
 
-Implementar el **modelo de responsabilidad compartida** de AWS aplicado a una API serverless:
-
-- Gestionar identidades de usuario con **Amazon Cognito** (registro, login, tokens JWT RS256)
-- Proteger endpoints con el **JWT Authorizer nativo** de API Gateway HTTP API (sin código de criptografía en Lambda)
-- Añadir una capa de perimetro con **AWS WAF** (optional, desactivado por defecto en demos)
+- Gestionar identidades de usuario con Amazon Cognito.
+- Proteger `/profile` sin escribir criptografia en Lambda.
+- Mantener una demo barata y, a la vez, una variante seria para mostrar WAF real.
 
 ## Arquitectura
 
-```
-Internet → [WAF opcional] → [API Gateway HTTP API] → [Lambda Python]
-                                      ↑                      ↑
-                              JWT Authorizer          handle_register
-                              (valida token)          handle_login
-                                      ↑               handle_profile
-                              Cognito User Pool       handle_health
-                              (emite tokens)
+```text
+Modo DEMO
+Internet -> API Gateway HTTP API -> JWT Authorizer -> Lambda
+                  ^                     ^
+                  |                     |
+               Cognito ------------- emite tokens
+
+Modo VISUALIZATION
+Internet -> WAF -> API Gateway REST API -> Cognito Authorizer -> Lambda
+                 ^                           ^
+                 |                           |
+              reglas managed ----------- Cognito
 ```
 
-Ver [docs/architecture.md](docs/architecture.md) para el diagrama completo.
+Ver [docs/architecture.md](docs/architecture.md) para el diagrama completo y la decision tecnica.
 
 ## Componentes
 
-| Recurso | Tipo | Descripción |
-|---------|------|-------------|
-| `UserPool` | `AWS::Cognito::UserPool` | Email como username, Pre-Signup trigger para auto-confirm en demo |
-| `UserPoolClient` | `AWS::Cognito::UserPoolClient` | `USER_PASSWORD_AUTH`, sin secreto de cliente |
-| `Api` | `AWS::Serverless::HttpApi` | CORS + JWT Authorizer de Cognito |
-| `SecurityFunction` | `AWS::Serverless::Function` | Handler principal — Python 3.12 |
-| `PreSignUpFunction` | `AWS::Serverless::Function` | Trigger Cognito — auto-confirma usuarios en demo |
-| `WafWebAcl` | `AWS::WAFv2::WebACL` | SQLi + Common Rules (solo si `DeployWAF=true`) |
+| Recurso | Modalidad | Descripcion |
+|---|---|---|
+| `UserPool` | Ambas | Email como username, auto-verified, password policy |
+| `UserPoolClient` | Ambas | `USER_PASSWORD_AUTH`, sin client secret |
+| `SecurityFunction` | Ambas | Registro, login, profile, health |
+| `PreSignUpFunction` | Ambas | Auto-confirma usuarios para demo controlada |
+| `Api` | `DEMO` | `AWS::Serverless::HttpApi` con JWT Authorizer |
+| `Api` | `VISUALIZATION` | `AWS::Serverless::Api` con Cognito Authorizer |
+| `WafWebAcl` | `VISUALIZATION` | Common Rules + SQLi Rules para validar perimetro |
 
 ## Endpoints
 
-| Método | Ruta | Auth | Descripción |
-|--------|------|------|-------------|
-| `GET` | `/` | Pública | Landing page interactiva |
-| `GET` | `/health` | Pública | Estado del servicio |
-| `POST` | `/auth/register` | Pública | Crea usuario en Cognito User Pool |
-| `POST` | `/auth/login` | Pública | Devuelve AccessToken + IdToken + RefreshToken |
-| `GET` | `/profile` | **JWT requerido** | Devuelve claims del token validado |
+| Metodo | Ruta | Auth | Descripcion |
+|---|---|---|---|
+| `GET` | `/` | Publica | Landing interactiva |
+| `GET` | `/health` | Publica | Estado del servicio y modalidad desplegada |
+| `POST` | `/auth/register` | Publica | Crea usuario en Cognito |
+| `POST` | `/auth/login` | Publica | Devuelve `accessToken`, `idToken`, `refreshToken` |
+| `GET` | `/profile` | Requerida | Devuelve claims ya validados por API Gateway |
 
-## Despliegue rápido
+## Despliegue rapido
 
 ```bash
 cd caso-f-security-cognito/backend
 
-# Sin WAF (demo, sin costo base)
-sam build && sam deploy --guided
+# Modalidad DEMO
+sam build
+sam deploy --guided
 
-# Con WAF (~$5 USD/mes base)
-sam deploy --parameter-overrides DeployWAF=true
+# Modalidad VISUALIZATION
+sam build --template-file template-visualization.yaml
+sam deploy --template-file template-visualization.yaml \
+  --stack-name caso-f-security-cognito-visualization
 ```
 
-## Tests
+## Validacion rapida
 
 ```bash
-# Unitarios
-pytest backend/tests/ -v --tb=short
+# Tests unitarios
+python -m pytest caso-f-security-cognito/backend/tests/ -v --tb=short
 
-# Smoke test (requiere API_F_URL)
+# Smoke test demo o visualization
 export API_F_URL=https://<api-id>.execute-api.us-east-2.amazonaws.com
-bash ../../scripts/smoke/smoke_caso_f.sh
+bash scripts/smoke/smoke_caso_f.sh
+
+# Smoke con chequeo WAF
+EXPECT_WAF=true bash scripts/smoke/smoke_caso_f.sh
+```
+
+En `/profile`, usa preferentemente el `idToken`:
+
+```bash
+TOKEN=$(curl -s -X POST "$API_F_URL/auth/login" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@demo.com","password":"Demo1234"}' | jq -r '.idToken')
+
+curl -s "$API_F_URL/profile" -H "Authorization: Bearer $TOKEN" | jq .
 ```
 
 ## Limpieza
 
 ```bash
+# Demo
 sam delete --stack-name caso-f-security-cognito
+
+# Visualization
+sam delete --template-file template-visualization.yaml \
+  --stack-name caso-f-security-cognito-visualization
 ```
 
-> **Importante**: Si desplegaste con `DeployWAF=true`, el `sam delete` también elimina el WebACL y detiene el cobro de ~$5/mes.
+## Decisiones tecnicas
 
-## Decisiones técnicas
+**Por que dos templates en vez de un flag `DeployWAF`?**  
+Porque HTTP API + JWT Authorizer es el camino correcto para la demo barata, pero WAF se asocia a REST API. Separar los templates evita prometer una combinacion que AWS no soporta.
 
-**¿Por qué JWT Authorizer en lugar de Custom Authorizer Lambda?**
-El JWT Authorizer nativo de API Gateway HTTP API verifica la firma RS256, el issuer y el audience de Cognito sin ejecutar ninguna Lambda. Es más barato, más rápido (sin cold start extra) y elimina una clase entera de bugs de implementación.
+**Por que usar `idToken` en `/profile`?**  
+Porque contiene claims de identidad como `email` y `name`, que son los que el endpoint muestra al reclutador o al evaluador del laboratorio.
 
-**¿Por qué `USER_PASSWORD_AUTH` y no `SRP_AUTH`?**
-Para una demo con curl y scripts de smoke test es necesario enviar email+password en texto plano sobre HTTPS. En producción, `SRP_AUTH` (Secure Remote Password) es preferible porque la contraseña nunca viaja por la red, ni siquiera cifrada.
+**Por que mantener `USER_PASSWORD_AUTH`?**  
+Porque simplifica `curl`, smoke tests y la landing interactiva. En produccion, `SRP_AUTH` o flujos hosted UI son preferibles.
 
-**¿Por qué WAF opcional con `DeployWAF=false` por defecto?**
-WAF tiene un costo fijo de ~$5 USD/mes independiente del tráfico. Para portafolio/demo es un gasto innecesario. El parámetro SAM permite activarlo con un solo flag cuando se necesite validar el perimetro.
+## Relacion con otros casos
 
-## Relación con otros casos
-
-- **Caso E** (DynamoDB): Caso F añade la capa de identidad necesaria antes de persistir datos de usuario.
-- **Caso G** (Event-Driven): Los eventos de registro/login pueden publicarse a SNS/EventBridge como extensión.
-- **Caso I** (IA Generativa): Los endpoints de Bedrock **requieren** autenticación. Caso F es prerequisito directo.
+- **Caso E**: agrega identidad sobre la API serverless con datos.
+- **Caso H**: la siguiente mejora natural es observabilidad de rechazos, login failures y WAF.
+- **Caso I**: prerequisito directo antes de exponer endpoints de IA.
 
 ## Links
 
-- ⬅️ [Roadmap Principal](../README.md)
-- 🏗️ [Arquitectura detallada](docs/architecture.md)
-- 📋 [Paso a paso AWS](AWS_PASO_A_PASO.md)
+- [Roadmap Principal](../README.md)
+- [Arquitectura detallada](docs/architecture.md)
+- [Paso a paso AWS](AWS_PASO_A_PASO.md)
+- [Reporte de visualization](VISUALIZATION.md)

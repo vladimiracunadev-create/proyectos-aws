@@ -24,6 +24,12 @@ build/
 
 # Misc
 *.log
+.pytest_cache/
+.sam-appdata/
+.vendor/
+vendor_py/
+**/__pycache__/
+*.pyc
 
 # Terraform
 **/.terraform/*

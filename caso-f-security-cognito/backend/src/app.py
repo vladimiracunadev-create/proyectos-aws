@@ -8,6 +8,8 @@ from botocore.exceptions import ClientError
 
 COGNITO_CLIENT_ID = os.environ.get("COGNITO_CLIENT_ID", "")
 COGNITO_USER_POOL_ID = os.environ.get("COGNITO_USER_POOL_ID", "")
+DEPLOYMENT_MODE = os.environ.get("DEPLOYMENT_MODE", "demo-http-jwt")
+PERIMETER_MODE = os.environ.get("PERIMETER_MODE", "native-authorizer")
 
 cognito_client = boto3.client("cognito-idp")
 
@@ -15,7 +17,7 @@ cognito_client = boto3.client("cognito-idp")
 # ---------------------------------------------------------------------------
 # Landing Page HTML
 # ---------------------------------------------------------------------------
-LANDING_PAGE = """<!DOCTYPE html>
+LANDING_PAGE = r"""<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -126,20 +128,20 @@ LANDING_PAGE = """<!DOCTYPE html>
   <main class="shell">
     <section class="hero">
       <p class="eyebrow">Caso F · Nivel 5 · Security First</p>
-      <h1>Identidad y perimetro: Cognito + JWT + WAF</h1>
+      <h1>Identidad y perimetro: Cognito + Authorizer nativo + WAF</h1>
       <p class="lead">
-        Esta demo implementa el modelo de seguridad perimetral en AWS.
-        Rutas publicas para autenticacion, rutas protegidas con token JWT validado
-        por API Gateway y WAF opcional para bloquear trafico malicioso antes de que
-        llegue a tu codigo.
+        Este caso tiene dos modalidades reales en AWS: demo permanente con HTTP API
+        y JWT Authorizer nativo, y visualization temporal con REST API, Cognito
+        Authorizer y WAF para capturar la evidencia del perimetro sin dejar costo fijo
+        activo fuera de la ventana del laboratorio.
       </p>
       <div class="hero-grid">
         <div class="mini-panel">
           <div class="stats">
             <div class="stat"><strong>JWT</strong><span>Validado por API GW</span></div>
             <div class="stat"><strong>Cognito</strong><span>User Pool + Auth Flow</span></div>
-            <div class="stat"><strong>WAF</strong><span>Opcional (2 reglas managed)</span></div>
-            <div class="stat"><strong>0 config</strong><span>manual de JWT en Lambda</span></div>
+            <div class="stat"><strong>WAF</strong><span>Solo en visualization</span></div>
+            <div class="stat"><strong>0 crypto</strong><span>manual dentro de Lambda</span></div>
           </div>
           <div class="chips">
             <span class="chip">POST /auth/register</span>
@@ -157,11 +159,11 @@ LANDING_PAGE = """<!DOCTYPE html>
             </article>
             <article class="story-card">
               <strong>JWT Authorizer</strong>
-              <p>API Gateway valida el token sin que tu Lambda escriba ni una linea de criptografia.</p>
+              <p>En modo demo, HTTP API valida JWT sin que tu Lambda escriba ni una linea de criptografia.</p>
             </article>
             <article class="story-card">
-              <strong>WAF (opcional)</strong>
-              <p>Bloquea SQLi, XSS e IPs con mala reputacion antes de que el trafico llegue al API.</p>
+              <strong>WAF (visualization)</strong>
+              <p>En la modalidad de evidencia, REST API agrega WAF para bloquear SQLi, XSS e IPs maliciosas antes del API.</p>
             </article>
           </div>
         </div>
@@ -170,7 +172,7 @@ LANDING_PAGE = """<!DOCTYPE html>
 
     <section class="panel">
       <h2>Demo en vivo del flujo completo</h2>
-      <p class="helper">Sigue los tres pasos: registrate, inicia sesion y llama al endpoint protegido con tu token JWT.</p>
+      <p class="helper">Sigue los tres pasos: registrate, inicia sesion y llama al endpoint protegido con tu token.</p>
 
       <div class="step-tabs">
         <div class="step-tab active" id="tab-1">1. Registrar</div>
@@ -192,17 +194,17 @@ LANDING_PAGE = """<!DOCTYPE html>
         <input id="login-email" type="email" placeholder="tu@email.com" />
         <label for="login-password">Contrasena</label>
         <input id="login-password" type="password" placeholder="MinSegura1!" />
-        <button class="btn-primary" id="btn-login">Iniciar sesion y obtener JWT</button>
+        <button class="btn-primary" id="btn-login">Iniciar sesion y obtener tokens</button>
         <p class="helper" id="login-msg"></p>
         <div id="token-display" style="display:none">
-          <p class="helper">Token JWT obtenido (Access Token):</p>
+          <p class="helper">Token recomendado para <code class="inline">GET /profile</code> (ID Token):</p>
           <div class="token-box" id="token-value"></div>
         </div>
       </div>
 
       <div class="step-panel" id="panel-3">
-        <p class="helper">Con el token JWT en memoria, llama al endpoint <code class="inline">GET /profile</code>. API Gateway valida el token automaticamente antes de pasarlo a la Lambda.</p>
-        <button class="btn-secondary" id="btn-profile">Llamar /profile con JWT</button>
+        <p class="helper">Con el token en memoria, llama al endpoint <code class="inline">GET /profile</code>. API Gateway valida el token automaticamente antes de pasarlo a la Lambda, ya sea con JWT Authorizer o Cognito Authorizer segun la modalidad desplegada.</p>
+        <button class="btn-secondary" id="btn-profile">Llamar /profile con token</button>
         <p class="helper" id="profile-msg"></p>
       </div>
     </section>
@@ -212,7 +214,7 @@ LANDING_PAGE = """<!DOCTYPE html>
         <h2>Respuesta</h2>
         <div class="badges">
           <span class="badge" id="statusBadge">Esperando accion</span>
-          <span class="badge ok">JWT valido por API GW</span>
+          <span class="badge ok">Authorizer nativo activo</span>
           <span class="badge warn">Cognito User Pool activo</span>
         </div>
       </div>
@@ -224,11 +226,11 @@ LANDING_PAGE = """<!DOCTYPE html>
       <div class="story">
         <article class="story-card">
           <strong>Sin codigo de criptografia</strong>
-          <p>La validacion JWT la hace API Gateway nativamente con el JWT Authorizer de Cognito. Tu Lambda nunca toca el token.</p>
+          <p>La validacion del token vive en API Gateway. La Lambda solo consume claims ya validados.</p>
         </article>
         <article class="story-card">
           <strong>Perimetro antes de la logica</strong>
-          <p>WAF bloquea SQLi, XSS e IPs maliciosas antes de que el trafico llegue a API Gateway. Dos capas de defensa independientes.</p>
+          <p>Cuando despliegas la modalidad visualization, WAF bloquea SQLi y XSS antes de API Gateway. Dos capas de defensa independientes.</p>
         </article>
         <article class="story-card">
           <strong>Prerequisito para el Caso I</strong>
@@ -236,19 +238,17 @@ LANDING_PAGE = """<!DOCTYPE html>
         </article>
       </div>
       <div class="waf-note">
-        WAF WebACL tiene un costo base de ~$5 USD/mes independiente del trafico. Para demos, se despliega con
-        <code class="inline">DeployWAF=false</code> (por defecto) y se activa solo cuando el caso requiere validacion real del perimetro.
-        Destruye siempre con <code class="inline">sam delete</code> al terminar.
+        Modo demo: <code class="inline">backend/template.yaml</code> con HTTP API y costo base cero.
+        Modo visualization: <code class="inline">backend/template-visualization.yaml</code> con REST API + WAF para capturas controladas.
+        Destruye siempre el stack de visualization al terminar.
       </div>
     </section>
   </main>
 
   <script>
-    const BASE = window.location.origin;
     const outputEl = document.getElementById("output");
     const statusBadgeEl = document.getElementById("statusBadge");
-    let accessToken = null;
-    let currentEmail = "";
+    let profileToken = null;
 
     function setBadge(label, kind) {
       statusBadgeEl.className = "badge";
@@ -271,8 +271,15 @@ LANDING_PAGE = """<!DOCTYPE html>
       });
     }
 
+    function buildUrl(path) {
+      const pagePath = window.location.pathname || "/";
+      const basePath = pagePath === "/" ? "/" : pagePath.replace(/\/?$/, "/");
+      const cleanPath = String(path || "").replace(/^\/+/, "");
+      return `${window.location.origin}${basePath}${cleanPath}`;
+    }
+
     async function apiCall(path, options) {
-      const response = await fetch(BASE + path, {
+      const response = await fetch(buildUrl(path), {
         headers: { "Content-Type": "application/json", ...((options || {}).headers || {}) },
         ...options,
       });
@@ -297,7 +304,6 @@ LANDING_PAGE = """<!DOCTYPE html>
 
       showOutput({ step: "register", status, data });
       if (status === 201) {
-        currentEmail = email;
         msgEl.textContent = "Cuenta creada. Avanza al paso 2.";
         setBadge("Registro OK", "ok");
         document.getElementById("login-email").value = email;
@@ -323,14 +329,23 @@ LANDING_PAGE = """<!DOCTYPE html>
         body: JSON.stringify({ email, password }),
       });
 
-      showOutput({ step: "login", status, data: { ...data, accessToken: data.accessToken ? data.accessToken.slice(0, 40) + "..." : undefined } });
+      showOutput({
+        step: "login",
+        status,
+        data: {
+          ...data,
+          accessToken: data.accessToken ? data.accessToken.slice(0, 40) + "..." : undefined,
+          idToken: data.idToken ? data.idToken.slice(0, 40) + "..." : undefined,
+          refreshToken: data.refreshToken ? data.refreshToken.slice(0, 40) + "..." : undefined,
+        },
+      });
 
       if (status === 200) {
-        accessToken = data.accessToken;
-        msgEl.textContent = "Token JWT obtenido. Avanza al paso 3.";
-        setBadge("Login OK — JWT obtenido", "ok");
+        profileToken = data.idToken || data.accessToken;
+        msgEl.textContent = "Tokens emitidos. Avanza al paso 3.";
+        setBadge("Login OK - token listo", "ok");
         document.getElementById("token-display").style.display = "block";
-        document.getElementById("token-value").textContent = (accessToken || "").slice(0, 80) + "...";
+        document.getElementById("token-value").textContent = (profileToken || "").slice(0, 80) + "...";
         activateStep(3);
       } else {
         msgEl.textContent = data.error || "Credenciales incorrectas.";
@@ -340,19 +355,19 @@ LANDING_PAGE = """<!DOCTYPE html>
 
     document.getElementById("btn-profile").addEventListener("click", async () => {
       const msgEl = document.getElementById("profile-msg");
-      if (!accessToken) { msgEl.textContent = "Primero inicia sesion para obtener el token."; return; }
+      if (!profileToken) { msgEl.textContent = "Primero inicia sesion para obtener el token."; return; }
       msgEl.textContent = "Llamando /profile...";
       setBadge("Consultando perfil...", "warn");
 
       const { status, data } = await apiCall("/profile", {
         method: "GET",
-        headers: { Authorization: accessToken },
+        headers: { Authorization: `Bearer ${profileToken}` },
       });
 
       showOutput({ step: "profile", status, data });
       if (status === 200) {
-        msgEl.textContent = "Perfil obtenido. El token JWT fue validado por API Gateway automaticamente.";
-        setBadge("Perfil OK — JWT validado", "ok");
+        msgEl.textContent = "Perfil obtenido. El token fue validado por API Gateway automaticamente.";
+        setBadge("Perfil OK - token validado", "ok");
       } else {
         msgEl.textContent = data.error || "Token invalido o expirado.";
         setBadge("Token rechazado", "danger");
@@ -423,6 +438,31 @@ def _cognito_error_response(exc):
     return _json_response(status, {"ok": False, "error": message, "code": code})
 
 
+def _http_method(event):
+    request_ctx = event.get("requestContext") or {}
+    http_ctx = request_ctx.get("http") or {}
+    return str(http_ctx.get("method") or event.get("httpMethod") or "").upper()
+
+
+def _request_path(event):
+    return event.get("rawPath") or event.get("path") or "/"
+
+
+def _authorizer_claims(event):
+    authorizer = (event.get("requestContext") or {}).get("authorizer") or {}
+    jwt_claims = (authorizer.get("jwt") or {}).get("claims") or {}
+    rest_claims = authorizer.get("claims") or {}
+    return jwt_claims or rest_claims
+
+
+def _as_bool(value):
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        return value.lower() == "true"
+    return bool(value)
+
+
 # ---------------------------------------------------------------------------
 # Route handlers
 # ---------------------------------------------------------------------------
@@ -481,9 +521,9 @@ def handle_login(event):
 
 
 def handle_profile(event):
-    # API Gateway JWT Authorizer inyecta los claims en requestContext.authorizer.jwt.claims
-    authorizer = (event.get("requestContext") or {}).get("authorizer") or {}
-    claims = authorizer.get("jwt", {}).get("claims", {})
+    # HTTP API JWT Authorizer -> requestContext.authorizer.jwt.claims
+    # REST API Cognito Authorizer -> requestContext.authorizer.claims
+    claims = _authorizer_claims(event)
 
     if not claims:
         return _json_response(401, {"ok": False, "error": "Token de autorizacion requerido."})
@@ -493,7 +533,7 @@ def handle_profile(event):
         "email": claims.get("email", ""),
         "name": claims.get("name", claims.get("email", "")),
         "sub": claims.get("sub", ""),
-        "emailVerified": claims.get("email_verified", False),
+        "emailVerified": _as_bool(claims.get("email_verified", False)),
         "timestamp": _utc_now(),
     })
 
@@ -503,6 +543,8 @@ def handle_health(_event):
         "status": "ok",
         "service": "caso-f-security",
         "cognito": "configured" if COGNITO_USER_POOL_ID else "not-configured",
+        "deploymentMode": DEPLOYMENT_MODE,
+        "perimeterMode": PERIMETER_MODE,
         "timestamp": _utc_now(),
     })
 
@@ -524,9 +566,8 @@ def pre_signup_trigger(event, _context):
 # ---------------------------------------------------------------------------
 
 def handler(event, _context):
-    request_ctx = (event.get("requestContext") or {}).get("http", {})
-    method = request_ctx.get("method", "").upper()
-    path = event.get("rawPath", "/")
+    method = _http_method(event)
+    path = _request_path(event)
 
     print(json.dumps({
         "method": method,

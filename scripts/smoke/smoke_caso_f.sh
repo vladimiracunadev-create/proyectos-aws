@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
-# Smoke test — Caso F: Security First (Cognito + JWT)
+# Smoke test - Caso F: Security First (Cognito + Authorizer nativo)
 # Requiere: API_F_URL, TEST_EMAIL (opcional), TEST_PASSWORD (opcional)
+# Opcional: EXPECT_WAF=true para validar bloqueo SQLi en modo visualization
 
 set -euo pipefail
 
-BASE="${API_F_URL:?La variable API_F_URL no está definida}"
+BASE="${API_F_URL:?La variable API_F_URL no esta definida}"
 EMAIL="${TEST_EMAIL:-smoketest_$(date +%s)@demo.com}"
 PASSWORD="${TEST_PASSWORD:-SmokeTest1!}"
 
@@ -17,7 +18,7 @@ check() {
     echo "  [OK]  $desc (HTTP $actual)"
     PASS=$((PASS + 1))
   else
-    echo "  [FAIL] $desc — esperado HTTP $expected, obtenido HTTP $actual"
+    echo "  [FAIL] $desc - esperado HTTP $expected, obtenido HTTP $actual"
     FAIL=$((FAIL + 1))
   fi
 }
@@ -44,9 +45,15 @@ else
   FAIL=$((FAIL + 1))
 fi
 
-# 3. /profile sin token debe devolver 403 (JWT Authorizer rechaza)
+# 3. /profile sin token debe devolver 401 o 403 segun el authorizer
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/profile")
-check "GET /profile sin token devuelve 403" "403" "$STATUS"
+if [ "$STATUS" = "401" ] || [ "$STATUS" = "403" ]; then
+  echo "  [OK]  GET /profile sin token devuelve $STATUS"
+  PASS=$((PASS + 1))
+else
+  echo "  [FAIL] GET /profile sin token esperaba 401/403, obtuvo HTTP $STATUS"
+  FAIL=$((FAIL + 1))
+fi
 
 # 4. Registro de usuario
 REGISTER_BODY=$(curl -s -X POST "$BASE/auth/register" \
@@ -58,12 +65,11 @@ if [ "$REGISTER_STATUS" = "ok" ]; then
   echo "  [OK]  POST /auth/register crea usuario"
   PASS=$((PASS + 1))
 else
-  # Puede ser 409 si el usuario ya existe (re-run del smoke test)
   if echo "$REGISTER_BODY" | grep -q "UsernameExistsException\|ya existe"; then
-    echo "  [OK]  POST /auth/register (usuario ya existe — re-run OK)"
+    echo "  [OK]  POST /auth/register (usuario ya existe - re-run OK)"
     PASS=$((PASS + 1))
   else
-    echo "  [FAIL] POST /auth/register — respuesta: $REGISTER_BODY"
+    echo "  [FAIL] POST /auth/register - respuesta: $REGISTER_BODY"
     FAIL=$((FAIL + 1))
   fi
 fi
@@ -72,37 +78,42 @@ fi
 LOGIN_RESP=$(curl -s -X POST "$BASE/auth/login" \
   -H "Content-Type: application/json" \
   -d "{\"email\":\"$EMAIL\",\"password\":\"$PASSWORD\"}")
-ACCESS_TOKEN=$(echo "$LOGIN_RESP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('accessToken',''))" 2>/dev/null || echo "")
+PROFILE_TOKEN=$(echo "$LOGIN_RESP" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('idToken') or d.get('accessToken',''))" 2>/dev/null || echo "")
 
-if [ -n "$ACCESS_TOKEN" ]; then
-  echo "  [OK]  POST /auth/login devuelve accessToken"
+if [ -n "$PROFILE_TOKEN" ]; then
+  echo "  [OK]  POST /auth/login devuelve token util para /profile"
   PASS=$((PASS + 1))
 else
-  echo "  [FAIL] POST /auth/login no devolvio accessToken — respuesta: $LOGIN_RESP"
+  echo "  [FAIL] POST /auth/login no devolvio token util - respuesta: $LOGIN_RESP"
   FAIL=$((FAIL + 1))
 fi
 
-# 6. /profile con token válido
-if [ -n "$ACCESS_TOKEN" ]; then
+# 6. /profile con token valido
+if [ -n "$PROFILE_TOKEN" ]; then
   PROFILE_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/profile" \
-    -H "Authorization: $ACCESS_TOKEN")
-  check "GET /profile con JWT válido devuelve 200" "200" "$PROFILE_STATUS"
+    -H "Authorization: Bearer $PROFILE_TOKEN")
+  check "GET /profile con token valido devuelve 200" "200" "$PROFILE_STATUS"
 
-  PROFILE_BODY=$(curl -s "$BASE/profile" -H "Authorization: $ACCESS_TOKEN")
+  PROFILE_BODY=$(curl -s "$BASE/profile" -H "Authorization: Bearer $PROFILE_TOKEN")
   if echo "$PROFILE_BODY" | grep -q '"email"'; then
     echo "  [OK]  GET /profile devuelve claims con campo 'email'"
     PASS=$((PASS + 1))
   else
-    echo "  [FAIL] GET /profile no devolvio campo 'email' — respuesta: $PROFILE_BODY"
+    echo "  [FAIL] GET /profile no devolvio campo 'email' - respuesta: $PROFILE_BODY"
     FAIL=$((FAIL + 1))
   fi
 fi
 
-# 7. Ruta inexistente
+# 7. Validacion WAF opcional
+if [ "${EXPECT_WAF:-false}" = "true" ]; then
+  STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/auth/login?q=1'%20OR%20'1'='1")
+  check "WAF bloquea payload SQLi de prueba" "403" "$STATUS"
+fi
+
+# 8. Ruta inexistente
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/no-existe")
 check "GET /no-existe devuelve 404" "404" "$STATUS"
 
-# Resultado final
 echo ""
 echo "=== Resultado: $PASS OK, $FAIL FAIL ==="
 [ $FAIL -eq 0 ] && exit 0 || exit 1

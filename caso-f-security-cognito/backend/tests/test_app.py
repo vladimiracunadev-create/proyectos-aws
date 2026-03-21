@@ -11,7 +11,18 @@ import app
 # Fixtures
 # ---------------------------------------------------------------------------
 
-def _make_event(method="GET", path="/", body=None, claims=None):
+def _make_event(method="GET", path="/", body=None, claims=None, api_version="v2"):
+    if api_version == "v1":
+        event = {
+            "httpMethod": method,
+            "path": path,
+            "requestContext": {},
+            "body": json.dumps(body) if body is not None else None,
+        }
+        if claims is not None:
+            event["requestContext"]["authorizer"] = {"claims": claims}
+        return event
+
     event = {
         "requestContext": {
             "http": {"method": method}
@@ -209,6 +220,18 @@ def test_handle_profile_with_valid_claims():
     assert body["ok"] is True
     assert body["email"] == "user@test.com"
     assert body["sub"] == "abc-123"
+    assert body["emailVerified"] is True
+
+
+def test_handle_profile_with_rest_api_claims():
+    claims = {"sub": "rest-123", "email": "rest@test.com", "name": "REST User", "email_verified": "true"}
+    event = _make_event("GET", "/profile", claims=claims, api_version="v1")
+    response = app.handle_profile(event)
+    assert response["statusCode"] == 200
+    body = json.loads(response["body"])
+    assert body["ok"] is True
+    assert body["email"] == "rest@test.com"
+    assert body["emailVerified"] is True
 
 
 def test_handle_profile_no_claims_returns_401():
@@ -239,6 +262,8 @@ def test_handle_health_configured():
     body = json.loads(response["body"])
     assert body["status"] == "ok"
     assert body["cognito"] == "configured"
+    assert "deploymentMode" in body
+    assert "perimeterMode" in body
 
     # Reload without env for subsequent tests
     import importlib
@@ -287,6 +312,13 @@ def test_handler_root_returns_html():
 
 def test_handler_health_route():
     event = _make_event("GET", "/health")
+    response = app.handler(event, None)
+    assert response["statusCode"] == 200
+    assert json.loads(response["body"])["status"] == "ok"
+
+
+def test_handler_health_route_rest_api_event():
+    event = _make_event("GET", "/health", api_version="v1")
     response = app.handler(event, None)
     assert response["statusCode"] == 200
     assert json.loads(response["body"])["status"] == "ok"

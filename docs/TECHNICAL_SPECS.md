@@ -87,12 +87,12 @@ El usuario o rol que despliegue debe tener permisos suficientes segun el caso.
 ### Caso F: Security First (Cognito + JWT + WAF)
 
 - `cognito-idp:*` o permisos sobre User Pool, App Client y flujos de auth
-- `apigateway:*` o permisos equivalentes sobre HTTP API con JWT Authorizer
+- `apigateway:*` o permisos equivalentes sobre HTTP API y REST API
 - `lambda:*` o permisos de creacion/actualizacion/invocacion de funciones
 - `lambda:AddPermission` para el trigger Pre-Signup de Cognito
-- `wafv2:*` solo si se despliega con `DeployWAF=true` (opcional)
+- `wafv2:*` para la modalidad `template-visualization.yaml`
 - `logs:*` para CloudWatch Logs de Lambda
-- `cloudformation:*` para crear y actualizar el stack `caso-f-security-cognito`
+- `cloudformation:*` para crear y actualizar `caso-f-security-cognito` y `caso-f-security-cognito-visualization`
 - `s3:*` sobre el bucket temporal que usa SAM para empaquetado
 
 ### Caso G: Event Driven
@@ -166,6 +166,8 @@ Ver: [caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md](../caso-e-dynamodb-persist
 
 ```bash
 cd caso-f-security-cognito/backend
+
+# DEMO
 sam build && sam deploy --guided
 # DeployWAF: false (por defecto — sin costo base)
 
@@ -174,11 +176,15 @@ curl -s -X POST "$API_F_URL/auth/register" \
   -H "Content-Type: application/json" \
   -d '{"email":"test@demo.com","password":"Demo1234"}'
 
-# Login y perfil protegido con JWT
+# Login y perfil protegido
 TOKEN=$(curl -s -X POST "$API_F_URL/auth/login" \
   -H "Content-Type: application/json" \
-  -d '{"email":"test@demo.com","password":"Demo1234"}' | python3 -c "import sys,json; print(json.load(sys.stdin)['accessToken'])")
-curl -s "$API_F_URL/profile" -H "Authorization: $TOKEN"
+  -d '{"email":"test@demo.com","password":"Demo1234"}' | python3 -c "import sys,json; print(json.load(sys.stdin)['idToken'])")
+curl -s "$API_F_URL/profile" -H "Authorization: Bearer $TOKEN"
+
+# VISUALIZATION
+sam build --template-file template-visualization.yaml
+sam deploy --template-file template-visualization.yaml --stack-name caso-f-security-cognito-visualization
 ```
 
 Ver: [caso-f-security-cognito/AWS_PASO_A_PASO.md](../caso-f-security-cognito/AWS_PASO_A_PASO.md)

@@ -1,170 +1,180 @@
-# AWS Paso a Paso — Caso F: Security First
+# AWS Paso a Paso - Caso F: Security First
 
 ## Prerequisitos
 
 - AWS CLI configurado (`aws configure`)
 - AWS SAM CLI instalado (`sam --version`)
-- Python 3.12+ (para tests locales)
-- Permisos IAM: `cognito-idp:*`, `lambda:*`, `apigateway:*`, `wafv2:*`, `iam:CreateRole`, `cloudformation:*`
+- Python 3.12+
+- Permisos IAM para Cognito, Lambda, API Gateway, CloudFormation y WAF
 
----
+## Estructura del caso
 
-## Paso 1: Entender la estructura
-
-```
+```text
 caso-f-security-cognito/
-├── backend/
-│   ├── template.yaml          # SAM: Cognito + HttpApi + Lambda + WAF
-│   ├── src/
-│   │   └── app.py             # Handler + pre_signup_trigger
-│   ├── events/
-│   │   ├── register.json      # Evento de prueba local
-│   │   └── login.json
-│   └── tests/
-│       ├── conftest.py
-│       └── test_app.py        # 35+ tests unitarios
-├── index.html                 # Landing estática (misma que sirve la Lambda)
-├── docs/
-│   └── architecture.md        # Diagrama Mermaid
-├── README.md
-└── AWS_PASO_A_PASO.md         # (este archivo)
+|-- backend/
+|   |-- template.yaml                # DEMO: HTTP API + JWT Authorizer
+|   |-- template-visualization.yaml  # VISUALIZATION: REST API + WAF
+|   |-- src/app.py                   # Handler compatible con ambos formatos
+|   |-- events/
+|   `-- tests/
+|-- docs/architecture.md
+|-- VISUALIZATION.md
+|-- README.md
+`-- index.html
 ```
 
----
-
-## Paso 2: Ejecutar tests unitarios
+## Paso 1: Ejecutar tests unitarios
 
 ```bash
-cd caso-f-security-cognito
-pip install pytest boto3
-pytest backend/tests/ -v --tb=short
+python -m pytest caso-f-security-cognito/backend/tests/ -v --tb=short
 ```
 
-Todos los tests usan `unittest.mock.patch` — no necesitan credenciales AWS.
+Los tests cubren:
 
----
+- routing HTTP API
+- routing REST API
+- register y login
+- profile con claims inyectados
+- health con metadata de modalidad
 
-## Paso 3: Invocar la Lambda localmente (opcional)
+## Paso 2: Probar localmente la modalidad DEMO
 
 ```bash
-cd backend
+cd caso-f-security-cognito/backend
 sam build
-
-# Prueba el endpoint de registro (falla si no hay Cognito real, útil para ver el routing)
-sam local invoke SecurityFunction -e events/register.json
-
-# Prueba la landing page
 sam local start-api
-# Luego abre http://localhost:3000
 ```
 
----
+Abre [http://localhost:3000](http://localhost:3000) y prueba el flujo visual.
 
-## Paso 4: Desplegar en AWS
+## Paso 3: Desplegar la modalidad DEMO
 
 ```bash
-cd backend
-
-# Primera vez — configura el nombre del stack, región y S3 para artefactos
-sam build && sam deploy --guided
+cd caso-f-security-cognito/backend
+sam build
+sam deploy --guided
 ```
 
-Responde a las preguntas:
-- **Stack Name**: `caso-f-security-cognito`
-- **AWS Region**: `us-east-2` (o tu región)
-- **DeployWAF**: `false` (recomendado para demo)
-- **Confirm changes**: `y`
-- **Allow SAM CLI IAM role creation**: `y`
-- **Save arguments to samconfig.toml**: `y`
+Respuestas sugeridas:
 
----
+- `Stack Name`: `caso-f-security-cognito`
+- `AWS Region`: `us-east-2`
+- `Confirm changes`: `y`
+- `Allow SAM CLI IAM role creation`: `y`
+- `Save arguments to samconfig.toml`: `y`
 
-## Paso 5: Obtener las URLs
+Outputs esperados:
 
-Al terminar el deploy, SAM muestra los Outputs:
-
-```
-Outputs:
-  ApiBaseUrl       = https://xxxx.execute-api.us-east-2.amazonaws.com
-  UserPoolId       = us-east-2_XXXXXXX
-  UserPoolClientId = 1234567890abcdefghijklmn
-  FunctionName     = caso-f-security-cognito-SecurityFunction-XXXX
+```text
+ApiBaseUrl       = https://xxxx.execute-api.us-east-2.amazonaws.com
+UserPoolId       = us-east-2_XXXXXXX
+UserPoolClientId = 1234567890abcdefghijklmn
+FunctionName     = caso-f-security-cognito-SecurityFunction-XXXX
+DeploymentMode   = demo-http-jwt
 ```
 
----
-
-## Paso 6: Probar manualmente con curl
+## Paso 4: Validar la modalidad DEMO con curl
 
 ```bash
 export API_F_URL=https://xxxx.execute-api.us-east-2.amazonaws.com
 
-# 1. Registrar usuario
+# Registrar usuario
 curl -s -X POST "$API_F_URL/auth/register" \
   -H "Content-Type: application/json" \
   -d '{"email":"test@demo.com","password":"Demo1234"}' | jq .
 
-# 2. Hacer login y guardar token
+# Login y guardar ID token
 TOKEN=$(curl -s -X POST "$API_F_URL/auth/login" \
   -H "Content-Type: application/json" \
-  -d '{"email":"test@demo.com","password":"Demo1234"}' | jq -r '.accessToken')
+  -d '{"email":"test@demo.com","password":"Demo1234"}' | jq -r '.idToken')
 
-# 3. Llamar endpoint protegido con JWT
+# Perfil protegido
 curl -s "$API_F_URL/profile" \
-  -H "Authorization: $TOKEN" | jq .
+  -H "Authorization: Bearer $TOKEN" | jq .
 
-# 4. Verificar que /profile rechaza requests sin token (403)
+# Sin token debe fallar con 401 o 403 segun authorizer
 curl -s -o /dev/null -w "%{http_code}" "$API_F_URL/profile"
 ```
 
----
-
-## Paso 7: Ejecutar smoke test automatizado
+## Paso 5: Ejecutar smoke test
 
 ```bash
 export API_F_URL=https://xxxx.execute-api.us-east-2.amazonaws.com
 bash scripts/smoke/smoke_caso_f.sh
 ```
 
----
+## Paso 6: Desplegar la modalidad VISUALIZATION
 
-## Paso 8: Demo visual
-
-Abre `$API_F_URL` en el navegador. La landing page sirve la interfaz interactiva de 3 pasos: registrar → login → perfil.
-
----
-
-## Paso 9: Activar WAF (opcional)
+Esta modalidad existe porque AWS WAF se asocia a REST API, no a HTTP API.
 
 ```bash
-# Solo si quieres probar el perimetro (~$5 USD/mes)
-sam deploy --parameter-overrides DeployWAF=true
+cd caso-f-security-cognito/backend
+sam build --template-file template-visualization.yaml
+sam deploy --template-file template-visualization.yaml \
+  --stack-name caso-f-security-cognito-visualization \
+  --region us-east-2 \
+  --resolve-s3 \
+  --capabilities CAPABILITY_IAM
 ```
 
-Para verificar que WAF bloquea SQLi:
+Outputs esperados:
+
+```text
+ApiBaseUrl       = https://xxxx.execute-api.us-east-2.amazonaws.com/Prod
+UserPoolId       = us-east-2_XXXXXXX
+UserPoolClientId = 1234567890abcdefghijklmn
+FunctionName     = caso-f-security-cognito-visualization-SecurityFunction-XXXX
+WebAclArn        = arn:aws:wafv2:...
+DeploymentMode   = visualization-rest-waf
+```
+
+## Paso 7: Validar WAF de verdad
+
+```bash
+export API_F_URL=https://xxxx.execute-api.us-east-2.amazonaws.com/Prod
+EXPECT_WAF=true bash scripts/smoke/smoke_caso_f.sh
+```
+
+Chequeo manual puntual:
+
 ```bash
 curl -s "$API_F_URL/auth/login?q=1' OR '1'='1" -w "\nHTTP: %{http_code}\n"
-# Esperado: HTTP 403 (bloqueado por WAF antes de llegar a Lambda)
 ```
 
----
+Esperado:
 
-## Paso 10: Limpiar todo
+- `HTTP 403`
+- el request no debe llegar a la Lambda
+
+## Paso 8: Capturar evidencia
+
+Usa [VISUALIZATION.md](VISUALIZATION.md) como checklist para:
+
+- stack desplegado
+- authorizer funcionando
+- WAF asociado
+- login correcto
+- `/profile` correcto
+- SQLi de prueba bloqueado
+
+## Paso 9: Limpiar
 
 ```bash
-cd backend
-sam delete --stack-name caso-f-security-cognito
+# Demo
+sam delete --stack-name caso-f-security-cognito --region us-east-2
+
+# Visualization
+sam delete --template-file template-visualization.yaml \
+  --stack-name caso-f-security-cognito-visualization \
+  --region us-east-2
 ```
-
-> Esto elimina: Lambda, API Gateway, Cognito User Pool (y todos sus usuarios), WAF (si fue desplegado), roles IAM y CloudFormation stack.
-
----
 
 ## Troubleshooting
 
-| Error | Causa | Solución |
-|-------|-------|----------|
-| `NotAuthorizedException` en login | Credenciales incorrectas | Verificar email/password |
-| `InvalidParameterException` | Password no cumple política | Mínimo 8 chars, mayúscula, número |
-| `403` en `/profile` sin token | JWT Authorizer rechaza la request | Incluir `Authorization: <access_token>` en el header |
-| `UserPoolClient does not support USER_PASSWORD_AUTH` | App Client sin el flujo habilitado | SAM template ya lo incluye; asegurarse de hacer `sam deploy` fresco |
-| WAF `403` en requests legítimas | False positive en AWSManagedRulesCommonRuleSet | Revisar WAF logs en CloudWatch; considerar `Count` mode en lugar de `Block` |
+| Problema | Causa probable | Solucion |
+|---|---|---|
+| `NotAuthorizedException` | Password o email incorrectos | Revisa credenciales |
+| `InvalidParameterException` | Password no cumple politica | Minimo 8 chars, mayuscula y numero |
+| `/profile` devuelve 401 o 403 | Falta token o token invalido | Usa `Authorization: Bearer <idToken>` |
+| WAF no bloquea la prueba | Estas en DEMO o usando URL sin `/Prod` | Usa `template-visualization.yaml` y la URL correcta |
+| La landing falla en REST API | URL base incompleta | Usa el `ApiBaseUrl` del output, incluyendo `/Prod` |

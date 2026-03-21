@@ -144,7 +144,7 @@ Porque DynamoDB no se modela como SQL tradicional; se modela segun las consultas
 
 **Que se hizo**
 
-Se implemento un modelo de seguridad perimetral con AWS Cognito, JWT Authorizer nativo de API Gateway y WAF opcional.
+Se implemento un modelo de seguridad perimetral con AWS Cognito y dos modalidades reales: una DEMO con HTTP API + JWT Authorizer y una VISUALIZATION con REST API + Cognito Authorizer + WAF.
 
 **Por que**
 
@@ -154,7 +154,7 @@ Porque ningun sistema de produccion deberia exponer endpoints sin autenticacion.
 
 - gestion de identidades (registro, login, tokens JWT)
 - autorizacion sin codigo de criptografia en Lambda
-- proteccion contra SQLi y XSS antes del API (WAF)
+- proteccion contra SQLi y XSS antes del API (WAF en modalidad VISUALIZATION)
 - prerequisito directo para el Caso I (GenAI expuesto publicamente)
 
 **Que mirar primero**
@@ -162,10 +162,11 @@ Porque ningun sistema de produccion deberia exponer endpoints sin autenticacion.
 - [Caso F](../caso-f-security-cognito/README.md)
 - [Arquitectura Caso F](../caso-f-security-cognito/docs/architecture.md)
 - [Paso a paso Caso F](../caso-f-security-cognito/AWS_PASO_A_PASO.md)
+- [Visualization Caso F](../caso-f-security-cognito/VISUALIZATION.md)
 
 **Como funciona el JWT sin codigo**
 
-El JWT Authorizer de API Gateway HTTP API valida la firma RS256, el issuer y el audience de Cognito antes de llamar a la Lambda. La Lambda recibe los claims ya validados en `requestContext.authorizer.jwt.claims`. No hay ni una linea de criptografia en el codigo Python.
+En DEMO, el JWT Authorizer de API Gateway HTTP API valida la firma RS256, el issuer y el audience de Cognito antes de llamar a la Lambda. En VISUALIZATION, el authorizer nativo de Cognito protege el REST API para poder asociar WAF. La Lambda no valida criptografia en ninguno de los dos caminos.
 
 ---
 

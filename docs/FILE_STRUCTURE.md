@@ -216,15 +216,17 @@ Cada directorio `caso-X-*` es un **proyecto autocontenido**. Aquí la anatomía 
 ### Caso F: `caso-f-security-cognito/` — Security First `Nivel 5` `COMPLETADO`
 | Archivo/Dir | Descripción |
 |-------------|-------------|
-| `backend/template.yaml` | Infraestructura SAM: Cognito UserPool + UserPoolClient + HttpApi con JWT Authorizer + WAF opcional. |
-| `backend/src/app.py` | Handler Python: register, login, profile, health, pre_signup_trigger. |
+| `backend/template.yaml` | Infraestructura SAM del modo DEMO: Cognito + HTTP API + JWT Authorizer. |
+| `backend/template-visualization.yaml` | Infraestructura SAM del modo VISUALIZATION: REST API + Cognito Authorizer + WAF. |
+| `backend/src/app.py` | Handler Python compatible con eventos de HTTP API v2 y REST API v1. |
 | `backend/events/register.json` | Evento de prueba para `sam local invoke` — registro. |
 | `backend/events/login.json` | Evento de prueba para `sam local invoke` — login. |
-| `backend/tests/test_app.py` | 35+ tests unitarios con `unittest.mock.patch` (sin moto, sin credenciales). |
-| `index.html` | Landing interactiva con flujo 3 pasos: registrar → login → perfil protegido. |
-| `docs/architecture.md` | Diagramas Mermaid: secuencia auth, 4 capas de defensa, arquitectura SAM, JWT Authorizer vs Custom Lambda. |
-| `README.md` | Stack, endpoints, decisiones tecnicas y guia de deploy. |
-| `AWS_PASO_A_PASO.md` | 10 pasos verificados con curl, troubleshooting y notas de costo. |
+| `backend/tests/test_app.py` | Tests unitarios para auth, claims, routing y compatibilidad entre ambos gateways. |
+| `index.html` | Landing interactiva con flujo 3 pasos y soporte para base path con stage `/Prod`. |
+| `docs/architecture.md` | Diagramas Mermaid y explicacion de por que el caso usa dos modalidades. |
+| `README.md` | Resumen del stack dual, endpoints y decisiones tecnicas. |
+| `AWS_PASO_A_PASO.md` | Deploy y validacion de DEMO y VISUALIZATION. |
+| `VISUALIZATION.md` | Checklist de capturas y cierre FinOps del despliegue con WAF. |
 
 ### Caso G: `caso-g-event-driven/` — Event Driven `Nivel 6` `COMPLETADO (VALIDADO)`
 | Archivo/Dir | Descripción |

@@ -9,7 +9,7 @@ S3_BUCKET ?= vladimir-caso-b-site-2026
 REGION ?= us-east-2
 TF_DIR = caso-c-terraform-s3
 
-.PHONY: help install lint format serve upload deploy-b tf-init tf-plan tf-apply tf-security docker-build k8s-lint clean case-h-build case-h-deploy case-h-destroy case-k-init case-k-deploy case-k-destroy finops-check test test-d test-e test-f test-g test-h smoke-d smoke-e smoke-f smoke-g smoke-h
+.PHONY: help install lint format serve upload deploy-b tf-init tf-plan tf-apply tf-security docker-build k8s-lint clean case-f-demo-build case-f-demo-deploy case-f-demo-destroy case-f-visualization-build case-f-visualization-deploy case-f-visualization-destroy case-h-build case-h-deploy case-h-destroy case-k-init case-k-deploy case-k-destroy finops-check test test-d test-e test-f test-g test-h smoke-d smoke-e smoke-f smoke-g smoke-h
 
 help: ## Muestra este mensaje de ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -79,6 +79,35 @@ tf-destroy: ## Destruye la infraestructura del Caso C
 	@echo "ATENCION: Destruyendo infraestructura de $(TF_DIR)..."
 	cd $(TF_DIR) && terraform destroy -auto-approve
 
+
+# ==========================================
+# CASO F: Security First
+# ==========================================
+CASE_F_DIR = caso-f-security-cognito/backend
+
+case-f-demo-build: ## Compila el Caso F en modo demo (HTTP API + JWT)
+	@echo "Compilando Caso F demo..."
+	cd $(CASE_F_DIR) && sam build
+
+case-f-demo-deploy: case-f-demo-build ## Despliega el Caso F en modo demo sin costo base
+	@echo "Desplegando Caso F demo en $(REGION)..."
+	cd $(CASE_F_DIR) && sam deploy --stack-name caso-f-security-cognito --region $(REGION) --resolve-s3 --capabilities CAPABILITY_IAM --no-confirm-changeset --no-fail-on-empty-changeset
+
+case-f-demo-destroy: ## Elimina el Caso F demo
+	@echo "Eliminando Caso F demo..."
+	cd $(CASE_F_DIR) && sam delete --stack-name caso-f-security-cognito --region $(REGION) --no-prompts
+
+case-f-visualization-build: ## Compila el Caso F en modo visualization (REST API + WAF)
+	@echo "Compilando Caso F visualization..."
+	cd $(CASE_F_DIR) && sam build --template-file template-visualization.yaml
+
+case-f-visualization-deploy: case-f-visualization-build ## Despliega el Caso F visualization (WAF activo: destruir tras capturas)
+	@echo "Desplegando Caso F visualization en $(REGION)..."
+	cd $(CASE_F_DIR) && sam deploy --template-file template-visualization.yaml --stack-name caso-f-security-cognito-visualization --region $(REGION) --resolve-s3 --capabilities CAPABILITY_IAM --no-confirm-changeset --no-fail-on-empty-changeset
+
+case-f-visualization-destroy: ## Elimina el Caso F visualization y evita cobro del WAF
+	@echo "Eliminando Caso F visualization..."
+	cd $(CASE_F_DIR) && sam delete --stack-name caso-f-security-cognito-visualization --region $(REGION) --no-prompts
 
 # ==========================================
 # CASO H: Observability + CloudWatch + X-Ray

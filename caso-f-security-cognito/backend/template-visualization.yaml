@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: caso-f-security-cognito demo - Cognito User Pool + HTTP API JWT Authorizer
+Description: caso-f-security-cognito visualization - REST API + Cognito Authorizer + WAF
 
 Globals:
   Function:
@@ -13,7 +13,7 @@ Resources:
   UserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      UserPoolName: caso-f-user-pool
+      UserPoolName: caso-f-user-pool-visualization
       UsernameAttributes:
         - email
       AutoVerifiedAttributes:
@@ -41,7 +41,7 @@ Resources:
     Type: AWS::Cognito::UserPoolClient
     Properties:
       UserPoolId: !Ref UserPool
-      ClientName: caso-f-app-client
+      ClientName: caso-f-app-client-visualization
       GenerateSecret: false
       ExplicitAuthFlows:
         - ALLOW_USER_PASSWORD_AUTH
@@ -55,27 +55,21 @@ Resources:
         RefreshToken: days
 
   Api:
-    Type: AWS::Serverless::HttpApi
+    Type: AWS::Serverless::Api
     Properties:
-      CorsConfiguration:
-        AllowOrigins:
-          - "*"
-        AllowMethods:
-          - GET
-          - POST
-          - OPTIONS
-        AllowHeaders:
-          - content-type
-          - authorization
+      Name: caso-f-security-cognito-visualization
+      StageName: Prod
+      EndpointConfiguration: REGIONAL
+      Cors:
+        AllowOrigin: "'*'"
+        AllowHeaders: "'Content-Type,Authorization'"
+        AllowMethods: "'GET,POST,OPTIONS'"
       Auth:
-        DefaultAuthorizer: CognitoJwtAuth
+        DefaultAuthorizer: CognitoAuthorizer
+        AddDefaultAuthorizerToCorsPreflight: false
         Authorizers:
-          CognitoJwtAuth:
-            IdentitySource: "$request.header.Authorization"
-            JwtConfiguration:
-              issuer: !Sub "https://cognito-idp.${AWS::Region}.amazonaws.com/${UserPool}"
-              audience:
-                - !Ref UserPoolClient
+          CognitoAuthorizer:
+            UserPoolArn: !GetAtt UserPool.Arn
 
   SecurityFunction:
     Type: AWS::Serverless::Function
@@ -86,8 +80,8 @@ Resources:
         Variables:
           COGNITO_CLIENT_ID: !Ref UserPoolClient
           COGNITO_USER_POOL_ID: !Ref UserPool
-          DEPLOYMENT_MODE: demo-http-jwt
-          PERIMETER_MODE: http-api-jwt-authorizer
+          DEPLOYMENT_MODE: visualization-rest-waf
+          PERIMETER_MODE: rest-api-cognito-authorizer-waf
       Policies:
         - Statement:
             - Effect: Allow
@@ -99,50 +93,50 @@ Resources:
               Resource: "*"
       Events:
         RootLanding:
-          Type: HttpApi
+          Type: Api
           Properties:
-            ApiId: !Ref Api
+            RestApiId: !Ref Api
             Path: /
-            Method: GET
+            Method: get
             Auth:
               Authorizer: NONE
         HealthCheck:
-          Type: HttpApi
+          Type: Api
           Properties:
-            ApiId: !Ref Api
+            RestApiId: !Ref Api
             Path: /health
-            Method: GET
+            Method: get
             Auth:
               Authorizer: NONE
         Register:
-          Type: HttpApi
+          Type: Api
           Properties:
-            ApiId: !Ref Api
+            RestApiId: !Ref Api
             Path: /auth/register
-            Method: POST
+            Method: post
             Auth:
               Authorizer: NONE
         Login:
-          Type: HttpApi
+          Type: Api
           Properties:
-            ApiId: !Ref Api
+            RestApiId: !Ref Api
             Path: /auth/login
-            Method: POST
+            Method: post
             Auth:
               Authorizer: NONE
         Profile:
-          Type: HttpApi
+          Type: Api
           Properties:
-            ApiId: !Ref Api
+            RestApiId: !Ref Api
             Path: /profile
-            Method: GET
+            Method: get
 
   PreSignUpFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: src/
       Handler: app.pre_signup_trigger
-      Description: Auto-confirma usuarios para demo. No usar en produccion.
+      Description: Auto-confirma usuarios para visualization. No usar en produccion.
 
   PreSignUpPermission:
     Type: AWS::Lambda::Permission
@@ -152,10 +146,53 @@ Resources:
       Principal: cognito-idp.amazonaws.com
       SourceArn: !GetAtt UserPool.Arn
 
+  WafWebAcl:
+    Type: AWS::WAFv2::WebACL
+    Properties:
+      Name: caso-f-security-cognito-visualization
+      Scope: REGIONAL
+      DefaultAction:
+        Allow: {}
+      VisibilityConfig:
+        CloudWatchMetricsEnabled: true
+        MetricName: caso-f-security-cognito-visualization
+        SampledRequestsEnabled: true
+      Rules:
+        - Name: AWSManagedRulesCommonRuleSet
+          Priority: 0
+          OverrideAction:
+            None: {}
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesCommonRuleSet
+          VisibilityConfig:
+            CloudWatchMetricsEnabled: true
+            MetricName: caso-f-security-cognito-common
+            SampledRequestsEnabled: true
+        - Name: AWSManagedRulesSQLiRuleSet
+          Priority: 1
+          OverrideAction:
+            None: {}
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesSQLiRuleSet
+          VisibilityConfig:
+            CloudWatchMetricsEnabled: true
+            MetricName: caso-f-security-cognito-sqli
+            SampledRequestsEnabled: true
+
+  WafAssociation:
+    Type: AWS::WAFv2::WebACLAssociation
+    Properties:
+      ResourceArn: !Sub "arn:aws:apigateway:${AWS::Region}::/restapis/${Api}/stages/Prod"
+      WebACLArn: !GetAtt WafWebAcl.Arn
+
 Outputs:
   ApiBaseUrl:
-    Description: URL base del HTTP API demo
-    Value: !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com"
+    Description: URL base del REST API visualization
+    Value: !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com/Prod"
 
   UserPoolId:
     Description: ID del Cognito User Pool
@@ -169,6 +206,10 @@ Outputs:
     Description: Nombre de la Lambda principal
     Value: !Ref SecurityFunction
 
+  WebAclArn:
+    Description: ARN del WAF WebACL
+    Value: !GetAtt WafWebAcl.Arn
+
   DeploymentMode:
     Description: Modalidad del despliegue
-    Value: demo-http-jwt
+    Value: visualization-rest-waf

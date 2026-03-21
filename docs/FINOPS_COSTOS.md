@@ -159,7 +159,7 @@ Los GSI en DynamoDB on-demand no tienen costo base; se cobra por las lecturas qu
 
 ### Caso F — Security First (Cognito + JWT Authorizer + WAF)
 
-**Servicios activos:** Cognito User Pool, API Gateway HTTP con JWT Authorizer, Lambda, y opcionalmente WAF
+**Servicios activos:** Cognito User Pool, API Gateway, Lambda y, en visualization, WAF
 
 | Servicio | Modelo | Free Tier | Costo si se supera |
 |---|---|---|---|
@@ -169,8 +169,8 @@ Los GSI en DynamoDB on-demand no tienen costo base; se cobra por las lecturas qu
 | WAF — Managed Rules | Por regla activada | $1.00/mes por grupo de reglas activo | $1.00/millón de requests |
 
 **Costo real:**
-- **Sin WAF (DeployWAF=false, default):** $0.00
-- **Con WAF activo:** $5 (WebACL) + $2 (2 grupos de reglas) = ~$7/mes base
+- **Modo DEMO (`template.yaml`):** $0.00
+- **Modo VISUALIZATION (`template-visualization.yaml`):** $5 (WebACL) + $2 (2 grupos de reglas) = ~$7/mes base
 
 **Punto crítico del WAF:** El WAF es el único servicio en este caso con costo fijo provisioned. El template SAM tiene `DeployWAF=false` por defecto precisamente por esto. Si se activa el WAF para probar, destruir el stack al terminar.
 

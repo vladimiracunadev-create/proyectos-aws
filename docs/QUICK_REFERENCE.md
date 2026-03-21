@@ -183,8 +183,14 @@ docker run --rm -it -v "$(pwd):/workspace" proyectos-aws/tooling:1.0.0 /bin/bash
 
 ```bash
 cd caso-f-security-cognito/backend
+
+# DEMO
 sam build && sam deploy --guided
-# DeployWAF: false (por defecto, sin costo base)
+
+# VISUALIZATION
+sam build --template-file template-visualization.yaml
+sam deploy --template-file template-visualization.yaml \
+  --stack-name caso-f-security-cognito-visualization
 ```
 
 Validaciones utiles:
@@ -195,17 +201,17 @@ curl -s -X POST "$API_F_URL/auth/register" \
   -H "Content-Type: application/json" \
   -d '{"email":"test@demo.com","password":"Demo1234"}' | jq .
 
-# Login + guardar token
+# Login + guardar ID token
 TOKEN=$(curl -s -X POST "$API_F_URL/auth/login" \
   -H "Content-Type: application/json" \
-  -d '{"email":"test@demo.com","password":"Demo1234"}' | jq -r '.accessToken')
+  -d '{"email":"test@demo.com","password":"Demo1234"}' | jq -r '.idToken')
 
 # Perfil protegido (JWT validado por API GW)
-curl -s "$API_F_URL/profile" -H "Authorization: $TOKEN" | jq .
+curl -s "$API_F_URL/profile" -H "Authorization: Bearer $TOKEN" | jq .
 
 # Verificar que /profile rechaza sin token
 curl -s -o /dev/null -w "%{http_code}" "$API_F_URL/profile"
-# Esperado: 403
+# Esperado: 401 o 403
 ```
 
 ---
@@ -222,6 +228,7 @@ curl -s -o /dev/null -w "%{http_code}" "$API_F_URL/profile"
 | [caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md](../caso-e-dynamodb-persistence/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso E |
 | [caso-f-security-cognito/README.md](../caso-f-security-cognito/README.md) | Resumen del Caso F |
 | [caso-f-security-cognito/AWS_PASO_A_PASO.md](../caso-f-security-cognito/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso F |
+| [caso-f-security-cognito/VISUALIZATION.md](../caso-f-security-cognito/VISUALIZATION.md) | Evidencia estatica del modo con WAF |
 | [caso-g-event-driven/README.md](../caso-g-event-driven/README.md) | Resumen del Caso G |
 | [caso-g-event-driven/AWS_PASO_A_PASO.md](../caso-g-event-driven/AWS_PASO_A_PASO.md) | Deploy y validacion del Caso G |
 | [caso-h-observability/README.md](../caso-h-observability/README.md) | Resumen del Caso H |
