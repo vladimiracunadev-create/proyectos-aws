@@ -186,6 +186,12 @@ Lectura simple del caso:
 - `DEMO`: crear usuario, hacer login y abrir `/profile`
 - pagina WAF: usar el mismo token para demostrar la segunda capa perimetral
 
+URLs y evidencia:
+
+- `DEMO`: [https://tmi7kgebl9.execute-api.us-east-2.amazonaws.com/](https://tmi7kgebl9.execute-api.us-east-2.amazonaws.com/)
+- `WAF asociado`: [https://2i88ijfu54.execute-api.us-east-2.amazonaws.com/Prod](https://2i88ijfu54.execute-api.us-east-2.amazonaws.com/Prod)
+- `Reporte de visualizacion`: [../caso-f-security-cognito/VISUALIZATION.md](../caso-f-security-cognito/VISUALIZATION.md)
+
 ```bash
 cd caso-f-security-cognito/backend
 

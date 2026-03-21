@@ -168,6 +168,8 @@ Porque ningun sistema de produccion deberia exponer endpoints sin autenticacion.
 
 **Que mirar primero**
 
+- [DEMO principal](https://tmi7kgebl9.execute-api.us-east-2.amazonaws.com/)
+- [WAF asociado](https://2i88ijfu54.execute-api.us-east-2.amazonaws.com/Prod)
 - [Caso F](../caso-f-security-cognito/README.md)
 - [Arquitectura Caso F](../caso-f-security-cognito/docs/architecture.md)
 - [Paso a paso Caso F](../caso-f-security-cognito/AWS_PASO_A_PASO.md)

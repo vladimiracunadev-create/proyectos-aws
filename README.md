@@ -207,6 +207,7 @@ Cada carpeta representa un hito en la evolución de un Ingeniero Cloud. Aquí el
 *   **Qué demuestra a un reclutador**: seguridad cloud aplicada a un problema real: no dejar rutas privadas abiertas a cualquiera y mover la validacion del token al borde.
 *   🏗️ [Arquitectura (Mermaid)](caso-f-security-cognito/docs/architecture.md)
 *   ☁️ [Guía Paso a Paso AWS](caso-f-security-cognito/AWS_PASO_A_PASO.md)
+*   👉 [DEMO principal](https://tmi7kgebl9.execute-api.us-east-2.amazonaws.com/) / [WAF asociado](https://2i88ijfu54.execute-api.us-east-2.amazonaws.com/Prod)
 *   🖼️ [Reporte de Visualización y Resultados](caso-f-security-cognito/VISUALIZATION.md)
 
 #### [📂 Caso G: Event Driven](./caso-g-event-driven/README.md) `Nivel 6` `COMPLETADO`

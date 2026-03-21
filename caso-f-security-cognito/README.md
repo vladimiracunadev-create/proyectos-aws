@@ -12,6 +12,24 @@ La seguridad no es un parche, es la base. Este caso ensena seguridad por capas c
 
 Ambas piezas cuentan la misma historia de producto. No son dos productos distintos.
 
+## Estado real y criterio de costo
+
+- `DEMO principal`: [https://tmi7kgebl9.execute-api.us-east-2.amazonaws.com/](https://tmi7kgebl9.execute-api.us-east-2.amazonaws.com/)
+- `WAF asociado`: [https://2i88ijfu54.execute-api.us-east-2.amazonaws.com/Prod](https://2i88ijfu54.execute-api.us-east-2.amazonaws.com/Prod)
+- `Reporte de Visualizacion y Resultados`: [VISUALIZATION.md](VISUALIZATION.md)
+
+La regla de costo del modulo es esta:
+
+- el `DEMO` puede quedar publicado porque su costo base es practicamente cero para este laboratorio
+- el `WAF` no conviene dejarlo activo por tiempo indefinido porque agrega un costo fijo cercano a `~$7/mes`
+- por eso el reporte de visualizacion no se elimina: sirve como evidencia y respaldo cuando la capa WAF se destruye
+
+La navegacion correcta del caso debe mostrar siempre:
+
+1. `DEMO`
+2. `WAF asociado`
+3. `VISUALIZATION.md` como respaldo FinOps
+
 ## Explicacion sin jerga
 
 Si una aplicacion tiene usuarios, necesita una puerta segura.

@@ -97,6 +97,8 @@ El `Caso H` no crea el dashboard desde la consola: el `AWS::CloudWatch::Dashboar
 **Solucion**: Cognito User Pool para identidades, JWT Authorizer nativo en API Gateway para autorizacion sin codigo Lambda, WAF opcional para bloquear SQLi y XSS.
 **Habilidad demostrada**: identidad en AWS, defensa en profundidad, IaC de seguridad, separacion autenticacion/autorizacion.
 **Estado**: completado con tests y documentacion.
+**Demo**: [DEMO principal](https://tmi7kgebl9.execute-api.us-east-2.amazonaws.com/) / [WAF asociado](https://2i88ijfu54.execute-api.us-east-2.amazonaws.com/Prod)
+**Respaldo FinOps**: [Reporte de Visualizacion y Resultados](../caso-f-security-cognito/VISUALIZATION.md)
 
 ### Caso G: Event Driven
 
