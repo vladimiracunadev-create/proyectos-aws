@@ -87,6 +87,7 @@ Hemos organizado la base de conocimientos para que sea fácil de navegar:
 ### 💰 FinOps & Auditoría
 - 💰 **[Costos por Caso Completado](docs/FINOPS_COSTOS.md)**: Análisis detallado para los 11 casos: free tier, provisioned, estrategias y tabla de riesgo financiero.
 - 🔧 **[Manual de FinOps](docs/FINOPS_MANUAL.md)**: Auditoría rápida y semáforo de riesgo financiero.
+- 🧭 **[Centro de Control de Costos AWS](docs/COST_CONTROL_COMMAND_CENTER.md)**: Cuenta, créditos, Free Tier, Cost Explorer, comandos Windows y auditoría completa por caso del monorepo.
 - 📊 **[Análisis de Casos Proyectados](docs/PROYECTADOS_ANALISIS.md)**: Complejidad, costos y orden de implementación para casos futuros (I, M, N, O).
 - 🧮 **Calculadora Interactiva de Costos**: Disponible en GitLab Pages — sección 💰 FinOps del portal.
 

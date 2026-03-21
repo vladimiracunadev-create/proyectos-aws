@@ -55,7 +55,7 @@ Decision Demo en Vivo vs Reporte de Visualizacion segun costo del caso.
 Para casos con recursos de costo fijo (H, J, K, M): genera VISUALIZATION.md detallado.
 
 #### `finops-audit-and-budgeting`
-Scripts de auditoria de costos, automatizacion de presupuestos y dashboards de FinOps.
+Scripts de auditoria de costos, cuenta, creditos, Free Tier, presupuestos y dashboards de FinOps.
 
 ### Scaffolding y CI/CD
 

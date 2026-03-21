@@ -9,7 +9,7 @@ S3_BUCKET ?= vladimir-caso-b-site-2026
 REGION ?= us-east-2
 TF_DIR = caso-c-terraform-s3
 
-.PHONY: help install lint format serve upload deploy-b tf-init tf-plan tf-apply tf-security docker-build k8s-lint clean case-f-demo-build case-f-demo-deploy case-f-demo-destroy case-f-visualization-build case-f-visualization-deploy case-f-visualization-destroy case-h-build case-h-deploy case-h-destroy case-k-init case-k-deploy case-k-destroy finops-check test test-d test-e test-f test-g test-h smoke-d smoke-e smoke-f smoke-g smoke-h
+.PHONY: help install lint format serve upload deploy-b tf-init tf-plan tf-apply tf-security docker-build k8s-lint clean case-f-demo-build case-f-demo-deploy case-f-demo-destroy case-f-visualization-build case-f-visualization-deploy case-f-visualization-destroy case-h-build case-h-deploy case-h-destroy case-k-init case-k-deploy case-k-destroy finops-check finops-control test test-d test-e test-f test-g test-h smoke-d smoke-e smoke-f smoke-g smoke-h
 
 help: ## Muestra este mensaje de ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -22,6 +22,16 @@ finops-check: ## 💰 Escanea recursos activos en AWS (Multi-Región) para evita
 	else \
 		echo "Detectado entorno Windows/PowerShell. Ejecutando script .ps1..."; \
 		powershell -ExecutionPolicy Bypass -File ./scripts/aws-resource-audit.ps1; \
+	fi
+
+finops-control: ## 🧭 Ejecuta auditoría completa de cuenta, billing y recursos del monorepo
+	@if [ -f /bin/bash ]; then \
+		echo "Detectado entorno Bash. Ejecutando reporte completo .sh..."; \
+		chmod +x ./scripts/aws-cost-control-report.sh; \
+		./scripts/aws-cost-control-report.sh --regions us-east-2,us-east-1,sa-east-1 --billing-region us-east-1; \
+	else \
+		echo "Detectado entorno Windows/PowerShell. Ejecutando reporte completo .ps1..."; \
+		powershell -ExecutionPolicy Bypass -File ./scripts/aws-cost-control-report.ps1 -Regions us-east-2,us-east-1,sa-east-1 -BillingRegion us-east-1; \
 	fi
 
 case-l-deploy: ## Genera datos de FinOps y sincroniza el sitio estático S3
