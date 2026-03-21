@@ -24,6 +24,7 @@ build/
 
 # Misc
 *.log
+.tmp/
 .pytest_cache/
 .sam-appdata/
 .vendor/

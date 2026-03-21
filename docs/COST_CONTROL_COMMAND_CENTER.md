@@ -341,11 +341,13 @@ make finops-control
 Alternativas directas:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\aws-cost-control-report.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\aws-cost-control-report.ps1 `
+  -OutputPath .\.tmp\skill-output\finops-report.txt
 ```
 
 ```bash
-./scripts/aws-cost-control-report.sh
+./scripts/aws-cost-control-report.sh \
+  --output-path ./.tmp/skill-output/finops-report.txt
 ```
 
 Con parametros:
@@ -356,7 +358,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\aws-cost-control-report.ps1 `
   -BillingRegion us-east-1 `
   -StartDate 2026-03-01 `
   -EndDate 2026-04-01 `
-  -OutputPath .\finops-report.txt
+  -OutputPath .\.tmp\skill-output\finops-report.txt
 ```
 
 ```bash
@@ -365,7 +367,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\aws-cost-control-report.ps1 `
   --billing-region us-east-1 \
   --start-date 2026-03-01 \
   --end-date 2026-04-01 \
-  --output-path ./finops-report.txt
+  --output-path ./.tmp/skill-output/finops-report.txt
 ```
 
 ---
@@ -386,6 +388,14 @@ Usalo cuando quieras:
 - actualizar dashboards o documentacion FinOps
 
 La idea del skill no es adivinar precios: es apoyarse en estos scripts y en las APIs reales de AWS para leer la cuenta.
+
+Para no ensuciar el repositorio, cualquier salida local generada por este flujo debe quedar dentro de:
+
+```text
+.tmp/skill-output/
+```
+
+Esa ruta vive bajo `.tmp/`, que esta bloqueada en `.gitignore` y no se sube al repositorio.
 
 ---
 

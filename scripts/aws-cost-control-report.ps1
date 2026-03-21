@@ -14,6 +14,10 @@ if ($Regions.Count -eq 1 -and $Regions[0] -match ",") {
 }
 
 if ($OutputPath) {
+  $outputDirectory = Split-Path -Path $OutputPath -Parent
+  if ($outputDirectory) {
+    New-Item -ItemType Directory -Force -Path $outputDirectory | Out-Null
+  }
   Start-Transcript -Path $OutputPath -Force | Out-Null
 }
 

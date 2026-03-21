@@ -65,6 +65,7 @@ EOF
 done
 
 if [[ -n "$OUTPUT_PATH" ]]; then
+  mkdir -p "$(dirname "$OUTPUT_PATH")"
   exec > >(tee "$OUTPUT_PATH") 2>&1
 fi
 
