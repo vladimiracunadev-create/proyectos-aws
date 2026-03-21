@@ -95,11 +95,12 @@ graph TB
 graph TB
     subgraph Tier_F["🔐 Caso F: Security First"]
         direction TB
-        F1[☁️ WAF WebACL<br/>SQLi + Common Rules] -->|filtra| F2[🌐 API GW HTTP API<br/>JWT Authorizer]
-        F2 -->|rutas publicas| F3[⚡ Lambda — register / login]
-        F3 -->|sign_up / initiate_auth| F4[🔑 Cognito User Pool]
-        F4 -->|Pre-Signup trigger| F5[⚡ Lambda Pre-SignUp]
-        F2 -->|rutas protegidas — claims| F6[⚡ Lambda — profile]
+        F1[🔑 Cognito User Pool compartido] -->|mismo usuario / mismo token| F2[🌐 HTTP API DEMO<br/>JWT Authorizer]
+        F2 -->|register / login / profile| F3[⚡ Lambda demo]
+        F1 -->|mismo token| F4[🌐 REST API WAF<br/>Cognito Authorizer]
+        F5[☁️ WAF WebACL<br/>SQLi + Common Rules] -->|filtra| F4
+        F4 -->|profile / health| F6[⚡ Lambda WAF]
+        F1 -->|solo alta de usuario| F7[⚡ Lambda Pre-SignUp]
     end
 
     subgraph Tier_H["📊 Caso H: Observability"]
