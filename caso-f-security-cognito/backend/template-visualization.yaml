@@ -185,6 +185,8 @@ Resources:
 
   WafAssociation:
     Type: AWS::WAFv2::WebACLAssociation
+    DependsOn:
+      - ApiProdStage
     Properties:
       ResourceArn: !Sub "arn:aws:apigateway:${AWS::Region}::/restapis/${Api}/stages/Prod"
       WebACLArn: !GetAtt WafWebAcl.Arn
