@@ -3,10 +3,15 @@
   --text: #e8eefc;
   --muted: #a7b0c3;
   --line: rgba(255, 255, 255, .12);
+  --line-strong: rgba(255, 255, 255, .22);
   --shadow: 0 10px 24px rgba(0, 0, 0, .35);
   --card-bg: linear-gradient(180deg, rgba(255, 255, 255, .04), rgba(255, 255, 255, .02));
   --card-soft: linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, .01));
   --btn-bg: rgba(255, 255, 255, .04);
+  --accent: #70a5ff;
+  --accent-soft: rgba(112, 165, 255, .16);
+  --accent-strong: rgba(112, 165, 255, .34);
+  --surface: rgba(255, 255, 255, .03);
   --radius2: 22px;
   --max: 1120px;
   --pad: 20px;
@@ -17,56 +22,73 @@ body[data-theme="light"] {
   --text: #0f172a;
   --muted: #64748b;
   --line: rgba(0, 0, 0, .08);
+  --line-strong: rgba(0, 0, 0, .14);
   --shadow: 0 10px 24px rgba(0, 0, 0, .08);
   --card-bg: #ffffff;
   --card-soft: #f1f5f9;
   --btn-bg: rgba(0, 0, 0, .05);
+  --accent: #2563eb;
+  --accent-soft: rgba(37, 99, 235, .10);
+  --accent-strong: rgba(37, 99, 235, .2);
+  --surface: rgba(255, 255, 255, .7);
 }
 
-/* --- LÓGICA DE VISIBILIDAD BILINGÜE (RESPETUOSA) --- */
+/* --- LÓGICA DE VISIBILIDAD MULTILINGÜE --- */
 /* Ocultar por defecto para evitar parpadeos */
 [data-en],
-[data-es] {
+[data-es],
+[data-pt],
+[data-it],
+[data-fr],
+[data-zh] {
   display: none !important;
 }
 
-/* Inyección de visibilidad basada en el lenguaje - No fuerza display type */
+/* Visibilidad basada en el idioma activo (spans y elementos inline) */
 body:not([data-lang]) [data-es],
-body[data-lang="es"] [data-es] {
-  display: revert !important;
-}
+body[data-lang="es"] [data-es] { display: revert !important; }
 
-body[data-lang="en"] [data-en] {
-  display: revert !important;
-}
+body[data-lang="en"] [data-en] { display: revert !important; }
+body[data-lang="pt"] [data-pt] { display: revert !important; }
+body[data-lang="it"] [data-it] { display: revert !important; }
+body[data-lang="fr"] [data-fr] { display: revert !important; }
+body[data-lang="zh"] [data-zh] { display: revert !important; }
 
-/* Casos específicos para elementos de bloque que 'revert' podría no manejar bien en todos los navegadores */
-body:not([data-lang]) div[data-es],
-body[data-lang="es"] div[data-es],
-body:not([data-lang]) section[data-es],
-body[data-lang="es"] section[data-es],
-body:not([data-lang]) article[data-es],
-body[data-lang="es"] article[data-es],
-body:not([data-lang]) p[data-es],
-body[data-lang="es"] p[data-es],
-body:not([data-lang]) h1[data-es],
-body[data-lang="es"] h1[data-es],
-body:not([data-lang]) h2[data-es],
-body[data-lang="es"] h2[data-es],
-body:not([data-lang]) h3[data-es],
-body[data-lang="es"] h3[data-es] {
+/* Elementos de bloque: forzar display:block donde revert no alcanza */
+body:not([data-lang]) div[data-es],  body[data-lang="es"] div[data-es],
+body:not([data-lang]) section[data-es], body[data-lang="es"] section[data-es],
+body:not([data-lang]) article[data-es], body[data-lang="es"] article[data-es],
+body:not([data-lang]) p[data-es],    body[data-lang="es"] p[data-es],
+body:not([data-lang]) h1[data-es],   body[data-lang="es"] h1[data-es],
+body:not([data-lang]) h2[data-es],   body[data-lang="es"] h2[data-es],
+body:not([data-lang]) h3[data-es],   body[data-lang="es"] h3[data-es] {
   display: block !important;
 }
 
-body[data-lang="en"] div[data-en],
-body[data-lang="en"] section[data-en],
-body[data-lang="en"] article[data-en],
-body[data-lang="en"] p[data-en],
-body[data-lang="en"] h1[data-en],
-body[data-lang="en"] h2[data-en],
-body[data-lang="en"] h3[data-en] {
-  display: block !important;
-}
+body[data-lang="en"] div[data-en],   body[data-lang="en"] section[data-en],
+body[data-lang="en"] article[data-en], body[data-lang="en"] p[data-en],
+body[data-lang="en"] h1[data-en],    body[data-lang="en"] h2[data-en],
+body[data-lang="en"] h3[data-en] { display: block !important; }
+
+body[data-lang="pt"] div[data-pt],   body[data-lang="pt"] section[data-pt],
+body[data-lang="pt"] article[data-pt], body[data-lang="pt"] p[data-pt],
+body[data-lang="pt"] h1[data-pt],    body[data-lang="pt"] h2[data-pt],
+body[data-lang="pt"] h3[data-pt] { display: block !important; }
+
+body[data-lang="it"] div[data-it],   body[data-lang="it"] section[data-it],
+body[data-lang="it"] article[data-it], body[data-lang="it"] p[data-it],
+body[data-lang="it"] h1[data-it],    body[data-lang="it"] h2[data-it],
+body[data-lang="it"] h3[data-it] { display: block !important; }
+
+body[data-lang="fr"] div[data-fr],   body[data-lang="fr"] section[data-fr],
+body[data-lang="fr"] article[data-fr], body[data-lang="fr"] p[data-fr],
+body[data-lang="fr"] h1[data-fr],    body[data-lang="fr"] h2[data-fr],
+body[data-lang="fr"] h3[data-fr] { display: block !important; }
+
+body[data-lang="zh"] div[data-zh],   body[data-lang="zh"] section[data-zh],
+body[data-lang="zh"] article[data-zh], body[data-lang="zh"] p[data-zh],
+body[data-lang="zh"] h1[data-zh],    body[data-lang="zh"] h2[data-zh],
+body[data-lang="zh"] h3[data-zh] { display: block !important; }
 
 * {
   box-sizing: border-box
@@ -82,6 +104,7 @@ body {
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   background: radial-gradient(1200px 800px at 20% -10%, rgba(90, 140, 255, .12), transparent 55%),
     radial-gradient(1000px 700px at 90% 10%, rgba(0, 240, 255, .08), transparent 50%),
+    radial-gradient(900px 600px at 50% 30%, rgba(112, 165, 255, .05), transparent 60%),
     var(--bg);
   color: var(--text);
   line-height: 1.5;
@@ -104,6 +127,19 @@ pre {
   max-width: var(--max);
   margin: 0 auto;
   padding: 0 var(--pad)
+}
+
+.mt-6 {
+  margin-top: 6px
+}
+
+.mt-0 {
+  margin-top: 0
+}
+
+.text-center-pad {
+  text-align: center;
+  padding: 8px 0
 }
 
 .mt-10 {
@@ -134,9 +170,10 @@ pre {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(11, 13, 16, .72);
-  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
 }
 
 .topbar__inner {
@@ -194,7 +231,8 @@ pre {
 
 .brand__name {
   font-weight: 750;
-  letter-spacing: .2px
+  letter-spacing: .2px;
+  font-size: 15px
 }
 
 .brand__role {
@@ -236,7 +274,8 @@ pre {
 
 .nav a:hover {
   color: var(--text);
-  background: rgba(255, 255, 255, .04)
+  background: var(--surface);
+  opacity: 1
 }
 
 .views {
@@ -244,6 +283,11 @@ pre {
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  backdrop-filter: blur(10px);
 }
 
 .views__label {
@@ -267,12 +311,19 @@ pre {
   min-height: 40px;
   display: inline-flex;
   align-items: center;
+  transition: transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
+}
+
+.chip:hover {
+  transform: translateY(-1px);
+  border-color: var(--line-strong);
+  color: var(--text);
 }
 
 .chip.is-active {
   color: var(--text);
-  background: rgba(255, 255, 255, .08);
-  border-color: rgba(255, 255, 255, .22)
+  background: linear-gradient(180deg, var(--accent-strong), var(--accent-soft));
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line))
 }
 
 .settings {
@@ -280,6 +331,11 @@ pre {
   gap: 12px;
   align-items: center;
   flex-shrink: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  backdrop-filter: blur(10px);
 }
 
 .lang-select {
@@ -300,6 +356,7 @@ pre {
   background-size: 12px;
   padding-right: 28px;
   color-scheme: dark;
+  min-height: 40px;
   /* Ayuda a que los estilos nativos de las options hereden el tema oscuro */
 }
 
@@ -333,10 +390,12 @@ body[data-theme="light"] .lang-select option {
   cursor: pointer;
   transition: all 0.2s;
   backdrop-filter: blur(5px);
+  min-height: 40px;
 }
 
 .theme-toggle:hover {
-  background: var(--line);
+  background: var(--surface);
+  border-color: var(--line-strong);
 }
 
 .theme-toggle i {
@@ -344,7 +403,7 @@ body[data-theme="light"] .lang-select option {
 }
 
 .hero {
-  padding: 44px 0 26px
+  padding: 50px 0 30px
 }
 
 .hero__inner {
@@ -356,14 +415,30 @@ body[data-theme="light"] .lang-select option {
 
 .hero h1 {
   margin: 0 0 10px;
-  font-size: 40px;
+  font-size: clamp(34px, 5vw, 52px);
   line-height: 1.1
 }
 
 .lead {
   margin: 0 0 16px;
   color: var(--muted);
-  font-size: 16px
+  font-size: 17px;
+  max-width: 68ch
+}
+
+.hero__context {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(180deg, var(--surface), transparent);
+  color: var(--muted);
+  font-size: 13px;
+  max-width: 72ch;
+}
+
+.hero__context strong {
+  color: var(--text)
 }
 
 .meta {
@@ -376,7 +451,7 @@ body[data-theme="light"] .lang-select option {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin: 14px 0
+  margin: 16px 0
 }
 
 .pill {
@@ -386,9 +461,10 @@ body[data-theme="light"] .lang-select option {
   padding: 8px 10px;
   border-radius: 999px;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, .03);
+  background: linear-gradient(180deg, var(--surface), transparent);
   font-size: 12px;
   color: var(--muted);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05);
 }
 
 .cta {
@@ -413,15 +489,19 @@ body[data-theme="light"] .lang-select option {
   font-size: 14px;
   cursor: pointer;
   min-height: 44px;
+  transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
 }
 
 .btn:hover {
-  background: rgba(255, 255, 255, .08)
+  background: rgba(255, 255, 255, .08);
+  transform: translateY(-1px);
+  border-color: var(--line-strong);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .12)
 }
 
 .btn.primary {
-  background: linear-gradient(180deg, rgba(90, 140, 255, .35), rgba(90, 140, 255, .14));
-  border-color: rgba(90, 140, 255, .45)
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 45%, transparent), color-mix(in srgb, var(--accent) 18%, transparent));
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line))
 }
 
 .social {
@@ -446,6 +526,10 @@ body[data-theme="light"] .lang-select option {
 
 .section {
   padding: 34px 0
+}
+
+.section--compact {
+  padding: 8px 0 18px
 }
 
 .section__head {
@@ -489,10 +573,27 @@ body[data-theme="light"] .lang-select option {
   border-radius: var(--radius2);
   box-shadow: var(--shadow);
   padding: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-strong), transparent);
 }
 
 .card.soft {
   background: var(--card-soft)
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: var(--line-strong);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, .16);
 }
 
 .card h2 {
@@ -517,6 +618,47 @@ body[data-theme="light"] .lang-select option {
   display: flex;
   flex-direction: column;
   gap: 14px
+}
+
+.recruiter-quick {
+  background: linear-gradient(180deg, var(--surface), transparent 65%), var(--card-bg);
+}
+
+.quick-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.quick-list li {
+  margin: 7px 0;
+  color: var(--muted);
+}
+
+.signal-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.signal {
+  padding: 16px 14px;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.signal__value {
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.signal p {
+  margin: 0;
 }
 
 .bullets {
@@ -547,7 +689,7 @@ body[data-theme="light"] .lang-select option {
   border: 1px solid var(--line);
   padding: 6px 10px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, .12)
+  background: linear-gradient(180deg, var(--surface), transparent)
 }
 
 .chips {
@@ -607,7 +749,8 @@ body[data-theme="light"] .lang-select option {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  justify-content: center
+  justify-content: center;
+  background: linear-gradient(180deg, var(--accent-soft), transparent 55%), var(--card-bg);
 }
 
 .app-download__brand {
@@ -655,7 +798,7 @@ body[data-theme="light"] .lang-select option {
   padding: 12px;
   border: 1px solid var(--line);
   border-radius: 14px;
-  background: rgba(0, 0, 0, .18)
+  background: linear-gradient(180deg, var(--surface), transparent)
 }
 
 .repo__top {
@@ -690,8 +833,8 @@ body[data-theme="light"] .lang-select option {
 }
 
 .card.highlight-feb {
-  background: linear-gradient(180deg, rgba(90, 140, 255, .12), rgba(90, 140, 255, .05));
-  border-color: rgba(90, 140, 255, .3)
+  background: linear-gradient(180deg, var(--accent-soft), rgba(90, 140, 255, .05));
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--line))
 }
 
 .contact__actions {
@@ -708,6 +851,16 @@ body[data-theme="light"] .lang-select option {
   display: none !important
 }
 
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+body[data-view="deep"] .card.soft,
+body[data-view="deep"] .repo {
+  border-color: color-mix(in srgb, var(--accent) 24%, var(--line));
+}
+
 @media (max-width:980px) {
   .hero__inner {
     grid-template-columns: 1fr
@@ -717,9 +870,16 @@ body[data-theme="light"] .lang-select option {
     min-width: auto
   }
 
+  .settings,
+  .views {
+    width: 100%;
+    justify-content: center;
+  }
+
   .grid,
   .grid--2,
-  .grid--3 {
+  .grid--3,
+  .signal-grid {
     grid-template-columns: 1fr
   }
 

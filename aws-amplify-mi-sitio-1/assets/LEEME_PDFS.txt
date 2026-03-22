@@ -1,5 +1,0 @@
-Coloca aquí tus PDFs (mantén o ajusta los nombres en index.html):
-- portafolio.pdf
-- cv-reducido.pdf
-- cv-completo.pdf
-- carta-recomendacion.pdf

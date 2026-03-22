@@ -34,16 +34,38 @@ function setLang(lang) {
   localStorage.setItem("portfolio_lang", lang);
   const sel = $("#selectLang");
   if (sel) sel.value = lang;
+  updateLocalizedPdfLinks(lang);
+}
+
+function resolveLocalizedPdfHref(link, lang) {
+  const fallback = link.dataset.pdfEs || link.getAttribute("href") || "#";
+  const key = "pdf" + lang.charAt(0).toUpperCase() + lang.slice(1);
+  return link.dataset[key] || fallback;
+}
+
+function updateLocalizedPdfLinks(lang) {
+  $$("[data-pdf-link]").forEach(link => {
+    link.setAttribute("href", resolveLocalizedPdfHref(link, lang));
+  });
 }
 
 function handleLangChange(e) {
   setLang(e.target.value);
 }
 
+function detectLang() {
+  const saved = localStorage.getItem("portfolio_lang");
+  if (saved) return saved;
+  const supported = ["es", "en", "pt", "it", "fr", "zh"];
+  const browser = (navigator.language || navigator.languages?.[0] || "es")
+    .toLowerCase().slice(0, 2);
+  return supported.includes(browser) ? browser : "es";
+}
+
 function initSettings() {
   setView(localStorage.getItem("portfolio_view") || "normal");
   setTheme(localStorage.getItem("portfolio_theme") || "dark");
-  setLang(localStorage.getItem("portfolio_lang") || "es");
+  setLang(detectLang());
 
   $$("[data-view-btn]").forEach(btn => btn.addEventListener("click", () => setView(btn.dataset.viewBtn)));
   $("#btnTheme")?.addEventListener("click", toggleTheme);
