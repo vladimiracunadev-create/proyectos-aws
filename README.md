@@ -103,7 +103,7 @@ flowchart LR
     DEV[Dev Local\ngit push] --> GH[(GitHub\nmain - dev)]
     GH -->|webhook automatico| AMP[AWS Amplify Console]
     AMP -->|rama main| PROD[main.amplifyapp.com]
-    AMP -->|rama dev|  PREV[dev.amplifyapp.com]
+    AMP -->|rama dev| PREV[dev.amplifyapp.com]
     AMP -.->|incluido| CDN[CloudFront - ACM - S3]
     PROD --> USER[Usuario Final]
     PREV --> USER
