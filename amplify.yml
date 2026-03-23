@@ -1,6 +1,6 @@
 ﻿version: 1
 applications:
-  - appRoot: aws-amplify-mi-sitio-1
+  - appRoot: caso-01-amplify-hosting
     frontend:
       phases:
         build:
