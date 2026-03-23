@@ -2,7 +2,7 @@
 # Purpose: Provides AWS CLI, Terraform, Checkov, and linters for validation
 # Security: Non-root user, fixed tags, minimal attack surface
 
-FROM alpine:3.19 AS base
+FROM alpine:3.23 AS base
 
 # Install base dependencies
 RUN apk add --no-cache \
