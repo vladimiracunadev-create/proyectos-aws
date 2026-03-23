@@ -91,6 +91,214 @@ flowchart TD
 
 ---
 
+## 📋 Guía rápida por caso
+
+<details>
+<summary>✅ Caso 01 — Amplify Hosting · <em>en producción</em></summary>
+
+**AWS Amplify Console** monitorea el repo y despliega automáticamente al hacer push, sin configurar runners ni pipelines.
+
+```mermaid
+flowchart LR
+    DEV[👨‍💻 Dev Local\ngit push] --> GH[(GitHub\nmain · dev)]
+    GH -->|webhook automático| AMP[AWS Amplify Console]
+    AMP -->|rama main| PROD[🟢 main.xxx.amplifyapp.com]
+    AMP -->|rama dev|  PREV[🔵 dev.xxx.amplifyapp.com]
+    AMP -.->|incluido| CDN[CloudFront · ACM · S3]
+    PROD & PREV --> USER[👤 Usuario Final]
+```
+
+**Pasos clave:**
+1. Amplify Console → `New app → Host web app` → conectar repo GitHub
+2. Configurar branch mappings (`main` → prod, `dev` → preview)
+3. Añadir `amplify.yml` con `appRoot: caso-01-amplify-hosting`
+4. `git push` → Amplify construye y despliega en ~2 min con SSL y CDN incluidos
+
+📄 [README detallado](caso-01-amplify-hosting/README.md) · 🌐 [Demo main](https://main.d3r1wuymolxagh.amplifyapp.com/) · [Demo dev](https://dev.d20m8tc0banvg.amplifyapp.com/)
+</details>
+
+<details>
+<summary>✅ Caso 02 — S3 + GitHub Actions · <em>en producción</em></summary>
+
+**GitHub Actions** controla cada paso del pipeline explícitamente; `aws s3 sync` despliega al bucket.
+
+```mermaid
+flowchart LR
+    DEV[👨‍💻 Dev Local\ngit push main] --> GH[(GitHub)]
+    GH -->|paths: caso-02/**| WF[⚙️ despliegue.yml]
+    WF -->|credenciales env| SEC[🔑 Repository Secrets\nAWS keys]
+    SEC -.-> WF
+    WF -->|aws s3 sync --delete| S3[🪣 S3 Bucket\nus-east-2]
+    S3 --> WEB[🌐 Sitio Web HTTP]
+```
+
+**Pasos clave:**
+1. Crear bucket S3 → habilitar `Static website hosting`
+2. Crear IAM User con política mínima (`s3:PutObject`, `s3:DeleteObject`, `s3:ListBucket`)
+3. Añadir `AWS_ACCESS_KEY_ID` y `AWS_SECRET_ACCESS_KEY` en `Settings → Secrets → Actions`
+4. Crear `despliegue.yml` con `paths: caso-02-s3-github-actions/**` y `aws s3 sync --delete`
+
+📄 [README detallado](caso-02-s3-github-actions/README.md) · 🌐 [Demo S3](https://mi-pagina-scrum-123.s3.us-east-2.amazonaws.com/index.html)
+</details>
+
+<details>
+<summary>🔜 Caso 03 — CloudFront + OIDC · Q2 2026</summary>
+
+Elimina las credenciales estáticas del Caso 02. OIDC emite un JWT efímero; AWS STS lo valida y devuelve credenciales temporales de 15 minutos.
+
+```mermaid
+flowchart LR
+    GH[(GitHub)] -->|id-token: write| JWT[JWT OIDC Token]
+    JWT -->|AssumeRoleWithWebIdentity| STS[🔐 AWS STS]
+    IAM[IAM Role\ntrust policy] -.->|valida sub claim| STS
+    STS -->|credenciales temporales| WF[⚙️ workflow.yml]
+    WF -->|s3 sync + CDN invalidation| CDN[🌐 CloudFront\nHTTPS]
+```
+
+**Pasos clave proyectados:**
+1. Crear OIDC Provider en IAM → URL: `token.actions.githubusercontent.com`
+2. Crear IAM Role con trust policy restringida a `repo:owner/repo:ref:refs/heads/main`
+3. Crear distribución CloudFront → origen S3 con OAC (sin acceso público directo)
+4. Workflow: `permissions: id-token: write` + `role-to-assume` + step de `create-invalidation`
+
+📄 [README detallado](caso-03-cloudfront-oidc/README.md)
+</details>
+
+<details>
+<summary>🔜 Caso 04 — Environments + Approvals · Q2 2026</summary>
+
+Staging se despliega automáticamente; producción pausa hasta que un revisor apruebe en GitHub UI.
+
+```mermaid
+flowchart TB
+    GH[(GitHub)] -->|push dev| STG[⚙️ env: staging\nautomático]
+    GH -->|merge a main| GATE{🛑 Aprobación\nrequerida}
+    GATE -->|revisor aprueba| PRD[⚙️ env: production]
+    STG --> S3_S[🪣 S3 Staging]
+    PRD --> S3_P[🪣 S3 Production]
+```
+
+📄 [README detallado](caso-04-environments-approvals/README.md)
+</details>
+
+<details>
+<summary>🔜 Caso 05 — Lambda + API Gateway · Q2–Q3 2026</summary>
+
+Primer backend real. Patrón **test → build → deploy** con jobs encadenados y artefactos compartidos.
+
+```mermaid
+flowchart LR
+    GH[(GitHub)] --> J1[🧪 test\npytest]
+    J1 -->|needs: test ✅| J2[📦 build\nsam build]
+    J2 -->|upload-artifact| ART[📎 Artifact .zip]
+    ART -->|download-artifact| J3[🚀 deploy\nsam deploy]
+    J3 --> LAMBDA[⚡ Lambda + API GW]
+```
+
+📄 [README detallado](caso-05-lambda-api-gateway/README.md)
+</details>
+
+<details>
+<summary>🔜 Caso 06 — DynamoDB + Matrix · Q3 2026</summary>
+
+Persistencia real (DynamoDB) y matrix strategy: el mismo código probado en múltiples runtimes × regiones en paralelo.
+
+```mermaid
+flowchart TB
+    GH[(GitHub)] --> MAT{Matrix\nruntimes × regiones}
+    MAT --> J1[python3.11 · us-east-1]
+    MAT --> J2[python3.11 · us-east-2]
+    MAT --> J3[python3.12 · us-east-1]
+    MAT --> J4[python3.12 · us-east-2]
+    J1 & J2 & J3 & J4 --> DDB[🗄️ DynamoDB]
+```
+
+📄 [README detallado](caso-06-dynamodb-matrix/README.md)
+</details>
+
+<details>
+<summary>🔜 Caso 07 — Reusable Workflows · Q3 2026</summary>
+
+Extrae la lógica común de deploy a una librería interna de GitHub Actions reutilizable por todos los casos futuros.
+
+```mermaid
+flowchart LR
+    C8[caso-08] & C9[caso-09] & C10[caso-10] -->|uses: deploy-s3-oidc.yml| RW[🔄 Reusable Workflows]
+    RW -->|uses: setup-aws-oidc| CA[🧩 Composite Action]
+    CA --> STS[🔐 AWS STS]
+```
+
+📄 [README detallado](caso-07-reusable-workflows/README.md)
+</details>
+
+<details>
+<summary>🔜 Caso 08 — Containers + GHCR · Q3 2026</summary>
+
+Containerizar la app, publicarla en GitHub Container Registry (gratis) y desplegarla en ECS Fargate.
+
+```mermaid
+flowchart LR
+    GH[(GitHub)] --> BUILD[🐳 buildx\namd64 + arm64]
+    BUILD --> GHCR[📦 ghcr.io\nGHCR]
+    GHCR --> TASK[ECS Task\nDefinition]
+    TASK -->|rolling update| FARGATE[🚀 ECS Fargate]
+    FARGATE --> ALB[⚖️ ALB]
+```
+
+📄 [README detallado](caso-08-containers-ghcr/README.md)
+</details>
+
+<details>
+<summary>🔜 Caso 09 — FinOps + Scheduled · Q4 2026</summary>
+
+Cron mensual que extrae costos reales de AWS Cost Explorer y actualiza `docs/FINOPS_COSTOS.md` automáticamente.
+
+```mermaid
+flowchart LR
+    CRON[⏰ Cron\n1° de cada mes] --> WF[⚙️ finops-report.yml]
+    WF -->|boto3 OIDC| CE[📊 Cost Explorer]
+    CE --> WF
+    WF -->|git commit auto| GH[(GitHub\nFINOPS_COSTOS.md)]
+```
+
+📄 [README detallado](caso-09-finops-scheduled/README.md)
+</details>
+
+<details>
+<summary>🔜 Caso 10 — Multi-región + DR · Q4 2026</summary>
+
+Deploy paralelo a dos regiones AWS con validación de salud antes de actualizar el DNS con Route53.
+
+```mermaid
+flowchart TB
+    GH[(GitHub)] --> MAT{Matrix\nus-east-1 · eu-west-1}
+    MAT --> D1[Deploy 🇺🇸] & D2[Deploy 🇪🇺]
+    D1 & D2 -->|smoke tests| OK{✅ OK?}
+    OK -->|sí| R53U[Route53\nactivar ambas]
+    OK -->|no| R53R[Route53\nrollback DNS]
+```
+
+📄 [README detallado](caso-10-multiregion-dr/README.md)
+</details>
+
+<details>
+<summary>🔜 Caso 11 — EKS + GitOps · Q4 2026</summary>
+
+Cierre del viaje. GitHub Actions como controlador GitOps: manifiestos en el repo = estado del cluster EKS.
+
+```mermaid
+flowchart LR
+    GH[(GitHub\nfuente de verdad)] -->|OIDC + kubectl apply| EKS[⚓ EKS\nKubernetes 1.32]
+    EKS --> POD[🐳 Pods] --> ALB[⚖️ ALB]
+    ECR[📦 ECR] -.->|image pull| EKS
+    IRSA[IRSA] -.->|IAM per pod| POD
+```
+
+📄 [README detallado](caso-11-eks-gitops/README.md)
+</details>
+
+---
+
 ## 🔒 Pipeline de seguridad (Defense in Depth)
 
 | 🛡️ Capa | 🔧 Herramienta | ⚡ Trigger |

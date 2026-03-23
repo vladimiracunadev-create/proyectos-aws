@@ -33,6 +33,24 @@ encadenados y artefactos compartidos entre ellos.
 
 ---
 
+## 🏗️ Arquitectura proyectada
+
+```mermaid
+flowchart TB
+    DEV[👨‍💻 Dev Local\ngit push] --> GH[(GitHub)]
+
+    GH --> J1[🧪 Job: test\npytest / jest]
+    J1 -->|needs: test ✅| J2[📦 Job: build\nsam build]
+    J2 -->|actions/upload-artifact| ART[📎 Actions Artifact\npackage.zip]
+    ART -->|actions/download-artifact| J3[🚀 Job: deploy\nneeds: build]
+
+    J3 -->|sam deploy\n--no-confirm-changeset| CF[☁️ CloudFormation\nStack]
+    CF --> LAMBDA[⚡ AWS Lambda\nPython / Node.js]
+    CF --> APIGW[🔗 API Gateway\nHTTP endpoint]
+
+    APIGW --> CLIENT[👤 Cliente API\ncurl / browser]
+```
+
 ## 🔄 Flujo multi-job (objetivo)
 
 ```
@@ -53,6 +71,19 @@ workflow trigger (push o dispatch)
 
 > **Principio clave:** El artefacto que se prueba es el mismo que llega a producción.
 > No hay "build de prod" diferente al "build de tests".
+
+---
+
+## 📋 Implementación proyectada — pasos clave
+
+1. **Escribir la Lambda** → función Python/Node.js con handler estándar + `requirements.txt` o `package.json`
+2. **Crear `template.yaml` SAM** → define `AWS::Serverless::Function` + `AWS::Serverless::Api`
+3. **Job `test`** → `pytest` o `jest` sobre la función — el job de build solo se ejecuta si pasan
+4. **Job `build`** → `sam build` compila el paquete → `actions/upload-artifact` guarda el `.zip`
+5. **Job `deploy`** → `actions/download-artifact` descarga el paquete → `sam deploy --no-confirm-changeset --capabilities CAPABILITY_IAM`
+6. **Verificar** → CloudFormation crea el stack automáticamente · API Gateway genera la URL del endpoint
+
+> **Principio clave:** El artefacto que se prueba en el job `test` es el mismo `.zip` que llega a producción. No hay re-build en producción.
 
 ---
 

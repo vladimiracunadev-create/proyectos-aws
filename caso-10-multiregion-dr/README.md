@@ -33,6 +33,27 @@ validación de salud por región antes de actualizar el DNS con Route53.
 
 ---
 
+## 🏗️ Arquitectura proyectada
+
+```mermaid
+flowchart TB
+    DEV[👨‍💻 Dev Local\ngit push main] --> GH[(GitHub)]
+
+    GH --> MAT{⚡ Matrix Regions\nfail-fast: false}
+    MAT -->|us-east-1| D1[🚀 Deploy\nNorte América]
+    MAT -->|eu-west-1| D2[🚀 Deploy\nEuropa]
+
+    D1 -->|needs: deploy| ST1[🧪 Smoke Test\nus-east-1\ncurl + assert 200]
+    D2 -->|needs: deploy| ST2[🧪 Smoke Test\neu-west-1\ncurl + assert 200]
+
+    ST1 & ST2 -->|if: success| R53U[✅ Route53 Update\nActivar primario + secundario]
+    ST1 & ST2 -->|if: failure| R53R[🔄 Route53 Rollback\nMantener región anterior]
+
+    R53U --> R53[🌍 Route53\nFailover Routing Policy]
+    R53 --> CDN[CloudFront\nOrigen con failover]
+    CDN --> USER[👤 Usuario Final\nHA geográfica]
+```
+
 ## 🔄 Flujo (objetivo)
 
 ```
@@ -50,6 +71,24 @@ Push a main
   └── [needs: smoke-tests, if: failure]
         └── Route53 rollback: mantener región anterior activa
 ```
+
+---
+
+## 📋 Implementación proyectada — pasos clave
+
+1. **Crear buckets S3 en dos regiones** → `us-east-1` y `eu-west-1` — mismo contenido, mismo nombre de dominio
+2. **Crear distribuciones CloudFront** por región con `Origin Failover` configurado
+3. **Configurar Route53** → `Failover Routing Policy` → record `PRIMARY` (us-east-1) + record `SECONDARY` (eu-west-1) · habilitar `Health Checks`
+4. **Matrix en el workflow** → deploy simultáneo a ambas regiones en paralelo:
+   ```yaml
+   strategy:
+     matrix:
+       region: [us-east-1, eu-west-1]
+   ```
+5. **Smoke tests por región** → job `needs: deploy` → `curl https://endpoint-${region}` + assert HTTP 200
+6. **Rollback condicional** → `if: steps.smoke.outcome == 'failure'` → `aws route53 change-resource-record-sets` revierte el DNS
+
+> **Patrón implementado:** Warm Standby — ambas regiones activas, Route53 conmuta en segundos si una falla.
 
 ---
 

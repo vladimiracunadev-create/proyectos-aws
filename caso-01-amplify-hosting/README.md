@@ -31,6 +31,26 @@ Push local → GitHub (rama dev o main)
 
 ---
 
+## 🏗️ Diagrama de arquitectura
+
+```mermaid
+flowchart LR
+    DEV[👨‍💻 Dev Local\ngit push] --> GH[(GitHub\nmain · dev)]
+
+    GH -->|webhook automático| AMP[AWS Amplify Console\nCI/CD integrado]
+
+    AMP -->|rama main| PROD[🟢 Producción\nhttps://main.xxx.amplifyapp.com]
+    AMP -->|rama dev|  PREV[🔵 Preview\nhttps://dev.xxx.amplifyapp.com]
+
+    AMP -.->|incluido| CDN[CloudFront\nCDN global]
+    AMP -.->|incluido| SSL[ACM Certificate\nHTTPS automático]
+    AMP -.->|incluido| STOR[S3 Assets\nalmacenamiento]
+
+    PROD & PREV --> USER[👤 Usuario Final]
+```
+
+---
+
 ## Stack Técnico
 
 | Capa | Tecnología |
@@ -64,6 +84,19 @@ applications:
 
 > **Por qué no hay build commands:** El sitio usa HTML/CSS/JS plano con Import Maps para Three.js.
 > Amplify sirve los archivos tal cual, sin transpilación ni bundling.
+
+---
+
+## 📋 Pasos para reproducirlo desde cero
+
+1. **Crear app en Amplify Console** → `All apps → New app → Host web app`
+2. **Conectar repositorio GitHub** → seleccionar `proyectos-aws` → autorizar acceso
+3. **Configurar branch mappings** → `main` (producción) + `dev` (preview) → Amplify genera URLs únicas por rama automáticamente
+4. **Añadir `amplify.yml`** al raíz del repo con `appRoot: caso-01-amplify-hosting` (sin build commands si el sitio es vanilla JS)
+5. **`git push`** → Amplify detecta el cambio, ejecuta el build y despliega en ~2 minutos
+6. **Verificar** → abrir la URL de Amplify en el navegador; SSL y CDN ya están activos
+
+> **Tiempo estimado:** 15 minutos la primera vez, < 2 min en deploys posteriores.
 
 ---
 

@@ -26,6 +26,22 @@ Eliminar duplicación entre casos. Extraer la lógica común de deploy a una
 
 ---
 
+## 🏗️ Arquitectura proyectada
+
+```mermaid
+flowchart TB
+    C8[caso-08\nworkflow caller] -->|uses: deploy-s3-oidc.yml| RW1[🔄 Reusable Workflow\ndeploy-s3-oidc.yml]
+    C9[caso-09\nworkflow caller] -->|uses: deploy-lambda-sam.yml| RW2[🔄 Reusable Workflow\ndeploy-lambda-sam.yml]
+    C10[caso-10\nworkflow caller] -->|uses: smoke-test.yml| RW3[🔄 Reusable Workflow\nsmoke-test.yml]
+
+    RW1 & RW2 & RW3 -->|uses: setup-aws-oidc| CA[🧩 Composite Action\n.github/actions/setup-aws-oidc]
+    CA -->|AssumeRoleWithWebIdentity| STS[🔐 AWS STS]
+
+    RW1 --> S3[🪣 S3]
+    RW2 --> LAMBDA[⚡ Lambda]
+    RW3 --> TEST[✅ Smoke Tests]
+```
+
 ## 🏗️ Estructura objetivo
 
 ```
@@ -53,6 +69,26 @@ jobs:
       environment: production
     secrets: inherit
 ```
+
+---
+
+## 📋 Implementación proyectada — pasos clave
+
+1. **Crear Composite Action** → `.github/actions/setup-aws-oidc/action.yml` con los steps de `aws-actions/configure-aws-credentials` encapsulados; recibe `role-to-assume` como `input`
+2. **Crear Reusable Workflow** → `.github/workflows/deploy-s3-oidc.yml` con trigger `on: workflow_call` · define `inputs` (bucket, environment) y `secrets: inherit`
+3. **Refactorizar casos existentes** → los workflows de caso-08, caso-09, caso-10 reemplazan sus steps de OIDC por `uses: ./.github/actions/setup-aws-oidc`
+4. **Llamar al reusable workflow** desde cualquier caso:
+   ```yaml
+   jobs:
+     deploy:
+       uses: ./.github/workflows/deploy-s3-oidc.yml@main
+       with:
+         bucket: ${{ vars.BUCKET_PROD }}
+       secrets: inherit
+   ```
+5. **Verificar DRY** → cualquier cambio en la lógica de OIDC se actualiza en un solo lugar
+
+> **Resultado:** Los casos 08-11 no repiten la configuración de OIDC ni los steps de deploy — solo los llaman como funciones.
 
 ---
 
