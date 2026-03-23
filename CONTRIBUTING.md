@@ -1,58 +1,104 @@
-# 🤝 Guía de Contribución
+# Guía de Contribución
 
-Este repositorio es un ecosistema de ingeniería. Para mantener el estándar de calidad y seguridad, sigue estas directrices.
-
----
-
-## 🚀 Inicio Rápido (Local Setup)
-
-1. **Clonar y Ramas**:
-   ```bash
-   git clone https://github.com/vladimiracunadev-create/proyectos-aws.git
-   cd proyectos-aws
-   git checkout dev
-   ```
-
-2. **Requisitos**:
-   - Docker Desktop (recomendado para validaciones).
-   - PowerShell 7+ o Bash.
-   - Cuenta de AWS (opcional para pruebas locales con CLI).
-
-3. **Herramientas de Calidad**:
-   ```bash
-   # Instalar pre-commit para auditoría local de secretos
-   pip install pre-commit
-   pre-commit install
-   ```
+Este repositorio es un ecosistema de ingeniería progresivo. Para mantener
+el estándar de calidad y seguridad, sigue estas directrices.
 
 ---
 
-## 🛠️ Uso del Hub CLI
+## Inicio rápido
 
-Utilizamos una capa de abstracción para estandarizar comandos entre Windows, Mac y Linux.
+```bash
+git clone https://github.com/vladimiracunadev-create/proyectos-aws.git
+cd proyectos-aws
+git checkout dev
 
-| Comando (PS / Bash) | Descripción |
-| :--- | :--- |
-| `.\hub.ps1 list-projects` | Lista todos los proyectos disponibles. |
-| `.\hub.ps1 validate` | Ejecuta el contenedor de tooling para validar seguridad y sintaxis. |
-| `.\hub.ps1 help` | Muestra la ayuda del Hub. |
+# Instalar pre-commit (auditoría local de secretos y calidad)
+pip install pre-commit
+pre-commit install
+
+# Construir tooling y verificar
+make tooling-build
+make tooling-validate
+```
+
+Para configuración detallada: [docs/INSTALL.md](docs/INSTALL.md)
+
+---
+
+## Hub CLI
+
+| Comando | Descripción |
+|:---|:---|
+| `.\hub.ps1 list-projects` | Lista todos los casos detectados |
+| `.\hub.ps1 validate` | Ejecuta validaciones en Docker |
+| `.\hub.ps1 help` | Ayuda completa |
+| `./hub.sh list-projects` | Equivalente en Linux/macOS |
 
 ---
 
-## 🧭 Flujo de Trabajo (Git Flow Simplicado)
+## Flujo de trabajo (Git Flow simplificado)
 
-1. **Desarrollo**: Realiza tus cambios siempre sobre la rama `dev`.
-2. **Validación**: Ejecuta `.\hub.ps1 validate` antes de cada commit.
-3. **Commit**: Usa mensajes descriptivos (ej: `feat: add lambda demo`, `docs: fix typo`).
-4. **Pull Request**: Crea un PR de `dev` hacia `main`. No se permiten pushes directos a la rama principal.
+1. **Rama de trabajo:** Siempre sobre `dev`, nunca directo a `main`
+2. **Validar localmente:** `.\hub.ps1 validate` antes de cada commit
+3. **Commits descriptivos:** `feat: add lambda demo`, `fix: correct s3 path`, `docs: update cert coverage`
+4. **Pull Request:** de `dev` → `main`. El PR template guía el checklist
+5. **No push directo a `main`:** Protegida por CODEOWNERS
+
+---
+
+## Estándares de código
+
+### Al añadir un caso nuevo
+
+Cada caso nuevo (`caso-XX-nombre/`) debe incluir:
+
+- [ ] `README.md` con badges de estado, trimestre, AWS, Actions y certificaciones
+- [ ] Tabla de capacidades nuevas (AWS + GitHub Actions)
+- [ ] Diagrama de flujo del objetivo
+- [ ] Tabla de certificaciones relevantes (DVA-C02 / SAA-C03 / SOA-C02)
+- [ ] Navegación anterior / siguiente entre casos
+- [ ] Workflow en `.github/workflows/` si el caso tiene deploy
+
+### Seguridad
+
+- Nunca incluir secrets, credenciales ni API keys en el código
+- El pre-commit hook bloqueará automáticamente si detecta patrones sensibles
+- Usar OIDC desde el Caso 03 en adelante — no secrets estáticos
+- Permisos IAM mínimos necesarios
+
+### Documentación
+
+- Actualizar `CHANGELOG.md` si es feature o fix significativo
+- Actualizar `docs/CERT_COVERAGE.md` si el caso cubre nuevos dominios de certificación
+- Actualizar `docs/FINOPS_COSTOS.md` con costo estimado del caso nuevo
+- Actualizar `ROADMAP.md` marcando el caso como completado (`[x]`)
 
 ---
 
-## ✅ Estándares de Código
+## Convenciones de commits
 
-- **Documentación**: Todo nuevo proyecto debe incluir su propio `README.md` y `AWS_PASO_A_PASO.md`.
-- **Seguridad**: Nunca incluyas secretos. El pre-commit hook bloqueará automáticamente el commit si detecta potenciales llaves o tokens.
-- **Portabilidad**: Si el proyecto requiere dependencias complejas, documéntalo en un Dockerfile.
+| Prefijo | Cuándo usarlo |
+|:---|:---|
+| `feat:` | Nuevo caso o nueva capacidad |
+| `fix:` | Corrección de bug |
+| `docs:` | Solo documentación |
+| `chore:` | Mantenimiento (deps, configs) |
+| `refactor:` | Cambio de estructura sin nueva funcionalidad |
+| `security:` | Cambios de seguridad, IAM, OIDC |
+| `ci:` | Cambios en workflows de GitHub Actions |
 
 ---
-*Gracias por ayudar a que este portafolio siga siendo un ejemplo de excelencia técnica.*
+
+## Releases
+
+Los releases se crean con tags semver. Al pushear `v*.*.*`,
+el workflow `release.yml` crea automáticamente el GitHub Release.
+
+```bash
+git tag v5.0.0
+git push origin v5.0.0
+```
+
+---
+
+*Gracias por contribuir a que este portafolio siga siendo un ejemplo de excelencia técnica.*

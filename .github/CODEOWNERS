@@ -1,0 +1,27 @@
+# CODEOWNERS — Revisores obligatorios por área
+# Formato: <patrón> <@usuario o @equipo>
+# Documentación: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Dueño global (fallback para todo lo no cubierto abajo)
+*                                   @vladimiracunadev-create
+
+# Workflows de CI/CD — revisión obligatoria en cualquier cambio
+.github/workflows/                  @vladimiracunadev-create
+
+# Configuración de seguridad — revisión estricta
+SECURITY.md                         @vladimiracunadev-create
+.pre-commit-config.yaml             @vladimiracunadev-create
+.secrets.baseline                   @vladimiracunadev-create
+
+# Infraestructura Docker y Kubernetes
+tooling/                            @vladimiracunadev-create
+k8s/                                @vladimiracunadev-create
+
+# Casos en producción
+caso-01-amplify-hosting/            @vladimiracunadev-create
+caso-02-s3-github-actions/          @vladimiracunadev-create
+
+# Documentación crítica (reclutadores y certificaciones)
+docs/RECRUITER.md                   @vladimiracunadev-create
+docs/CERT_COVERAGE.md               @vladimiracunadev-create
+GITHUB_ACTIONS_JOURNEY.md           @vladimiracunadev-create

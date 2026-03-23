@@ -46,7 +46,7 @@ En lugar de almacenar `AWS_ACCESS_KEY_ID` en GitHub, utilizamos **OpenID Connect
 
 En `despliegue.yml`, utilizamos el flag `--delete`:
 ```bash
-aws s3 sync ./aws-s3-scrum-mi-sitio-1 s3://mi-pagina-scrum-123 --delete
+aws s3 sync ./caso-02-s3-github-actions s3://mi-pagina-scrum-123 --delete
 ```
 **Análisis de Ingeniería**:
 - **Delta-only**: Solo sube los archivos que han cambiado, ahorrando ancho de banda y tiempo.

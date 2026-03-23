@@ -1,35 +1,71 @@
-﻿# ðŸ—ï¸ Arquitectura de CI/CD
+# Arquitectura de CI/CD
 
-El corazÃ³n operativo de este monorepo reside en su automatizaciÃ³n. Contamos con tres flujos de trabajo principales que garantizan la calidad, seguridad y entrega constante.
+El corazón operativo de este monorepo reside en su automatización. Contamos con tres workflows
+principales que garantizan calidad, seguridad y entrega constante.
+
+---
 
 ## 1. Pipeline de Despliegue (`despliegue.yml`)
-Gestiona la sincronizaciÃ³n del contenido estÃ¡tico con la nube.
-- **Trigger:** Push a `main` o `dev`.
+
+Gestiona la sincronización del contenido estático con la nube.
+
+- **Trigger:** Push a `main` con cambios en `caso-02-s3-github-actions/**`
 - **Estrategia:**
-  - Para `aws-s3-*`: SincronizaciÃ³n directa vÃ­a AWS SDK usando OIDC para autenticaciÃ³n.
-  - Para `aws-amplify-*`: DelegaciÃ³n al Amplify Console para despliegues por rama con entornos aislados.
+  - `caso-02-s3-github-actions/`: Sincronización directa vía `aws s3 sync` con credenciales IAM
+    _(migración a OIDC planificada en Caso 03)_
+  - `caso-01-amplify-hosting/`: Delegación al Amplify Console — deploy automático por rama
+
+---
 
 ## 2. Escaneo de Seguridad (`security-scan.yml`)
-Nuestra "Guardia de Calidad" que protege la integridad del cÃ³digo.
-- **Componentes:**
-  - **Secret Scan:** TruffleHog analiza el historial de Git buscando brechas.
-  - **Detect Secrets:** Escaneo de archivos actuales comparando contra [.secrets.baseline](../../.secrets.baseline).
-  - **Dependency Review:** AuditorÃ­a de vulnerabilidades en nuevas dependencias (CVEs).
-  - **Linters:** `yamllint` y `markdownlint` aseguran que el cÃ³digo sea legible y profesional.
 
-## 3. SincronizaciÃ³n de Wiki (`wiki-sync.yml`)
-ImplementaciÃ³n de **"Documentation as Code"**.
-- **LÃ³gica:** Cualquier cambio en la carpeta `docs/wiki/` dispara una sincronizaciÃ³n automÃ¡tica con el repositorio de la GitHub Wiki.
-- **Beneficio:** La documentaciÃ³n tÃ©cnica nunca se desincroniza del estado actual del sistema.
+Nuestra "Guardia de Calidad" que protege la integridad del código.
+
+| Componente | Herramienta | Qué detecta |
+|:---|:---|:---|
+| **Secret Scan** | TruffleHog | Secretos en el historial completo de Git |
+| **Detect Secrets** | detect-secrets | Secretos en archivos actuales vs baseline |
+| **Dependency Review** | actions/dependency-review-action | CVEs en dependencias nuevas (solo en PRs) |
+| **Linters** | yamllint + markdownlint-cli | Calidad de YAML y Markdown |
 
 ---
 
-## ðŸ› ï¸ Stack TecnolÃ³gico de CI/CD
-- **Runner:** `ubuntu-latest`
-- **Auth:** OpenID Connect (OIDC) para AWS.
-- **Scanners:** TruffleHog, detect-secrets, GitHub Dependency Graph.
-- **Estilo:** Markdown-CLI, Yamllint.
+## 3. Sincronización de Wiki (`wiki-sync.yml`)
+
+Implementación de **"Documentation as Code"**.
+
+- **Lógica:** Cualquier cambio en `docs/wiki/` dispara sincronización automática con la GitHub Wiki.
+- **Beneficio:** La documentación nunca se desincroniza del estado actual del sistema.
 
 ---
-> [!IMPORTANT]
-> **Inmersión Técnica**: Consulta el manual de [Ingeniería de CI/CD (OIDC & Workflows)](https://github.com/vladimiracunadev-create/proyectos-aws/blob/main/docs/CI_CD_ENGINEERING_DEEP_DIVE.md) para un análisis de bajo nivel de la automatización.
+
+## Stack Tecnológico de CI/CD
+
+| Componente | Tecnología |
+|:---|:---|
+| **Runner** | `ubuntu-latest` |
+| **Auth AWS** (actual) | Secrets estáticos (`AWS_ACCESS_KEY_ID`) |
+| **Auth AWS** (Caso 03) | OIDC — `AssumeRoleWithWebIdentity` sin secrets |
+| **Secret scanners** | TruffleHog + detect-secrets |
+| **Dependency scanner** | GitHub Dependency Graph + actions/dependency-review |
+| **Linters** | markdownlint-cli + yamllint |
+
+---
+
+## Flujo completo (estado actual)
+
+```
+Local (rama dev)
+  └── pre-commit hooks (detect-secrets, yaml lint, terraform fmt)
+      └── git push → GitHub
+          ├── security-scan.yml (TruffleHog, lint, dependency review en PRs)
+          ├── wiki-sync.yml (si cambia docs/wiki/)
+          └── [merge a main]
+              ├── despliegue.yml → aws s3 sync → caso-02 en S3
+              └── Amplify Console → caso-01 (main + dev URLs)
+```
+
+---
+
+> **Inmersión técnica:** Consulta [CI/CD Engineering Deep Dive](https://github.com/vladimiracunadev-create/proyectos-aws/blob/main/docs/CI_CD_ENGINEERING_DEEP_DIVE.md)
+> para el análisis de bajo nivel de OIDC, JWT y deploy inmutable.

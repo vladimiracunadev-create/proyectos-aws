@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentación del proyecto
+    url: https://github.com/vladimiracunadev-create/proyectos-aws/blob/main/README.md
+    about: Lee el README y el GitHub Actions Journey antes de abrir un issue.
+  - name: Guía de Troubleshooting
+    url: https://github.com/vladimiracunadev-create/proyectos-aws/blob/main/docs/TROUBLESHOOTING_GUIDE.md
+    about: Consulta la guía de resolución de problemas comunes.

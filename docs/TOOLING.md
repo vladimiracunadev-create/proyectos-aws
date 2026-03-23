@@ -284,8 +284,8 @@ make tooling-validate
 ```text
 📂 Proyectos AWS encontrados:
 
-  ▸ aws-amplify-mi-sitio-1 (XX archivos)
-  ▸ aws-s3-scrum-mi-sitio-1 (XX archivos)
+  ▸ caso-01-amplify-hosting (XX archivos)
+  ▸ caso-02-s3-github-actions (XX archivos)
 
 ✅ Total: 2 proyecto(s)
 ```

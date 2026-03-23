@@ -1,0 +1,29 @@
+version: 2
+updates:
+  # Mantener GitHub Actions actualizadas
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Santiago"
+    labels:
+      - "dependencies"
+      - "ci/cd"
+    commit-message:
+      prefix: "chore(actions)"
+    reviewers:
+      - "vladimiracunadev-create"
+    open-pull-requests-limit: 5
+
+  # Dependencias Docker en tooling
+  - package-ecosystem: "docker"
+    directory: "/tooling"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "dependencies"
+      - "infra"
+    commit-message:
+      prefix: "chore(docker)"
