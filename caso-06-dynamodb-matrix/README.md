@@ -17,6 +17,7 @@ el mismo código probado en múltiples runtimes y regiones en paralelo.
 ## 🔑 Lo que introduce
 
 ### En AWS
+
 | Servicio | Para qué |
 |:---|:---|
 | **DynamoDB** | Base de datos NoSQL serverless (CRUD real desde Lambda) |
@@ -24,6 +25,7 @@ el mismo código probado en múltiples runtimes y regiones en paralelo.
 | **IAM** | Política mínima necesaria para que Lambda acceda a DynamoDB |
 
 ### En GitHub Actions
+
 | Capacidad nueva | Descripción |
 |:---|:---|
 | `strategy.matrix` | Define combinaciones: runtimes × regiones |
@@ -91,6 +93,7 @@ strategy:
 1. **Crear tabla DynamoDB** → `On-demand` capacity mode · PK: `PK` (String) + SK: `SK` (String) · habilitar Streams
 2. **Lambda con permisos mínimos** → IAM policy con solo `dynamodb:GetItem`, `dynamodb:PutItem`, `dynamodb:DeleteItem`, `dynamodb:Query` sobre esta tabla
 3. **Definir la matrix en el workflow:**
+
    ```yaml
    strategy:
      fail-fast: false
@@ -98,6 +101,7 @@ strategy:
        runtime: [python3.11, python3.12]
        region:  [us-east-1, us-east-2]
    ```
+
 4. **`${{ matrix.runtime }}`** y **`${{ matrix.region }}`** como variables en el step de deploy
 5. **Revisar el workflow summary** → GitHub muestra tabla de resultados por combinación
 6. **Verificar DynamoDB** → AWS Console → `Explore items` → confirmar items escritos por la Lambda

@@ -110,6 +110,7 @@ flowchart LR
 ```
 
 **Pasos clave:**
+
 1. Amplify Console → `New app → Host web app` → conectar repo GitHub
 2. Configurar branch mappings (`main` → prod, `dev` → preview)
 3. Añadir `amplify.yml` con `appRoot: caso-01-amplify-hosting`
@@ -134,6 +135,7 @@ flowchart LR
 ```
 
 **Pasos clave:**
+
 1. Crear bucket S3 → habilitar `Static website hosting`
 2. Crear IAM User con política mínima (`s3:PutObject`, `s3:DeleteObject`, `s3:ListBucket`)
 3. Añadir `AWS_ACCESS_KEY_ID` y `AWS_SECRET_ACCESS_KEY` en `Settings → Secrets → Actions`
@@ -157,6 +159,7 @@ flowchart LR
 ```
 
 **Pasos clave proyectados:**
+
 1. Crear OIDC Provider en IAM → URL: `token.actions.githubusercontent.com`
 2. Crear IAM Role con trust policy restringida a `repo:owner/repo:ref:refs/heads/main`
 3. Crear distribución CloudFront → origen S3 con OAC (sin acceso público directo)
@@ -322,7 +325,7 @@ flowchart LR
 
 ## 🔗 Complementariedad con GitLab
 
-```
+```text
 proyectos-aws-gitlab (GitLab CI)           proyectos-aws (GitHub Actions)
 ══════════════════════════════════         ══════════════════════════════════
  ❓ ¿QUÉ hace cada servicio AWS?      ←→   ❓ ¿CÓMO lo orquesta GitHub Actions?

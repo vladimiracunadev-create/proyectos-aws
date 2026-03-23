@@ -17,6 +17,7 @@ Eliminar duplicación entre casos. Extraer la lógica común de deploy a una
 ## 🔑 Lo que introduce
 
 ### En GitHub Actions
+
 | Capacidad nueva | Descripción |
 |:---|:---|
 | `workflow_call` | Convierte un workflow en una función llamable desde otros workflows |
@@ -46,7 +47,7 @@ flowchart TB
 
 ## 🏗️ Estructura objetivo
 
-```
+```text
 .github/
 ├── workflows/
 │   ├── deploy-s3-oidc.yml        ← Reusable: deploy a S3 con OIDC
@@ -80,6 +81,7 @@ jobs:
 2. **Crear Reusable Workflow** → `.github/workflows/deploy-s3-oidc.yml` con trigger `on: workflow_call` · define `inputs` (bucket, environment) y `secrets: inherit`
 3. **Refactorizar casos existentes** → los workflows de caso-08, caso-09, caso-10 reemplazan sus steps de OIDC por `uses: ./.github/actions/setup-aws-oidc`
 4. **Llamar al reusable workflow** desde cualquier caso:
+
    ```yaml
    jobs:
      deploy:
@@ -88,6 +90,7 @@ jobs:
          bucket: ${{ vars.BUCKET_PROD }}
        secrets: inherit
    ```
+
 5. **Verificar DRY** → cualquier cambio en la lógica de OIDC se actualiza en un solo lugar
 
 > **Resultado:** Los casos 08-11 no repiten la configuración de OIDC ni los steps de deploy — solo los llaman como funciones.

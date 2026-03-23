@@ -17,6 +17,7 @@ encadenados y artefactos compartidos entre ellos.
 ## 🔑 Lo que introduce
 
 ### En AWS
+
 | Servicio | Para qué |
 |:---|:---|
 | **AWS Lambda** | Función serverless Python/Node.js |
@@ -24,6 +25,7 @@ encadenados y artefactos compartidos entre ellos.
 | **AWS SAM** | Framework de despliegue serverless (IaC declarativo) |
 
 ### En GitHub Actions
+
 | Capacidad nueva | Descripción |
 |:---|:---|
 | `needs:` | Secuenciación explícita de jobs (test debe pasar antes de build) |
@@ -53,7 +55,7 @@ flowchart TB
 
 ## 🔄 Flujo multi-job (objetivo)
 
-```
+```text
 workflow trigger (push o dispatch)
   │
   ├── job: test (pytest)

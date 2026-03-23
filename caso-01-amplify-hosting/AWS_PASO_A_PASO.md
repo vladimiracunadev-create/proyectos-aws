@@ -94,6 +94,7 @@ Para tener el entorno de previsualización automático:
 5. Clic **"Save and deploy"**
 
 **Resultado:** Amplify asigna automáticamente una URL única para `dev`:
+
 - `main` → `https://main.<app-id>.amplifyapp.com`
 - `dev`  → `https://dev.<app-id>.amplifyapp.com`
 
@@ -140,6 +141,7 @@ git push origin main
 ### Verificar la PWA
 
 Abrir la URL en Chrome → `F12` → pestaña **"Application"** → **"Service Workers"**:
+
 - Status: `activated and is running`
 - Source: `service-worker.js`
 
@@ -160,7 +162,7 @@ Si tienes un dominio propio en Route53:
 
 ### Error: "appRoot not found"
 
-```
+```text
 Build failed: The 'appRoot' directory 'caso-01-amplify-hosting' was not found
 ```
 
@@ -168,6 +170,7 @@ Build failed: The 'appRoot' directory 'caso-01-amplify-hosting' was not found
 o tiene otro nombre.
 
 **Solución:** Verificar que la carpeta existe exactamente como `caso-01-amplify-hosting/`:
+
 ```bash
 ls -la caso-01-amplify-hosting/
 ```
@@ -189,6 +192,7 @@ es vanilla JS, no necesita `npm install` ni `npm run build`.
 
 **Solución:** Verificar en `amplify.yml` que `files: - '**/*'` incluye todos los archivos.
 Si persiste, añadir explícitamente:
+
 ```yaml
 artifacts:
   baseDirectory: .
@@ -205,6 +209,7 @@ artifacts:
 **Causa:** `appRoot` no está configurado correctamente.
 
 **Verificación:**
+
 ```bash
 # El amplify.yml raíz debe tener:
 grep -A2 "appRoot" amplify.yml

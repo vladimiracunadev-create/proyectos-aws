@@ -21,21 +21,25 @@
 ## Checklist
 
 ### Calidad
+
 - [ ] El código pasa los pre-commit hooks localmente (`pre-commit run --all-files`)
 - [ ] No hay secretos ni credenciales en el diff
 - [ ] Los workflows YAML son válidos (`yamllint`)
 
 ### Documentación
+
 - [ ] El README del caso afectado está actualizado
 - [ ] `CHANGELOG.md` refleja el cambio (si es feature o fix)
 - [ ] Si se añade un caso nuevo, tiene su README con badges y tabla de certificaciones
 
 ### Seguridad
+
 - [ ] No se añaden secrets estáticos (usar OIDC o variables de entorno)
 - [ ] Los permisos IAM son mínimos necesarios
 - [ ] `SECURITY.md` aplica a los cambios realizados
 
 ### Certificaciones (si aplica)
+
 - [ ] DVA-C02: `docs/CERT_COVERAGE.md` actualizado
 - [ ] SAA-C03: `docs/CERT_COVERAGE.md` actualizado
 - [ ] SOA-C02: `docs/CERT_COVERAGE.md` actualizado

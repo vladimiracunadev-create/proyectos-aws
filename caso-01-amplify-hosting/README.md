@@ -22,7 +22,7 @@
 
 **Flujo:**
 
-```
+```text
 Push local → GitHub (rama dev o main)
     └── Amplify Console detecta el push
         ├── Rama main → https://main.d3r1wuymolxagh.amplifyapp.com
@@ -126,7 +126,7 @@ applications:
 
 ## Archivos principales
 
-```
+```text
 caso-01-amplify-hosting/
 ├── index.html              # SPA principal con i18n inline
 ├── app.js                  # Lógica: vistas, idiomas, PDFs, theme

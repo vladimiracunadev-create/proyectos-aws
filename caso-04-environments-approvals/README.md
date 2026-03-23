@@ -17,6 +17,7 @@ producción requiere aprobación manual de un revisor en GitHub UI.
 ## 🔑 Lo que introduce
 
 ### En GitHub Actions
+
 | Capacidad nueva | Descripción |
 |:---|:---|
 | `environment: staging` | Deploy automático sin intervención |
@@ -45,7 +46,7 @@ flowchart TB
 
 ## 🔄 Flujo (objetivo)
 
-```
+```text
 Push a dev
   └── Deploy automático → STAGING (sin aprobación)
       └── URL staging: https://staging.caso-04.example.com

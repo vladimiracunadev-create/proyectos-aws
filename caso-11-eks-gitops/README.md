@@ -18,6 +18,7 @@ Kubernetes de este repositorio disparan reconciliación automática sobre un clu
 ## 🔑 Lo que introduce
 
 ### En AWS
+
 | Servicio | Para qué |
 |:---|:---|
 | **EKS** (v1.32) | Cluster Kubernetes gestionado por AWS |
@@ -26,6 +27,7 @@ Kubernetes de este repositorio disparan reconciliación automática sobre un clu
 | **ALB Ingress** | AWS Load Balancer Controller para exponer servicios |
 
 ### En GitHub Actions
+
 | Capacidad nueva | Descripción |
 |:---|:---|
 | `kubectl apply` via OIDC | Autenticación al API de K8s sin kubeconfig estático |
@@ -57,7 +59,7 @@ flowchart LR
 
 ## 🔄 Flujo GitOps (objetivo)
 
-```
+```text
 Cambio en caso-11-eks-gitops/k8s/deployment.yaml
   └── GitHub Actions detecta el cambio
       └── Autentica contra EKS via OIDC (IRSA)
@@ -86,7 +88,7 @@ Cambio en caso-11-eks-gitops/k8s/deployment.yaml
 
 ## 📁 Estructura objetivo
 
-```
+```text
 caso-11-eks-gitops/
 ├── k8s/
 │   ├── namespace.yaml
