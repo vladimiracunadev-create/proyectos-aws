@@ -75,6 +75,8 @@ Push a main (cambios en caso-08/**)
 
 ## 📋 Implementación proyectada — pasos clave
 
+> Guia detallada con comandos exactos, errores comunes y verificaciones: **[AWS_PASO_A_PASO.md](./AWS_PASO_A_PASO.md)**
+
 1. **Crear cluster ECS Fargate** → definir Task Definition con CPU/memory + image placeholder
 2. **Login a GHCR en el workflow** → `docker/login-action` con `registry: ghcr.io` y `GITHUB_TOKEN` — sin secrets extra
 3. **Build multi-platform con buildx:**

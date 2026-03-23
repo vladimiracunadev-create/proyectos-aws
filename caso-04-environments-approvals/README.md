@@ -63,6 +63,8 @@ PR dev → main aprobado
 
 ## 📋 Implementación proyectada — pasos clave
 
+> Guia detallada con comandos exactos, errores comunes y verificaciones: **[AWS_PASO_A_PASO.md](./AWS_PASO_A_PASO.md)**
+
 1. **Crear GitHub Environments** → `Settings → Environments → New environment` → `staging` y `production`
 2. **Configurar protection rules** en `production` → `Required reviewers` → añadir tu usuario o equipo
 3. **Secrets por entorno** → cada environment tiene su propio `BUCKET_NAME` apuntando a buckets distintos

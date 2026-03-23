@@ -75,6 +75,8 @@ Cambio en caso-11-eks-gitops/k8s/deployment.yaml
 
 ## 📋 Implementación proyectada — pasos clave
 
+> Guia detallada con comandos exactos, errores comunes y verificaciones: **[AWS_PASO_A_PASO.md](./AWS_PASO_A_PASO.md)**
+
 1. **Provisionar cluster EKS** con Terraform → `eks-cluster.tf` crea cluster + managed node group · habilitar OIDC provider del cluster
 2. **Configurar IRSA** → `irsa.tf` crea IAM Role con trust policy vinculada al ServiceAccount de la app — permisos AWS por pod sin credenciales en el contenedor
 3. **Instalar AWS Load Balancer Controller** → `alb-controller.tf` · necesario para que `Ingress` cree ALBs automáticamente

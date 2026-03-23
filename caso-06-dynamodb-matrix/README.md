@@ -90,6 +90,8 @@ strategy:
 
 ## 📋 Implementación proyectada — pasos clave
 
+> Guia detallada con comandos exactos, errores comunes y verificaciones: **[AWS_PASO_A_PASO.md](./AWS_PASO_A_PASO.md)**
+
 1. **Crear tabla DynamoDB** → `On-demand` capacity mode · PK: `PK` (String) + SK: `SK` (String) · habilitar Streams
 2. **Lambda con permisos mínimos** → IAM policy con solo `dynamodb:GetItem`, `dynamodb:PutItem`, `dynamodb:DeleteItem`, `dynamodb:Query` sobre esta tabla
 3. **Definir la matrix en el workflow:**

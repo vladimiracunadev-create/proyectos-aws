@@ -255,4 +255,4 @@ Esta limitación es la motivación del **Caso 02**.
 
 ## Siguiente paso
 
-➡️ [Caso 02 — S3 + GitHub Actions](../caso-02-s3-github-actions/AWS_PASO_A_PASO.md): control total del pipeline sin depender de Amplify.
+-> [Caso 02 — S3 + GitHub Actions](../caso-02-s3-github-actions/AWS_PASO_A_PASO.md): control total del pipeline sin depender de Amplify.

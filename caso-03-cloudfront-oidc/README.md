@@ -67,6 +67,8 @@ GitHub push a main
 
 ## 📋 Implementación proyectada — pasos clave
 
+> Guia detallada con comandos exactos, errores comunes y verificaciones: **[AWS_PASO_A_PASO.md](./AWS_PASO_A_PASO.md)**
+
 1. **Crear OIDC Provider en IAM** → URL: `token.actions.githubusercontent.com` · Audience: `sts.amazonaws.com`
 2. **Crear IAM Role** con trust policy que restrinja a `sub: repo:owner/repo:ref:refs/heads/main`
 3. **Crear distribución CloudFront** → origen: S3 bucket con OAC (Origin Access Control) — sin acceso público directo al bucket

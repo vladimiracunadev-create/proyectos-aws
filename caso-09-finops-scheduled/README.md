@@ -67,6 +67,8 @@ flowchart LR
 
 ## 📋 Implementación proyectada — pasos clave
 
+> Guia detallada con comandos exactos, errores comunes y verificaciones: **[AWS_PASO_A_PASO.md](./AWS_PASO_A_PASO.md)**
+
 1. **Política IAM mínima para Cost Explorer** → `ce:GetCostAndUsage`, `ce:GetDimensionValues` — solo lectura
 2. **Script Python** con `boto3` → `ce.get_cost_and_usage(TimePeriod=..., Granularity='MONTHLY', GroupBy=...)` → formatea resultado en tabla Markdown
 3. **Workflow con cron trigger:**

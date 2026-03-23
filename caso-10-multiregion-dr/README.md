@@ -80,6 +80,8 @@ Push a main
 
 ## 📋 Implementación proyectada — pasos clave
 
+> Guia detallada con comandos exactos, errores comunes y verificaciones: **[AWS_PASO_A_PASO.md](./AWS_PASO_A_PASO.md)**
+
 1. **Crear buckets S3 en dos regiones** → `us-east-1` y `eu-west-1` — mismo contenido, mismo nombre de dominio
 2. **Crear distribuciones CloudFront** por región con `Origin Failover` configurado
 3. **Configurar Route53** → `Failover Routing Policy` → record `PRIMARY` (us-east-1) + record `SECONDARY` (eu-west-1) · habilitar `Health Checks`
