@@ -31,16 +31,16 @@ producción requiere aprobación manual de un revisor en GitHub UI.
 
 ```mermaid
 flowchart TB
-    DEV[👨‍💻 Dev Local] -->|push a dev| GH[(GitHub)]
-    GH -->|automático| STG[⚙️ Deploy\nenv: staging]
-    STG --> S3_STG[🪣 S3 Staging\nURL pública]
+    DEV[Dev Local] -->|push a dev| GH[(GitHub)]
+    GH -->|automatico| STG[Deploy\nenv: staging]
+    STG --> S3_STG[S3 Staging\nURL publica]
 
-    GH -->|PR dev → main\naprobado| GATE{🛑 Aprobación\nrequerida en\nGitHub UI}
-    GATE -->|👤 Revisor\naprueba| PRD[⚙️ Deploy\nenv: production]
-    PRD --> S3_PRD[🪣 S3 Production\nURL pública]
+    GH -->|PR dev a main\naprobado| GATE{Aprobacion\nrequerida en\nGitHub UI}
+    GATE -->|Revisor aprueba| PRD[Deploy\nenv: production]
+    PRD --> S3_PRD[S3 Production\nURL publica]
 
-    S3_STG -.->|staging secrets\nSTAGING_BUCKET| ENV_S[Environment Secrets\nstaging]
-    S3_PRD -.->|prod secrets\nPROD_BUCKET| ENV_P[Environment Secrets\nproduction]
+    S3_STG -.->|staging secrets| ENV_S[Environment Secrets\nstaging]
+    S3_PRD -.->|prod secrets| ENV_P[Environment Secrets\nproduction]
 ```
 
 ## 🔄 Flujo (objetivo)

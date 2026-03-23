@@ -36,19 +36,22 @@ el mismo código probado en múltiples runtimes y regiones en paralelo.
 
 ```mermaid
 flowchart TB
-    DEV[👨‍💻 Dev Local\ngit push] --> GH[(GitHub)]
+    DEV[Dev Local\ngit push] --> GH[(GitHub)]
 
-    GH --> MAT{⚡ Matrix Strategy\nfail-fast: false}
+    GH --> MAT{Matrix Strategy\nfail-fast: false}
 
     MAT --> J1[python3.11\nus-east-1]
     MAT --> J2[python3.11\nus-east-2]
     MAT --> J3[python3.12\nus-east-1]
     MAT --> J4[python3.12\nus-east-2]
 
-    J1 & J2 & J3 & J4 -->|sam deploy| LAMBDA[⚡ Lambda\nCRUD handler]
-    LAMBDA <-->|GetItem / PutItem\nDeleteItem| DDB[🗄️ DynamoDB\nSingle-table Design\nPK + SK]
+    J1 --> LAMBDA[Lambda\nCRUD handler]
+    J2 --> LAMBDA
+    J3 --> LAMBDA
+    J4 --> LAMBDA
+    LAMBDA <-->|GetItem - PutItem\nDeleteItem| DDB[DynamoDB\nSingle-table\nPK + SK]
 
-    DDB -->|Streams| EVT[DynamoDB Streams\n🔜 casos event-driven]
+    DDB -->|Streams| EVT[DynamoDB Streams\ncasos event-driven]
 ```
 
 ## 🔄 Matrix en acción (objetivo)

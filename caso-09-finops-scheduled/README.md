@@ -36,18 +36,18 @@ de AWS Cost Explorer y actualiza `docs/FINOPS_COSTOS.md` directamente en el repo
 
 ```mermaid
 flowchart LR
-    CRON[⏰ GitHub Cron\n0 8 1 * *\n1° de cada mes] -->|schedule trigger| WF[⚙️ finops-report.yml\nubuntu-latest]
+    CRON[GitHub Cron\n0 8 1 cada mes] -->|schedule trigger| WF[finops-report.yml\nubuntu-latest]
 
-    WF -->|OIDC credentials\nboto3| CE[📊 AWS Cost Explorer\nget_cost_and_usage\ngranularity: MONTHLY]
+    WF -->|OIDC + boto3| CE[AWS Cost Explorer\nget_cost_and_usage\nMONTHLY]
     CE -->|JSON costos| WF
 
-    WF -->|genera tabla\nMarkdown| MD[📝 docs/FINOPS_COSTOS.md]
+    WF -->|genera tabla Markdown| MD[docs/FINOPS_COSTOS.md]
     MD -->|git commit + push\nGITHUB_TOKEN| GH[(GitHub\nrepo actualizado)]
 
-    WF -->|si excede budget| SNS[📣 AWS SNS\nnotificación email]
-    SNS --> ALERT[📧 Alerta\nBudget superado]
+    WF -->|si excede budget| SNS[AWS SNS\nnotificacion email]
+    SNS --> ALERT[Alerta\nBudget superado]
 
-    BUDGET[💰 AWS Budgets\numbrales definidos] -.->|monitorea| SNS
+    BUDGET[AWS Budgets\numbrales definidos] -.->|monitorea| SNS
 ```
 
 ## 🔄 Flujo (objetivo)

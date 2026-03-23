@@ -30,16 +30,18 @@ Eliminar duplicación entre casos. Extraer la lógica común de deploy a una
 
 ```mermaid
 flowchart TB
-    C8[caso-08\nworkflow caller] -->|uses: deploy-s3-oidc.yml| RW1[🔄 Reusable Workflow\ndeploy-s3-oidc.yml]
-    C9[caso-09\nworkflow caller] -->|uses: deploy-lambda-sam.yml| RW2[🔄 Reusable Workflow\ndeploy-lambda-sam.yml]
-    C10[caso-10\nworkflow caller] -->|uses: smoke-test.yml| RW3[🔄 Reusable Workflow\nsmoke-test.yml]
+    C8[caso-08\nworkflow caller] -->|uses: deploy-s3-oidc.yml| RW1[Reusable Workflow\ndeploy-s3-oidc.yml]
+    C9[caso-09\nworkflow caller] -->|uses: deploy-lambda-sam.yml| RW2[Reusable Workflow\ndeploy-lambda-sam.yml]
+    C10[caso-10\nworkflow caller] -->|uses: smoke-test.yml| RW3[Reusable Workflow\nsmoke-test.yml]
 
-    RW1 & RW2 & RW3 -->|uses: setup-aws-oidc| CA[🧩 Composite Action\n.github/actions/setup-aws-oidc]
-    CA -->|AssumeRoleWithWebIdentity| STS[🔐 AWS STS]
+    RW1 -->|uses: setup-aws-oidc| CA[Composite Action\nsetup-aws-oidc]
+    RW2 -->|uses: setup-aws-oidc| CA
+    RW3 -->|uses: setup-aws-oidc| CA
+    CA -->|AssumeRoleWithWebIdentity| STS[AWS STS]
 
-    RW1 --> S3[🪣 S3]
-    RW2 --> LAMBDA[⚡ Lambda]
-    RW3 --> TEST[✅ Smoke Tests]
+    RW1 --> S3[S3]
+    RW2 --> LAMBDA[Lambda]
+    RW3 --> TEST[Smoke Tests]
 ```
 
 ## 🏗️ Estructura objetivo

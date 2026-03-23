@@ -35,18 +35,19 @@ Push local → GitHub (rama dev o main)
 
 ```mermaid
 flowchart LR
-    DEV[👨‍💻 Dev Local\ngit push] --> GH[(GitHub\nmain · dev)]
+    DEV[Dev Local\ngit push] --> GH[(GitHub\nmain - dev)]
 
-    GH -->|webhook automático| AMP[AWS Amplify Console\nCI/CD integrado]
+    GH -->|webhook automatico| AMP[AWS Amplify Console\nCI/CD integrado]
 
-    AMP -->|rama main| PROD[🟢 Producción\nhttps://main.xxx.amplifyapp.com]
-    AMP -->|rama dev|  PREV[🔵 Preview\nhttps://dev.xxx.amplifyapp.com]
+    AMP -->|rama main| PROD[Produccion\nmain.amplifyapp.com]
+    AMP -->|rama dev|  PREV[Preview\ndev.amplifyapp.com]
 
     AMP -.->|incluido| CDN[CloudFront\nCDN global]
-    AMP -.->|incluido| SSL[ACM Certificate\nHTTPS automático]
+    AMP -.->|incluido| SSL[ACM Certificate\nHTTPS automatico]
     AMP -.->|incluido| STOR[S3 Assets\nalmacenamiento]
 
-    PROD & PREV --> USER[👤 Usuario Final]
+    PROD --> USER[Usuario Final]
+    PREV --> USER
 ```
 
 ---
@@ -88,6 +89,8 @@ applications:
 ---
 
 ## 📋 Pasos para reproducirlo desde cero
+
+> Guía detallada con comandos exactos, errores comunes y verificaciones: **[AWS_PASO_A_PASO.md](./AWS_PASO_A_PASO.md)**
 
 1. **Crear app en Amplify Console** → `All apps → New app → Host web app`
 2. **Conectar repositorio GitHub** → seleccionar `proyectos-aws` → autorizar acceso

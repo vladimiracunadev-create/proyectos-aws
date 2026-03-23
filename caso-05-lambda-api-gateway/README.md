@@ -37,18 +37,18 @@ encadenados y artefactos compartidos entre ellos.
 
 ```mermaid
 flowchart TB
-    DEV[👨‍💻 Dev Local\ngit push] --> GH[(GitHub)]
+    DEV[Dev Local\ngit push] --> GH[(GitHub)]
 
-    GH --> J1[🧪 Job: test\npytest / jest]
-    J1 -->|needs: test ✅| J2[📦 Job: build\nsam build]
-    J2 -->|actions/upload-artifact| ART[📎 Actions Artifact\npackage.zip]
-    ART -->|actions/download-artifact| J3[🚀 Job: deploy\nneeds: build]
+    GH --> J1[Job: test\npytest o jest]
+    J1 -->|needs: test OK| J2[Job: build\nsam build]
+    J2 -->|upload-artifact| ART[Actions Artifact\npackage.zip]
+    ART -->|download-artifact| J3[Job: deploy\nneeds: build]
 
-    J3 -->|sam deploy\n--no-confirm-changeset| CF[☁️ CloudFormation\nStack]
-    CF --> LAMBDA[⚡ AWS Lambda\nPython / Node.js]
-    CF --> APIGW[🔗 API Gateway\nHTTP endpoint]
+    J3 -->|sam deploy| CF[CloudFormation\nStack]
+    CF --> LAMBDA[AWS Lambda\nPython o Node.js]
+    CF --> APIGW[API Gateway\nHTTP endpoint]
 
-    APIGW --> CLIENT[👤 Cliente API\ncurl / browser]
+    APIGW --> CLIENT[Cliente API]
 ```
 
 ## 🔄 Flujo multi-job (objetivo)

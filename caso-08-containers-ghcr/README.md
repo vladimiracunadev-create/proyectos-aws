@@ -39,19 +39,19 @@ Containerizar la aplicación del Caso 05, publicarla en **GitHub Container Regis
 
 ```mermaid
 flowchart LR
-    DEV[👨‍💻 Dev Local\ngit push main] --> GH[(GitHub)]
+    DEV[Dev Local\ngit push main] --> GH[(GitHub)]
 
-    GH --> BUILD[🐳 docker/build-push-action\nbuildx multi-platform]
-    BUILD -->|linux/amd64 + linux/arm64| GHCR[📦 ghcr.io\nGitHub Container Registry]
+    GH --> BUILD[docker build-push\nbuildx multi-platform]
+    BUILD -->|amd64 + arm64| GHCR[ghcr.io\nContainer Registry]
 
-    GHCR -->|imagen SHA tag| TASK[📋 ECS Task Definition\nnueva revisión]
-    TASK -->|rolling update\n0 downtime| FARGATE[🚀 ECS Fargate\nTasks en VPC]
+    GHCR -->|imagen SHA tag| TASK[ECS Task Definition\nnueva revision]
+    TASK -->|rolling update\n0 downtime| FARGATE[ECS Fargate\nTasks en VPC]
 
-    FARGATE <-->|traffic| ALB[⚖️ ALB\nApplication Load Balancer]
-    ALB --> USER[👤 Usuario Final]
+    FARGATE --> ALB[ALB\nLoad Balancer]
+    ALB --> USER[Usuario Final]
 
-    VPC[VPC / Subnets / SGs\nNetworking] -.-> FARGATE
-    ECR[ECR alternativo\nprivado AWS] -.->|opción| GHCR
+    VPC[VPC - Subnets - SGs] -.-> FARGATE
+    ECR[ECR alternativo\nAWS privado] -.->|opcion| GHCR
 ```
 
 ## 🔄 Flujo (objetivo)

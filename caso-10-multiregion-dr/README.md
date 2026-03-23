@@ -37,21 +37,23 @@ validación de salud por región antes de actualizar el DNS con Route53.
 
 ```mermaid
 flowchart TB
-    DEV[👨‍💻 Dev Local\ngit push main] --> GH[(GitHub)]
+    DEV[Dev Local\ngit push main] --> GH[(GitHub)]
 
-    GH --> MAT{⚡ Matrix Regions\nfail-fast: false}
-    MAT -->|us-east-1| D1[🚀 Deploy\nNorte América]
-    MAT -->|eu-west-1| D2[🚀 Deploy\nEuropa]
+    GH --> MAT{Matrix Regions\nfail-fast: false}
+    MAT -->|us-east-1| D1[Deploy\nNorte America]
+    MAT -->|eu-west-1| D2[Deploy\nEuropa]
 
-    D1 -->|needs: deploy| ST1[🧪 Smoke Test\nus-east-1\ncurl + assert 200]
-    D2 -->|needs: deploy| ST2[🧪 Smoke Test\neu-west-1\ncurl + assert 200]
+    D1 -->|needs: deploy| ST1[Smoke Test\nus-east-1\ncurl + assert 200]
+    D2 -->|needs: deploy| ST2[Smoke Test\neu-west-1\ncurl + assert 200]
 
-    ST1 & ST2 -->|if: success| R53U[✅ Route53 Update\nActivar primario + secundario]
-    ST1 & ST2 -->|if: failure| R53R[🔄 Route53 Rollback\nMantener región anterior]
+    ST1 -->|if: success| R53U[Route53 Update\nActivar ambas regiones]
+    ST2 -->|if: success| R53U
+    ST1 -->|if: failure| R53R[Route53 Rollback\nMantener region anterior]
+    ST2 -->|if: failure| R53R
 
-    R53U --> R53[🌍 Route53\nFailover Routing Policy]
-    R53 --> CDN[CloudFront\nOrigen con failover]
-    CDN --> USER[👤 Usuario Final\nHA geográfica]
+    R53U --> R53[Route53\nFailover Routing]
+    R53 --> CDN[CloudFront\ncon failover]
+    CDN --> USER[Usuario Final\nHA geografica]
 ```
 
 ## 🔄 Flujo (objetivo)
