@@ -40,7 +40,7 @@ flowchart LR
     GH -->|webhook automatico| AMP[AWS Amplify Console\nCI/CD integrado]
 
     AMP -->|rama main| PROD[Produccion\nmain.amplifyapp.com]
-    AMP -->|rama dev|  PREV[Preview\ndev.amplifyapp.com]
+    AMP -->|rama dev| PREV[Preview\ndev.amplifyapp.com]
 
     AMP -.->|incluido| CDN[CloudFront\nCDN global]
     AMP -.->|incluido| SSL[ACM Certificate\nHTTPS automatico]
