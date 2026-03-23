@@ -39,20 +39,20 @@ Kubernetes de este repositorio disparan reconciliación automática sobre un clu
 
 ```mermaid
 flowchart LR
-    DEV[👨‍💻 Dev Local\ncambio en k8s/\ndeployment.yaml] --> GH[(GitHub\nfuente de verdad)]
+    DEV[Dev Local\ncambio en k8s/\ndeployment.yaml] --> GH[(GitHub\nfuente de verdad)]
 
-    GH -->|OIDC JWT\npermission: id-token: write| STS[🔐 AWS STS\nIRSA]
-    STS -->|credenciales temporales\npara API de EKS| WF[⚙️ gitops.yml\nGitHub Actions]
+    GH -->|OIDC JWT\nid-token: write| STS[AWS STS\nIRSA]
+    STS -->|credenciales temporales\npara API de EKS| WF[gitops.yml\nGitHub Actions]
 
-    WF -->|kubectl apply -f k8s/| EKS[⚓ AWS EKS\nKubernetes 1.32]
-    EKS -->|Rolling Update\n0 downtime| POD[🐳 Pods\nApp containers]
+    WF -->|kubectl apply -f k8s/| EKS[AWS EKS\nKubernetes 1.32]
+    EKS -->|Rolling Update\n0 downtime| POD[Pods\nApp containers]
 
-    POD <-->|traffic| ALB[⚖️ ALB Ingress\nController]
-    ALB --> USER[👤 Usuario Final]
+    POD --> ALB[ALB Ingress\nController]
+    ALB --> USER[Usuario Final]
 
-    ECR[📦 ECR\nImagen del Caso 08] -.->|image pull| EKS
-    IRSA[IRSA\nIAM Role per ServiceAccount] -.->|permisos AWS por pod| POD
-    HPA[HPA\nHorizontal Pod Autoscaler] -.->|escala automática| POD
+    ECR[ECR\nImagen del Caso 08] -.->|image pull| EKS
+    IRSA[IRSA\nIAM Role por ServiceAccount] -.->|permisos por pod| POD
+    HPA[HPA\nHorizontal Pod Autoscaler] -.->|escala automatica| POD
 ```
 
 ## 🔄 Flujo GitOps (objetivo)

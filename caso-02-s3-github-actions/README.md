@@ -35,16 +35,16 @@ Push a main (archivos en caso-02-s3-github-actions/**)
 
 ```mermaid
 flowchart LR
-    DEV[👨‍💻 Dev Local\ngit push main] --> GH[(GitHub)]
+    DEV[Dev Local\ngit push main] --> GH[(GitHub)]
 
-    GH -->|paths: caso-02/**\nfiltro de ruta| WF[⚙️ despliegue.yml\nubuntu-latest runner]
+    GH -->|paths: caso-02\nfiltro de ruta| WF[despliegue.yml\nubuntu-latest runner]
 
-    WF -->|1. actions/checkout| CODE[📁 Código fuente]
-    WF -->|2. credenciales env| SEC[🔑 Repository Secrets\nAWS_ACCESS_KEY_ID\nAWS_SECRET_ACCESS_KEY]
+    WF -->|1. checkout| CODE[Codigo fuente]
+    WF -->|2. credenciales| SEC[Repository Secrets\nAWS_ACCESS_KEY_ID\nAWS_SECRET_ACCESS_KEY]
     SEC -.->|inyectadas al runner| WF
-    WF -->|3. aws s3 sync --delete| S3[🪣 S3 Bucket\nmi-pagina-scrum-123\nus-east-2]
+    WF -->|3. aws s3 sync --delete| S3[S3 Bucket\nmi-pagina-scrum-123\nus-east-2]
 
-    S3 -->|Static Website\n⚠️ HTTP sin CDN| WEB[🌐 Sitio Web]
+    S3 -->|Static Website\nHTTP sin CDN| WEB[Sitio Web]
 ```
 
 ---
@@ -88,6 +88,8 @@ jobs:
 ---
 
 ## 📋 Pasos para reproducirlo desde cero
+
+> Guía detallada con comandos exactos, errores comunes y verificaciones: **[AWS_PASO_A_PASO.md](./AWS_PASO_A_PASO.md)**
 
 1. **Crear bucket S3** → habilitar `Static website hosting` → configurar `index.html` como documento raíz
 2. **Política de bucket** → añadir `s3:GetObject` público (o con CloudFront OAC en el Caso 03)

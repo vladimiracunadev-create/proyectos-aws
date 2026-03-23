@@ -36,17 +36,17 @@ Este caso cierra la deuda técnica más importante del Caso 02.
 
 ```mermaid
 flowchart LR
-    DEV[👨‍💻 Dev Local\ngit push main] --> GH[(GitHub)]
+    DEV[Dev Local\ngit push main] --> GH[(GitHub)]
 
-    GH -->|id-token: write| JWT[JWT OIDC\nToken firmado\npor GitHub]
-    JWT -->|AssumeRoleWithWebIdentity| STS[🔐 AWS STS]
+    GH -->|id-token: write| JWT[JWT OIDC\nToken firmado por GitHub]
+    JWT -->|AssumeRoleWithWebIdentity| STS[AWS STS]
 
-    IAM[IAM Role\ntrust policy\nrepo + branch] -.->|valida sub claim| STS
-    STS -->|credenciales temporales\n≤ 15 minutos| WF[⚙️ workflow.yml]
+    IAM[IAM Role\ntrust policy\nrepo y branch] -.->|valida sub claim| STS
+    STS -->|credenciales temporales\n15 minutos| WF[workflow.yml]
 
-    WF -->|aws s3 sync| S3[🪣 S3 Bucket\nprivado]
-    WF -->|create-invalidation| CDN[🌐 CloudFront\nHTTPS · Cache flush]
-    CDN --> USER[👤 Usuario Final\nHTTPS + CDN global]
+    WF -->|aws s3 sync| S3[S3 Bucket\nprivado]
+    WF -->|create-invalidation| CDN[CloudFront\nHTTPS y Cache flush]
+    CDN --> USER[Usuario Final\nHTTPS + CDN global]
 ```
 
 ## 🔄 Flujo (objetivo)
