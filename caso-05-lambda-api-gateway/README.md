@@ -78,6 +78,8 @@ workflow trigger (push o dispatch)
 
 ## 📋 Implementación proyectada — pasos clave
 
+> Guia detallada con comandos exactos, errores comunes y verificaciones: **[AWS_PASO_A_PASO.md](./AWS_PASO_A_PASO.md)**
+
 1. **Escribir la Lambda** → función Python/Node.js con handler estándar + `requirements.txt` o `package.json`
 2. **Crear `template.yaml` SAM** → define `AWS::Serverless::Function` + `AWS::Serverless::Api`
 3. **Job `test`** → `pytest` o `jest` sobre la función — el job de build solo se ejecuta si pasan

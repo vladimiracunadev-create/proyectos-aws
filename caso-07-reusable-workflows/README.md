@@ -77,6 +77,8 @@ jobs:
 
 ## 📋 Implementación proyectada — pasos clave
 
+> Guia detallada con comandos exactos, errores comunes y verificaciones: **[AWS_PASO_A_PASO.md](./AWS_PASO_A_PASO.md)**
+
 1. **Crear Composite Action** → `.github/actions/setup-aws-oidc/action.yml` con los steps de `aws-actions/configure-aws-credentials` encapsulados; recibe `role-to-assume` como `input`
 2. **Crear Reusable Workflow** → `.github/workflows/deploy-s3-oidc.yml` con trigger `on: workflow_call` · define `inputs` (bucket, environment) y `secrets: inherit`
 3. **Refactorizar casos existentes** → los workflows de caso-08, caso-09, caso-10 reemplazan sus steps de OIDC por `uses: ./.github/actions/setup-aws-oidc`

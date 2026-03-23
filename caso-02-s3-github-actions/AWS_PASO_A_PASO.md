@@ -437,11 +437,11 @@ aws s3api put-bucket-logging \
 | Aspecto | Caso 01 (Amplify) | Caso 02 (S3 + Actions) |
 |:---|:---|:---|
 | **Visibilidad del pipeline** | Solo en Amplify Console | En GitHub Actions (versionado) |
-| **HTTPS** | Automático (CloudFront incluido) | ⚠️ Solo HTTP hasta Caso 03 |
-| **CDN** | CloudFront incluido | ⚠️ Sin CDN hasta Caso 03 |
+| **HTTPS** | Automático (CloudFront incluido) | (ATENCION) Solo HTTP hasta Caso 03 |
+| **CDN** | CloudFront incluido | (ATENCION) Sin CDN hasta Caso 03 |
 | **Steps personalizables** | No (caja negra) | Sí (YAML completo) |
 | **Costo por deploy** | $0 (Free Tier) | ~$0.0001 |
-| **Control de credenciales** | No aplica | ⚠️ Credenciales estáticas → Caso 03 |
+| **Control de credenciales** | No aplica | (ATENCION) Credenciales estáticas → Caso 03 |
 
 ---
 
@@ -462,4 +462,4 @@ este repositorio y esta rama.
 
 ## Siguiente paso
 
-➡️ [Caso 03 — CloudFront + OIDC](../caso-03-cloudfront-oidc/README.md): eliminar las credenciales estáticas y añadir CDN real.
+-> [Caso 03 — CloudFront + OIDC](../caso-03-cloudfront-oidc/README.md): eliminar las credenciales estáticas y añadir CDN real.
