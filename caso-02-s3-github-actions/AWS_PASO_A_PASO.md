@@ -33,6 +33,7 @@ aws s3api create-bucket \
 > ya existe, elige otro nombre y actualiza el workflow.
 
 Respuesta esperada:
+
 ```json
 {
     "Location": "http://mi-pagina-scrum-123.s3.amazonaws.com/"
@@ -147,6 +148,7 @@ aws iam create-access-key --user-name github-actions-caso02
 ```
 
 Respuesta (guardar estos valores — no se pueden recuperar después):
+
 ```json
 {
     "AccessKey": {
@@ -238,7 +240,8 @@ git push origin main
 3. Clic para ver los logs en tiempo real
 
 Log esperado del step `aws s3 sync`:
-```
+
+```text
 upload: caso-02-s3-github-actions/index.html to s3://mi-pagina-scrum-123/index.html
 upload: caso-02-s3-github-actions/styles.css to s3://mi-pagina-scrum-123/styles.css
 upload: caso-02-s3-github-actions/app.js to s3://mi-pagina-scrum-123/app.js
@@ -302,7 +305,7 @@ aws s3 ls s3://mi-pagina-scrum-123/ | grep archivo-basura
 
 ### Error: `Unable to locate credentials`
 
-```
+```text
 An error occurred (NoCredentialsError) when calling the ListObjectsV2 operation:
 Unable to locate credentials
 ```
@@ -311,6 +314,7 @@ Unable to locate credentials
 o tienen un nombre incorrecto.
 
 **Verificación:**
+
 - GitHub → Settings → Secrets → Actions → confirmar que los dos secrets existen
 - El nombre debe ser exactamente `AWS_ACCESS_KEY_ID` (mayúsculas, sin espacios)
 
@@ -318,7 +322,7 @@ o tienen un nombre incorrecto.
 
 ### Error: `Access Denied` al hacer sync
 
-```
+```text
 upload failed: caso-02-s3-github-actions/index.html to s3://mi-pagina-scrum-123/index.html
 An error occurred (AccessDenied) when calling the PutObject operation: Access Denied
 ```
@@ -326,6 +330,7 @@ An error occurred (AccessDenied) when calling the PutObject operation: Access De
 **Causa:** El usuario IAM no tiene `s3:PutObject` sobre el bucket.
 
 **Verificación:**
+
 ```bash
 # Ver las políticas del usuario
 aws iam list-attached-user-policies --user-name github-actions-caso02
@@ -344,6 +349,7 @@ aws iam simulate-principal-policy \
 **Causa:** El archivo modificado no está dentro de `caso-02-s3-github-actions/**`.
 
 **Verificación:**
+
 ```bash
 # Confirmar que el commit modifica archivos en la carpeta correcta
 git diff --name-only HEAD~1 HEAD

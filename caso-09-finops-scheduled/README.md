@@ -17,6 +17,7 @@ de AWS Cost Explorer y actualiza `docs/FINOPS_COSTOS.md` directamente en el repo
 ## 🔑 Lo que introduce
 
 ### En AWS
+
 | Servicio | Para qué |
 |:---|:---|
 | **AWS Cost Explorer** | API de análisis de costos por servicio, región y etiqueta |
@@ -24,6 +25,7 @@ de AWS Cost Explorer y actualiza `docs/FINOPS_COSTOS.md` directamente en el repo
 | **SNS** | Notificaciones de alerta de presupuesto a email/Slack |
 
 ### En GitHub Actions
+
 | Capacidad nueva | Descripción |
 |:---|:---|
 | `schedule` con cron | `0 8 1 * *` — primer día del mes a las 08:00 UTC |
@@ -52,7 +54,7 @@ flowchart LR
 
 ## 🔄 Flujo (objetivo)
 
-```
+```text
 1° de cada mes, 08:00 UTC — cron trigger
   └── Script Python con boto3
       └── ce.get_cost_and_usage(granularity='MONTHLY')
@@ -68,12 +70,14 @@ flowchart LR
 1. **Política IAM mínima para Cost Explorer** → `ce:GetCostAndUsage`, `ce:GetDimensionValues` — solo lectura
 2. **Script Python** con `boto3` → `ce.get_cost_and_usage(TimePeriod=..., Granularity='MONTHLY', GroupBy=...)` → formatea resultado en tabla Markdown
 3. **Workflow con cron trigger:**
+
    ```yaml
    on:
      schedule:
        - cron: '0 8 1 * *'   # 1° de cada mes, 08:00 UTC
      workflow_dispatch:       # también manual
    ```
+
 4. **Commit automático** → el workflow configura git user + hace commit del `.md` actualizado usando `GITHUB_TOKEN` — sin secrets extra
 5. **Crear AWS Budget** → umbral en $ → suscripción SNS → email/Slack al superar el límite
 6. **Verificar** → ejecutar `workflow_dispatch` manualmente → revisar `docs/FINOPS_COSTOS.md` actualizado en el repo
@@ -84,7 +88,7 @@ flowchart LR
 
 ## 📊 Output esperado (en FINOPS_COSTOS.md)
 
-```
+```text
 Período: 2026-03 | Total: $12.47 USD
 ├── Amazon S3           $0.002
 ├── AWS Lambda          $0.000

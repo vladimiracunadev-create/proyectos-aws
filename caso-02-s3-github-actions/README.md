@@ -21,7 +21,7 @@
 
 **Flujo:**
 
-```
+```text
 Push a main (archivos en caso-02-s3-github-actions/**)
     └── .github/workflows/despliegue.yml se activa
         ├── Checkout del código
@@ -138,7 +138,7 @@ jobs:
 
 ## Archivos principales
 
-```
+```text
 caso-02-s3-github-actions/
 ├── index.html              # Misma SPA que caso-01 (portafolio compartido)
 ├── app.js

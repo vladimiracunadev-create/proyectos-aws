@@ -12,7 +12,11 @@
       "Bash(git mv:*)",
       "Bash(grep -r \"aws-amplify-mi-sitio\\\\|aws-s3-scrum\" /c/proyectos-aws --include=*.md)",
       "Bash(grep -r \"AWS_PASO_A_PASO\\\\|caso-0[12]\" /c/proyectos-aws --include=*.md)",
-      "Bash(find /c/proyectos-aws/caso-0[3-9] -type f -name \"README.md\" -o -name \"*.tf\")"
+      "Bash(find /c/proyectos-aws/caso-0[3-9] -type f -name \"README.md\" -o -name \"*.tf\")",
+      "Bash(python C:/portfolio-pages/scripts/fix-md-lint.py)",
+      "Bash(python C:/portfolio-pages/scripts/fix-md-lint.py --all)",
+      "Bash(npx markdownlint-cli2:*)",
+      "Bash(python -c \":*)"
     ]
   }
 }

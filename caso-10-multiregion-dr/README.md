@@ -17,6 +17,7 @@ validación de salud por región antes de actualizar el DNS con Route53.
 ## 🔑 Lo que introduce
 
 ### En AWS
+
 | Servicio | Para qué |
 |:---|:---|
 | **Route53** | DNS con failover routing policy entre regiones |
@@ -25,6 +26,7 @@ validación de salud por región antes de actualizar el DNS con Route53.
 | **CloudFront** | CDN global con origen-failover configurado |
 
 ### En GitHub Actions
+
 | Capacidad nueva | Descripción |
 |:---|:---|
 | Matrix sobre regiones | Deploy simultáneo a `us-east-1` y `eu-west-1` |
@@ -58,7 +60,7 @@ flowchart TB
 
 ## 🔄 Flujo (objetivo)
 
-```
+```text
 Push a main
   │
   ├── [matrix] Deploy → us-east-1   ✅
@@ -82,11 +84,13 @@ Push a main
 2. **Crear distribuciones CloudFront** por región con `Origin Failover` configurado
 3. **Configurar Route53** → `Failover Routing Policy` → record `PRIMARY` (us-east-1) + record `SECONDARY` (eu-west-1) · habilitar `Health Checks`
 4. **Matrix en el workflow** → deploy simultáneo a ambas regiones en paralelo:
+
    ```yaml
    strategy:
      matrix:
        region: [us-east-1, eu-west-1]
    ```
+
 5. **Smoke tests por región** → job `needs: deploy` → `curl https://endpoint-${region}` + assert HTTP 200
 6. **Rollback condicional** → `if: steps.smoke.outcome == 'failure'` → `aws route53 change-resource-record-sets` revierte el DNS
 

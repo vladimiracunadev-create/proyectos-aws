@@ -18,6 +18,7 @@ Containerizar la aplicación del Caso 05, publicarla en **GitHub Container Regis
 ## 🔑 Lo que introduce
 
 ### En AWS
+
 | Servicio | Para qué |
 |:---|:---|
 | **ECS Fargate** | Runtime de containers sin gestionar servidores |
@@ -26,6 +27,7 @@ Containerizar la aplicación del Caso 05, publicarla en **GitHub Container Regis
 | **ALB** | Application Load Balancer frente al servicio ECS |
 
 ### En GitHub Actions
+
 | Capacidad nueva | Descripción |
 |:---|:---|
 | `docker/build-push-action` | Build y push de imagen en un step |
@@ -56,7 +58,7 @@ flowchart LR
 
 ## 🔄 Flujo (objetivo)
 
-```
+```text
 Push a main (cambios en caso-08/**)
   │
   ├── Build multi-platform image
@@ -76,6 +78,7 @@ Push a main (cambios en caso-08/**)
 1. **Crear cluster ECS Fargate** → definir Task Definition con CPU/memory + image placeholder
 2. **Login a GHCR en el workflow** → `docker/login-action` con `registry: ghcr.io` y `GITHUB_TOKEN` — sin secrets extra
 3. **Build multi-platform con buildx:**
+
    ```yaml
    - uses: docker/setup-buildx-action@v3
    - uses: docker/build-push-action@v5
@@ -84,6 +87,7 @@ Push a main (cambios en caso-08/**)
        push: true
        tags: ghcr.io/${{ github.repository }}/caso-08:${{ github.sha }}
    ```
+
 4. **Actualizar Task Definition** → `aws ecs register-task-definition` con la nueva imagen tag (SHA)
 5. **Rolling update** → `aws ecs update-service --force-new-deployment` → ECS reemplaza tasks sin downtime
 6. **Smoke test post-deploy** → `curl` al ALB endpoint + assert HTTP 200

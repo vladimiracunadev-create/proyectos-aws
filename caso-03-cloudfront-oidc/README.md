@@ -17,6 +17,7 @@ Este caso cierra la deuda técnica más importante del Caso 02.
 ## 🔑 Lo que introduce
 
 ### En AWS
+
 | Servicio | Para qué |
 |:---|:---|
 | **CloudFront** | CDN global, HTTPS propio, invalidación de caché controlada |
@@ -24,6 +25,7 @@ Este caso cierra la deuda técnica más importante del Caso 02.
 | **AWS STS** | Emite credenciales temporales (duración ≤ 1h) via `AssumeRoleWithWebIdentity` |
 
 ### En GitHub Actions
+
 | Capacidad nueva | Descripción |
 |:---|:---|
 | `id-token: write` | Permiso que habilita la emisión del JWT OIDC por GitHub |
@@ -51,7 +53,7 @@ flowchart LR
 
 ## 🔄 Flujo (objetivo)
 
-```
+```text
 GitHub push a main
   └── workflow activa id-token: write
       └── GitHub emite JWT firmado (sub: repo:owner/repo:ref:refs/heads/main)
