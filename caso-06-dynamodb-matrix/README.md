@@ -32,6 +32,25 @@ el mismo código probado en múltiples runtimes y regiones en paralelo.
 
 ---
 
+## 🏗️ Arquitectura proyectada
+
+```mermaid
+flowchart TB
+    DEV[👨‍💻 Dev Local\ngit push] --> GH[(GitHub)]
+
+    GH --> MAT{⚡ Matrix Strategy\nfail-fast: false}
+
+    MAT --> J1[python3.11\nus-east-1]
+    MAT --> J2[python3.11\nus-east-2]
+    MAT --> J3[python3.12\nus-east-1]
+    MAT --> J4[python3.12\nus-east-2]
+
+    J1 & J2 & J3 & J4 -->|sam deploy| LAMBDA[⚡ Lambda\nCRUD handler]
+    LAMBDA <-->|GetItem / PutItem\nDeleteItem| DDB[🗄️ DynamoDB\nSingle-table Design\nPK + SK]
+
+    DDB -->|Streams| EVT[DynamoDB Streams\n🔜 casos event-driven]
+```
+
 ## 🔄 Matrix en acción (objetivo)
 
 ```yaml
@@ -61,6 +80,26 @@ strategy:
   "createdAt": "2026-Q3"
 }
 ```
+
+---
+
+## 📋 Implementación proyectada — pasos clave
+
+1. **Crear tabla DynamoDB** → `On-demand` capacity mode · PK: `PK` (String) + SK: `SK` (String) · habilitar Streams
+2. **Lambda con permisos mínimos** → IAM policy con solo `dynamodb:GetItem`, `dynamodb:PutItem`, `dynamodb:DeleteItem`, `dynamodb:Query` sobre esta tabla
+3. **Definir la matrix en el workflow:**
+   ```yaml
+   strategy:
+     fail-fast: false
+     matrix:
+       runtime: [python3.11, python3.12]
+       region:  [us-east-1, us-east-2]
+   ```
+4. **`${{ matrix.runtime }}`** y **`${{ matrix.region }}`** como variables en el step de deploy
+5. **Revisar el workflow summary** → GitHub muestra tabla de resultados por combinación
+6. **Verificar DynamoDB** → AWS Console → `Explore items` → confirmar items escritos por la Lambda
+
+> **Principio clave:** `fail-fast: false` es fundamental — una región fallida no cancela las pruebas en las demás.
 
 ---
 

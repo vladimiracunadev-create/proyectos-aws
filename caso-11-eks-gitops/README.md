@@ -35,6 +35,26 @@ Kubernetes de este repositorio disparan reconciliación automática sobre un clu
 
 ---
 
+## 🏗️ Arquitectura proyectada
+
+```mermaid
+flowchart LR
+    DEV[👨‍💻 Dev Local\ncambio en k8s/\ndeployment.yaml] --> GH[(GitHub\nfuente de verdad)]
+
+    GH -->|OIDC JWT\npermission: id-token: write| STS[🔐 AWS STS\nIRSA]
+    STS -->|credenciales temporales\npara API de EKS| WF[⚙️ gitops.yml\nGitHub Actions]
+
+    WF -->|kubectl apply -f k8s/| EKS[⚓ AWS EKS\nKubernetes 1.32]
+    EKS -->|Rolling Update\n0 downtime| POD[🐳 Pods\nApp containers]
+
+    POD <-->|traffic| ALB[⚖️ ALB Ingress\nController]
+    ALB --> USER[👤 Usuario Final]
+
+    ECR[📦 ECR\nImagen del Caso 08] -.->|image pull| EKS
+    IRSA[IRSA\nIAM Role per ServiceAccount] -.->|permisos AWS por pod| POD
+    HPA[HPA\nHorizontal Pod Autoscaler] -.->|escala automática| POD
+```
+
 ## 🔄 Flujo GitOps (objetivo)
 
 ```
@@ -48,6 +68,19 @@ Cambio en caso-11-eks-gitops/k8s/deployment.yaml
                       ├── ✅ Deploy exitoso → merge PR automático
                       └── ❌ Falla → rollback + alerta
 ```
+
+---
+
+## 📋 Implementación proyectada — pasos clave
+
+1. **Provisionar cluster EKS** con Terraform → `eks-cluster.tf` crea cluster + managed node group · habilitar OIDC provider del cluster
+2. **Configurar IRSA** → `irsa.tf` crea IAM Role con trust policy vinculada al ServiceAccount de la app — permisos AWS por pod sin credenciales en el contenedor
+3. **Instalar AWS Load Balancer Controller** → `alb-controller.tf` · necesario para que `Ingress` cree ALBs automáticamente
+4. **En el workflow de GitHub Actions** → `permissions: id-token: write` + `aws-actions/configure-aws-credentials` → `aws eks update-kubeconfig` → `kubectl apply -f k8s/`
+5. **Actualizar imagen** → el workflow de Caso 08 hace push a ECR → actualiza `deployment.yaml` con el nuevo tag → commit en el repo → el workflow de Caso 11 detecta el cambio y reconcilia
+6. **Smoke test post-deploy** → `kubectl rollout status` + `curl` al ALB endpoint → si falla, `kubectl rollout undo`
+
+> **Patrón GitOps:** El repositorio es la única fuente de verdad. No hay `kubectl apply` manuales — todo pasa por el workflow. Lo que está en Git = lo que corre en el cluster.
 
 ---
 

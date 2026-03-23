@@ -32,6 +32,23 @@ Este caso cierra la deuda técnica más importante del Caso 02.
 
 ---
 
+## 🏗️ Arquitectura proyectada
+
+```mermaid
+flowchart LR
+    DEV[👨‍💻 Dev Local\ngit push main] --> GH[(GitHub)]
+
+    GH -->|id-token: write| JWT[JWT OIDC\nToken firmado\npor GitHub]
+    JWT -->|AssumeRoleWithWebIdentity| STS[🔐 AWS STS]
+
+    IAM[IAM Role\ntrust policy\nrepo + branch] -.->|valida sub claim| STS
+    STS -->|credenciales temporales\n≤ 15 minutos| WF[⚙️ workflow.yml]
+
+    WF -->|aws s3 sync| S3[🪣 S3 Bucket\nprivado]
+    WF -->|create-invalidation| CDN[🌐 CloudFront\nHTTPS · Cache flush]
+    CDN --> USER[👤 Usuario Final\nHTTPS + CDN global]
+```
+
 ## 🔄 Flujo (objetivo)
 
 ```
@@ -43,6 +60,19 @@ GitHub push a main
                   ├── aws s3 sync → S3 bucket
                   └── aws cloudfront create-invalidation → CDN flush
 ```
+
+---
+
+## 📋 Implementación proyectada — pasos clave
+
+1. **Crear OIDC Provider en IAM** → URL: `token.actions.githubusercontent.com` · Audience: `sts.amazonaws.com`
+2. **Crear IAM Role** con trust policy que restrinja a `sub: repo:owner/repo:ref:refs/heads/main`
+3. **Crear distribución CloudFront** → origen: S3 bucket con OAC (Origin Access Control) — sin acceso público directo al bucket
+4. **Actualizar workflow** → añadir `permissions: id-token: write` + step `aws-actions/configure-aws-credentials@v4` con `role-to-assume`
+5. **Añadir step de invalidación** → `aws cloudfront create-invalidation --distribution-id $CDN_ID --paths "/*"`
+6. **Eliminar los secrets estáticos** de GitHub → `AWS_ACCESS_KEY_ID` y `AWS_SECRET_ACCESS_KEY` ya no son necesarios
+
+> **Resultado:** Sin ningún secret en GitHub. El token existe ~15 segundos y es válido solo para este repo y rama.
 
 ---
 

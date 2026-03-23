@@ -31,6 +31,24 @@ Push a main (archivos en caso-02-s3-github-actions/**)
 
 ---
 
+## 🏗️ Diagrama de arquitectura
+
+```mermaid
+flowchart LR
+    DEV[👨‍💻 Dev Local\ngit push main] --> GH[(GitHub)]
+
+    GH -->|paths: caso-02/**\nfiltro de ruta| WF[⚙️ despliegue.yml\nubuntu-latest runner]
+
+    WF -->|1. actions/checkout| CODE[📁 Código fuente]
+    WF -->|2. credenciales env| SEC[🔑 Repository Secrets\nAWS_ACCESS_KEY_ID\nAWS_SECRET_ACCESS_KEY]
+    SEC -.->|inyectadas al runner| WF
+    WF -->|3. aws s3 sync --delete| S3[🪣 S3 Bucket\nmi-pagina-scrum-123\nus-east-2]
+
+    S3 -->|Static Website\n⚠️ HTTP sin CDN| WEB[🌐 Sitio Web]
+```
+
+---
+
 ## Stack Técnico
 
 | Capa | Tecnología |
@@ -66,6 +84,20 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: 'us-east-2'
 ```
+
+---
+
+## 📋 Pasos para reproducirlo desde cero
+
+1. **Crear bucket S3** → habilitar `Static website hosting` → configurar `index.html` como documento raíz
+2. **Política de bucket** → añadir `s3:GetObject` público (o con CloudFront OAC en el Caso 03)
+3. **Crear IAM User** con política mínima: `s3:PutObject`, `s3:DeleteObject`, `s3:ListBucket` solo sobre este bucket
+4. **Añadir secrets en GitHub** → `Settings → Secrets → Actions` → `AWS_ACCESS_KEY_ID` + `AWS_SECRET_ACCESS_KEY`
+5. **Crear `.github/workflows/despliegue.yml`** con `paths: caso-02-s3-github-actions/**` y `aws s3 sync`
+6. **`git push` a main** → el workflow se activa solo si hay cambios en esta carpeta
+7. **Verificar** en S3 → `Properties → Static website hosting` → abrir la URL endpoint
+
+> **Tiempo estimado:** 20 minutos. La deuda técnica (credenciales estáticas) se elimina en el Caso 03.
 
 ---
 

@@ -32,6 +32,24 @@ de AWS Cost Explorer y actualiza `docs/FINOPS_COSTOS.md` directamente en el repo
 
 ---
 
+## 🏗️ Arquitectura proyectada
+
+```mermaid
+flowchart LR
+    CRON[⏰ GitHub Cron\n0 8 1 * *\n1° de cada mes] -->|schedule trigger| WF[⚙️ finops-report.yml\nubuntu-latest]
+
+    WF -->|OIDC credentials\nboto3| CE[📊 AWS Cost Explorer\nget_cost_and_usage\ngranularity: MONTHLY]
+    CE -->|JSON costos| WF
+
+    WF -->|genera tabla\nMarkdown| MD[📝 docs/FINOPS_COSTOS.md]
+    MD -->|git commit + push\nGITHUB_TOKEN| GH[(GitHub\nrepo actualizado)]
+
+    WF -->|si excede budget| SNS[📣 AWS SNS\nnotificación email]
+    SNS --> ALERT[📧 Alerta\nBudget superado]
+
+    BUDGET[💰 AWS Budgets\numbrales definidos] -.->|monitorea| SNS
+```
+
 ## 🔄 Flujo (objetivo)
 
 ```
@@ -42,6 +60,25 @@ de AWS Cost Explorer y actualiza `docs/FINOPS_COSTOS.md` directamente en el repo
               └── git commit "chore: actualizar costos [mes]"
                   └── git push → docs/FINOPS_COSTOS.md actualizado
 ```
+
+---
+
+## 📋 Implementación proyectada — pasos clave
+
+1. **Política IAM mínima para Cost Explorer** → `ce:GetCostAndUsage`, `ce:GetDimensionValues` — solo lectura
+2. **Script Python** con `boto3` → `ce.get_cost_and_usage(TimePeriod=..., Granularity='MONTHLY', GroupBy=...)` → formatea resultado en tabla Markdown
+3. **Workflow con cron trigger:**
+   ```yaml
+   on:
+     schedule:
+       - cron: '0 8 1 * *'   # 1° de cada mes, 08:00 UTC
+     workflow_dispatch:       # también manual
+   ```
+4. **Commit automático** → el workflow configura git user + hace commit del `.md` actualizado usando `GITHUB_TOKEN` — sin secrets extra
+5. **Crear AWS Budget** → umbral en $ → suscripción SNS → email/Slack al superar el límite
+6. **Verificar** → ejecutar `workflow_dispatch` manualmente → revisar `docs/FINOPS_COSTOS.md` actualizado en el repo
+
+> **Resultado:** El repositorio se auto-documenta con costos reales cada mes. No requiere intervención manual.
 
 ---
 
