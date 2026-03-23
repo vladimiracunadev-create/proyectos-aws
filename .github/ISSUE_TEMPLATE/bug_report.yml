@@ -1,0 +1,71 @@
+name: Bug Report
+description: Reportar un error en un caso o en la infraestructura de CI/CD
+title: "[BUG] "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por reportar el bug. Completa los campos para ayudarnos a reproducirlo.
+
+  - type: dropdown
+    id: caso
+    attributes:
+      label: Caso afectado
+      description: ¿En qué caso ocurre el problema?
+      options:
+        - caso-01-amplify-hosting
+        - caso-02-s3-github-actions
+        - caso-03-cloudfront-oidc
+        - caso-04-environments-approvals
+        - caso-05-lambda-api-gateway
+        - caso-06-dynamodb-matrix
+        - caso-07-reusable-workflows
+        - caso-08-containers-ghcr
+        - caso-09-finops-scheduled
+        - caso-10-multiregion-dr
+        - caso-11-eks-gitops
+        - CI/CD Pipeline (workflows)
+        - Tooling (Docker / Makefile)
+        - Documentación
+    validations:
+      required: true
+
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: Descripción del bug
+      description: Qué ocurre y qué debería ocurrir.
+      placeholder: "El workflow falla en el step X con el error Y..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: pasos
+    attributes:
+      label: Pasos para reproducir
+      placeholder: |
+        1. Hacer push a main con cambios en caso-02/**
+        2. El workflow se activa
+        3. El step de S3 sync falla con...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs o capturas relevantes
+      description: Pega el output del workflow o el error de consola.
+      render: shell
+
+  - type: dropdown
+    id: severidad
+    attributes:
+      label: Severidad
+      options:
+        - Critica (producción caída)
+        - Alta (funcionalidad rota)
+        - Media (degradación parcial)
+        - Baja (cosmético / documentación)
+    validations:
+      required: true

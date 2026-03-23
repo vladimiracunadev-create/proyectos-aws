@@ -1,0 +1,57 @@
+name: Feature Request / Nuevo Caso
+description: Proponer una mejora, nuevo caso o capacidad de GitHub Actions
+title: "[FEAT] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Propuestas de nuevos casos o mejoras al ecosistema existente.
+
+  - type: dropdown
+    id: tipo
+    attributes:
+      label: Tipo de propuesta
+      options:
+        - Nuevo caso (caso-XX)
+        - Mejora a caso existente
+        - Nueva capacidad de GitHub Actions
+        - Mejora de documentación
+        - Mejora de seguridad / OIDC
+        - FinOps / optimización de costos
+    validations:
+      required: true
+
+  - type: textarea
+    id: problema
+    attributes:
+      label: Problema o motivación
+      description: ¿Qué problema resuelve esta propuesta?
+      placeholder: "Actualmente no hay forma de... esto causa que..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solucion
+    attributes:
+      label: Solución propuesta
+      description: Describe la implementación ideal.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: Alternativas consideradas
+      description: ¿Hay otras formas de resolver esto?
+
+  - type: dropdown
+    id: cert
+    attributes:
+      label: Certificación AWS relacionada
+      description: ¿Esta feature cubre algún dominio de certificación?
+      options:
+        - DVA-C02 (Developer Associate)
+        - SAA-C03 (Solutions Architect Associate)
+        - SOA-C02 (SysOps Administrator)
+        - No aplica

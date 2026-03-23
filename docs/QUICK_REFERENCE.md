@@ -218,7 +218,7 @@ choco install kind
 
 ```bash
 # 1. Hacer cambios en el código
-vim aws-amplify-mi-sitio-1/index.html
+vim caso-01-amplify-hosting/index.html
 
 # 2. Ejecutar validaciones
 make tooling-validate

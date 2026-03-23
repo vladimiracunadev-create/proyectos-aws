@@ -36,7 +36,7 @@ graph TD
 
 ## 🛠️ Evidencias Técnicas
 
-- **Despliegue Multi-branch:** Ver [AWS_PASO_A_PASO.md](../aws-amplify-mi-sitio-1/AWS_PASO_A_PASO.md) en la carpeta de Amplify.
+- **Despliegue Multi-branch:** Ver [Caso 01 — Amplify Hosting](../caso-01-amplify-hosting/README.md) — stack, configuración y lecciones aprendidas.
 - **Ecosistema de Validación:** Ver [TOOLING.md](TOOLING.md) para entender la capa de abstracción en Docker.
 - **Políticas de Calidad:** Ver [killed.md](killed.md) para conocer las prácticas de ingeniería que rechazo y por qué.
 

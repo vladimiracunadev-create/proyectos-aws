@@ -10,7 +10,9 @@
       "Bash(git merge:*)",
       "WebFetch(domain:gitlab.com)",
       "Bash(git mv:*)",
-      "Bash(git rm:*)"
+      "Bash(grep -r \"aws-amplify-mi-sitio\\\\|aws-s3-scrum\" /c/proyectos-aws --include=*.md)",
+      "Bash(grep -r \"AWS_PASO_A_PASO\\\\|caso-0[12]\" /c/proyectos-aws --include=*.md)",
+      "Bash(find /c/proyectos-aws/caso-0[3-9] -type f -name \"README.md\" -o -name \"*.tf\")"
     ]
   }
 }

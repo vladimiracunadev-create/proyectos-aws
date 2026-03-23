@@ -45,7 +45,7 @@ Este archivo es el contrato con **AWS Amplify Console**.
 ```yaml
 version: 1
 applications:
-  - appRoot: aws-amplify-mi-sitio-1
+  - appRoot: caso-01-amplify-hosting
     frontend:
       phases:
         build:
@@ -61,7 +61,7 @@ applications:
 
 ## 📊 Catálogo de Activos Dinámicos (`assets/`)
 
-Cada subproyecto (`aws-amplify-*` y `aws-s3-*`) mantiene una carpeta `assets/` con una arquitectura idéntica:
+Cada caso (`caso-01-amplify-hosting/` y `caso-02-s3-github-actions/`) mantiene una carpeta `assets/` con una arquitectura idéntica:
 - **`icons/icon.svg`**: Un solo activo vectorial para generar todos los tamaños de iconos de la PWA.
 - **`cv-completo.pdf` vs `cv-reducido.pdf`**: Estrategia de segmentación de información para diferentes perfiles de reclutador.
 - **`LEEME_PDFS.txt`**: Documentación interna para asegurar que los PDFs estén actualizados y no sean archivos corruptos.
