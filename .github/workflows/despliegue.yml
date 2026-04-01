@@ -1,4 +1,4 @@
-﻿name: Caso 02 — S3 Deploy
+name: Caso 02 — S3 Deploy
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout del cÃ³digo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Â¿DÃ³nde estoy y quÃ© veo?
         run: |
