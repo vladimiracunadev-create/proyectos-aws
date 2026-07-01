@@ -35,7 +35,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
       - name: Dependency Review
-        uses: actions/dependency-review-action@v4
+        uses: actions/dependency-review-action@v5
         continue-on-error: true # Permite que el pipeline siga si el Grafo de Dependencias no está activo
         with:
           fail-on-severity: moderate
