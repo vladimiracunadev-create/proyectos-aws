@@ -8,14 +8,17 @@ on:
       - 'caso-02-s3-github-actions/**'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout del cÃ³digo
+      - name: Checkout del código
         uses: actions/checkout@v6
 
-      - name: Â¿DÃ³nde estoy y quÃ© veo?
+      - name: ¿Dónde estoy y qué veo?
         run: |
           echo "La carpeta actual es:"
           pwd
